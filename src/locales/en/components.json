@@ -1,0 +1,82 @@
+{
+  "appBuilder": {
+    "specHighlights": "Spec Highlights",
+    "buildInDays": "Build in days, not months",
+    "pagesWorkflows": "Pages, workflows, reports", 
+    "rolesPermissions": "Roles & granular permissions",
+    "integrations": "15+ native integrations",
+    "security": "SSO, audit trail, SOC2/GDPR",
+    "whyAppBuilder": "Why App Builder vs. Custom Dev?",
+    "whyDescription": "Replace ad-hoc spreadsheets and one-off scripts with purpose-built apps that mirror how your teams really work. Design visually, connect data sources in minutes, and ship faster—without sacrificing governance.",
+    "speedToValue": "Speed to Value",
+    "speedDescription": "Launch prototypes in hours; go live in days with templates and blocks.",
+    "businessFit": "Business Fit", 
+    "businessDescription": "Forms, roles, approvals aligned to your real process—not generic software.",
+    "unifiedData": "Unified Data",
+    "dataDescription": "Connect DBs & SaaS. Make your app the single source of truth.",
+    "workspaces": "Dedicated Workspaces & Roles",
+    "workspacesDescription": "Isolated spaces per audience. Calibrate access at workspace, page, or field level. Align collaboration without leaking sensitive data.",
+    "roleBasedAccess": "Role-based access",
+    "customDashboards": "Custom dashboards", 
+    "externalOnboarding": "External onboarding",
+    "workspaceThemes": "Workspace themes",
+    "useCases": "Use Cases",
+    "useCasesDescription": "CRMs, ticketing, analytics dashboards, document portals, inventory—mobile-responsive via PWA. Roadmap: AI-generated apps.",
+    "hero": {
+      "title": "Custom Apps. Zero Heavy Code.",
+      "subtitle": "Visual Drag-and-Drop Builder",
+      "description": "Design responsive internal tools with pages, workflows, reports, roles, and integrations. AI-assisted builder + enterprise controls = speed with confidence."
+    },
+    "tabs": {
+      "ui": {
+        "title": "Visual Drag-and-Drop Builder",
+        "description": "Place forms, tables, charts, boards, and buttons; wire actions; set validations. Build pages without code.",
+        "label": "UI Blocks"
+      },
+      "flows": {
+        "title": "Flows & Business Rules",
+        "description": "Configure steps, branches, and approvals. Use time-based SLAs and escalations. Trigger actions on events.",
+        "label": "Flows & Rules"
+      },
+      "themes": {
+        "title": "Design Systems & Themes",
+        "description": "Apply brand colors, typography, and spacing system-wide. Keep UI consistent across workspaces.",
+        "label": "Themes"
+      },
+      "code": {
+        "title": "Extend with Code",
+        "description": "Embed custom JS, call APIs, or write small functions where needed. No-code speed + code precision.",
+        "label": "Custom Code"
+      }
+    },
+    "cta": {
+      "title": "Ready to Build?",
+      "description": "Start creating powerful applications today with our intuitive builder.",
+      "primaryButton": "Get Started Free",
+      "secondaryButton": "Book a Demo"
+    },
+    "footer": {
+      "company": "Company",
+      "about": "Empowering learners worldwide to master English with confidence and fluency.",
+      "careers": "Careers",
+      "contact": "Contact",
+      "product": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "security": "Security",
+      "resources": "Resources",
+      "documentation": "Documentation",
+      "support": "Support",
+      "community": "Community",
+      "legal": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy",
+      "copyright": "© 2024 English Website. All rights reserved."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about our platform"
+    }
+  }
+}

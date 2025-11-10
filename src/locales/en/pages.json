@@ -1,0 +1,37 @@
+{
+  "home": {
+    "title": "English Website",
+    "subtitle": "Multilingual platform with modern navigation",
+    "description": "Transform your English skills with our comprehensive learning platform"
+  },
+  "formBuilder": {
+    "title": "Form Builder",
+    "subtitle": "Create Dynamic Forms",
+    "description": "Build powerful forms with drag-and-drop interface"
+  },
+  "appBuilder": {
+    "title": "App Builder", 
+    "subtitle": "Build Custom Applications",
+    "description": "Create applications without coding"
+  },
+  "workflow": {
+    "title": "Workflow Orchestrator",
+    "subtitle": "Automate Your Processes", 
+    "description": "Streamline your business workflows"
+  },
+  "fleet": {
+    "title": "Fleet Management",
+    "subtitle": "Manage Your Fleet",
+    "description": "Complete fleet management solution"
+  },
+  "automation": {
+    "title": "Business Automation",
+    "subtitle": "Streamline Operations",
+    "description": "Automate your business processes"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Get in Touch",
+    "description": "We're here to help you succeed"
+  }
+}

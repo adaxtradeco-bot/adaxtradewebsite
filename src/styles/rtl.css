@@ -1,0 +1,152 @@
+/* RTL Support Styles */
+
+/* Base RTL styles */
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+/* Navigation RTL adjustments */
+[dir="rtl"] .nav-dropdown {
+  right: 0;
+  left: auto;
+}
+
+[dir="rtl"] .mobile-menu {
+  right: 0;
+  left: auto;
+}
+
+/* Flexbox RTL adjustments */
+[dir="rtl"] .flex-row-reverse {
+  flex-direction: row-reverse;
+}
+
+/* Margin and padding RTL adjustments */
+[dir="rtl"] .ml-auto {
+  margin-left: auto;
+  margin-right: 0;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+[dir="rtl"] .pl-4 {
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+[dir="rtl"] .pr-4 {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+/* Text alignment RTL */
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* Border radius RTL */
+[dir="rtl"] .rounded-l-lg {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+[dir="rtl"] .rounded-r-lg {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
+/* Positioning RTL */
+[dir="rtl"] .left-0 {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .right-0 {
+  right: auto;
+  left: 0;
+}
+
+/* Transform RTL */
+[dir="rtl"] .translate-x-full {
+  transform: translateX(-100%);
+}
+
+[dir="rtl"] .-translate-x-full {
+  transform: translateX(100%);
+}
+
+/* Dropdown positioning */
+[dir="rtl"] .dropdown-menu {
+  right: 0;
+  left: auto;
+}
+
+/* Language switch specific */
+[dir="rtl"] .language-dropdown {
+  right: 0;
+  left: auto;
+}
+
+/* Mobile menu slide direction */
+[dir="rtl"] .mobile-menu-slide {
+  transform: translateX(100%);
+}
+
+[dir="rtl"] .mobile-menu-slide.open {
+  transform: translateX(0);
+}
+
+/* Chevron icons RTL */
+[dir="rtl"] .chevron-right {
+  transform: rotate(180deg);
+}
+
+[dir="rtl"] .chevron-left {
+  transform: rotate(180deg);
+}
+
+/* Animation adjustments for RTL */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+[dir="rtl"] .slide-in-from-left {
+  animation: slideInFromRight 0.3s ease-out;
+}
+
+/* Typography RTL */
+[dir="rtl"] {
+  font-family: 'Inter', 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+}
+
+/* Arabic font support */
+[dir="rtl"][lang="ar"] {
+  font-family: 'Inter', 'Segoe UI', 'Tahoma', 'Arial', 'Noto Sans Arabic', sans-serif;
+}
+
+/* Ensure proper text rendering for Arabic */
+[dir="rtl"][lang="ar"] * {
+  font-feature-settings: "liga" off;
+}

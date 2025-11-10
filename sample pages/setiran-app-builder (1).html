@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Setiran App Builder — Build Custom Web Apps Fast</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <style>
+    :root{ --ink:#0b1220; --brand:#7c3aed; --brand2:#06b6d4; }
+    html,body{ background:#0b1220; color:#e5e7eb; }
+    .pill{ background:linear-gradient(90deg, var(--brand), var(--brand2)); }
+    .bg-grid{ background:
+      radial-gradient(1200px 800px at 80% -20%, rgba(124,58,237,.18), transparent 45%),
+      radial-gradient(900px 600px at -10% 120%, rgba(6,182,212,.18), transparent 55%),
+      #0b1220; }
+    .reveal{ opacity:0; transform:translateY(18px); transition:opacity .5s ease, transform .5s ease; will-change:opacity, transform;}
+    .reveal.show{ opacity:1; transform:translateY(0); }
+    .lift{ transition:transform .25s ease, box-shadow .25s ease; will-change:transform; }
+    .lift:hover{ transform:translateY(-6px); box-shadow:0 12px 28px rgba(0,0,0,.45); }
+    .soft-line{ background:linear-gradient(90deg, transparent, rgba(255,255,255,.12), transparent); height:1px; }
+    .badge{ font-size:.75rem; padding:.35rem .6rem; border:1px solid rgba(255,255,255,.15); border-radius:.65rem; background:rgba(255,255,255,.06); }
+    .acc-body{ display:none; }
+    .hscroll{ overflow-x:auto; scroll-behavior:smooth; }
+    .hscroll::-webkit-scrollbar{ height:8px; }
+    .hscroll::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.15); border-radius:999px; }
+    .masonry{ column-count:1; column-gap:1rem; }
+    @media (min-width: 768px){ .masonry{ column-count:2; } }
+    @media (min-width: 1024px){ .masonry{ column-count:3; } }
+    .masonry-item{ break-inside:avoid; margin:0 0 1rem; }
+    figure.placeholder{ border:1px dashed rgba(255,255,255,.2); background:rgba(255,255,255,.03); }
+    figure.placeholder img{ width:100%; height:auto; display:block; }
+    figure.placeholder figcaption{ font-size:.75rem; color:#cbd5e1; padding:.5rem .75rem; border-top:1px dashed rgba(255,255,255,.15); }
+    /* safety: create new stacking context for each major section to prevent overlap */
+    section, header { isolation:isolate; position:relative; z-index:0; }
+  </style>
+</head>
+<body class="antialiased selection:bg-fuchsia-500 selection:text-white">
+
+  <!-- NAV + HERO (no floats; safe spacing) -->
+  <header class="bg-grid">
+    <nav class="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full pill"></div>
+        <span class="text-slate-100 font-semibold">Setiran App Builder</span>
+      </div>
+      <div class="hidden md:flex items-center gap-6 text-slate-300">
+        <a href="#why" class="hover:text-white">Why</a>
+        <a href="#workspaces" class="hover:text-white">Workspaces</a>
+        <a href="#builder" class="hover:text-white">Builder</a>
+        <a href="#integrations" class="hover:text-white">Integrations</a>
+        <a href="#gov" class="hover:text-white">Governance</a>
+        <a href="#benefits" class="hover:text-white">Benefits</a>
+        <a href="#usecases" class="hover:text-white">Use Cases</a>
+        <a href="#faq" class="hover:text-white">FAQ</a>
+      </div>
+      <a href="#cta" class="px-4 py-2 rounded-xl text-sm font-semibold bg-white text-ink hover:opacity-90">Request a Demo</a>
+    </nav>
+
+    <section class="mx-auto max-w-7xl px-6 pt-10 pb-20 lg:pt-16">
+      <div class="grid lg:grid-cols-[1.1fr_.9fr] gap-10 items-center">
+        <div class="reveal">
+          <span class="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-white/10 border border-white/10">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Build complete web apps in days
+          </span>
+          <h1 class="mt-5 text-4xl md:text-5xl font-extrabold leading-tight text-white">
+            Custom Apps. <span class="text-fuchsia-400">Zero Heavy Code.</span>
+          </h1>
+          <p class="mt-5 text-slate-300 max-w-xl">
+            Design responsive internal tools with pages, workflows, reports, roles, and integrations. AI-assisted builder + enterprise controls = speed with confidence.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <a href="#builder" class="px-5 py-3 rounded-xl font-semibold pill text-white">Try the Builder</a>
+            <a href="#templates" class="px-5 py-3 rounded-xl font-semibold border border-white/15 text-slate-100 hover:bg-white/5">Browse Templates</a>
+          </div>
+          <div class="mt-8 flex gap-3 text-xs text-slate-400">
+            <span class="badge">No-Code</span>
+            <span class="badge">AI-Assisted</span>
+            <span class="badge">SOC2/GDPR</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="rounded-3xl overflow-hidden p-5 shadow-[0_0_0_1px_rgba(255,255,255,.06)]"
+               style="background:
+                 radial-gradient(900px 600px at 80% -20%, rgba(124,58,237,.2), transparent 50%),
+                 radial-gradient(700px 500px at -10% 120%, rgba(6,182,212,.18), transparent 55%),
+                 #0f1525;">
+            <figure class="placeholder rounded-2xl overflow-hidden">
+              <img src="https://placehold.co/980x420/0b1220/93c5fd?text=App+Canvas+%7C+Forms+%7C+Tables+%7C+Rules" alt="Canvas mock">
+              <figcaption>Mock: page canvas + component panel + properties.</figcaption>
+            </figure>
+            <div class="grid grid-cols-3 gap-3 mt-4">
+              <div class="lift rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+                <div class="text-lg">🧩</div><div class="text-xs">Drag & Drop</div>
+              </div>
+              <div class="lift rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+                <div class="text-lg">🔗</div><div class="text-xs">Integrations</div>
+              </div>
+              <div class="lift rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+                <div class="text-lg">🛡️</div><div class="text-xs">Security</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <div class="soft-line"></div>
+
+  <!-- WHY + Sticky rail -->
+  <section id="why" class="mx-auto max-w-7xl px-6 py-16 grid lg:grid-cols-[260px_1fr] gap-10">
+    <aside class="hidden lg:block sticky top-6 self-start reveal">
+      <div class="rounded-2xl bg-white/5 border border-white/10 p-4">
+        <div class="text-xs uppercase tracking-wide text-slate-400 mb-3">Spec Highlights</div>
+        <ul class="space-y-2 text-sm">
+          <li>• Build in days, not months</li>
+          <li>• Pages, workflows, reports</li>
+          <li>• Roles & granular permissions</li>
+          <li>• 15+ native integrations</li>
+          <li>• SSO, audit trail, SOC2/GDPR</li>
+        </ul>
+      </div>
+    </aside>
+    <div>
+      <div class="reveal">
+        <h2 class="text-3xl md:text-4xl font-bold">Why App Builder vs. Custom Dev?</h2>
+        <p class="mt-3 text-slate-300 max-w-3xl">
+          Replace ad-hoc spreadsheets and one-off scripts with purpose-built apps that mirror how your teams really work. Design visually, connect data sources in minutes, and ship faster—without sacrificing governance.
+        </p>
+      </div>
+      <div class="mt-8 grid md:grid-cols-3 gap-5">
+        <div class="reveal rounded-2xl bg-white/5 border border-white/10 p-5 lift">
+          <h3 class="font-semibold">Speed to Value</h3>
+          <p class="text-sm text-slate-300 mt-2">Launch prototypes in hours; go live in days with templates and blocks.</p>
+        </div>
+        <div class="reveal rounded-2xl bg-white/5 border border-white/10 p-5 lift">
+          <h3 class="font-semibold">Business Fit</h3>
+          <p class="text-sm text-slate-300 mt-2">Forms, roles, approvals aligned to your real process—not generic software.</p>
+        </div>
+        <div class="reveal rounded-2xl bg-white/5 border border-white/10 p-5 lift">
+          <h3 class="font-semibold">Unified Data</h3>
+          <p class="text-sm text-slate-300 mt-2">Connect DBs & SaaS. Make your app the single source of truth.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="soft-line"></div>
+
+  <!-- Workspaces (zig-zag) -->
+  <section id="workspaces" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div class="order-2 lg:order-1 reveal">
+        <figure class="placeholder rounded-3xl overflow-hidden bg-white/5 border border-white/10">
+          <img src="https://placehold.co/1000x560/0b1220/93c5fd?text=Workspace+Dashboards" alt="Workspace dashboards">
+          <figcaption>Separate workspaces for internal, partners, and customers.</figcaption>
+        </figure>
+      </div>
+      <div class="order-1 lg:order-2 reveal">
+        <h2 class="text-3xl md:text-4xl font-bold">Dedicated Workspaces & Roles</h2>
+        <p class="mt-3 text-slate-300">Isolated spaces per audience. Calibrate access at workspace, page, or field level. Align collaboration without leaking sensitive data.</p>
+        <div class="mt-6 grid sm:grid-cols-2 gap-4 text-sm">
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10 lift">Role-based access</div>
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10 lift">Custom dashboards</div>
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10 lift">External onboarding</div>
+          <div class="p-4 rounded-xl bg-white/5 border border-white/10 lift">Workspace themes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Templates Horizontal Scroller (auto-swipe) -->
+  <section id="templates" class="bg-[linear-gradient(180deg,rgba(6,182,212,.08),transparent)]">
+    <div class="mx-auto max-w-7xl px-6 py-16">
+      <div class="reveal flex items-end justify-between">
+        <h2 class="text-3xl md:text-4xl font-bold">Pre-Built Apps & Templates</h2>
+        <div class="flex gap-2">
+          <button id="tplPrev" class="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15">‹</button>
+          <button id="tplNext" class="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15">›</button>
+        </div>
+      </div>
+      <p class="reveal mt-3 text-slate-300 max-w-3xl">Start with HR, IT, Ops and more. Customize policies, SLAs, and reports—no rebuild.</p>
+      <div id="tplScroller" class="hscroll mt-6">
+        <div class="min-w-max flex gap-4">
+          <div class="reveal w-[320px] rounded-xl bg-white/5 border border-white/10 p-6 lift">
+            <div class="text-lg font-semibold">Employee Management</div>
+            <p class="text-sm text-slate-300 mt-1">Onboarding to offboarding with tasks & reports.</p>
+          </div>
+          <div class="reveal w-[320px] rounded-xl bg-white/5 border border-white/10 p-6 lift">
+            <div class="text-lg font-semibold">Leave Management</div>
+            <p class="text-sm text-slate-300 mt-1">Policy-aware approvals, calendars, limits.</p>
+          </div>
+          <div class="reveal w-[320px] rounded-xl bg-white/5 border border-white/10 p-6 lift">
+            <div class="text-lg font-semibold">Performance Reviews</div>
+            <p class="text-sm text-slate-300 mt-1">Goals, 360 feedback, analytics.</p>
+          </div>
+          <div class="reveal w-[320px] rounded-xl bg-white/5 border border-white/10 p-6 lift">
+            <div class="text-lg font-semibold">Marketing Requests</div>
+            <p class="text-sm text-slate-300 mt-1">Brief intake, approvals, asset tracking.</p>
+          </div>
+          <div class="reveal w-[320px] rounded-xl bg-white/5 border border-white/10 p-6 lift">
+            <div class="text-lg font-semibold">IT Service Desk</div>
+            <p class="text-sm text-slate-300 mt-1">Tickets, SLAs, escalations, KB.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Builder with Vertical Tabs -->
+  <section id="builder" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="grid lg:grid-cols-[260px_1fr] gap-10">
+      <div class="reveal">
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-4" id="builderTabs">
+          <button data-tab="ui" class="w-full text-left px-3 py-2 rounded-lg bg-white/10 mb-2">UI Blocks</button>
+          <button data-tab="flows" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 mb-2">Flows & Rules</button>
+          <button data-tab="themes" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10 mb-2">Themes</button>
+          <button data-tab="code" class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/10">Custom Code</button>
+        </div>
+      </div>
+      <div class="reveal rounded-2xl bg-white/5 border border-white/10 p-6">
+        <div id="tab-ui">
+          <h2 class="text-3xl font-bold">Visual Drag-and-Drop Builder</h2>
+          <p class="mt-2 text-slate-300">Place forms, tables, charts, boards, and buttons; wire actions; set validations. Build pages without code.</p>
+          <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Reusable components</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Conditional UI</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Inline validation</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Form states</li>
+          </ul>
+          <figure class="placeholder rounded-2xl overflow-hidden mt-5">
+            <img src="https://placehold.co/1100x420/0b1220/93c5fd?text=Builder+Canvas" alt="Builder Canvas">
+            <figcaption>Canvas with component drawer + properties.</figcaption>
+          </figure>
+        </div>
+        <div id="tab-flows" class="hidden">
+          <h2 class="text-3xl font-bold">Flows & Business Rules</h2>
+          <p class="mt-2 text-slate-300">Configure steps, branches, and approvals. Use time-based SLAs and escalations. Trigger actions on events.</p>
+          <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Parallel/Sequential approvals</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Timers & escalations</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Webhooks & callbacks</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Rule sets & conditions</li>
+          </ul>
+        </div>
+        <div id="tab-themes" class="hidden">
+          <h2 class="text-3xl font-bold">Design Systems & Themes</h2>
+          <p class="mt-2 text-slate-300">Apply brand colors, typography, and spacing system-wide. Keep UI consistent across workspaces.</p>
+          <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Global variables</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Workspace themes</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Component tokens</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Dark/Light support</li>
+          </ul>
+        </div>
+        <div id="tab-code" class="hidden">
+          <h2 class="text-3xl font-bold">Extend with Code</h2>
+          <p class="mt-2 text-slate-300">Embed custom JS, call APIs, or write small functions where needed. No-code speed + code precision.</p>
+          <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">JS hooks</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">REST/GraphQL</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">SDK/Plugins</li>
+            <li class="p-3 rounded-lg bg-white/5 border border-white/10">Unit tests</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integrations split -->
+  <section id="integrations" class="bg-[linear-gradient(180deg,rgba(124,58,237,.08),transparent)]">
+    <div class="mx-auto max-w-7xl px-6 py-16 grid lg:grid-cols-2 gap-12 items-center">
+      <div class="reveal">
+        <h2 class="text-3xl md:text-4xl font-bold">Data Management & Integrations</h2>
+        <p class="mt-3 text-slate-300">Flexible tables, custom fields, and automation-ready forms. Connect Sheets, Airtable, Notion, Postgres, and more. Keep systems synced via APIs & webhooks.</p>
+        <div class="mt-6 grid grid-cols-2 gap-3 text-sm">
+          <div class="p-3 rounded-lg bg-white/5 border border-white/10">15+ native connectors</div>
+          <div class="p-3 rounded-lg bg-white/5 border border-white/10">Import/Export & sync</div>
+          <div class="p-3 rounded-lg bg-white/5 border border-white/10">Data validation</div>
+          <div class="p-3 rounded-lg bg-white/5 border border-white/10">Audit on changes</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <figure class="placeholder rounded-2xl overflow-hidden">
+          <img src="https://placehold.co/1100x420/0f172a/FFFFFF?text=Integration+Diagram" alt="Integration Diagram">
+          <figcaption>Hub-and-spoke: App Builder ↔ ERP/CRM/DB/Email/Docs via APIs & webhooks.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- Business Benefits (masonry) -->
+  <section id="benefits" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="reveal text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold">Business Benefits</h2>
+      <p class="mt-3 text-slate-300">Accelerate delivery, reduce costs, standardize processes, and keep security tight—without slowing innovation.</p>
+    </div>
+    <div class="masonry mt-10">
+      <div class="masonry-item reveal rounded-2xl bg-white/5 border border-white/10 p-5"><h3 class="font-semibold">Time-to-Value</h3><p class="text-sm text-slate-300 mt-2">Launch in days with templates, blocks, and AI suggestions.</p></div>
+      <div class="masonry-item reveal rounded-2xl bg-white/5 border border-white/10 p-5"><h3 class="font-semibold">Lower TCO</h3><p class="text-sm text-slate-300 mt-2">Empower teams and focus IT on strategic initiatives.</p></div>
+      <div class="masonry-item reveal rounded-2xl bg-white/5 border border-white/10 p-5"><h3 class="font-semibold">Governed Agility</h3><p class="text-sm text-slate-300 mt-2">Move fast with role-based controls and auditability.</p></div>
+      <div class="masonry-item reveal rounded-2xl bg-white/5 border border-white/10 p-5"><h3 class="font-semibold">Happier Users</h3><p class="text-sm text-slate-300 mt-2">Tools that fit how teams actually work increase adoption.</p></div>
+      <div class="masonry-item reveal rounded-2xl bg-white/5 border border-white/10 p-5"><h3 class="font-semibold">Scalable</h3><p class="text-sm text-slate-300 mt-2">Handle more users and data without a redesign.</p></div>
+    </div>
+  </section>
+
+  <!-- Governance -->
+  <section id="gov" class="bg-[linear-gradient(180deg,rgba(99,102,241,.08),transparent)]">
+    <div class="mx-auto max-w-7xl px-6 py-16">
+      <div class="reveal text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold">Governance, Security & Compliance</h2>
+        <p class="mt-3 text-slate-300">Role-based access, field-level visibility, SSO, and audit logs by default. Tune security per workspace without breaking UX.</p>
+      </div>
+      <div class="reveal grid md:grid-cols-3 gap-5 mt-10">
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5 lift"><h3 class="font-semibold">Multi-Level Permissions</h3><p class="text-sm text-slate-300 mt-2">Field-level controls and scoped external access.</p></div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5 lift"><h3 class="font-semibold">Audit Trails</h3><p class="text-sm text-slate-300 mt-2">Every action logged for inspections and trust.</p></div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5 lift"><h3 class="font-semibold">Enterprise SSO</h3><p class="text-sm text-slate-300 mt-2">SSO, encryption at rest/in transit, secure hosting.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Use cases (auto-swipe) + Testimonials -->
+  <section id="usecases" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="reveal flex items-end justify-between">
+      <h2 class="text-3xl md:text-4xl font-bold">Use Cases</h2>
+      <div class="flex gap-2">
+        <button id="ucPrev" class="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15">‹</button>
+        <button id="ucNext" class="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/15">›</button>
+      </div>
+    </div>
+    <p class="reveal mt-3 text-slate-300 max-w-3xl">CRMs, ticketing, analytics dashboards, document portals, inventory—mobile-responsive via PWA. Roadmap: AI-generated apps.</p>
+    <div class="mt-6 rounded-2xl border border-white/10 bg-white/5 overflow-hidden">
+      <div id="ucTrack" class="flex gap-4 p-6">
+        <div class="min-w-[320px] rounded-xl border border-white/10 bg-white/5 p-6 lift"><div class="text-lg font-semibold">CRM</div><p class="text-sm text-slate-300 mt-1">Custom pipelines, roles, and reports.</p></div>
+        <div class="min-w-[320px] rounded-xl border border-white/10 bg-white/5 p-6 lift"><div class="text-lg font-semibold">Ticketing</div><p class="text-sm text-slate-300 mt-1">SLAs, automations, and knowledge base.</p></div>
+        <div class="min-w-[320px] rounded-xl border border-white/10 bg-white/5 p-6 lift"><div class="text-lg font-semibold">Analytics</div><p class="text-sm text-slate-300 mt-1">Dashboards with drill-downs.</p></div>
+        <div class="min-w-[320px] rounded-xl border border-white/10 bg-white/5 p-6 lift"><div class="text-lg font-semibold">Portals</div><p class="text-sm text-slate-300 mt-1">Docs, forms, and secure sharing.</p></div>
+        <div class="min-w-[320px] rounded-xl border border-white/10 bg-white/5 p-6 lift"><div class="text-lg font-semibold">Inventory</div><p class="text-sm text-slate-300 mt-1">Items, suppliers, and re-order logic.</p></div>
+      </div>
+    </div>
+
+    <div class="reveal mt-10 rounded-2xl bg-white/5 border border-white/10 p-6">
+      <div class="grid md:grid-cols-3 gap-5">
+        <blockquote class="rounded-xl bg-white/5 border border-white/10 p-4"><p class="text-sm text-slate-200">“We shipped internal tools 5× faster and finally retired fragile spreadsheets.”</p><div class="text-xs text-slate-400 mt-3">Ops Lead — Logistics</div></blockquote>
+        <blockquote class="rounded-xl bg-white/5 border border-white/10 p-4"><p class="text-sm text-slate-200">“Role-based workspaces let partners collaborate securely without extra portals.”</p><div class="text-xs text-slate-400 mt-3">Program Manager — Finance</div></blockquote>
+        <blockquote class="rounded-xl bg-white/5 border border-white/10 p-4"><p class="text-sm text-slate-200">“Governance + speed. The audit trail saved us during compliance review.”</p><div class="text-xs text-slate-400 mt-3">IT Director — Healthcare</div></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ + CTA -->
+  <section id="faq" class="bg-[linear-gradient(180deg,rgba(6,182,212,.08),transparent)]">
+    <div class="mx-auto max-w-7xl px-6 py-16">
+      <div class="reveal text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold">FAQ</h2>
+        <p class="mt-3 text-slate-300">Everything you need to know before building your first app.</p>
+      </div>
+      <div class="mt-8 grid lg:grid-cols-2 gap-6">
+        <div class="reveal rounded-2xl bg-white/5 border border-white/10 p-4">
+          <h3 class="font-semibold text-white mb-3">Getting Started</h3>
+          <div class="border-t border-white/10">
+            <button class="acc-head w-full text-left py-3 hover:text-white">Do I need coding skills?</button>
+            <div class="acc-body text-sm text-slate-300 pb-3">No. Build visually; add custom code only if you want extra control.</div>
+          </div>
+          <div class="border-t border-white/10">
+            <button class="acc-head w-full text-left py-3 hover:text-white">How do templates work?</button>
+            <div class="acc-body text-sm text-slate-300 pb-3">Pick a template, customize pages & rules, connect data sources.</div>
+          </div>
+        </div>
+        <div class="reveal rounded-2xl bg-white/5 border border-white/10 p-4">
+          <h3 class="font-semibold text-white mb-3">Security & Scaling</h3>
+          <div class="border-t border-white/10">
+            <button class="acc-head w-full text-left py-3 hover:text-white">Is it enterprise-ready?</button>
+            <div class="acc-body text-sm text-slate-300 pb-3">Yes. Role-based access, SSO, audit logs, and compliance features.</div>
+          </div>
+          <div class="border-t border-white/10">
+            <button class="acc-head w-full text-left py-3 hover:text-white">Can it integrate with our stack?</button>
+            <div class="acc-body text-sm text-slate-300 pb-3">Connect via native connectors, REST APIs, and webhooks.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="cta" class="reveal mt-12 text-center">
+        <h3 class="text-2xl font-bold">Ready to build your first app?</h3>
+        <p class="mt-2 text-slate-300">Book a tailored demo or start from a template to see results fast.</p>
+        <a href="#" class="inline-block mt-6 px-6 py-3 rounded-xl font-semibold pill text-white">Request a Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="border-t border-white/10">
+    <div class="mx-auto max-w-7xl px-6 py-10 text-sm text-slate-400 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>© <span id="year"></span> Setiran. All rights reserved.</div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-white">Privacy</a>
+        <a href="#" class="hover:text-white">Security</a>
+        <a href="#" class="hover:text-white">Status</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS: reveal, tabs, accordion, auto-swipe scrollers -->
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Reveal on scroll (no layout shift)
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target);} });
+    }, { threshold:.15 });
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+    // Vertical Tabs (Builder)
+    $('#builderTabs button').on('click', function(){
+      $('#builderTabs button').removeClass('bg-white/10');
+      $(this).addClass('bg-white/10');
+      const tab = $(this).data('tab');
+      $('#tab-ui, #tab-flows, #tab-themes, #tab-code').addClass('hidden');
+      $('#tab-'+tab).removeClass('hidden');
+    });
+
+    // Accordion (FAQ)
+    $('.acc-head').on('click', function(){
+      const $body = $(this).next('.acc-body');
+      $('.acc-body').not($body).slideUp(160);
+      $body.stop(true,true).slideToggle(180);
+    });
+
+    // ---------- Auto-swipe for Templates (horizontal native scroller) ----------
+    function makeAutoScroller(scrollerSel, prevSel, nextSel){
+      const $scroller = $(scrollerSel);
+      let itemWidth = 320 + 16; // card width + gap (approx)
+      function recalc(){
+        const $first = $scroller.find('> div > div').first();
+        if($first.length){ itemWidth = $first.outerWidth(true); }
+      }
+      recalc();
+      $(window).on('resize', recalc);
+
+      function move(dir=1){
+        const maxScroll = $scroller[0].scrollWidth - $scroller[0].clientWidth;
+        let target = $scroller.scrollLeft() + dir*itemWidth;
+        if(target < 0) target = 0;
+        if(target > maxScroll) target = 0; // loop
+        $scroller.stop(true).animate({scrollLeft: target}, 450);
+      }
+
+      // Buttons
+      $(prevSel).on('click', ()=> move(-1));
+      $(nextSel).on('click', ()=> move(1));
+
+      // Autoplay with hover pause
+      let timer = setInterval(()=> move(1), 2600);
+      $scroller.on('mouseenter', ()=> clearInterval(timer));
+      $scroller.on('mouseleave', ()=> timer = setInterval(()=> move(1), 2600));
+    }
+    makeAutoScroller('#tplScroller', '#tplPrev', '#tplNext');
+
+    // ---------- Use Cases simple carousel (auto + buttons) ----------
+    (function(){
+      const $track = $('#ucTrack');
+      const $wrap = $track.parent(); // overflow container
+      let cardW = 0, index = 0;
+
+      function recalc(){
+        cardW = $track.children().first().outerWidth(true) || 360;
+        // Snap back within bounds on resize
+        index = Math.max(0, Math.min(index, $track.children().length - Math.ceil($wrap.width()/cardW)));
+        $track.css({ transform:`translateX(${-index*cardW}px)` });
+      }
+      recalc();
+      $(window).on('resize', recalc);
+
+      function move(dir=1){
+        const visible = Math.floor($wrap.width()/cardW) || 1;
+        const maxIndex = Math.max(0, $track.children().length - visible);
+        index = index + dir;
+        if(index > maxIndex) index = 0; // loop
+        if(index < 0) index = maxIndex;
+        $track.css({ transition:'transform .45s ease', transform:`translateX(${-index*cardW}px)` });
+      }
+
+      $('#ucPrev').on('click', ()=> move(-1));
+      $('#ucNext').on('click', ()=> move(1));
+
+      let timer = setInterval(()=> move(1), 2800);
+      $wrap.on('mouseenter', ()=> clearInterval(timer));
+      $wrap.on('mouseleave', ()=> timer = setInterval(()=> move(1), 2800));
+    })();
+  </script>
+</body>
+</html>

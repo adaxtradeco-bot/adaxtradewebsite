@@ -1,0 +1,14 @@
+{
+  "gettingStarted": "Getting Started",
+  "securityScaling": "Security & Scaling",
+  "needCoding": "Do I need coding skills?",
+  "needCodingAnswer": "No—build visually. Add custom code only if you want extra control.",
+  "howTemplates": "How do templates work?",
+  "howTemplatesAnswer": "Pick a template, customize steps, fields and rules, connect systems.",
+  "enterpriseReady": "Is it enterprise-ready?",
+  "enterpriseReadyAnswer": "Yes. Role-based access, SSO, audit logs, encryption, and compliance.",
+  "canIntegrate": "Can it integrate with our stack?",
+  "canIntegrateAnswer": "Use native connectors, REST APIs, and webhooks to sync data.",
+  "readyToModernize": "Ready to modernize your forms?",
+  "readyDescription": "Book a tailored demo or start from a template to see results fast."
+}

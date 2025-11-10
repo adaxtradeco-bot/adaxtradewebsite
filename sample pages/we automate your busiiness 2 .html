@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>No-Code Automation — From Idea to Impact</title>
+<style>
+  /* Reset & base */
+  body {
+    margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f9fafb; color: #222;
+    line-height: 1.6;
+  }
+  h1, h2, h3 {
+    color: #0a2540;
+  }
+  a {
+    color: #1761a0;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 12px 28px;
+    background: #1761a0;
+    color: white;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  .btn:hover {
+    background: #0f416a;
+  }
+  /* Sections */
+  section {
+    padding: 60px 0;
+  }
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, #1761a0 0%, #4393d1 100%);
+    color: white;
+    text-align: center;
+    padding: 100px 24px 80px;
+  }
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .hero p {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto 32px;
+  }
+  /* Modern business challenge */
+  .challenge-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .card {
+    background: white;
+    padding: 32px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(23 97 160 / 0.15);
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+  }
+  .card:hover {
+    box-shadow: 0 6px 18px rgb(23 97 160 / 0.3);
+  }
+  .card-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+    color: #1761a0;
+  }
+  /* Features grid */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 32px;
+    margin-top: 40px;
+  }
+  /* Consulting & others */
+  .two-columns {
+    display: flex;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+  .two-columns > div {
+    flex: 1 1 320px;
+    background: white;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgb(0 0 0 / 0.08);
+  }
+  /* Testimonials slider placeholder */
+  .testimonial-slider {
+    background: white;
+    padding: 48px 32px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  blockquote {
+    font-style: italic;
+    margin: 0 0 12px;
+    color: #555;
+  }
+  footer {
+    text-align: center;
+    padding: 24px 12px;
+    font-size: 0.875rem;
+    color: #777;
+  }
+  /* FAQ */
+  .faq-item {
+    margin-bottom: 20px;
+  }
+  .faq-question {
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    padding-right: 20px;
+  }
+  .faq-question::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-weight: 700;
+    font-size: 1.3rem;
+  }
+  .faq-answer {
+    margin-top: 6px;
+    padding-left: 12px;
+    color: #444;
+    display: none;
+  }
+  .faq-item.active .faq-answer {
+    display: block;
+  }
+  .faq-item.active .faq-question::after {
+    content: '−';
+  }
+  /* Industry logos placeholder */
+  .industry-logos {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+  .industry-logos img {
+    max-height: 50px;
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+  }
+  .industry-logos img:hover {
+    opacity: 1;
+  }
+  /* Responsive tweaks */
+  @media (max-width: 720px) {
+    .two-columns {
+      flex-direction: column;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <h1>From Idea to Impact — Faster, Smarter, Seamless</h1>
+    <p>Unlock the power of no-code automation and transform your business workflows — fast, flexible, and without writing a single line of code. Accelerate growth, cut costs, and empower your teams to focus on what matters.</p>
+    <a href="#" class="btn">Get Started Today</a>
+    <a href="#" class="btn" style="background:#3a78c8; margin-left:12px;">Request a Demo</a>
+  </div>
+</section>
+
+<!-- Modern Business Challenge -->
+<section>
+  <div class="container">
+    <h2>The Modern Business Challenge</h2>
+    <p>We help organizations overcome inefficiencies, disconnected systems, and outdated tools — delivering results with speed and clarity.</p>
+
+    <div class="challenge-cards">
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <h3>Manual Processes</h3>
+        <p>Replace repetitive, error-prone tasks with automated, reliable workflows that free your team to innovate.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔗</div>
+        <h3>Disconnected Systems</h3>
+        <p>Break down data silos by unifying your tools and information into one consistent, accurate source.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚙️</div>
+        <h3>Outdated Tools</h3>
+        <p>Upgrade without disruption—modern, adaptable systems designed to grow with your business, no costly rebuilds required.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📉</div>
+        <h3>Limited Capacity</h3>
+        <p>Implement meaningful process improvements quickly without straining your internal resources.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Automate -->
+<section style="background:#1761a0; color:#fff;">
+  <div class="container" style="max-width: 800px; text-align:center;">
+    <h2>Why Automate?</h2>
+    <p>Managing daily business operations means juggling endless approvals, emails, paperwork, and follow-ups. What if much of that could run automatically?</p>
+    <ul style="list-style:none; padding-left:0; font-size:1.1rem; text-align:left; max-width: 480px; margin: 0 auto;">
+      <li>✔ Eliminate manual, repetitive work</li>
+      <li>✔ Reduce costly errors</li>
+      <li>✔ Save valuable hours every week</li>
+      <li>✔ Gain real-time insight and control</li>
+      <li>✔ Scale faster without adding headcount</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Features -->
+<section>
+  <div class="container">
+    <h2>How Our No-Code Platform Empowers You</h2>
+    <div class="features-grid">
+      <div>
+        <h3>Visual Workflow Builder</h3>
+        <p>Drag-and-drop process design with web-based simplicity.</p>
+      </div>
+      <div>
+        <h3>Flexible Stage & Role Management</h3>
+        <p>Define unlimited process steps and assign roles dynamically.</p>
+      </div>
+      <div>
+        <h3>Dynamic Conditions & Approvals</h3>
+        <p>Automate decisions based on data, timing, and roles.</p>
+      </div>
+      <div>
+        <h3>Custom Forms & Data Capture</h3>
+        <p>Tailor data entry to each step or transition.</p>
+      </div>
+      <div>
+        <h3>Automated Notifications</h3>
+        <p>Send real-time SMS, email, and system alerts.</p>
+      </div>
+      <div>
+        <h3>Live Workflow Monitoring</h3>
+        <p>Track progress visually with real-time dashboards.</p>
+      </div>
+      <div>
+        <h3>Manual & Event-Driven Triggers</h3>
+        <p>Start processes on-demand or via event triggers.</p>
+      </div>
+      <div>
+        <h3>Robust API Integration</h3>
+        <p>Connect seamlessly with your existing systems and data sources.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Workflow Builder Deep Dive -->
+<section style="background:#f0f4fb;">
+  <div class="container">
+    <h2>Deep Workflow Builder Capabilities</h2>
+    <ul style="max-width: 900px; margin: 0 auto; padding-left: 20px; font-size:1.1rem;">
+      <li>Online process definition with graphical design and stage sequencing.</li>
+      <li>Unlimited stage types: start, intermediate, and end.</li>
+      <li>Stage instructions, reusable templates, and dynamic branching.</li>
+      <li>Integrated communication services for SMS, email, and fax.</li>
+      <li>Flexible role assignment based on org structure and data.</li>
+      <li>Visual workflow diagrams for full transparency.</li>
+      <li>Manual and event-driven triggers to start workflows.</li>
+      <li>Advanced approval workflows with parallel/sequential voting.</li>
+      <li>Task delegation, referral, and automated API integration.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Consulting & Implementation -->
+<section>
+  <div class="container">
+    <h2>Our Consulting: Strategy to Execution</h2>
+    <div class="two-columns">
+      <div>
+        <h3>Strategy Development</h3>
+        <p>Senior consultants craft tailored automation roadmaps aligned with your business vision.</p>
+      </div>
+      <div>
+        <h3>Analysis & Benefit Design</h3>
+        <p>Identify challenges and design workflows that deliver measurable value.</p>
+      </div>
+      <div>
+        <h3>Implementation Management</h3>
+        <p>End-to-end delivery including configuration, integration, testing, and training.</p>
+      </div>
+      <div>
+        <h3>Change & Risk Management</h3>
+        <p>Support adoption and manage transformation risks for smooth rollout.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Industry Logos (placeholder) -->
+<section style="background:#e8f0fe;">
+  <div class="container">
+    <h2>Industry Adaptability</h2>
+    <p style="text-align:center; max-width: 700px; margin: 0 auto 40px;">Our no-code automation platform drives impact across diverse sectors:</p>
+    <div class="industry-logos">
+      <img src="https://via.placeholder.com/120x50?text=Finance" alt="Finance Industry" />
+      <img src="https://via.placeholder.com/120x50?text=Healthcare" alt="Healthcare Industry" />
+      <img src="https://via.placeholder.com/120x50?text=Retail" alt="Retail Industry" />
+      <img src="https://via.placeholder.com/120x50?text=Manufacturing" alt="Manufacturing Industry" />
+      <img src="https://via.placeholder.com/120x50?text=Government" alt="Government Industry" />
+      <img src="https://via.placeholder.com/120x50?text=Construction" alt="Construction Industry" />
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section>
+  <div class="container">
+    <h2>Success Stories</h2>
+    <div class="testimonial-slider">
+      <blockquote>“No-code automation eliminated 70% of manual work, freeing our team to focus on innovation.”</blockquote>
+      <p><strong>Operations Director, Financial Services</strong></p>
+      <hr />
+      <blockquote>“Business users now create and update workflows themselves, accelerating our agility.”</blockquote>
+      <p><strong>CIO, Healthcare Provider</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 8-Week Delivery Guarantee -->
+<section style="background:#1761a0; color:#fff;">
+  <div class="container" style="max-width: 900px; margin: auto; text-align:center;">
+    <h2>Our Commitment: Rapid Delivery, Real Results — In Just 8 Weeks</h2>
+    <p>We guarantee to bring your automation project from concept to live deployment in <strong>8 weeks or less</strong>. Our no-code platform combined with expert guidance ensures your solution is delivered right — fast, efficient, and scalable.</p>
+    <ul style="list-style:none; padding-left:0; font-size:1.1rem; text-align:left; max-width: 600px; margin: 0 auto;">
+      <li>✔ Fixed timeline and transparent pricing — no surprises</li>
+      <li>✔ Dedicated team guiding your project every step</li>
+      <li>✔ Collaborative design process aligned to your goals</li>
+      <li>✔ Proven best practices from years of experience</li>
+      <li>✔ Agile no-code platform for rapid iteration and growth</li>
+      <li>✔ Trusted expertise helping enterprises transform</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container" style="max-width: 700px;">
+    <h2>Frequently Asked Questions</h2>
+
+    <div class="faq-item">
+      <div class="faq-question">Do I need programming skills?</div>
+      <div class="faq-answer">No. Our no-code platform is designed for business users and process owners.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">How fast can I deploy?</div>
+      <div class="faq-answer">Many organizations are live within days to a few weeks.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question">Can I customize workflows?</div>
+      <div class="faq-answer">Absolutely. Every element is configurable to your exact needs.</div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section style="background:#0a2540; color:#fff; text-align:center; padding: 60px 24px;">
+  <h2>Get Started Today</h2>
+  <p>From idea to impact — accelerate your business with no-code automation built for the modern enterprise.</p>
+  <a href="#" class="btn" style="background:#4393d1;">Try It Free for 14 Days</a>
+  <a href="#" class="btn" style="background:#1761a0; margin-left:12px;">Schedule a Consultation</a>
+</section>
+
+<!-- Footer -->
+<footer>
+  © 2025 Your Company. All rights reserved.
+</footer>
+
+<script>
+  // FAQ toggle
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      item.classList.toggle('active');
+    });
+  });
+</script>
+
+</body>
+</html>

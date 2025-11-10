@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Management BPMS: Product Catalog</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the Inter font and smooth scrolling */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #f8fafc; /* Tailwind's slate-50 */
+            color: #1e293b; /* Tailwind's slate-800 */
+        }
+        /* Style for active navigation links */
+        .nav-link.active {
+            font-weight: bold;
+            color: #1a73e8; /* A shade of blue */
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-lg fixed w-full z-50 py-4 px-6 md:px-10">
+        <nav class="container mx-auto flex flex-col md:flex-row items-center justify-between">
+            <a href="#top" class="text-3xl font-extrabold text-blue-700 hover:text-blue-800 transition-colors duration-300 rounded-lg p-2">
+                🚚 Fleet BPMS
+            </a>
+            <div class="mt-4 md:mt-0 flex flex-wrap justify-center md:justify-end  text-lg">
+                <a href="#executive-summary" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Summary</a>
+                <a href="#core-capabilities" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Capabilities</a>
+                <a href="#key-features" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Features</a>
+                <a href="#dynamic-platform" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Builders</a>
+                <a href="#role-workspaces" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Workspaces</a>
+                <a href="#analytics" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Analytics</a>
+                <a href="#integrations" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Integrations</a>
+                <a href="#security" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Security</a>
+                <a href="#customers" class="nav-link text-gray-700 hover:text-blue-600 transition-colors duration-200 p-2 rounded-md">Customers</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-28 md:pt-24">
+        <!-- Hero Section -->
+        <section id="top" class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-20 md:py-32 text-center shadow-inner rounded-b-3xl">
+            <div class="container mx-auto px-6">
+                <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
+                    Fleet Management BPMS: <br class="hidden md:block"> Your Blueprint for Modern Fleet Operations
+                </h1>
+                <p class="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">
+                    A modern, enterprise-grade platform unifying Business Process Management (BPMS) with Automatic Vehicle Location (AVL) telematics to digitize and optimize your entire fleet lifecycle.
+                </p>
+                <a href="#executive-summary" class="mt-10 inline-block bg-white text-blue-700 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-transform transform hover:scale-105 duration-300 shadow-xl">
+                    Explore the Catalog
+                </a>
+            </div>
+        </section>
+
+        <!-- Executive Summary -->
+        <section id="executive-summary" class="py-16 md:py-24 bg-white rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-12 text-blue-800">Executive Summary</h2>
+                <p class="text-xl leading-relaxed text-gray-700 max-w-4xl mx-auto">
+                    This <strong class="text-blue-700">Fleet Management BPMS</strong> (Business Process Management System) is an enterprise-grade platform meticulously engineered to <strong class="text-blue-700">unify BPMS with cutting-edge AVL (Automatic Vehicle Location) telematics</strong>. It comprehensively digitizes the entire lifecycle of fleet operations, from initial vehicle demand and precise assignment to efficient dispatch, flawless route execution, meticulous time and contract management, robust compliance, proactive maintenance, insightful analytics, and seamless customer communication. The entire system remains remarkably configurable through intuitive <strong class="text-blue-700">no-code builders</strong> (for forms, processes, and dashboards) and offers modular, <strong class="text-blue-700">role-tailored workspaces</strong> designed for maximum productivity.
+                </p>
+            </div>
+        </section>
+
+        <!-- Core Capabilities & Transformative Outcomes -->
+        <section id="core-capabilities" class="py-16 md:py-24 bg-gray-100 rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-16 text-blue-800">Core Capabilities & Transformative Outcomes</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
+
+                    <!-- Accelerated, Auditable Workflows -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col md:flex-row items-center">
+                        <div class="mb-6 md:mb-0 md:mr-6 flex-shrink-0">
+                            <img src="https://placehold.co/150x150/CCE3FF/2D73CC?text=Workflow+Viz" alt="Dynamic digital workflow dashboard" class="w-36 h-36 object-cover rounded-full shadow-md border-4 border-blue-200">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-700">⏱️ Accelerated, Auditable Workflows</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                <strong class="text-blue-600">Transform cumbersome processes</strong> into agile, transparent operations. Streamline every request-to-assignment-to-trip process with <strong class="text-blue-600">real-time context</strong> and complete, unalterable <strong class="text-blue-600">audit trails</strong>, ensuring accountability and efficiency at every step.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Substantial Operating Cost Reduction -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col md:flex-row items-center">
+                        <div class="mb-6 md:mb-0 md:mr-6 flex-shrink-0">
+                            <img src="https://placehold.co/150x150/FFF0CC/CC8800?text=Cost+Savings" alt="Graph illustrating fleet cost reductions" class="w-36 h-36 object-cover rounded-full shadow-md border-4 border-yellow-200">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-yellow-700">💰 Substantial Operating Cost Reduction</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                Unlock significant financial savings through <strong class="text-yellow-600">intelligent automation</strong>. Achieve a leaner, more efficient fleet by leveraging automated routing, <strong class="text-yellow-600">optimized vehicle utilization</strong>, and a proactive, <strong class="text-yellow-600">predictive maintenance</strong> approach that minimizes downtime and extends asset life.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Elevated Service Levels & Uncompromising Safety -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col md:flex-row items-center">
+                        <div class="mb-6 md:mb-0 md:mr-6 flex-shrink-0">
+                            <img src="https://placehold.co/150x150/FFDDC1/FF6600?text=Safety+Map" alt="Interactive map with safety alerts" class="w-36 h-36 object-cover rounded-full shadow-md border-4 border-red-200">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-red-700">🛡️ Elevated Service Levels & Uncompromising Safety</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                <strong class="text-red-600">Exceed customer expectations</strong> and foster a culture of safety. Improve service delivery and ensure the well-being of your assets and personnel with <strong class="text-red-600">dynamic live maps</strong>, instant <strong class="text-red-600">real-time alerts</strong>, and <strong class="text-red-600">policy-driven rules</strong> designed for secure, compliant operations.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Future-Proof Continuous Adaptability -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col md:flex-row items-center">
+                        <div class="mb-6 md:mb-0 md:mr-6 flex-shrink-0">
+                            <img src="https://placehold.co/150x150/D0FFF0/00CC99?text=Modularity" alt="Schematic diagram of interconnected modules" class="w-36 h-36 object-cover rounded-full shadow-md border-4 border-green-200">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-green-700">⚙️ Future-Proof Continuous Adaptability</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                <strong class="text-green-600">Stay ahead of tomorrow's challenges</strong> with a platform built for change. Ensure unparalleled future-proofing with our intuitive <strong class="text-green-600">visual no-code builders</strong> and a robust, <strong class="text-green-600">open integration layer</strong> that facilitates seamless evolution, easy customization, and effortless scalability as your business grows.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Key System Scope Features -->
+        <section id="key-features" class="py-16 md:py-24 bg-white rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-16 text-blue-800">Key System Scope Features: Powering Every Aspect of Your Fleet</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Intelligent Request & Assignment Processes -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <img src="https://placehold.co/250x150/E6F3FF/4A90E2?text=Dispatch+Screen" alt="Dispatch screen with assignment functionality" class="w-full h-40 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-700">🗺️ Intelligent Request & Assignment Processes</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            From initial intake to final trip closure, our system provides <strong class="text-blue-600">end-to-end management</strong>. Handle intake, triage, validation, approval, precise assignment, efficient dispatch, and seamless trip closure with <strong class="text-blue-600">clear SLA tracking</strong> and <strong class="text-blue-600">intelligent auto-escalations</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Flawless Operational Execution -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <img src="https://placehold.co/250x150/E6FFEB/5CB85C?text=Driver+App" alt="Driver's mobile app screen with navigation" class="w-full h-40 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold mb-3 text-green-700">🚦 Flawless Operational Execution</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Ensure every journey is executed with precision. Manage trip start/stop, validate arrivals with <strong class="text-green-600">geofenced checkpoints</strong>, efficiently handle incidents and detours, and provide <strong class="text-green-600">live ETA updates</strong> for efficient, transparent operations.
+                        </p>
+                    </div>
+
+                    <!-- Comprehensive Time & Contract Management -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <img src="https://placehold.co/250x150/FFFBE6/FFC107?text=Timesheet+Dashboard" alt="Digital dashboard displaying driver shift schedules" class="w-full h-40 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold mb-3 text-yellow-700">📝 Comprehensive Time & Contract Management</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Simplify complex administrative tasks. Easily manage <strong class="text-yellow-600">driver working hours</strong>, optimize shift rosters, apply <strong class="text-yellow-600">overtime rules</strong>, oversee pay items, and expertly manage vehicle leasing contracts with unparalleled ease and accuracy.
+                        </p>
+                    </div>
+
+                    <!-- Specialized Construction & Heavy Equipment Allocation -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <img src="https://placehold.co/250x150/FFEDF0/FF4081?text=Construction+Site" alt="Construction site plan with equipment locations" class="w-full h-40 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold mb-3 text-pink-700">🏗️ Specialized Construction & Heavy Equipment Allocation</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Tailored for demanding industries. Facilitate intricate heavy equipment scheduling, precise job-site allocation, detailed daily logs, rigorous operator certifications, and robust control mechanisms.
+                        </p>
+                    </div>
+
+                    <!-- Proactive Safety, Compliance & Risk Management -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <img src="https://placehold.co/250x150/FFE6E6/F44336?text=Safety+DVIR" alt="Tablet showing digital DVIR checklist" class="w-full h-40 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold mb-3 text-red-700">✅ Proactive Safety, Compliance & Risk Management</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Prioritize safety and ensure regulatory adherence. Implement sophisticated <strong class="text-red-600">driver behavior scoring</strong>, streamlined DVIR (Daily Vehicle Inspection Report) workflows, comprehensive incident reporting, prompt corrective actions, and robust compliance tools.
+                        </p>
+                    </div>
+
+                    <!-- Advanced Assets & Maintenance Lifecycle Management -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <img src="https://placehold.co/250x150/E8F5E9/8BC34A?text=Maintenance+Log" alt="Vehicle maintenance record on screen" class="w-full h-40 object-cover rounded-md mb-4 shadow-sm">
+                        <h3 class="text-xl font-semibold mb-3 text-lime-700">🛠️ Advanced Assets & Maintenance Lifecycle Management</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            Maximize asset longevity and performance. Manage your complete fleet registry, automate <strong class="text-lime-600">warranties</strong>, schedule comprehensive service plans, trigger <strong class="text-lime-600">meter-based preventive maintenance (PM)</strong>, integrate fault codes, manage parts inventory, and track work orders efficiently.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Platform Capabilities: Your No-Code/Low-Code Advantage -->
+        <section id="dynamic-platform" class="py-16 md:py-24 bg-gray-100 rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-16 text-blue-800">Dynamic Platform Capabilities: Your No-Code/Low-Code Advantage</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10">
+
+                    <!-- Intuitive Form Builder -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <img src="https://placehold.co/400x200/F0F8FF/6A5ACD?text=Form+Builder+UI" alt="Drag-and-drop interface for building forms" class="w-full h-52 object-cover rounded-md mb-6 shadow-md">
+                        <h3 class="text-2xl font-semibold mb-4 text-purple-700">✍️ Intuitive Form Builder</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong class="text-purple-600">Design any form you need</strong> with remarkable ease. Create custom forms effortlessly with <strong class="text-purple-600">drag-and-drop fields</strong>, dynamic conditional sections, robust validation rules, and a library of reusable blocks and widgets.
+                        </p>
+                    </div>
+
+                    <!-- Visual Process Designer -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <img src="https://placehold.co/400x200/F0FFF0/32CD32?text=BPMN+Designer" alt="Interactive BPMN diagram in a visual editor" class="w-full h-52 object-cover rounded-md mb-6 shadow-md">
+                        <h3 class="text-2xl font-semibold mb-4 text-emerald-700">🔄 Visual Process Designer</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong class="text-emerald-600">Orchestrate your business logic visually.</strong> Design and optimize BPMN workflows with precision, incorporating timers, escalations, <strong class="text-emerald-600">intelligent gateways</strong>, comprehensive SLA rules, and dynamic telematics event triggers for automated process advancement.
+                        </p>
+                    </div>
+
+                    <!-- Powerful Dashboard Builder -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <img src="https://placehold.co/400x200/FFF8DC/FFD700?text=Dashboard+Config" alt="Customizable dashboard displaying widgets" class="w-full h-52 object-cover rounded-md mb-6 shadow-md">
+                        <h3 class="text-2xl font-semibold mb-4 text-amber-700">📊 Powerful Dashboard Builder</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong class="text-amber-600">Gain instant insights with custom views.</strong> Design intuitive <strong class="text-amber-600">real-time dashboards</strong> featuring dynamic KPI cards, interactive maps, powerful pivot tables, flexible export options, and scheduled report delivery for stakeholders.
+                        </p>
+                    </div>
+
+                    <!-- Flexible Workspace Builder -->
+                    <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                        <img src="https://placehold.co/400x200/E0FFFF/4682B4?text=Workspace+Layout" alt="Personalized user interface examples for different roles" class="w-full h-52 object-cover rounded-md mb-6 shadow-md">
+                        <h3 class="text-2xl font-semibold mb-4 text-sky-700">🖥️ Flexible Workspace Builder</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            <strong class="text-sky-600">Tailor the experience for every role.</strong> Create and customize <strong class="text-sky-600">role-specific workspaces</strong> for your contact center, dispatch teams, drivers, valued customers, maintenance crews, and management, ensuring optimal productivity and relevance for everyone.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Role-Based Workspaces Examples -->
+        <section id="role-workspaces" class="py-16 md:py-24 bg-white rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-16 text-blue-800">Role-Based Workspaces Examples: Optimized for Every User</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <h3 class="text-xl font-semibold mb-3 text-blue-700">📞 Contact Center</h3>
+                        <p class="text-gray-700">Manage omni-channel intake, monitor SLA timers, provide quick quotes, and handle alerts efficiently.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <h3 class="text-xl font-semibold mb-3 text-green-700">调度 & Back-Office</h3>
+                        <p class="text-gray-700">Leverage auto-match suggestions, an intuitive drag-and-drop schedule board, and streamlined exception queues for seamless operations.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <h3 class="text-xl font-semibold mb-3 text-yellow-700">👨‍✈️ Drivers & Operators</h3>
+                        <p class="text-gray-700">Access digital job cards, utilize offline caching, integrated navigation, DVIR forms, and easy timesheet submission.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <h3 class="text-xl font-semibold mb-3 text-purple-700">👥 Requesters / Customers</h3>
+                        <p class="text-gray-700">Benefit from a self-service booking portal, live tracking links, real-time ETA notifications, and preferred driver/vehicle settings.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                        <h3 class="text-xl font-semibold mb-3 text-red-700">⚙️ Maintenance & Safety</h3>
+                        <p class="text-gray-700">Utilize a centralized fault/event inbox, organized PM backlog, detailed safety incidents log, and comprehensive compliance pack management.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics & KPIs -->
+        <section id="analytics" class="py-16 md:py-24 bg-gray-100 rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-16 text-blue-800">Analytics & KPIs: Data-Driven Decision Making</h2>
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
+                    <div class="lg:w-1/2">
+                        <p class="text-xl leading-relaxed text-gray-700 mb-8">
+                            Harness the power of your fleet data. Gain deep, actionable insights with comprehensive <strong class="text-blue-600">utilization reports</strong>, precise <strong class="text-blue-600">SLA adherence metrics</strong>, detailed <strong class="text-blue-600">safety scores</strong>, robust <strong class="text-blue-600">PM compliance tracking</strong>, accurate <strong class="text-blue-600">fuel consumption analysis</strong>, transparent <strong class="text-blue-600">TCO (Total Cost of Ownership)</strong> breakdowns, and industry-specific <strong class="text-blue-600">construction KPIs</strong>.
+                        </p>
+                    </div>
+                    <div class="lg:w-1/2 flex justify-center">
+                        <img src="https://placehold.co/500x300/F0F4F8/1A73E8?text=Analytics+Dashboard" alt="Comprehensive analytics dashboard with charts, graphs, and heatmaps" class="w-full max-w-lg h-auto object-cover rounded-xl shadow-xl border border-gray-200">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integrations & Extensibility -->
+        <section id="integrations" class="py-16 md:py-24 bg-white rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-16 text-blue-800">Integrations & Extensibility: Connect Everything</h2>
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
+                    <div class="lg:w-1/2 flex justify-center order-2 lg:order-1">
+                        <img src="https://placehold.co/500x300/F0F8FF/4A90E2?text=Ecosystem+Diagram" alt="Ecosystem diagram showing BPMS core with integrated systems" class="w-full max-w-lg h-auto object-cover rounded-xl shadow-xl border border-gray-200">
+                    </div>
+                    <div class="lg:w-1/2 order-1 lg:order-2">
+                        <p class="text-xl leading-relaxed text-gray-700 mb-8">
+                            Our platform is built for a connected ecosystem. Seamlessly integrate with leading <strong class="text-blue-600">Telematics/AVL systems, ERP, HR, TMS, WMS, IAM/SSO</strong>, and essential <strong class="text-blue-600">map/traffic APIs</strong>. Leverage robust <strong class="text-blue-600">REST/GraphQL APIs</strong>, event webhooks, and scalable low-code serverless functions for ultimate flexibility and connectivity across your enterprise.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security, Privacy & Compliance -->
+        <section id="security" class="py-16 md:py-24 bg-gray-100 rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-16 text-blue-800">Security, Privacy & Compliance: Your Data, Protected</h2>
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
+                    <div class="lg:w-1/2">
+                        <p class="text-xl leading-relaxed text-gray-700 mb-8">
+                            We prioritize the integrity and confidentiality of your data. Ensure uncompromising data security and regulatory adherence with robust <strong class="text-blue-600">RBAC (Role-Based Access Control), SSO (Single Sign-On), MFA (Multi-Factor Authentication)</strong>, end-to-end encrypted data storage, comprehensive audit logs, and duty-status aware tracking with configurable retention policies.
+                        </p>
+                    </div>
+                    <div class="lg:w-1/2 flex justify-center">
+                        <img src="https://placehold.co/500x300/F8F8F8/000000?text=Security+Shield" alt="Security lock icon overlaid on a network diagram" class="w-full max-w-lg h-auto object-cover rounded-xl shadow-xl border border-gray-200">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Potential Customers & Strategic Use Cases -->
+        <section id="customers" class="py-16 md:py-24 bg-white rounded-xl shadow-lg m-6 md:m-10">
+            <div class="container mx-auto px-6 md:px-12">
+                <h2 class="text-4xl font-bold text-center mb-16 text-blue-800">Potential Customers & Strategic Use Cases</h2>
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-10">
+                    <div class="lg:w-1/2 flex justify-center order-2 lg:order-1">
+                        <img src="https://placehold.co/500x300/F0FFF0/32CD32?text=Diverse+Fleets" alt="Collage of diverse fleet vehicles from different industries" class="w-full max-w-lg h-auto object-cover rounded-xl shadow-xl border border-gray-200">
+                    </div>
+                    <div class="lg:w-1/2 order-1 lg:order-2">
+                        <p class="text-xl leading-relaxed text-gray-700 mb-8">
+                            Discover how the Fleet Management BPMS can empower diverse operations. Ideal for a wide range of sectors including:
+                        </p>
+                        <ul class="list-disc list-inside space-y-2 text-lg text-gray-700 pl-4">
+                            <li><strong class="text-blue-600">Corporate & Government Fleets</strong></li>
+                            <li><strong class="text-blue-600">Construction & Public Works</strong></li>
+                            <li><strong class="text-blue-600">Field Service & Healthcare</strong></li>
+                            <li><strong class="text-blue-600">Education & Oil & Gas</strong></li>
+                        </ul>
+                        <p class="text-xl leading-relaxed text-gray-700 mt-8">
+                            Delivers significant value through <strong class="text-blue-600">enhanced auditability, reduced operating costs, higher asset utilization, safer operations, and faster, more reliable service delivery.</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-10 text-center rounded-t-3xl">
+        <div class="container mx-auto px-6">
+            <p>&copy; 2025 Fleet Management BPMS. All rights reserved.</p>
+            <p class="text-sm mt-2 opacity-80">Powered by cutting-edge BPMS & AVL technologies.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Offset for fixed header
+                    const headerOffset = document.querySelector('header').offsetHeight;
+                    const elementPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    const offsetPosition = elementPosition - headerOffset - 20; // Added extra padding
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+                }
+            });
+        });
+
+        // Highlight active navigation link based on scroll position
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const header = document.querySelector('header');
+        const headerHeight = header.offsetHeight;
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - headerHeight - 30; // Account for header and some padding
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active', 'font-bold', 'text-blue-600');
+                link.classList.add('text-gray-700', 'hover:text-blue-600');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active', 'font-bold', 'text-blue-600');
+                    link.classList.remove('text-gray-700');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

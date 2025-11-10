@@ -1,0 +1,219 @@
+{
+  "nav": {
+    "home": "Home",
+    "brainAI": "Brain AI",
+    "product": "Product",
+    "solutions": "Solutions",
+    "resources": "Resources",
+    "pricing": "Pricing",
+    "enterprise": "Enterprise",
+    "contactSales": "Contact Sales",
+    "login": "Login",
+    "signUp": "Sign Up"
+  },
+  "brainAI": {
+    "title": "AI Features",
+    "aiWriting": "AI Writing",
+    "aiWritingDesc": "Generate content with AI assistance",
+    "smartSuggestions": "Smart Suggestions",
+    "smartSuggestionsDesc": "Get intelligent recommendations",
+    "autoTranslation": "Auto Translation",
+    "autoTranslationDesc": "Translate content automatically",
+    "integrations": "Integrations",
+    "chatgpt": "ChatGPT",
+    "chatgptDesc": "Integrate with ChatGPT",
+    "voice": "Voice Assistant",
+    "voiceDesc": "Voice-powered interactions"
+  },
+  "product": {
+    "coreFeatures": "Core Features",
+    "formBuilder": "Form Builder",
+    "formBuilderDesc": "Create dynamic forms",
+    "appBuilder": "App Builder",
+    "appBuilderDesc": "Build custom applications",
+    "workflowOrchestrator": "Workflow Orchestrator",
+    "workflowOrchestratorDesc": "Automate business processes",
+    "enterprise": "Enterprise",
+    "fleetManagement": "Fleet Management",
+    "fleetManagementDesc": "Manage vehicle fleets",
+    "businessAutomation": "Business Automation",
+    "businessAutomationDesc": "Automate business operations"
+  },
+  "solutions": {
+    "byIndustry": "By Industry",
+    "education": "Education",
+    "healthcare": "Healthcare",
+    "finance": "Finance",
+    "technology": "Technology",
+    "byUseCase": "By Use Case",
+    "projectManagement": "Project Management",
+    "customerSupport": "Customer Support",
+    "salesMarketing": "Sales & Marketing"
+  },
+  "resources": {
+    "learn": "Learn",
+    "documentation": "Documentation",
+    "tutorials": "Tutorials",
+    "apiReference": "API Reference",
+    "bestPractices": "Best Practices",
+    "community": "Community",
+    "blog": "Blog",
+    "caseStudies": "Case Studies",
+    "events": "Events",
+    "support": "Support"
+  },
+  "pages": {
+    "home": {
+      "title": "English Website",
+      "subtitle": "Multilingual platform with modern navigation",
+      "description": "Transform your English skills with our comprehensive learning platform"
+    },
+    "formBuilder": {
+      "title": "Form Builder",
+      "subtitle": "Create Dynamic Forms",
+      "description": "Build powerful forms with drag-and-drop interface"
+    },
+    "appBuilder": {
+      "title": "App Builder",
+      "subtitle": "Build Custom Applications",
+      "description": "Create applications without coding"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Get in Touch",
+      "description": "We're here to help you succeed"
+    }
+  },
+  "components": {
+    "hero": {
+      "title": "Custom Apps. Zero Heavy Code.",
+      "description": "Design responsive internal tools with pages, workflows, reports, roles, and integrations. AI-assisted builder + enterprise controls = speed with confidence.",
+      "tryBuilder": "Try the Builder",
+      "browseTemplates": "Browse Templates",
+      "badges": {
+        "noCode": "No-Code",
+        "aiAssisted": "AI-Assisted",
+        "compliance": "SOC2/GDPR"
+      },
+      "features": {
+        "dragDrop": "Drag & Drop",
+        "integrations": "Integrations",
+        "security": "Security",
+        "canvasLabel": "App Canvas | Forms | Tables | Rules"
+      }
+    },
+    "tabs": {
+      "ui": {
+        "title": "Visual Drag-and-Drop Builder",
+        "description": "Place forms, tables, charts, boards, and buttons; wire actions; set validations. Build pages without code.",
+        "label": "UI Blocks"
+      },
+      "flows": {
+        "title": "Flows & Business Rules",
+        "description": "Configure steps, branches, and approvals. Use time-based SLAs and escalations. Trigger actions on events.",
+        "label": "Flows & Rules"
+      },
+      "themes": {
+        "title": "Design Systems & Themes",
+        "description": "Apply brand colors, typography, and spacing system-wide. Keep UI consistent across workspaces.",
+        "label": "Themes"
+      },
+      "code": {
+        "title": "Extend with Code",
+        "description": "Embed custom JS, call APIs, or write small functions where needed. No-code speed + code precision.",
+        "label": "Custom Code"
+      }
+    },
+    "cta": {
+      "title": "Ready to Build?",
+      "description": "Start creating powerful applications today with our intuitive builder.",
+      "primaryButton": "Get Started Free",
+      "secondaryButton": "Book a Demo"
+    },
+    "footer": {
+      "about": "Empowering learners worldwide to master English with confidence and fluency.",
+      "product": "Product",
+      "pricing": "Pricing",
+      "contact": "Contact",
+      "resources": "Resources",
+      "copyright": "© 2024 English Website. All rights reserved."
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "subtitle": "Everything you need to know about our platform",
+      "gettingStarted": "Getting Started",
+      "securityScaling": "Security & Scaling",
+      "needCoding": "Do I need coding skills?",
+      "needCodingAnswer": "No—build visually. Add custom code only if you want extra control.",
+      "howTemplates": "How do templates work?",
+      "howTemplatesAnswer": "Pick a template, customize steps, fields and rules, connect systems.",
+      "enterpriseReady": "Is it enterprise-ready?",
+      "enterpriseReadyAnswer": "Yes. Role-based access, SSO, audit logs, encryption, and compliance.",
+      "canIntegrate": "Can it integrate with our stack?",
+      "canIntegrateAnswer": "Use native connectors, REST APIs, and webhooks to sync data."
+    },
+    "appBuilder": {
+      "buildInDays": "Build complete web apps in days",
+      "specHighlights": "Spec Highlights",
+      "pagesWorkflows": "Pages, workflows, reports",
+      "rolesPermissions": "Roles & granular permissions",
+      "integrations": "15+ native integrations",
+      "security": "SSO, audit trail, SOC2/GDPR",
+      "whyAppBuilder": "Why App Builder vs. Custom Dev?",
+      "whyDescription": "Replace ad-hoc spreadsheets and one-off scripts with purpose-built apps that mirror how your teams really work. Design visually, connect data sources in minutes, and ship faster—without sacrificing governance.",
+      "speedToValue": "Speed to Value",
+      "speedDescription": "Launch prototypes in hours; go live in days with templates and blocks.",
+      "businessFit": "Business Fit",
+      "businessDescription": "Forms, roles, approvals aligned to your real process—not generic software.",
+      "unifiedData": "Unified Data",
+      "dataDescription": "Connect DBs & SaaS. Make your app the single source of truth.",
+      "workspaces": "Dedicated Workspaces & Roles",
+      "workspacesDescription": "Isolated spaces per audience. Calibrate access at workspace, page, or field level. Align collaboration without leaking sensitive data.",
+      "roleBasedAccess": "Role-based access",
+      "customDashboards": "Custom dashboards",
+      "externalOnboarding": "External onboarding",
+      "workspaceThemes": "Workspace themes",
+      "useCases": "Use Cases",
+      "useCasesDescription": "CRMs, ticketing, analytics dashboards, document portals, inventory—mobile-responsive via PWA. Roadmap: AI-generated apps.",
+      "testimonials": {
+        "logistics": "We shipped internal tools 5× faster and finally retired fragile spreadsheets.",
+        "logisticsAuthor": "Ops Lead — Logistics",
+        "finance": "Role-based workspaces let partners collaborate securely without extra portals.",
+        "financeAuthor": "Program Manager — Finance",
+        "healthcare": "Governance + speed. The audit trail saved us during compliance review.",
+        "healthcareAuthor": "IT Director — Healthcare"
+      },
+      "useCaseItems": {
+        "crm": "CRM",
+        "crmDesc": "Custom pipelines, roles, and reports.",
+        "ticketing": "Ticketing",
+        "ticketingDesc": "SLAs, automations, and knowledge base.",
+        "analytics": "Analytics",
+        "analyticsDesc": "Dashboards with drill-downs.",
+        "portals": "Portals",
+        "portalsDesc": "Docs, forms, and secure sharing.",
+        "inventory": "Inventory",
+        "inventoryDesc": "Items, suppliers, and re-order logic."
+      },
+      "tabFeatures": {
+        "reusableComponents": "Reusable components",
+        "conditionalUI": "Conditional UI",
+        "inlineValidation": "Inline validation",
+        "formStates": "Form states",
+        "parallelApprovals": "Parallel/Sequential approvals",
+        "timersEscalations": "Timers & escalations",
+        "webhooksCallbacks": "Webhooks & callbacks",
+        "ruleSetsConditions": "Rule sets & conditions",
+        "globalVariables": "Global variables",
+        "workspaceThemes": "Workspace themes",
+        "componentTokens": "Component tokens",
+        "darkLightSupport": "Dark/Light support",
+        "jsHooks": "JS hooks",
+        "restGraphQL": "REST/GraphQL",
+        "sdkPlugins": "SDK/Plugins",
+        "unitTests": "Unit tests",
+        "canvasPreview": "Canvas with component drawer + properties"
+      }
+    }
+  }
+}
