@@ -32,3 +32,5 @@
 23. Use server components in Next.js where possible to reduce client-side load.
 24. Avoid inline styles — prefer Tailwind classes or design tokens.
 25. Regularly run `npm run build && npm run lint && npm test` after large changes.
+
+زبانی مه من باهات حرف میزنم فارسی هست همیشه یا فارسی یا انگلیسی جواب بده ولی سایتی  که در این اپلیکیشن داریم با هم میسازیم زیان فارسی نداره این رو یادت بمونه هیچ وقت جواب منو عربی نده  لطفا 

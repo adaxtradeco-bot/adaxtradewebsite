@@ -4,6 +4,7 @@
     "brainAI": "الذكاء الاصطناعي",
     "product": "المنتج",
     "solutions": "الحلول",
+    "industries": "الصناعات",
     "resources": "الموارد",
     "pricing": "الأسعار",
     "enterprise": "المؤسسات",
@@ -49,6 +50,20 @@
     "projectManagement": "إدارة المشاريع",
     "customerSupport": "دعم العملاء",
     "salesMarketing": "المبيعات والتسويق"
+  },
+  "industries": {
+    "sectors": "القطاعات الصناعية",
+    "more": "المزيد من الصناعات",
+    "oilgas": "النفط والغاز",
+    "oilgasDesc": "التحول الرقمي لقطاع الطاقة",
+    "iot": "تكامل إنترنت الأشياء",
+    "iotDesc": "الأجهزة المتصلة والأنظمة الذكية",
+    "realestate": "العقارات",
+    "realestateDesc": "حلول إدارة الممتلكات",
+    "construction": "البناء والتشييد",
+    "constructionDesc": "إدارة المشاريع والمواقع",
+    "healthcare": "الرعاية الصحية",
+    "healthcareDesc": "رعاية المرضى والأنظمة الطبية"
   },
   "resources": {
     "learn": "تعلم",

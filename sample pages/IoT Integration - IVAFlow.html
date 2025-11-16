@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IoT Integration - IVAFlow</title>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0F69FF;
+            --primary-dark: #0C1524;
+            --secondary: #22C55E;
+            --iot-primary: #06B6D4;
+            --iot-secondary: #0891B2;
+            --dark: #EAF3FF;
+            --gray: #B9C7DC;
+            --light: #0A0F16;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: #050815;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--dark);
+            border: 2px solid var(--dark);
+        }
+
+        /* Hero */
+        .iot-hero {
+            margin-top: 80px;
+            background: linear-gradient(135deg, #0A0E1A 0%, #164E63 100%);
+            color: white;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .iot-hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -10%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%);
+            animation: float 25s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(40px, -40px) rotate(120deg); }
+            66% { transform: translate(-30px, 30px) rotate(240deg); }
+        }
+
+        .hero-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -2px;
+        }
+
+        .hero-content h1 .highlight {
+            background: linear-gradient(135deg, #06B6D4 0%, #22D3EE 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;
+        }
+
+        .hero-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        .hero-feature::before {
+            content: '🔗';
+            width: 32px;
+            height: 32px;
+            background: rgba(6, 182, 212, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .hero .btn-primary {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+        }
+
+        .hero .btn-secondary {
+            border-color: rgba(255,255,255,0.3);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        .hero-visual {
+            position: relative;
+        }
+
+        .iot-mockup {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            min-height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mockup-icon {
+            font-size: 10rem;
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
+            animation: float-icon 6s infinite;
+        }
+
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(5deg); }
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: rgba(6, 182, 212, 0.1);
+            border-radius: 50px;
+            color: var(--iot-primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .section-header p {
+            font-size: 1.15rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .feature-card {
+            background: #050815;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border-color: var(--iot-primary);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 0.6rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .feature-list li::before {
+            content: '→';
+            color: var(--iot-primary);
+            font-weight: 900;
+        }
+
+        /* Content Block */
+        .content-block {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .content-grid.reverse {
+            direction: rtl;
+        }
+
+        .content-grid.reverse > * {
+            direction: ltr;
+        }
+
+        .content-text h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .content-text p {
+            font-size: 1.15rem;
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .content-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .content-list li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.05rem;
+            font-weight: 500;
+        }
+
+        .content-list li::before {
+            content: '✓';
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        .content-visual {
+            background: linear-gradient(135deg, #0F172A 0%, #164E63 100%);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-visual::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%);
+            animation: float 20s infinite;
+        }
+
+        .visual-icon {
+            font-size: 8rem;
+            filter: drop-shadow(0 15px 40px rgba(0,0,0,0.4));
+        }
+
+        /* Device Types */
+        .devices-section {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .device-card {
+            background: #050815;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .device-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .device-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .device-card h3 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+        }
+
+        .device-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Use Cases */
+        .usecases-section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .usecases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .usecase-card {
+            background: #050815;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s;
+        }
+
+        .usecase-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+
+        .usecase-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .usecase-card h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .usecase-card p {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .usecase-example {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--dark);
+            border-left: 4px solid var(--iot-primary);
+        }
+
+        /* Stats */
+        .stats-section {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-card {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 4rem 1.5rem;
+            background: linear-gradient(135deg, #0F69FF 0%, #02203A 55%, #050815 100%);
+            color: #EAF3FF;
+            text-align: center;
+        }
+
+        .cta-content h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .cta-content p {
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.8);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6366F1 0%, #10B981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section h4 {
+            color: white;
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-section a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-grid, .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+<link href="styles.css" rel="stylesheet"/></head>
+<body><header class="hdr" data-version="Khodā-ye Sāsān v1.2">
+<nav aria-label="Primary" class="nav">
+<a aria-label="IVAFlow Home" class="logo" href="index.html">IVA<span class="dot"></span></a>
+<ul class="nav-links">
+<li class="nav-item">
+<button aria-expanded="false" aria-haspopup="true" class="nav-btn">Platform ▾</button>
+<div class="mega" role="menu">
+<div class="mega-grid">
+<div>
+<h4>Core Capabilities</h4>
+<ul>
+<li><a href="Form Builder - IVAFlow.html"><span class="ico">📝</span> Form Builder</a></li>
+<li><a href="Workflow Automation - IVAFlow.html"><span class="ico">🔄</span> Workflow Designer</a></li>
+<li><a href="#analytics"><span class="ico">📊</span> Analytics</a></li>
+<li><a href="solutions-appbuilder.html"><span class="ico">🏗</span> App Builder</a></li>
+<li><a href="#integrations"><span class="ico">🔗</span> Integrations (API)</a></li>
+</ul>
+</div>
+<div>
+<h4>Advanced</h4>
+<ul>
+<li><a href="IoT Integration - IVAFlow.html"><span class="ico">📡</span> IoT Integration</a></li>
+<li><a href="#gps"><span class="ico">🗺</span> GPS &amp; Geofencing</a></li>
+<li><a href="#ai"><span class="ico">🤖</span> AI Automation</a></li>
+<li><a href="#multiportal"><span class="ico">🗂</span> Multi‑Portal Architecture</a></li>
+</ul>
+</div>
+<div>
+<h4>Security &amp; Compliance</h4>
+<ul>
+<li><a href="#security"><span class="ico">🛡</span> Enterprise Security</a></li>
+<li><a href="#access"><span class="ico">🔐</span> Access Control</a></li>
+<li><a href="#audit"><span class="ico">📜</span> Audit Logs</a></li>
+</ul>
+</div>
+</div>
+</div>
+</li>
+<li class="nav-item">
+<button aria-expanded="false" aria-haspopup="true" class="nav-btn">Solutions ▾</button>
+<div class="mega" role="menu">
+<div class="mega-grid">
+<div>
+<h4>By Industry</h4>
+<ul>
+<li><a href="solutions-fleet.html">🚚 Fleet &amp; Logistics</a></li>
+<li><a href="index.html#solutions-tabs">🏥 Healthcare</a></li>
+<li><a href="index.html#solutions-tabs">🏛 Government</a></li>
+<li><a href="index.html#solutions-tabs">⚒ Construction</a></li>
+<li><a href="oilgas.html">🛢 Oil &amp; Gas</a></li></ul>
+</div>
+<div>
+<h4>By Use Case</h4>
+<ul>
+<li><a href="solutions-fleet.html">Field Ops</a></li>
+<li><a href="#solutions">Incident Mgmt</a></li>
+<li><a href="#solutions">Approvals</a></li>
+<li><a href="#solutions">Docs &amp; e‑Sign</a></li>
+</ul>
+</div>
+<div>
+<h4>By Role</h4>
+<ul>
+<li><a href="#solutions">Operations</a></li>
+<li><a href="#solutions">IT Directors</a></li>
+<li><a href="#solutions">Digital Leaders</a></li>
+</ul>
+</div>
+</div>
+</div>
+</li>
+<li><a href="#resources">Resources</a></li>
+<li><a href="contact.html">Contact</a></li><li><a href="partnership.html">Partnership</a></li>
+</ul>
+<div class="nav-cta">
+<a class="btn secondary" href="#demo">Book Demo</a>
+<a class="btn brand" href="#signup">Start Free</a>
+<button aria-label="Toggle theme" class="theme-toggle" id="themeToggle"><span id="themeIcon"></span><span id="themeText">Auto</span></button>
+</div>
+</nav>
+</header>
+<section class="iot-hero">
+<div class="hero-grid">
+<div class="hero-content">
+<h1>Connect the <span class="highlight">Physical</span> &amp; Digital World</h1>
+<p class="hero-subtitle">The only BPMS built for IoT from day one. Connect any sensor, device, or industrial equipment directly to your workflows—no middleware required.</p>
+<div class="hero-features">
+<div class="hero-feature">Any IoT device triggers workflows automatically</div>
+<div class="hero-feature">Industrial sensors and machinery integration</div>
+<div class="hero-feature">Real-time data streaming and alerts</div>
+<div class="hero-feature">Bi-directional device control</div>
+</div>
+<div class="hero-cta">
+<a class="btn btn-primary" href="#">Explore IoT Solutions →</a>
+<a class="btn btn-secondary" href="#">Watch Demo</a>
+</div>
+</div>
+<div class="hero-visual">
+<div class="iot-mockup">
+<div class="mockup-icon">🔗</div>
+</div>
+</div>
+</div>
+</section>
+<section class="features-section">
+<div class="section-header">
+<div class="section-badge">IoT Capabilities</div>
+<h2>Built for Industrial IoT</h2>
+<p>Native integration with sensors, devices, and industrial equipment</p>
+</div>
+<div class="features-grid">
+<div class="feature-card">
+<div class="feature-icon">📡</div>
+<h3>Device Connectivity</h3>
+<p>Connect any IoT device using standard protocols like MQTT, HTTP, CoAP, and WebSockets.</p>
+<ul class="feature-list">
+<li>MQTT broker integration</li>
+<li>HTTP/REST API endpoints</li>
+<li>WebSocket real-time streams</li>
+<li>CoAP for low-power devices</li>
+</ul>
+</div>
+<div class="feature-card">
+<div class="feature-icon">⚡</div>
+<h3>Event-Driven Workflows</h3>
+<p>Trigger workflows automatically when sensors detect changes or devices send data.</p>
+<ul class="feature-list">
+<li>Sensor threshold triggers</li>
+<li>Device state change events</li>
+<li>Time-series data processing</li>
+<li>Complex event correlation</li>
+</ul>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🎛️</div>
+<h3>Device Control</h3>
+<p>Send commands back to devices to control actuators, relays, and industrial equipment.</p>
+<ul class="feature-list">
+<li>Remote device control</li>
+<li>Actuator management</li>
+<li>Configuration updates</li>
+<li>Firmware deployment</li>
+</ul>
+</div>
+<div class="feature-card">
+<div class="feature-icon">📊</div>
+<h3>Real-Time Monitoring</h3>
+<p>Visualize live data streams from all connected devices in customizable dashboards.</p>
+<ul class="feature-list">
+<li>Live device status</li>
+<li>Time-series charts</li>
+<li>Alert notifications</li>
+<li>Historical data analysis</li>
+</ul>
+</div>
+<div class="feature-card">
+<div class="feature-icon">🔒</div>
+<h3>Secure Communication</h3>
+<p>Enterprise-grade security for all device communications with TLS encryption and authentication.</p>
+<ul class="feature-list">
+<li>TLS/SSL encryption</li>
+<li>Device authentication</li>
+<li>API key management</li>
+<li>Access control policies</li>
+</ul>
+</div>
+<div class="feature-card">
+<div class="feature-icon">⚙️</div>
+<h3>Edge Computing</h3>
+<p>Process data at the edge for low-latency responses and reduced bandwidth usage.</p>
+<ul class="feature-list">
+<li>Edge data processing</li>
+<li>Local decision making</li>
+<li>Bandwidth optimization</li>
+<li>Offline operation support</li>
+</ul>
+</div>
+</div>
+</section>
+<section class="content-block">
+<div class="content-grid">
+<div class="content-text">
+<div class="section-badge">Smart Automation</div>
+<h2>When Sensors Detect, Workflows React</h2>
+<p>Transform physical events into automated digital workflows. Temperature rises? Start cooling protocol. Motion detected? Alert security team. Machine malfunctions? Create maintenance ticket automatically.</p>
+<ul class="content-list">
+<li>Temperature sensors trigger climate control</li>
+<li>Motion detectors start security protocols</li>
+<li>Pressure sensors alert maintenance teams</li>
+<li>GPS trackers automate check-in/out</li>
+<li>Industrial machines request service</li>
+</ul>
+<a class="btn btn-primary" href="#">View Examples →</a>
+</div>
+<div class="content-visual">
+<div class="visual-icon">🌡️</div>
+</div>
+</div>
+</section>
+<section class="devices-section">
+<div class="section-header">
+<div class="section-badge">Supported Devices</div>
+<h2>Connect Any IoT Device</h2>
+<p>From simple sensors to complex industrial equipment</p>
+</div>
+<div class="devices-grid">
+<div class="device-card">
+<div class="device-icon">🌡️</div>
+<h3>Environmental Sensors</h3>
+<p>Temperature, humidity, air quality, light, and weather sensors</p>
+</div>
+<div class="device-card">
+<div class="device-icon">📍</div>
+<h3>GPS Trackers</h3>
+<p>Vehicle tracking, asset location, and geofencing devices</p>
+</div>
+<div class="device-card">
+<div class="device-icon">🚨</div>
+<h3>Motion &amp; Security</h3>
+<p>PIR sensors, door contacts, cameras, and alarm systems</p>
+</div>
+<div class="device-card">
+<div class="device-icon">⚙️</div>
+<h3>Industrial Equipment</h3>
+<p>PLCs, SCADA systems, and manufacturing machinery</p>
+</div>
+<div class="device-card">
+<div class="device-icon">💧</div>
+<h3>Utility Meters</h3>
+<p>Water, gas, electricity, and energy consumption monitors</p>
+</div>
+<div class="device-card">
+<div class="device-icon">🏥</div>
+<h3>Medical Devices</h3>
+<p>Patient monitors, diagnostic equipment, and health trackers</p>
+</div>
+<div class="device-card">
+<div class="device-icon">🚗</div>
+<h3>Fleet Telematics</h3>
+<p>Vehicle diagnostics, fuel sensors, and driver behavior monitors</p>
+</div>
+<div class="device-card">
+<div class="device-icon">🏗️</div>
+<h3>Construction Equipment</h3>
+<p>Heavy machinery sensors, site monitoring, and safety systems</p>
+</div>
+</div>
+</section>
+<section class="usecases-section">
+<div class="section-header">
+<div class="section-badge">Real-World Applications</div>
+<h2>IoT Use Cases That Drive ROI</h2>
+<p>See how businesses use IVAFlow to connect devices and automate operations</p>
+</div>
+<div class="usecases-grid">
+<div class="usecase-card">
+<div class="usecase-icon">🏭</div>
+<h3>Predictive Maintenance</h3>
+<p>Monitor industrial equipment health and predict failures before they happen.</p>
+<div class="usecase-example">
+<strong>Example:</strong> Vibration sensor detects anomaly → Auto-create maintenance ticket → Notify technician → Schedule repair → Order parts
+                </div>
+</div>
+<div class="usecase-card">
+<div class="usecase-icon">🌡️</div>
+<h3>Cold Chain Monitoring</h3>
+<p>Ensure product quality with continuous temperature tracking and automatic alerts.</p>
+<div class="usecase-example">
+<strong>Example:</strong> Temperature exceeds threshold → Send SMS alert → Log incident → Notify manager → Generate compliance report
+                </div>
+</div>
+<div class="usecase-card">
+<div class="usecase-icon">🚗</div>
+<h3>Fleet Management</h3>
+<p>Track vehicles in real-time and optimize routes based on live telematics data.</p>
+<div class="usecase-example">
+<strong>Example:</strong> Vehicle enters geofence → Auto check-in driver → Track fuel consumption → Alert on maintenance due → Optimize routes
+                </div>
+</div>
+<div class="usecase-card">
+<div class="usecase-icon">🏢</div>
+<h3>Smart Building Automation</h3>
+<p>Control HVAC, lighting, and security systems based on occupancy and conditions.</p>
+<div class="usecase-example">
+<strong>Example:</strong> Motion sensor detects presence → Adjust lighting &amp; AC → Log energy usage → Generate savings report
+                </div>
+</div>
+<div class="usecase-card">
+<div class="usecase-icon">⚠️</div>
+<h3>Safety &amp; Compliance</h3>
+<p>Monitor environmental conditions and ensure regulatory compliance automatically.</p>
+<div class="usecase-example">
+<strong>Example:</strong> Gas sensor detects leak → Trigger alarm → Evacuate area → Notify emergency team → Create incident report
+                </div>
+</div>
+<div class="usecase-card">
+<div class="usecase-icon">💧</div>
+<h3>Utility Management</h3>
+<p>Track water, gas, and electricity consumption with automated meter reading.</p>
+<div class="usecase-example">
+<strong>Example:</strong> Smart meter sends reading → Calculate usage → Detect anomalies → Alert on leaks → Generate billing data
+                </div>
+</div>
+</div>
+</section>
+<section class="stats-section">
+<div class="section-header">
+<div class="section-badge">Impact</div>
+<h2>Proven Results with IoT Integration</h2>
+<p>Real metrics from organizations using IVAFlow IoT</p>
+</div>
+<div class="stats-grid">
+<div class="stat-card">
+<span class="stat-number">85%</span>
+<span class="stat-label">Reduction in Equipment Downtime</span>
+</div>
+<div class="stat-card">
+<span class="stat-number">40%</span>
+<span class="stat-label">Energy Cost Savings</span>
+</div>
+<div class="stat-card">
+<span class="stat-number">Real-time</span>
+<span class="stat-label">Device Monitoring &amp; Alerts</span>
+</div>
+</div>
+</section>
+<section class="cta-section">
+<div class="cta-content">
+<h2>Ready to Connect Your Devices?</h2>
+<p>Start integrating IoT devices into your workflows today. No hardware expertise required.</p>
+<div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem;">
+<a class="btn btn-primary" href="#" style="background: #050815; color: #06B6D4; padding: 1.2rem 2.5rem;">Start Free Trial →</a>
+<a class="btn btn-secondary" href="#" style="border-color: white; color: white; padding: 1.2rem 2.5rem;">Talk to IoT Expert</a>
+</div>
+</div>
+</section>
+<footer class="ft">
+<div class="ft-grid">
+<div>
+<div class="ft-logo">IVA<span class="dot"></span></div>
+<p>AI‑native, no‑code automation platform to design forms, orchestrate workflows, visualize data, and build apps — fast.</p>
+</div>
+<div>
+<h4>Platform</h4>
+<a href="Form Builder - IVAFlow.html">Forms</a><br/>
+<a href="Workflow Automation - IVAFlow.html">Workflow</a><br/>
+<a href="index.html#analytics">Analytics</a><br/>
+<a href="solutions-appbuilder.html">App Builder</a><br/>
+<a href="index.html#integrations">Integrations</a>
+</div>
+<div>
+<h4>Solutions</h4>
+<a href="solutions-fleet.html">Fleet</a><br/>
+<a href="index.html#solutions-tabs">Healthcare</a><br/>
+<a href="industry.html">Manufacturing</a><br/>
+<a href="index.html#solutions-tabs">Government</a>
+<a href="oilgas.html">Oil &amp; Gas</a><br/></div>
+<div>
+<h4>Company</h4>
+<a href="partnership.html">Partnership</a><br/>
+<a href="index.html#about">About</a><br/>
+<a href="index.html#careers">Careers</a><br/>
+<a href="contact.html">Contact</a>
+</div>
+</div>
+<div class="ft-bottom">© 2025 IVAFlow • Privacy • Terms • Security</div>
+</footer><script src="app.js"></script></body>
+</html>

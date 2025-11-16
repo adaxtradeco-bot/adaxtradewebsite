@@ -5,6 +5,7 @@
  */
 
 import { SectionConfig } from './section-schemas';
+import { WORKFLOW_SECTION, INTEGRATIONS_SECTION, PROCESS_SECTION } from './section-registry-additions';
 
 export interface SectionTemplate {
   id: string;
@@ -279,6 +280,250 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
         textColor: 'text-slate-900',
         padding: 'py-16',
         alignment: 'left',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'stats-counter',
+    name: 'Stats Counter',
+    type: 'stats',
+    category: SECTION_CATEGORIES.SOCIAL,
+    description: 'Display impressive statistics and numbers',
+    icon: '📊',
+    defaultData: {
+      id: '',
+      type: 'stats',
+      order: 0,
+      data: {
+        title: 'Our Impact in Numbers',
+        stats: [
+          { value: '10K+', label: 'Happy Clients', icon: '👥' },
+          { value: '50K+', label: 'Properties Sold', icon: '🏠' },
+          { value: '$2B+', label: 'Total Value', icon: '💰' },
+          { value: '98%', label: 'Satisfaction Rate', icon: '⭐' },
+        ],
+      },
+      style: {
+        backgroundColor: 'bg-slate-900',
+        textColor: 'text-white',
+        padding: 'py-16',
+        alignment: 'center',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'testimonials-carousel',
+    name: 'Testimonials',
+    type: 'testimonials',
+    category: SECTION_CATEGORIES.SOCIAL,
+    description: 'Customer testimonials and reviews',
+    icon: '💬',
+    defaultData: {
+      id: '',
+      type: 'testimonials',
+      order: 0,
+      data: {
+        title: 'What Our Clients Say',
+        subtitle: 'Real stories from real people',
+        testimonials: [
+          {
+            name: 'Sarah Johnson',
+            role: 'Property Investor',
+            content: 'Outstanding service! They helped me find the perfect investment property.',
+            rating: 5,
+            avatar: '👩',
+          },
+          {
+            name: 'Michael Chen',
+            role: 'First-time Buyer',
+            content: 'Professional team that made my first home purchase stress-free.',
+            rating: 5,
+            avatar: '👨',
+          },
+          {
+            name: 'Emily Davis',
+            role: 'Real Estate Developer',
+            content: 'Excellent market knowledge and negotiation skills. Highly recommended!',
+            rating: 5,
+            avatar: '👩‍💼',
+          },
+        ],
+      },
+      style: {
+        backgroundColor: 'bg-white',
+        textColor: 'text-slate-900',
+        padding: 'py-16',
+        alignment: 'center',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'property-showcase',
+    name: 'Property Showcase',
+    type: 'properties',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Showcase featured properties with images and details',
+    icon: '🏘️',
+    defaultData: {
+      id: '',
+      type: 'properties',
+      order: 0,
+      data: {
+        title: 'Featured Properties',
+        subtitle: 'Discover your dream home',
+        properties: [
+          {
+            title: 'Modern Downtown Apartment',
+            location: 'New York, NY',
+            price: '$850,000',
+            beds: 3,
+            baths: 2,
+            sqft: '2,100',
+            image: '🏢',
+          },
+          {
+            title: 'Luxury Beach Villa',
+            location: 'Miami, FL',
+            price: '$2,500,000',
+            beds: 5,
+            baths: 4,
+            sqft: '4,500',
+            image: '🏖️',
+          },
+          {
+            title: 'Suburban Family Home',
+            location: 'Austin, TX',
+            price: '$650,000',
+            beds: 4,
+            baths: 3,
+            sqft: '3,200',
+            image: '🏡',
+          },
+        ],
+      },
+      style: {
+        backgroundColor: 'bg-slate-50',
+        textColor: 'text-slate-900',
+        padding: 'py-16',
+        alignment: 'left',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'location-map',
+    name: 'Location Map',
+    type: 'location',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Display location with map and contact information',
+    icon: '📍',
+    defaultData: {
+      id: '',
+      type: 'location',
+      order: 0,
+      data: {
+        title: 'Visit Our Office',
+        subtitle: 'We\'re here to help',
+        address: '123 Main Street, Suite 100',
+        city: 'New York, NY 10001',
+        phone: '+1 (555) 123-4567',
+        email: 'info@realestate.com',
+        hours: 'Mon-Fri: 9AM-6PM',
+      },
+      style: {
+        backgroundColor: 'bg-white',
+        textColor: 'text-slate-900',
+        padding: 'py-16',
+        alignment: 'left',
+      },
+    },
+    configSchema: {},
+  },
+  WORKFLOW_SECTION,
+  INTEGRATIONS_SECTION,
+  PROCESS_SECTION,
+  {
+    id: 'compliance-badges',
+    name: 'Compliance Badges',
+    type: 'compliance',
+    category: SECTION_CATEGORIES.SOCIAL,
+    description: 'Display compliance certifications and security badges',
+    icon: '🛡️',
+    defaultData: {
+      id: '',
+      type: 'compliance',
+      order: 0,
+      data: {
+        title: 'Enterprise-Grade Security & Compliance',
+        description: 'Your data is protected with bank-level encryption and comprehensive compliance certifications.',
+        badges: [
+          {
+            icon: '🔒',
+            title: 'HIPAA Compliant'
+          },
+          {
+            icon: '✓',
+            title: 'SOC 2 Type II'
+          },
+          {
+            icon: '🛡️',
+            title: 'ISO 27001'
+          },
+          {
+            icon: '🔐',
+            title: 'AES-256 Encryption'
+          }
+        ],
+        backgroundGradient: 'from-cyan-600 to-blue-600'
+      },
+      style: {
+        backgroundColor: 'bg-gradient-to-br from-cyan-600 to-blue-600',
+        textColor: 'text-white',
+        padding: 'py-20',
+        alignment: 'center',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'industry-hero',
+    name: 'Industry Hero',
+    type: 'industry-hero',
+    category: SECTION_CATEGORIES.HEADERS,
+    description: 'Specialized hero section for industry pages with customizable content',
+    icon: '🏭',
+    defaultData: {
+      id: '',
+      type: 'industry-hero',
+      order: 0,
+      data: {
+        title: 'Built for Your Industry',
+        subtitle: 'Transform Operations with AI-Native Automation',
+        description: 'See how teams in fleet, construction, healthcare, government and more transform operations with AI-native no-code automation.',
+        icon: '🏭',
+        buttons: [
+          {
+            text: 'Explore Solutions',
+            href: '#solutions',
+            variant: 'primary' as const,
+            size: 'lg' as const,
+          },
+          {
+            text: 'Book Demo',
+            href: '/contact',
+            variant: 'outline' as const,
+            size: 'lg' as const,
+          },
+        ],
+        textAlign: 'center' as const,
+      },
+      style: {
+        backgroundColor: 'bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900',
+        textColor: 'text-white',
+        padding: 'py-20',
       },
     },
     configSchema: {},

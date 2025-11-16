@@ -4,6 +4,7 @@
     "brainAI": "Brain AI",
     "product": "Product",
     "solutions": "Solutions",
+    "industries": "Industries",
     "resources": "Resources",
     "pricing": "Pricing",
     "enterprise": "Enterprise",
@@ -49,6 +50,20 @@
     "projectManagement": "Project Management",
     "customerSupport": "Customer Support",
     "salesMarketing": "Sales & Marketing"
+  },
+  "industries": {
+    "sectors": "Industry Sectors",
+    "more": "More Industries",
+    "oilgas": "Oil & Gas",
+    "oilgasDesc": "Digital transformation for energy sector",
+    "iot": "IoT Integration",
+    "iotDesc": "Connected devices and smart systems",
+    "realestate": "Real Estate",
+    "realestateDesc": "Property management solutions",
+    "construction": "Construction",
+    "constructionDesc": "Project and site management",
+    "healthcare": "Healthcare",
+    "healthcareDesc": "Patient care and medical systems"
   },
   "resources": {
     "learn": "Learn",

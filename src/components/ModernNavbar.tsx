@@ -110,6 +110,28 @@ export function ModernNavbar() {
     }
   },
   {
+    label: t('nav.industries'),
+    dropdown: {
+      columns: [
+        {
+          title: t('industries.sectors'),
+          items: [
+            { title: t('industries.oilgas'), description: t('industries.oilgasDesc'), href: `/${currentLang}/industries/oilgas`, icon: '⚡' },
+            { title: t('industries.iot'), description: t('industries.iotDesc'), href: `/${currentLang}/industries/iot-integration`, icon: '🔗' },
+            { title: t('industries.realestate'), description: t('industries.realestateDesc'), href: `/${currentLang}/industries/real-estate`, icon: '🏢' }
+          ]
+        },
+        {
+          title: t('industries.more'),
+          items: [
+            { title: t('industries.construction'), description: t('industries.constructionDesc'), href: `/${currentLang}/industries/construction`, icon: '🏗️' },
+            { title: t('industries.healthcare'), description: t('industries.healthcareDesc'), href: `/${currentLang}/industries/healthcare`, icon: '🏥' }
+          ]
+        }
+      ]
+    }
+  },
+  {
     label: t('nav.resources'),
     dropdown: {
       columns: [

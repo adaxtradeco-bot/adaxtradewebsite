@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html data-theme="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>IVAFlow — Partner Program</title>
+<meta content="Join the IVAFlow partner ecosystem and grow with AI-native no-code automation." name="description"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<style>
+    /* =========================
+       IVAFlow Brand Tokens v14
+       ========================= */
+
+    /* Light (default) */
+    :root{
+      /* surfaces */
+      --bg: #F7F9FD;
+      --panel: #FFFFFF;
+      --card: #FFFFFF;
+      --line: #E2E8F0;
+
+      /* text */
+      --text: #0C1524;
+      --muted: #4A5B71;
+
+      /* brand */
+      --brand-gold: #E9B321;
+      --accent-blue: #0F69FF;
+      --teal: #009E92;
+
+      /* state */
+      --success: #0AA25B;
+      --danger: #DC2626;
+
+      /* interactive */
+      --link: var(--accent-blue);
+      --chip-bg: #F0F5FF;
+      --chip-line: #D7E3FF;
+
+      color-scheme: light;
+    }
+
+    /* Dark */
+    :root[data-theme="dark"]{
+      --bg: #0A0F16;
+      --panel: #0D141F;
+      --card: #0B111A;
+      --line: #1A2434;
+
+      --text: #EAF3FF;
+      --muted: #B9C7DC;
+
+      --brand-gold: #F7C948;
+      --accent-blue: #9AD1FF;
+      --teal: #22C7B8;
+
+      --success: #22C55E;
+      --danger: #EF4444;
+
+      --link: var(--accent-blue);
+      --chip-bg: #0F1724;
+      --chip-line: #223049;
+
+      color-scheme: dark;
+    }
+
+    /* ============ Base ============ */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial;
+      line-height:1.6; background:var(--bg); color:var(--text);
+    }
+    a{color:var(--link); text-decoration:none}
+    a:hover{text-decoration:underline}
+    img{max-width:100%; display:block}
+
+    /* ============ Header + Mega ============ */
+    .hdr{
+      position:fixed; inset:0 0 auto 0; z-index:1000;
+      background:color-mix(in oklab, var(--panel) 92%, transparent);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid color-mix(in oklab, var(--line) 92%, transparent);
+      box-shadow:0 6px 24px color-mix(in oklab, var(--line) 24%, transparent);
+    }
+    .nav{max-width:1400px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+    .logo{
+      display:flex; align-items:center; gap:.6rem; font-weight:900; letter-spacing:-.5px; font-size:1.4rem;
+    }
+    .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--brand-gold);box-shadow:0 0 12px var(--brand-gold)}
+    .nav-links{display:flex; gap:28px; align-items:center; list-style:none; margin:0; padding:0}
+    .nav-links>a{font-weight:700; color:var(--text)}
+    .nav-cta{display:flex; gap:10px; align-items:center}
+
+    /* Mega */
+    .nav-item{position:relative}
+    .mega{
+      position:absolute; left:50%; top:100%; transform:translateX(-50%);
+      min-width:760px; background:var(--panel); border:1px solid var(--line);
+      border-radius:18px; padding:20px; margin-top:12px;
+      box-shadow:0 24px 80px rgba(0,0,0,.25);
+      opacity:0; visibility:hidden; transition:opacity .22s, transform .22s, margin-top .22s;
+      transform-origin: top center; z-index:1200;
+    }
+    .nav-item.open .mega{opacity:1; visibility:visible; margin-top:8px}
+
+    .mega-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
+    .mega h4{margin:6px 0 10px; font-size:.9rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em}
+    .mega a{
+      display:flex; gap:.6rem; align-items:center; padding:8px; border-radius:10px;
+      color:var(--text); border:1px solid transparent; text-decoration:none;
+    }
+    .mega a:hover{
+      background:color-mix(in oklab, var(--accent-blue) 10%, transparent);
+      border-color:color-mix(in oklab, var(--accent-blue) 18%, transparent);
+      transform:translateX(3px);
+    }
+    .ico{
+      width:32px;height:32px;display:grid;place-items:center;border-radius:8px;
+      background:color-mix(in oklab, var(--accent-blue) 10%, transparent);
+      border:1px solid color-mix(in oklab, var(--accent-blue) 22%, transparent);
+      font-weight:800;
+    }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex; align-items:center; gap:.5rem; padding:.75rem 1.3rem;
+      border-radius:999px; border:1px solid color-mix(in srgb, var(--brand-gold) 40%, transparent);
+      box-shadow:0 10px 26px color-mix(in srgb, var(--brand-gold) 20%, transparent);
+      font-weight:800; text-decoration:none; transition:transform .2s, box-shadow .2s;
+    }
+    .btn.brand{background:var(--brand-gold); color:#111}
+    .btn.secondary{background:transparent; color:var(--text); border-color:var(--line); box-shadow:none}
+    .btn:hover{transform:translateY(-1px)}
+
+    /* Theme toggle */
+    .theme-toggle{
+      display:inline-flex; align-items:center; gap:.5rem; padding:.45rem .75rem;
+      background:var(--card); border:1px solid var(--line); border-radius:999px; cursor:pointer; font-weight:700;
+    }
+    .theme-toggle svg{width:18px;height:18px}
+
+    /* ============ Hero ============ */
+    .partner-hero{
+      margin-top:74px;
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(26,34,48,.7) 0%, rgba(27,34,48,0) 60%), linear-gradient(135deg, #0A0F16 0%, #0D141F 100%);
+      color:#fff; padding:86px 22px; position:relative; overflow:hidden;
+    }
+    .partner-hero .inner{max-width:1100px; margin:0 auto; text-align:center}
+    .partner-hero h1{font-size:3rem; line-height:1.08; margin:0 0 12px; font-weight:900; letter-spacing:-1.5px}
+    .partner-hero p{font-size:1.15rem; color:rgba(255,255,255,.9); margin:0 0 22px}
+    .partner-hero .cta{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
+
+    /* ============ Sections ============ */
+    .section{max-width:1200px; margin:0 auto; padding:64px 22px}
+    .section-header{text-align:center; margin-bottom:28px}
+    .eyebrow{
+      display:inline-block; padding:.45rem 1rem; border-radius:999px;
+      background:color-mix(in oklab, var(--accent-blue) 10%, transparent);
+      color:var(--accent-blue); font-weight:800; font-size:.85rem; letter-spacing:.06em; text-transform:uppercase;
+    }
+    h2.section-title{font-size:2.2rem; line-height:1.12; margin:10px 0 8px; letter-spacing:-.8px}
+    p.lead{color:var(--muted); max-width:720px; margin:0 auto}
+
+    /* Benefits */
+    .benefits-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; margin-top:16px}
+    .benefit-card{
+      background:var(--card); border:1px solid var(--line); border-radius:18px; padding:20px;
+      box-shadow:0 18px 60px rgba(0,0,0,.06);
+    }
+    .benefit-icon{
+      width:56px;height:56px;border-radius:14px;display:grid;place-items:center;
+      background:color-mix(in oklab, var(--teal) 16%, transparent); color:var(--teal); font-size:24px; margin-bottom:12px; font-weight:900
+    }
+    .benefit-card h3{margin:4px 0 8px; font-size:1.2rem}
+    .benefit-card p{color:var(--muted); margin:0 0 10px}
+    .benefit-list{list-style:none; margin:0; padding:0}
+    .benefit-list li{display:flex; gap:.6rem; align-items:center; padding:.38rem 0; color:var(--text)}
+    .benefit-list li::before{
+      content:""; width:18px;height:18px;border-radius:50%;
+      background:linear-gradient(135deg, var(--accent-blue), var(--teal));
+      box-shadow:0 0 0 3px color-mix(in oklab, var(--accent-blue) 16%, transparent);
+    }
+
+    /* Partner types */
+    .strip{background:color-mix(in oklab, var(--panel) 94%, var(--bg))}
+    .partner-types-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:18px}
+    .partner-type-card{
+      background:var(--card); border:1px solid var(--line); border-radius:22px; padding:24px;
+      box-shadow:0 18px 60px rgba(0,0,0,.06);
+    }
+    .partner-card-header{display:flex; gap:14px; align-items:center; padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:14px}
+    .partner-type-icon{
+      width:56px;height:56px;border-radius:14px;display:grid;place-items:center;
+      background:color-mix(in oklab, var(--accent-blue) 12%, transparent); color:var(--accent-blue); font-size:22px; font-weight:900
+    }
+    .partner-type-card h3{margin:0; font-size:1.25rem}
+    .partner-type-description{color:var(--muted); margin:8px 0 12px}
+    .partner-features{list-style:none; margin:0 0 14px 0; padding:0}
+    .partner-features li{padding:.6rem 0; border-bottom:1px solid var(--line)}
+    .partner-type-card .btn{width:100%; justify-content:center}
+
+    /* Requirements */
+    .req-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:center}
+    .req h2{margin:0 0 10px; font-size:2rem; letter-spacing:-.5px}
+    .req p{color:var(--muted); margin:0 0 12px}
+    .req-list{list-style:none; margin:0; padding:0}
+    .req-list li{display:flex; gap:.6rem; align-items:center; padding:10px 0; border-bottom:1px solid var(--line)}
+    .req-list li::before{
+      content:"→"; font-weight:900; color:var(--accent-blue);
+    }
+    .req-visual{
+      background:linear-gradient(135deg, #0A0F16 0%, #0D141F 100%);
+      border:1px solid var(--line); border-radius:22px; min-height:300px; display:grid; place-items:center;
+      color:#fff; box-shadow:0 22px 70px rgba(0,0,0,.28)
+    }
+    .req-visual .emoji{font-size:80px; filter:drop-shadow(0 12px 28px rgba(0,0,0,.55))}
+
+    /* CTA */
+    .cta{
+      background:linear-gradient(135deg, var(--accent-blue), var(--teal));
+      color:#fff; text-align:center; position:relative; overflow:hidden;
+    }
+    .cta h2{font-size:2.2rem; margin:0 0 8px}
+    .cta p{margin:0; opacity:.95}
+    .cta .row{display:flex; gap:12px; justify-content:center; margin-top:18px; flex-wrap:wrap}
+    .btn.light{background:#fff; color:#111; border-color:transparent; box-shadow:0 12px 32px rgba(255,255,255,.25)}
+
+    /* Footer */
+    .ft{background:#0B111A; color:rgba(255,255,255,.8); padding:44px 22px 24px}
+    html[data-theme="dark"] .ft{background:#0A0F16}
+    .ft-grid{max-width:1200px; margin:0 auto 16px auto; display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:18px}
+    .ft h4{color:#fff; margin:0 0 10px; font-size:1rem}
+    .ft a{color:rgba(255,255,255,.7); text-decoration:none}
+    .ft a:hover{color:#A5B4FC}
+    .ft-logo{display:flex; align-items:center; gap:.6rem; font-weight:900; letter-spacing:-.5px; font-size:1.2rem}
+    .ft-logo .dot{width:10px;height:10px;border-radius:50%;background:var(--brand-gold);box-shadow:0 0 12px var(--brand-gold)}
+    .ft-bottom{max-width:1200px; margin:12px auto 0; padding-top:12px; border-top:1px solid rgba(255,255,255,.12); text-align:center; color:rgba(255,255,255,.6)}
+
+    /* Responsive */
+    @media (max-width:1024px){
+      .nav-links{display:none}
+      .req-grid{grid-template-columns:1fr}
+      .mega{min-width:640px}
+    }
+    @media (max-width:720px){
+      .mega{left:12px; right:12px; transform:none; min-width:unset}
+      .partner-hero h1{font-size:2.2rem}
+      .ft-grid{grid-template-columns:1fr}
+    }
+  </style>
+<link href="styles.css" rel="stylesheet"/></head>
+<body><header class="hdr" data-version="Khodā-ye Sāsān v1.2">
+<nav aria-label="Primary" class="nav">
+<a aria-label="IVAFlow Home" class="logo" href="index.html">IVA<span class="dot"></span></a>
+<ul class="nav-links">
+<li class="nav-item">
+<button aria-expanded="false" aria-haspopup="true" class="nav-btn">Platform ▾</button>
+<div class="mega" role="menu">
+<div class="mega-grid">
+<div>
+<h4>Core Capabilities</h4>
+<ul>
+<li><a href="Form Builder - IVAFlow.html"><span class="ico">📝</span> Form Builder</a></li>
+<li><a href="Workflow Automation - IVAFlow.html"><span class="ico">🔄</span> Workflow Designer</a></li>
+<li><a href="#analytics"><span class="ico">📊</span> Analytics</a></li>
+<li><a href="solutions-appbuilder.html"><span class="ico">🏗</span> App Builder</a></li>
+<li><a href="#integrations"><span class="ico">🔗</span> Integrations (API)</a></li>
+</ul>
+</div>
+<div>
+<h4>Advanced</h4>
+<ul>
+<li><a href="IoT Integration - IVAFlow.html"><span class="ico">📡</span> IoT Integration</a></li>
+<li><a href="#gps"><span class="ico">🗺</span> GPS &amp; Geofencing</a></li>
+<li><a href="#ai"><span class="ico">🤖</span> AI Automation</a></li>
+<li><a href="#multiportal"><span class="ico">🗂</span> Multi‑Portal Architecture</a></li>
+</ul>
+</div>
+<div>
+<h4>Security &amp; Compliance</h4>
+<ul>
+<li><a href="#security"><span class="ico">🛡</span> Enterprise Security</a></li>
+<li><a href="#access"><span class="ico">🔐</span> Access Control</a></li>
+<li><a href="#audit"><span class="ico">📜</span> Audit Logs</a></li>
+</ul>
+</div>
+</div>
+</div>
+</li>
+<li class="nav-item">
+<button aria-expanded="false" aria-haspopup="true" class="nav-btn">Solutions ▾</button>
+<div class="mega" role="menu">
+<div class="mega-grid">
+<div>
+<h4>By Industry</h4>
+<ul>
+<li><a href="solutions-fleet.html">🚚 Fleet &amp; Logistics</a></li>
+<li><a href="index.html#solutions-tabs">🏥 Healthcare</a></li>
+<li><a href="index.html#solutions-tabs">🏛 Government</a></li>
+<li><a href="index.html#solutions-tabs">⚒ Construction</a></li>
+<li><a href="oilgas.html">🛢 Oil &amp; Gas</a></li></ul>
+</div>
+<div>
+<h4>By Use Case</h4>
+<ul>
+<li><a href="solutions-fleet.html">Field Ops</a></li>
+<li><a href="#solutions">Incident Mgmt</a></li>
+<li><a href="#solutions">Approvals</a></li>
+<li><a href="#solutions">Docs &amp; e‑Sign</a></li>
+</ul>
+</div>
+<div>
+<h4>By Role</h4>
+<ul>
+<li><a href="#solutions">Operations</a></li>
+<li><a href="#solutions">IT Directors</a></li>
+<li><a href="#solutions">Digital Leaders</a></li>
+</ul>
+</div>
+</div>
+</div>
+</li>
+<li><a href="#resources">Resources</a></li>
+<li><a href="contact.html">Contact</a></li><li><a href="partnership.html">Partnership</a></li>
+</ul>
+<div class="nav-cta">
+<a class="btn secondary" href="#demo">Book Demo</a>
+<a class="btn brand" href="#signup">Start Free</a>
+<button aria-label="Toggle theme" class="theme-toggle" id="themeToggle"><span id="themeIcon"></span><span id="themeText">Auto</span></button>
+</div>
+</nav>
+</header>
+<!-- Header -->
+<!-- HERO -->
+<section class="partner-hero">
+<div class="inner">
+<h1>Grow Your Business with IVAFlow</h1>
+<p>Join our partner ecosystem and deliver powerful automation solutions while unlocking predictable, recurring revenue.</p>
+<div class="cta">
+<a class="btn light" href="#apply">Apply Now →</a>
+<a class="btn secondary" href="/partners#contact" style="border-color:#fff; color:#fff">Contact Partners Team</a>
+</div>
+</div>
+</section>
+<!-- Benefits -->
+<section class="section">
+<div class="section-header">
+<span class="eyebrow">Partner Benefits</span>
+<h2 class="section-title">Why Partner with IVAFlow?</h2>
+<p class="lead">Access exclusive benefits, enablement, and support to accelerate your growth.</p>
+</div>
+<div class="benefits-grid">
+<div class="benefit-card">
+<div class="benefit-icon">💰</div>
+<h3>Revenue Growth</h3>
+<p>Unlock new revenue streams and expand your service offerings.</p>
+<ul class="benefit-list">
+<li>Competitive margins</li><li>Recurring revenue</li><li>Upsell &amp; cross-sell</li><li>Deal registration</li>
+</ul>
+</div>
+<div class="benefit-card">
+<div class="benefit-icon">🎓</div>
+<h3>Training &amp; Certification</h3>
+<p>Get your team certified and deliver world-class solutions.</p>
+<ul class="benefit-list">
+<li>Partner training</li><li>Tech certifications</li><li>Sales enablement</li><li>Live webinars</li>
+</ul>
+</div>
+<div class="benefit-card">
+<div class="benefit-icon">🤝</div>
+<h3>Dedicated Support</h3>
+<p>Work directly with our team for joint success.</p>
+<ul class="benefit-list">
+<li>Partner manager</li><li>Priority support</li><li>Pre-sales help</li><li>Co-marketing</li>
+</ul>
+</div>
+<div class="benefit-card">
+<div class="benefit-icon">🛠️</div>
+<h3>Partner Resources</h3>
+<p>Tools and templates to streamline delivery.</p>
+<ul class="benefit-list">
+<li>White-label options</li><li>Demo environments</li><li>Sales &amp; marketing kits</li><li>Implementation packs</li>
+</ul>
+</div>
+<div class="benefit-card">
+<div class="benefit-icon">📈</div>
+<h3>Market Expansion</h3>
+<p>Reach new geographies &amp; industries.</p>
+<ul class="benefit-list">
+<li>Co-marketing campaigns</li><li>Lead sharing</li><li>Directory listing</li><li>Success stories</li>
+</ul>
+</div>
+<div class="benefit-card">
+<div class="benefit-icon">🏆</div>
+<h3>Competitive Advantage</h3>
+<p>Stand out with an AI-native, IoT-capable platform.</p>
+<ul class="benefit-list">
+<li>Exclusive benefits</li><li>Early feature access</li><li>Roadmap input</li><li>Partner advisory board</li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Partner types -->
+<section class="section strip">
+<div class="section-header">
+<span class="eyebrow">Partner Types</span>
+<h2 class="section-title">Choose Your Partnership Path</h2>
+<p class="lead">Flexible models that match your business goals.</p>
+</div>
+<div class="partner-types-grid">
+<div class="partner-type-card">
+<div class="partner-card-header">
+<div class="partner-type-icon">🔧</div><h3>Implementation Partner</h3>
+</div>
+<p class="partner-type-description">Deploy and customize IVAFlow for clients. Ideal for IT consultancies &amp; SIs.</p>
+<ul class="partner-features">
+<li>Project-based revenue</li><li>Technical training</li><li>Best practices</li><li>Demo access</li><li>Pre-sales support</li>
+</ul>
+<a class="btn brand" href="#apply">Learn More →</a>
+</div>
+<div class="partner-type-card">
+<div class="partner-card-header">
+<div class="partner-type-icon">💼</div><h3>Reseller Partner</h3>
+</div>
+<p class="partner-type-description">Sell IVAFlow directly; earn competitive margins. For VARs &amp; solution providers.</p>
+<ul class="partner-features">
+<li>Reseller discounts</li><li>Deal protection</li><li>Sales enablement</li><li>Co-selling</li><li>MDF funds</li>
+</ul>
+<a class="btn brand" href="#apply">Learn More →</a>
+</div>
+<div class="partner-type-card">
+<div class="partner-card-header">
+<div class="partner-type-icon">🌐</div><h3>Technology Partner</h3>
+</div>
+<p class="partner-type-description">Integrate with IVAFlow and co-innovate. For software vendors &amp; IoT providers.</p>
+<ul class="partner-features">
+<li>API/integration support</li><li>Joint GTM</li><li>Co-innovation</li><li>Tech benefits</li><li>Marketplace listing</li>
+</ul>
+<a class="btn brand" href="#apply">Learn More →</a>
+</div>
+</div>
+</section>
+<!-- Requirements -->
+<section class="section">
+<div class="req-grid">
+<div class="req">
+<h2>Ready to Get Started?</h2>
+<p>Here’s what we look for in potential partners:</p>
+<ul class="req-list">
+<li>Track record in automation/IT consulting</li>
+<li>Commitment to customer success</li>
+<li>Technical expertise or certification path</li>
+<li>Active sales/marketing capability</li>
+<li>Alignment with IVAFlow’s vision</li>
+</ul>
+</div>
+<div class="req-visual"><div class="emoji">🤝</div></div>
+</div>
+</section>
+<!-- CTA -->
+<section class="section cta" id="apply">
+<div class="cta-content" style="max-width:900px;margin:0 auto">
+<h2>Ready to Become a Partner?</h2>
+<p>Submit your application—our team will reach out within 48 hours to discuss next steps.</p>
+<div class="row">
+<a class="btn light" href="/partners/apply">Apply Now →</a>
+<a class="btn secondary" href="/partners/contact" style="border-color:#fff;color:#fff">Contact Partners Team</a>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<script>
+    /* Hover-intent mega menu (≈220ms) */
+    (() => {
+      const items = document.querySelectorAll('.nav-item');
+      const IN = 220, OUT = 240;
+      items.forEach(item => {
+        let ti=null, to=null;
+        const open = () => { clearTimeout(to); ti = setTimeout(()=> item.classList.add('open'), IN); };
+        const close = () => { clearTimeout(ti); to = setTimeout(()=> item.classList.remove('open'), OUT); };
+        item.addEventListener('mouseenter', open);
+        item.addEventListener('mouseleave', close);
+      });
+    })();
+
+    /* Theme Manager (Auto → Dark → Light) */
+    (() => {
+      const KEY='ivaflow-theme';
+      const root=document.documentElement;
+      const btn=document.getElementById('themeToggle');
+      const icon=document.getElementById('themeIcon');
+      const label=document.getElementById('themeText');
+      const media=window.matchMedia('(prefers-color-scheme: dark)');
+
+      function apply(theme){
+        const resolved = (theme==='auto') ? (media.matches ? 'dark' : 'light') : theme;
+        if(resolved==='dark') root.setAttribute('data-theme','dark'); else root.setAttribute('data-theme','light');
+        label && (label.textContent = theme[0].toUpperCase()+theme.slice(1));
+        if(icon){
+          icon.innerHTML = (resolved==='dark')
+          ? '<svg viewBox="0 0 24 24" fill="none"><path d="M20 12.6a8 8 0 1 1-8.6-8 7 7 0 1 0 8.6 8Z" stroke="currentColor" stroke-width="1.6"/></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.6 4.6 6.4 6.4M17.6 17.6l1.8 1.8M17.6 6.4l1.8-1.8M4.6 19.4l1.8-1.8" stroke="currentColor" stroke-width="1.6"/></svg>';
+        }
+      }
+      function current(){ return localStorage.getItem(KEY) || 'auto'; }
+      function cycle(t){ if(t==='auto') return 'dark'; if(t==='dark') return 'light'; return 'auto'; }
+      apply(current());
+      media.addEventListener?.('change', ()=>{ if(current()==='auto') apply('auto'); });
+      btn?.addEventListener('click', ()=>{ const next=cycle(current()); localStorage.setItem(KEY,next); apply(next); });
+      btn?.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); btn.click(); }});
+    })();
+  </script>
+<footer class="ft">
+<div class="ft-grid">
+<div>
+<div class="ft-logo">IVA<span class="dot"></span></div>
+<p>AI‑native, no‑code automation platform to design forms, orchestrate workflows, visualize data, and build apps — fast.</p>
+</div>
+<div>
+<h4>Platform</h4>
+<a href="Form Builder - IVAFlow.html">Forms</a><br/>
+<a href="Workflow Automation - IVAFlow.html">Workflow</a><br/>
+<a href="index.html#analytics">Analytics</a><br/>
+<a href="solutions-appbuilder.html">App Builder</a><br/>
+<a href="index.html#integrations">Integrations</a>
+</div>
+<div>
+<h4>Solutions</h4>
+<a href="solutions-fleet.html">Fleet</a><br/>
+<a href="index.html#solutions-tabs">Healthcare</a><br/>
+<a href="industry.html">Manufacturing</a><br/>
+<a href="index.html#solutions-tabs">Government</a>
+<a href="oilgas.html">Oil &amp; Gas</a><br/></div>
+<div>
+<h4>Company</h4>
+<a href="partnership.html">Partnership</a><br/>
+<a href="index.html#about">About</a><br/>
+<a href="index.html#careers">Careers</a><br/>
+<a href="contact.html">Contact</a>
+</div>
+</div>
+<div class="ft-bottom">© 2025 IVAFlow • Privacy • Terms • Security</div>
+</footer><script src="app.js"></script></body>
+</html>

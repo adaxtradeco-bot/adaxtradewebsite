@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet & Logistics Solutions - IVAFlow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #E9B321;
+            --primary-dark: #C58F15;
+            --secondary: #0F69FF;
+            --dark: #0A0F16;
+            --gray: #64748B;
+            --light: #EAF3FF;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--light);
+            background: radial-gradient(circle at top, #0B1120 0%, #020617 45%, #000000 100%);
+        }
+
+        header {
+            background: rgba(10, 15, 22, 0.96);
+            backdrop-filter: blur(20px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(15,23,42,0.85);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6366F1 0%, #10B981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--light);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .nav-cta {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--dark);
+        }
+
+        .industry-hero {
+            margin-top: 80px;
+            background: linear-gradient(135deg, #0A0E1A 0%, #1E3A8A 100%);
+            color: white;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .industry-hero::before {
+            content: '';
+            position: absolute;
+            top: -30%;
+            right: -10%;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(37,99,235,0.25) 0%, transparent 70%);
+            animation: float 25s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -2px;
+        }
+
+        .hero-text .highlight {
+            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin: 2.5rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--secondary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .hero-visual {
+            background: rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-icon {
+            font-size: 12rem;
+            filter: drop-shadow(0 20px 50px rgba(0,0,0,0.5));
+        }
+
+        .challenges-section {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1.2rem;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 50px;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--light);
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+        }
+
+        .section-header p {
+            font-size: 1.15rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .challenges-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .challenge-card {
+            background: radial-gradient(circle at top, #0B1120 0%, #020617 45%, #000000 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            display: flex;
+            gap: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .challenge-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .challenge-card h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--light);
+            margin-bottom: 0.5rem;
+        }
+
+        .challenge-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .solutions-section {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .solution-card {
+            background: radial-gradient(circle at top, #0B1120 0%, #020617 45%, #000000 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s;
+            border: 2px solid transparent;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            border-color: var(--primary);
+        }
+
+        .solution-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .solution-card h3 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--light);
+            margin-bottom: 1rem;
+        }
+
+        .solution-card p {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .solution-features {
+            list-style: none;
+        }
+
+        .solution-features li {
+            padding: 0.6rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+            color: var(--light);
+        }
+
+        .solution-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 900;
+            font-size: 1.1rem;
+        }
+
+        .case-study {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .case-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .case-study h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .case-study blockquote {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin: 2rem 0;
+            font-style: italic;
+            opacity: 0.95;
+        }
+
+        .case-author {
+            font-size: 1rem;
+            margin-top: 2rem;
+            opacity: 0.9;
+        }
+
+        .case-results {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .case-stat {
+            text-align: center;
+        }
+
+        .case-stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .case-stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .cta-section {
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .cta-content h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: var(--light);
+            margin-bottom: 1.5rem;
+            letter-spacing: -2px;
+        }
+
+        .cta-content p {
+            font-size: 1.15rem;
+            color: var(--gray);
+            margin-bottom: 2.5rem;
+        }
+
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.8);
+            padding: 4rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #6366F1 0%, #10B981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section h4 {
+            color: white;
+            margin-bottom: 1.2rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-section a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links, .nav-cta {
+                display: none;
+            }
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+            .challenges-grid, .hero-stats, .case-results {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">IVAFlow</a>
+            <ul class="nav-links">
+                <li><a href="index.html#platform">Platform</a></li>
+                <li><a href="industry.html">Solutions</a></li>
+                <li><a href="partnership.html">Partners</a></li>
+                <li><a href="index.html#pricing">Pricing</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="#" class="btn btn-secondary">Sign In</a>
+                <a href="#" class="btn btn-primary">Start Free Trial</a>
+            </div>
+        </nav>
+    </header>
+
+    <section class="industry-hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Fleet & Logistics <span class="highlight">Intelligence</span></h1>
+                <p class="hero-subtitle">Real-time GPS tracking, route optimization, driver management, and automated dispatching—all in one platform.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">25%</span>
+                        <span class="stat-label">Travel Time Saved</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">35%</span>
+                        <span class="stat-label">Fuel Cost Reduction</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Fleet Visibility</span>
+                    </div>
+                </div>
+
+                <div class="hero-cta">
+                    <a href="#" class="btn btn-primary">Get Started →</a>
+                    <a href="#" class="btn btn-secondary" style="border-color: rgba(255,255,255,0.3); color: white;">Watch Demo</a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-icon">🚚</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="challenges-section">
+        <div class="section-header">
+            <div class="section-badge">Fleet Challenges</div>
+            <h2>Logistics Problems We Solve</h2>
+            <p>The pain points of managing vehicles, drivers, and deliveries</p>
+        </div>
+
+        <div class="challenges-grid">
+            <div class="challenge-card">
+                <div class="challenge-icon">📍</div>
+                <div>
+                    <h3>No Real-Time Visibility</h3>
+                    <p>Don't know where your vehicles are, what routes they're taking, or when deliveries will arrive.</p>
+                </div>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-icon">⛽</div>
+                <div>
+                    <h3>High Fuel Costs</h3>
+                    <p>Inefficient routes, idle time, and unauthorized vehicle use waste fuel and increase operating costs.</p>
+                </div>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-icon">📋</div>
+                <div>
+                    <h3>Manual Dispatch</h3>
+                    <p>Time-consuming manual dispatching leads to delays, errors, and poor resource utilization.</p>
+                </div>
+            </div>
+
+            <div class="challenge-card">
+                <div class="challenge-icon">🔧</div>
+                <div>
+                    <h3>Maintenance Issues</h3>
+                    <p>Missed maintenance schedules lead to breakdowns, downtime, and expensive emergency repairs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solutions-section">
+        <div class="section-header">
+            <div class="section-badge">IVAFlow for Fleet</div>
+            <h2>Complete Fleet Management Solution</h2>
+            <p>Everything you need to optimize your fleet operations</p>
+        </div>
+
+        <div class="solutions-grid">
+            <div class="solution-card">
+                <div class="solution-icon">📍</div>
+                <h3>Real-Time GPS Tracking</h3>
+                <p>Track every vehicle in real-time with live location updates, geofencing, and route history.</p>
+                <ul class="solution-features">
+                    <li>Live vehicle location</li>
+                    <li>Geofence alerts</li>
+                    <li>Route history playback</li>
+                    <li>Speed monitoring</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <div class="solution-icon">🗺️</div>
+                <h3>Route Optimization</h3>
+                <p>Automatically calculate the most efficient routes to save time, fuel, and money.</p>
+                <ul class="solution-features">
+                    <li>Multi-stop route planning</li>
+                    <li>Traffic-aware routing</li>
+                    <li>Delivery time windows</li>
+                    <li>Real-time rerouting</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <div class="solution-icon">👨‍✈️</div>
+                <h3>Driver Management</h3>
+                <p>Track driver performance, hours of service, and compliance with automated reporting.</p>
+                <ul class="solution-features">
+                    <li>Driver behavior monitoring</li>
+                    <li>Hours of service tracking</li>
+                    <li>Performance scoring</li>
+                    <li>License management</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <div class="solution-icon">📦</div>
+                <h3>Delivery Management</h3>
+                <p>Proof of delivery with photo, signature, and GPS location for every delivery.</p>
+                <ul class="solution-features">
+                    <li>Electronic proof of delivery</li>
+                    <li>Photo & signature capture</li>
+                    <li>Customer notifications</li>
+                    <li>Delivery status tracking</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <div class="solution-icon">🔧</div>
+                <h3>Maintenance Scheduling</h3>
+                <p>Automated maintenance alerts based on mileage, hours, and time intervals.</p>
+                <ul class="solution-features">
+                    <li>Preventive maintenance alerts</li>
+                    <li>Service history tracking</li>
+                    <li>Parts inventory management</li>
+                    <li>Cost tracking</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <div class="solution-icon">⛽</div>
+                <h3>Fuel Management</h3>
+                <p>Monitor fuel consumption, detect anomalies, and identify cost-saving opportunities.</p>
+                <ul class="solution-features">
+                    <li>Fuel consumption tracking</li>
+                    <li>Idle time monitoring</li>
+                    <li>Fuel theft detection</li>
+                    <li>Cost per mile analysis</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="case-study">
+        <div class="case-content">
+            <h2>Real Results from Fleet Operators</h2>
+            <blockquote>
+                "IVAFlow's GPS tracking and route optimization cut our fuel costs by 35% and reduced delivery times by 25%. Our dispatchers love how easy it is to manage 50+ vehicles in real-time."
+            </blockquote>
+            <p class="case-author">— Fleet Manager, Regional Distribution Company</p>
+
+            <div class="case-results">
+                <div class="case-stat">
+                    <span class="case-stat-number">35%</span>
+                    <span class="case-stat-label">Fuel Cost Reduction</span>
+                </div>
+                <div class="case-stat">
+                    <span class="case-stat-number">25%</span>
+                    <span class="case-stat-label">Faster Deliveries</span>
+                </div>
+                <div class="case-stat">
+                    <span class="case-stat-number">$75K</span>
+                    <span class="case-stat-label">Annual Savings</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Optimize Your Fleet?</h2>
+            <p>Join logistics companies saving time and money with IVAFlow's fleet management platform.</p>
+            <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem;">
+                <a href="#" class="btn btn-primary" style="padding: 1.2rem 2.5rem;">Start Free Trial →</a>
+                <a href="#" class="btn btn-secondary" style="padding: 1.2rem 2.5rem;">Schedule Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>IVAFlow</h3>
+                <p>The intelligent business automation platform built for modern operations.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="#">Automation</a></li>
+                    <li><a href="Form Builder - IVAFlow.html">Form Builder</a></li>
+                    <li><a href="IoT Integration - IVAFlow.html">IoT Integration</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Solutions</h4>
+                <ul>
+                    <li><a href="Fleet &amp; Logistics Solutions - IVAFlow.html">Fleet</a></li>
+                    <li><a href="Construction Solutions - IVAFlow.html">Construction</a></li>
+                    <li><a href="Healthcare Solutions - IVAFlow.html">Healthcare</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="partnership.html">Partners</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 IVAFlow. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

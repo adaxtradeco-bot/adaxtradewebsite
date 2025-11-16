@@ -19,6 +19,19 @@ import StatsSection from '@/components/builder-sections/StatsSection';
 import TestimonialSection from '@/components/builder-sections/TestimonialSection';
 import FeatureGridSection from '@/components/builder-sections/FeatureGridSection';
 import TeamSection from '@/components/builder-sections/TeamSection';
+import IndustryHeroSection from '@/components/builder-sections/IndustryHeroSection';
+import BenefitGridSection from '@/components/builder-sections/BenefitGridSection';
+import CaseStudySection from '@/components/builder-sections/CaseStudySection';
+import IndustryFeaturesSection from '@/components/builder-sections/IndustryFeaturesSection';
+import FeatureCardsSection from '@/components/builder-sections/FeatureCardsSection';
+import IndustryCardsSection from '@/components/builder-sections/IndustryCardsSection';
+import PropertiesSection from '@/components/builder-sections/PropertiesSection';
+import LocationSection from '@/components/builder-sections/LocationSection';
+import TestimonialsSection from '@/components/builder-sections/TestimonialsSection';
+import WorkflowSection from '@/components/builder-sections/WorkflowSection';
+import IntegrationsSection from '@/components/builder-sections/IntegrationsSection';
+import ProcessSection from '@/components/builder-sections/ProcessSection';
+import { ComplianceBadgesSection } from '@/components/builder-sections/ComplianceBadgesSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -72,6 +85,32 @@ export function SectionRenderer({
         return <FeatureGridSection data={(section as any).data} style={(section as any).style} />;
       case 'team':
         return <TeamSection data={(section as any).data} style={(section as any).style} />;
+      case 'industry-hero':
+        return <IndustryHeroSection section={section as any} isBuilder={isBuilder} />;
+      case 'benefit-grid':
+        return <BenefitGridSection data={(section as any).data} style={(section as any).style} />;
+      case 'case-study':
+        return <CaseStudySection data={(section as any).data} style={(section as any).style} />;
+      case 'industry-features':
+        return <IndustryFeaturesSection data={(section as any).data} style={(section as any).style} />;
+      case 'feature-cards':
+        return <FeatureCardsSection data={(section as any).data} style={(section as any).style} />;
+      case 'industry-cards':
+        return <IndustryCardsSection data={(section as any).data} style={(section as any).style} />;
+      case 'properties':
+        return <PropertiesSection data={(section as any).data} style={(section as any).style} />;
+      case 'location':
+        return <LocationSection data={(section as any).data} style={(section as any).style} />;
+      case 'testimonials':
+        return <TestimonialsSection data={(section as any).data} style={(section as any).style} />;
+      case 'workflow':
+        return <WorkflowSection data={(section as any).data} style={(section as any).style} />;
+      case 'integrations':
+        return <IntegrationsSection data={(section as any).data} style={(section as any).style} />;
+      case 'process':
+        return <ProcessSection data={(section as any).data} style={(section as any).style} />;
+      case 'compliance':
+        return <ComplianceBadgesSection data={(section as any).data} />;
       default:
         return (
           <div className="p-8 bg-gray-100 dark:bg-gray-800 text-center">
