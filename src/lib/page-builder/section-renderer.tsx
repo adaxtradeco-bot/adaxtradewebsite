@@ -32,6 +32,12 @@ import WorkflowSection from '@/components/builder-sections/WorkflowSection';
 import IntegrationsSection from '@/components/builder-sections/IntegrationsSection';
 import ProcessSection from '@/components/builder-sections/ProcessSection';
 import { ComplianceBadgesSection } from '@/components/builder-sections/ComplianceBadgesSection';
+import { MediaContentSection } from '@/components/builder-sections/MediaContentSection';
+import SidebarContentSection from '@/components/builder-sections/SidebarContentSection';
+import WorkflowHeroSection from '@/components/builder-sections/WorkflowHeroSection';
+import MetricsSection from '@/components/builder-sections/MetricsSection';
+import TwoColumnMediaSection from '@/components/builder-sections/TwoColumnMediaSection';
+import SimpleCardsSection from '@/components/builder-sections/SimpleCardsSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -111,6 +117,18 @@ export function SectionRenderer({
         return <ProcessSection data={(section as any).data} style={(section as any).style} />;
       case 'compliance':
         return <ComplianceBadgesSection data={(section as any).data} />;
+      case 'media-content':
+        return <MediaContentSection data={(section as any).data} isBuilder={isBuilder} />;
+      case 'sidebar-content':
+        return <SidebarContentSection key={section.id} {...(section as any).data} />;
+      case 'workflow-hero':
+        return <WorkflowHeroSection key={section.id} {...(section as any).data} />;
+      case 'metrics':
+        return <MetricsSection key={section.id} {...(section as any).data} />;
+      case 'two-column-media':
+        return <TwoColumnMediaSection key={section.id} {...(section as any).data} />;
+      case 'simple-cards':
+        return <SimpleCardsSection key={section.id} {...(section as any).data} />;
       default:
         return (
           <div className="p-8 bg-gray-100 dark:bg-gray-800 text-center">

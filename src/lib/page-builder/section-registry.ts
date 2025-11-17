@@ -528,6 +528,274 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+  {
+    id: 'media-content',
+    name: 'Media Content',
+    type: 'media-content',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Content section with image or video media on left or right',
+    icon: '🎬',
+    defaultData: {
+      id: '',
+      type: 'media-content',
+      order: 0,
+      data: {
+        title: 'Powerful Features',
+        subtitle: 'Why Choose Us',
+        description: 'Discover how our platform helps you achieve your goals faster and more efficiently.',
+        mediaType: 'image',
+        mediaUrl: '/placeholder-image.jpg',
+        mediaAlt: 'Feature showcase',
+        layout: 'media-right',
+        features: [
+          {
+            icon: '⚡',
+            title: 'Lightning Fast',
+            description: 'Optimized performance for the best user experience'
+          },
+          {
+            icon: '🔒',
+            title: 'Secure & Reliable',
+            description: 'Enterprise-grade security you can trust'
+          },
+          {
+            icon: '🎨',
+            title: 'Beautiful Design',
+            description: 'Modern interface that users love'
+          }
+        ],
+        ctaText: 'Learn More',
+        ctaLink: '#'
+      },
+      style: {
+        backgroundColor: 'bg-white dark:bg-neutral-900',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20',
+        alignment: 'left',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'sidebar-content',
+    name: 'Sidebar Content',
+    type: 'sidebar-content',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Sidebar navigation with content area - perfect for builder interfaces',
+    icon: '📐',
+    defaultData: {
+      id: '',
+      type: 'sidebar-content',
+      order: 0,
+      data: {
+        sidebarItems: [
+          {
+            id: 'ui-blocks',
+            label: 'UI Blocks',
+            content: {
+              title: 'Visual Drag-and-Drop Builder',
+              description: 'Place forms, tables, charts, boards, and buttons; wire actions; set validations. Build pages without code.',
+              features: [
+                { text: 'Reusable components' },
+                { text: 'Conditional UI' },
+                { text: 'Inline validation' },
+                { text: 'Form states' }
+              ],
+              placeholderIcon: '🎨',
+              placeholderText: 'Canvas with component drawer + properties'
+            }
+          },
+          {
+            id: 'flows-rules',
+            label: 'Flows & Rules',
+            content: {
+              title: 'Business Logic & Workflows',
+              description: 'Create complex workflows with conditional logic, approvals, and automated actions without writing code.',
+              features: [
+                { text: 'Visual workflow designer' },
+                { text: 'Conditional branching' },
+                { text: 'Approval chains' },
+                { text: 'Event triggers' }
+              ],
+              placeholderIcon: '⚡',
+              placeholderText: 'Workflow canvas with nodes and connections'
+            }
+          },
+          {
+            id: 'themes',
+            label: 'Themes',
+            content: {
+              title: 'Customizable Themes',
+              description: 'Apply pre-built themes or create your own with custom colors, fonts, and styling options.',
+              features: [
+                { text: 'Pre-built templates' },
+                { text: 'Custom color schemes' },
+                { text: 'Typography control' },
+                { text: 'Dark mode support' }
+              ],
+              placeholderIcon: '🎨',
+              placeholderText: 'Theme customization panel'
+            }
+          },
+          {
+            id: 'custom-code',
+            label: 'Custom Code',
+            content: {
+              title: 'Extend with Custom Code',
+              description: 'Add JavaScript, CSS, or API integrations when you need advanced customization beyond no-code.',
+              features: [
+                { text: 'JavaScript functions' },
+                { text: 'Custom CSS styles' },
+                { text: 'API integrations' },
+                { text: 'Code snippets library' }
+              ],
+              placeholderIcon: '💻',
+              placeholderText: 'Code editor with syntax highlighting'
+            }
+          }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-slate-50 dark:bg-slate-800',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-16',
+        alignment: 'left',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'workflow-hero',
+    name: 'Workflow Hero',
+    type: 'workflow-hero',
+    category: SECTION_CATEGORIES.HEADERS,
+    description: 'Hero section for workflow/orchestration pages with feature cards',
+    icon: '🔄',
+    defaultData: {
+      id: '',
+      type: 'workflow-hero',
+      order: 0,
+      data: {
+        badge: 'Live orchestration for modern teams',
+        title: 'Orchestrate Processes. Reduce Errors.',
+        titleHighlight: 'Move Faster.',
+        description: 'Model, automate, and optimize end-to-end workflows without code.',
+        primaryButton: {
+          text: 'Explore Features',
+          href: '#features'
+        },
+        secondaryButton: {
+          text: 'See Business Impact',
+          href: '#impact'
+        },
+        footerText: 'Secure • Extensible • Real-time visibility',
+        cards: [
+          { icon: '⚙️', title: 'Visual Builder', description: 'Drag & drop stages, forms, and rules.' },
+          { icon: '🔗', title: 'Integrations', description: 'Connect CRM, ERP, data, and email.' },
+          { icon: '✅', title: 'Approvals', description: 'Parallel & sequential with audit trails.' },
+          { icon: '📊', title: 'Reporting', description: 'Real-time visibility and KPIs.' }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-gradient-to-br from-indigo-50 via-slate-50 to-cyan-50 dark:from-indigo-950 dark:via-slate-900 dark:to-cyan-950',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20 lg:py-32',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'metrics',
+    name: 'Metrics Section',
+    type: 'metrics',
+    category: SECTION_CATEGORIES.SOCIAL,
+    description: 'Display business impact metrics in a grid',
+    icon: '📈',
+    defaultData: {
+      id: '',
+      type: 'metrics',
+      order: 0,
+      data: {
+        title: 'Proven Business Impact',
+        description: 'Cut manual effort, minimize errors, and accelerate productivity across the org.',
+        metrics: [
+          { value: '40%+', label: 'Cycle time reduction' },
+          { value: '99.9%', label: 'Process accuracy' },
+          { value: '5×', label: 'Faster integrations' },
+          { value: '24/7', label: 'Operational visibility' }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-slate-50 dark:bg-slate-900',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-16',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'two-column-media',
+    name: 'Two Column Media',
+    type: 'two-column-media',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Content with media/placeholder on left or right',
+    icon: '🖼️',
+    defaultData: {
+      id: '',
+      type: 'two-column-media',
+      order: 0,
+      data: {
+        title: 'No-Code Workflow Builder',
+        description: 'Design multi‑stage workflows with drag‑and‑drop, connect apps in minutes, and adapt logic without deploying code.',
+        features: [
+          { text: 'Drag‑and‑drop stages & forms' },
+          { text: 'Conditional logic & branching' },
+          { text: 'Parallel tasks & dynamic roles' },
+          { text: 'Manual, time‑based, or event triggers' }
+        ],
+        mediaIcon: '🔄',
+        mediaText: 'Workflow Builder Screenshot',
+        mediaPosition: 'right',
+        badge: 'Build once, reuse across departments'
+      },
+      style: {
+        backgroundColor: 'bg-gradient-to-br from-cyan-50/80 via-white to-slate-50/50 dark:bg-gradient-to-b dark:from-cyan-500/5 dark:to-transparent',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-16'
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'simple-cards',
+    name: 'Simple Cards',
+    type: 'simple-cards',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Grid of simple cards with title and description',
+    icon: '🎴',
+    defaultData: {
+      id: '',
+      type: 'simple-cards',
+      order: 0,
+      data: {
+        title: 'Why Intelligent Orchestration?',
+        description: 'Centralization, compliance, collaboration, and automation — all in one place to run processes at scale.',
+        cards: [
+          { title: 'Centralization & Visibility', description: 'Unify requests and track real-time status across all work streams.' },
+          { title: 'Process Compliance', description: 'Map processes and ensure execution standards are followed every time.' },
+          { title: 'Automation & Collaboration', description: 'Replace manual steps with rules, and keep teams aligned.' },
+          { title: 'Reports & Mapping', description: 'Analyze performance and visualize flows to remove bottlenecks.' }
+        ],
+        columns: 4
+      },
+      style: {
+        backgroundColor: 'bg-slate-50 dark:bg-slate-900',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-16'
+      },
+    },
+    configSchema: {},
+  },
 ];
 
 export function getSectionTemplate(type: string): SectionTemplate | undefined {

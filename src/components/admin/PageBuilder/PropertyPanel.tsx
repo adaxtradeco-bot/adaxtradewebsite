@@ -17,6 +17,81 @@ interface PropertyPanelProps {
   onClose: () => void;
 }
 
+function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (updates: Partial<SectionConfig>) => void }) {
+  const [jsonText, setJsonText] = React.useState(JSON.stringify(section.data, null, 2));
+  const [error, setError] = React.useState('');
+  const [hasChanges, setHasChanges] = React.useState(false);
+  const sectionIdRef = React.useRef(section.id);
+
+  React.useEffect(() => {
+    if (sectionIdRef.current !== section.id) {
+      sectionIdRef.current = section.id;
+      setJsonText(JSON.stringify(section.data, null, 2));
+      setError('');
+      setHasChanges(false);
+    }
+  }, [section.id]);
+
+  const handleChange = (value: string) => {
+    setJsonText(value);
+    setHasChanges(true);
+    try {
+      JSON.parse(value);
+      setError('');
+    } catch (err) {
+      setError('Invalid JSON');
+    }
+  };
+
+  const handleSave = () => {
+    try {
+      const newData = JSON.parse(jsonText);
+      console.log('🔄 Updating section data:', newData);
+      onUpdate({ data: newData });
+      setError('');
+      setHasChanges(false);
+      console.log('✅ Section updated successfully');
+    } catch (err) {
+      console.error('❌ Save error:', err);
+      setError('Cannot save - Invalid JSON');
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+        <p className="text-sm text-blue-800 dark:text-blue-200">
+          ✏️ Edit JSON and click Save to apply changes
+        </p>
+      </div>
+      {error && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
+          <p className="text-sm font-medium text-red-800 dark:text-red-200">⚠️ {error}</p>
+        </div>
+      )}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Section Data (JSON)
+        </label>
+        <textarea
+          value={jsonText}
+          onChange={(e) => handleChange(e.target.value)}
+          rows={18}
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white font-mono text-xs"
+          spellCheck={false}
+        />
+      </div>
+      <button
+        onClick={handleSave}
+        disabled={!!error || !hasChanges}
+        className="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed font-medium transition-colors"
+      >
+        {hasChanges ? '💾 Save Changes' : '✓ Saved'}
+      </button>
+    </div>
+  );
+}
+
 export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps) {
   const { register, handleSubmit, watch, setValue } = useForm<any>({
     defaultValues: {
@@ -27,14 +102,16 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
 
   const watchedValues = watch();
 
-  // Update section when form values change
+  // Update section when form values change (only for form-based sections)
   React.useEffect(() => {
-    const { style, ...data } = watchedValues;
-    onUpdate({
-      data: data as any,
-      style: style as any,
-    });
-  }, [watchedValues, onUpdate]);
+    if (section.type === 'hero' || section.type === 'features' || section.type === 'cta') {
+      const { style, ...data } = watchedValues;
+      onUpdate({
+        data: data as any,
+        style: style as any,
+      });
+    }
+  }, [watchedValues, onUpdate, section.type]);
 
   const renderSectionSpecificFields = () => {
     switch (section.type) {
@@ -143,11 +220,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         );
 
       default:
-        return (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            <p>Section-specific controls will appear here</p>
-          </div>
-        );
+        return <JSONEditor section={section} onUpdate={onUpdate} />;
     }
   };
 
@@ -242,7 +315,9 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
       {/* Footer */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          Changes are applied automatically
+          {section.type === 'hero' || section.type === 'features' || section.type === 'cta' 
+            ? 'Changes are applied automatically'
+            : 'Edit JSON and click Save to apply'}
         </p>
       </div>
     </div>

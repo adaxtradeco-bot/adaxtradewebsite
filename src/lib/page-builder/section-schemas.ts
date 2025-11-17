@@ -9,7 +9,7 @@ import { z } from 'zod';
 // Base section configuration
 export const BaseSectionSchema = z.object({
   id: z.string(),
-  type: z.enum(['hero', 'hero-video', 'hero-animated', 'features', 'cta', 'tabs', 'faq', 'timeline', 'pricing', 'stats', 'testimonial', 'testimonials', 'feature-grid', 'team', 'usecases', 'divider', 'industry-hero', 'benefit-grid', 'case-study', 'industry-features', 'feature-cards', 'industry-cards', 'properties', 'location', 'workflow', 'integrations', 'process', 'compliance']),
+  type: z.enum(['hero', 'hero-video', 'hero-animated', 'features', 'cta', 'tabs', 'faq', 'timeline', 'pricing', 'stats', 'testimonial', 'testimonials', 'feature-grid', 'team', 'usecases', 'divider', 'industry-hero', 'benefit-grid', 'case-study', 'industry-features', 'feature-cards', 'industry-cards', 'properties', 'location', 'workflow', 'integrations', 'process', 'compliance', 'media-content', 'sidebar-content', 'workflow-hero', 'metrics', 'two-column-media', 'simple-cards']),
   order: z.number(),
   data: z.record(z.string(), z.any()),
   style: z.object({

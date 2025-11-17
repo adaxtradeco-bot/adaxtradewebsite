@@ -42,28 +42,6 @@ export function ModernNavbar() {
 
   const navigationItems: NavigationItem[] = [
   {
-    label: t('nav.brainAI'),
-    dropdown: {
-      columns: [
-        {
-          title: t('brainAI.title'),
-          items: [
-            { title: t('brainAI.aiWriting'), description: t('brainAI.aiWritingDesc'), href: '/ai-writing', icon: '✍️' },
-            { title: t('brainAI.smartSuggestions'), description: t('brainAI.smartSuggestionsDesc'), href: '/ai-suggestions', icon: '💡' },
-            { title: t('brainAI.autoTranslation'), description: t('brainAI.autoTranslationDesc'), href: '/ai-translate', icon: '🌐' }
-          ]
-        },
-        {
-          title: t('brainAI.integrations'),
-          items: [
-            { title: t('brainAI.chatgpt'), description: t('brainAI.chatgptDesc'), href: '/chatgpt', icon: '🤖' },
-            { title: t('brainAI.voice'), description: t('brainAI.voiceDesc'), href: '/voice', icon: '🎤' }
-          ]
-        }
-      ]
-    }
-  },
-  {
     label: t('nav.product'),
     dropdown: {
       columns: [
@@ -72,6 +50,7 @@ export function ModernNavbar() {
           items: [
             { title: t('product.formBuilder'), description: t('product.formBuilderDesc'), href: `/${currentLang}/form-builder`, icon: '📝' },
             { title: t('product.appBuilder'), description: t('product.appBuilderDesc'), href: `/${currentLang}/app-builder`, icon: '🔧' },
+            { title: 'App Builder (Dynamic)', description: 'New dynamic version with builder sections', href: `/${currentLang}/app-builder-dynamic`, icon: '🎉' },
             { title: t('product.workflowOrchestrator'), description: t('product.workflowOrchestratorDesc'), href: `/${currentLang}/workflow-orchestrator`, icon: '⚡' }
           ]
         },
@@ -86,31 +65,8 @@ export function ModernNavbar() {
     }
   },
   {
-    label: t('nav.solutions'),
-    dropdown: {
-      columns: [
-        {
-          title: t('solutions.byIndustry'),
-          items: [
-            { title: t('solutions.education'), href: '/solutions/education' },
-            { title: t('solutions.healthcare'), href: '/solutions/healthcare' },
-            { title: t('solutions.finance'), href: '/solutions/finance' },
-            { title: t('solutions.technology'), href: '/solutions/technology' }
-          ]
-        },
-        {
-          title: t('solutions.byUseCase'),
-          items: [
-            { title: t('solutions.projectManagement'), href: '/solutions/project-management' },
-            { title: t('solutions.customerSupport'), href: '/solutions/customer-support' },
-            { title: t('solutions.salesMarketing'), href: '/solutions/sales-marketing' }
-          ]
-        }
-      ]
-    }
-  },
-  {
     label: t('nav.industries'),
+    href: `/${currentLang}/industries`,
     dropdown: {
       columns: [
         {
@@ -132,29 +88,8 @@ export function ModernNavbar() {
     }
   },
   {
-    label: t('nav.resources'),
-    dropdown: {
-      columns: [
-        {
-          title: t('resources.learn'),
-          items: [
-            { title: t('resources.documentation'), href: '/docs' },
-            { title: t('resources.tutorials'), href: '/tutorials' },
-            { title: t('resources.apiReference'), href: '/api' },
-            { title: t('resources.bestPractices'), href: '/best-practices' }
-          ]
-        },
-        {
-          title: t('resources.community'),
-          items: [
-            { title: t('resources.blog'), href: '/blog' },
-            { title: t('resources.caseStudies'), href: '/case-studies' },
-            { title: t('resources.events'), href: '/events' },
-            { title: t('resources.support'), href: '/support' }
-          ]
-        }
-      ]
-    }
+    label: 'Partnership',
+    href: `/${currentLang}/partnership`
   }
 ];
 
@@ -231,18 +166,34 @@ const CloseIcon = () => (
                   onMouseLeave={handleMouseLeave}
                 >
                   {item.dropdown ? (
-                    <button
-                      className={`flex items-center gap-1 h-8 px-2.5 rounded-lg bg-transparent cursor-pointer transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11 ${
-                        activeDropdown === item.label ? 'bg-black/6 dark:bg-white/11' : ''
-                      }`}
-                    >
-                      <span className="text-neutral-600 dark:text-neutral-400 font-medium text-sm leading-5 tracking-tight whitespace-nowrap">
-                        {item.label}
-                      </span>
-                      <div className="flex justify-center items-center w-3.5 h-3.5 text-neutral-600 dark:text-neutral-500 transition-transform duration-200">
-                        <ChevronIcon />
-                      </div>
-                    </button>
+                    item.href ? (
+                      <Link
+                        href={item.href}
+                        className={`flex items-center gap-1 h-8 px-2.5 rounded-lg bg-transparent cursor-pointer transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11 ${
+                          activeDropdown === item.label ? 'bg-black/6 dark:bg-white/11' : ''
+                        }`}
+                      >
+                        <span className="text-neutral-600 dark:text-neutral-400 font-medium text-sm leading-5 tracking-tight whitespace-nowrap">
+                          {item.label}
+                        </span>
+                        <div className="flex justify-center items-center w-3.5 h-3.5 text-neutral-600 dark:text-neutral-500 transition-transform duration-200">
+                          <ChevronIcon />
+                        </div>
+                      </Link>
+                    ) : (
+                      <button
+                        className={`flex items-center gap-1 h-8 px-2.5 rounded-lg bg-transparent cursor-pointer transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11 ${
+                          activeDropdown === item.label ? 'bg-black/6 dark:bg-white/11' : ''
+                        }`}
+                      >
+                        <span className="text-neutral-600 dark:text-neutral-400 font-medium text-sm leading-5 tracking-tight whitespace-nowrap">
+                          {item.label}
+                        </span>
+                        <div className="flex justify-center items-center w-3.5 h-3.5 text-neutral-600 dark:text-neutral-500 transition-transform duration-200">
+                          <ChevronIcon />
+                        </div>
+                      </button>
+                    )
                   ) : (
                     <Link
                       href={item.href!}
@@ -260,39 +211,17 @@ const CloseIcon = () => (
               >
                 {t('nav.pricing')}
               </Link>
-              
-              <Link
-                href="/enterprise"
-                className="flex items-center gap-1 h-8 px-2.5 rounded-lg bg-transparent cursor-pointer transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11 text-neutral-600 dark:text-neutral-400 font-medium text-sm leading-5 tracking-tight whitespace-nowrap hidden xl:flex"
-              >
-                {t('nav.enterprise')}
-              </Link>
             </div>
           </div>
 
           {/* CTA Section */}
           <div className="flex items-center gap-2.5">
-            <Button
-              variant="outline"
-              size="sm"
-              className="hidden sm:flex h-8 px-3 border-0 rounded-lg bg-neutral-100 dark:bg-white/10 hover:bg-neutral-200 dark:hover:bg-white/15 text-neutral-600 dark:text-neutral-300 font-semibold text-sm leading-4 tracking-tight"
-            >
-              {t('nav.contactSales')}
-            </Button>
-            
             <Link
-              href={`/${currentLang}/login`}
+              href={`/${currentLang}/contact-sales`}
               className="hidden sm:flex items-center h-8 px-3 border-0 rounded-lg bg-neutral-100 dark:bg-white/10 hover:bg-neutral-200 dark:hover:bg-white/15 text-neutral-600 dark:text-neutral-300 font-semibold text-sm leading-4 tracking-tight transition-colors duration-200"
             >
-              {t('nav.login')}
+              {t('nav.contactSales')}
             </Link>
-            
-            <Button
-              size="sm"
-              className="h-8 px-3 border-0 rounded-lg bg-neutral-800 dark:bg-neutral-200 hover:bg-neutral-700 dark:hover:bg-neutral-300 text-white dark:text-neutral-900 font-semibold text-sm leading-4 tracking-tight shadow-none"
-            >
-              {t('nav.signUp')}
-            </Button>
 
             <LanguageSwitch />
 
@@ -493,18 +422,11 @@ const CloseIcon = () => (
               {/* Mobile CTAs */}
               <div className="flex flex-col gap-2.5 px-5.5 py-5.5 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
                 <Link
-                  href={`/${currentLang}/login`}
-                  className="flex justify-center items-center w-full px-5 py-3.5 border-0 rounded-lg bg-neutral-100 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-semibold text-lg leading-6 tracking-tight cursor-pointer transition-colors duration-200 hover:bg-neutral-200 dark:hover:bg-white/15"
+                  href={`/${currentLang}/contact-sales`}
+                  className="flex justify-center items-center w-full h-12 border-0 rounded-lg bg-neutral-100 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-semibold text-lg transition-colors duration-200 hover:bg-neutral-200 dark:hover:bg-white/15"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {t('nav.login')}
-                </Link>
-                <Link
-                  href={`/${currentLang}/signup`}
-                  className="flex justify-center items-center w-full px-5 py-3.5 border-0 rounded-lg bg-neutral-800 dark:bg-neutral-200 text-white dark:text-neutral-900 font-semibold text-lg leading-6 tracking-tight cursor-pointer transition-colors duration-200 hover:bg-neutral-700 dark:hover:bg-neutral-300"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {t('nav.signUp')}
+                  {t('nav.contactSales')}
                 </Link>
               </div>
             </div>
