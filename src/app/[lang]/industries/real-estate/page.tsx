@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: 'Streamline property management and operations',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function RealEstatePage() {
   const page = await prisma.page.findFirst({
     where: { slug: 'industries-real-estate', isBuilderPage: true },

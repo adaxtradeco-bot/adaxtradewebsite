@@ -10,6 +10,8 @@ import { notFound } from 'next/navigation';
 
 const prisma = new PrismaClient();
 
+export const dynamic = 'force-dynamic';
+
 async function getPageData() {
   try {
     const page = await prisma.page.findFirst({

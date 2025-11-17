@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   description: 'Transform oil & gas operations with intelligent automation',
 };
 
+export const dynamic = 'force-dynamic';
+
 export default async function OilGasPage() {
   const page = await prisma.page.findFirst({
     where: { slug: 'industries-oilgas', isBuilderPage: true },
