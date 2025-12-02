@@ -81,8 +81,10 @@ update-db-prisma.ts
 # Scripts folder (exclude all from git)
 scripts/
 
-# API routes (exclude all - has schema issues)
+# Files with schema issues
 src/app/api/
+src/app/admin/pages/
+src/lib/menu.ts
 
 # Backup files
 prisma/*.backup_*.db
