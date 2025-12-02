@@ -39,8 +39,25 @@ export function ModernNavbar() {
   const { isRTL, language } = useLanguage();
   const params = useParams();
   const currentLang = params?.lang || language;
+  const [dbMenuItems, setDbMenuItems] = useState<NavigationItem[]>([]);
+  const [menuLoaded, setMenuLoaded] = useState(false);
 
-  const navigationItems: NavigationItem[] = [
+  useEffect(() => {
+    import('@/lib/menu-adapter').then(({ convertMenuToNavigation }) => {
+      fetch(`/api/menu?location=header&language=${currentLang}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.items && data.items.length > 0) {
+            const converted = convertMenuToNavigation(data.items);
+            setDbMenuItems(converted);
+          }
+          setMenuLoaded(true);
+        })
+        .catch(() => setMenuLoaded(true));
+    });
+  }, [currentLang]);
+
+  const fallbackItems: NavigationItem[] = [
   {
     label: t('nav.product'),
     dropdown: {
@@ -127,6 +144,8 @@ const CloseIcon = () => (
   const toggleMobileAccordion = (label: string) => {
     setMobileActiveAccordion(mobileActiveAccordion === label ? null : label);
   };
+
+  const navigationItems = menuLoaded && dbMenuItems.length > 0 ? dbMenuItems : fallbackItems;
 
   useEffect(() => {
     return () => {

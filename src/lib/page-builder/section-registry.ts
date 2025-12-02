@@ -6,6 +6,7 @@
 
 import { SectionConfig } from './section-schemas';
 import { WORKFLOW_SECTION, INTEGRATIONS_SECTION, PROCESS_SECTION } from './section-registry-additions';
+import { NWM_SECTION_TEMPLATES } from './section-registry-nwm';
 
 export interface SectionTemplate {
   id: string;
@@ -445,6 +446,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
   WORKFLOW_SECTION,
   INTEGRATIONS_SECTION,
   PROCESS_SECTION,
+  ...NWM_SECTION_TEMPLATES,
   {
     id: 'compliance-badges',
     name: 'Compliance Badges',
@@ -767,6 +769,48 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     configSchema: {},
   },
   {
+    id: 'form-builder-hero',
+    name: 'Form Builder Hero',
+    type: 'form-builder-hero',
+    category: SECTION_CATEGORIES.HEADERS,
+    description: 'Hero section for form builder with media support and custom gradient',
+    icon: '📝',
+    defaultData: {
+      id: '',
+      type: 'form-builder-hero',
+      order: 0,
+      data: {
+        badge: 'Collect form data seamlessly. Gain real-time visibility.',
+        title: 'Design Forms that',
+        titleHighlight: 'Run Your Processes',
+        description: 'Build multi-step, responsive forms with AI assistance, dynamic logic, and deep integrations. Validate at the source, automate downstream, and keep a complete audit trail.',
+        primaryButton: {
+          text: 'Open the Designer',
+          href: '#demo'
+        },
+        secondaryButton: {
+          text: 'Browse Templates',
+          href: '#templates'
+        },
+        badges: ['No-Code', 'AI-Assisted', 'Enterprise'],
+        mediaType: 'placeholder',
+        canvasIcon: '🎨',
+        canvasLabel: 'Form Canvas | Fields | Rules | Preview',
+        features: [
+          { icon: '🧩', label: 'Drag & Drop' },
+          { icon: '✅', label: 'Validations' },
+          { icon: '🔗', label: 'Integrations' }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-gradient-to-br from-fuchsia-50 via-rose-50 to-pink-50 dark:from-fuchsia-950 dark:via-rose-950 dark:to-pink-950',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20 lg:py-32',
+      },
+    },
+    configSchema: {},
+  },
+  {
     id: 'simple-cards',
     name: 'Simple Cards',
     type: 'simple-cards',
@@ -792,6 +836,200 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
         backgroundColor: 'bg-slate-50 dark:bg-slate-900',
         textColor: 'text-slate-900 dark:text-white',
         padding: 'py-16'
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'partner-benefits',
+    name: 'Partner Benefits',
+    type: 'partner-benefits',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Grid of partnership benefits with icons and feature lists',
+    icon: '💰',
+    defaultData: {
+      id: '',
+      type: 'partner-benefits',
+      order: 0,
+      data: {
+        badge: 'Partner Benefits',
+        title: 'Why Partner with Us?',
+        subtitle: 'Access exclusive benefits, enablement, and support to accelerate your growth.',
+        benefits: [
+          {
+            icon: '💰',
+            title: 'Revenue Growth',
+            description: 'Unlock new revenue streams and expand your service offerings.',
+            features: [
+              'Competitive margins',
+              'Recurring revenue',
+              'Upsell & cross-sell',
+              'Deal registration'
+            ]
+          },
+          {
+            icon: '🎓',
+            title: 'Training & Certification',
+            description: 'Get your team certified and deliver world-class solutions.',
+            features: [
+              'Partner training',
+              'Tech certifications',
+              'Sales enablement',
+              'Live webinars'
+            ]
+          },
+          {
+            icon: '🤝',
+            title: 'Dedicated Support',
+            description: 'Work directly with our team for joint success.',
+            features: [
+              'Partner manager',
+              'Priority support',
+              'Pre-sales help',
+              'Co-marketing'
+            ]
+          },
+          {
+            icon: '🛠️',
+            title: 'Partner Resources',
+            description: 'Tools and templates to streamline delivery.',
+            features: [
+              'White-label options',
+              'Demo environments',
+              'Sales & marketing kits',
+              'Implementation packs'
+            ]
+          },
+          {
+            icon: '📈',
+            title: 'Market Expansion',
+            description: 'Reach new geographies & industries.',
+            features: [
+              'Co-marketing campaigns',
+              'Lead sharing',
+              'Directory listing',
+              'Success stories'
+            ]
+          },
+          {
+            icon: '🏆',
+            title: 'Competitive Advantage',
+            description: 'Stand out with an AI-native, IoT-capable platform.',
+            features: [
+              'Exclusive benefits',
+              'Early feature access',
+              'Roadmap input',
+              'Partner advisory board'
+            ]
+          }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-white dark:bg-slate-900',
+        padding: 'py-16',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'partner-types',
+    name: 'Partner Types',
+    type: 'partner-types',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Display different partnership types with features and CTAs',
+    icon: '🤝',
+    defaultData: {
+      id: '',
+      type: 'partner-types',
+      order: 0,
+      data: {
+        badge: 'Partner Types',
+        title: 'Choose Your Partnership Path',
+        subtitle: 'Flexible models that match your business goals.',
+        types: [
+          {
+            icon: '🔧',
+            title: 'Implementation Partner',
+            description: 'Deploy and customize for clients. Ideal for IT consultancies & SIs.',
+            features: [
+              'Project-based revenue',
+              'Technical training',
+              'Best practices',
+              'Demo access',
+              'Pre-sales support'
+            ],
+            cta: {
+              text: 'Learn More →',
+              href: '#apply'
+            }
+          },
+          {
+            icon: '💼',
+            title: 'Reseller Partner',
+            description: 'Sell directly; earn competitive margins. For VARs & solution providers.',
+            features: [
+              'Reseller discounts',
+              'Deal protection',
+              'Sales enablement',
+              'Co-selling',
+              'MDF funds'
+            ],
+            cta: {
+              text: 'Learn More →',
+              href: '#apply'
+            }
+          },
+          {
+            icon: '🌐',
+            title: 'Technology Partner',
+            description: 'Integrate and co-innovate. For software vendors & IoT providers.',
+            features: [
+              'API/integration support',
+              'Joint GTM',
+              'Co-innovation',
+              'Tech benefits',
+              'Marketplace listing'
+            ],
+            cta: {
+              text: 'Learn More →',
+              href: '#apply'
+            }
+          }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-slate-50 dark:bg-slate-800',
+        padding: 'py-16',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'requirements',
+    name: 'Requirements Section',
+    type: 'requirements',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Two-column section with requirements list and visual',
+    icon: '✅',
+    defaultData: {
+      id: '',
+      type: 'requirements',
+      order: 0,
+      data: {
+        title: 'Ready to Get Started?',
+        description: "Here's what we look for in potential partners:",
+        requirements: [
+          'Track record in automation/IT consulting',
+          'Commitment to customer success',
+          'Technical expertise or certification path',
+          'Active sales/marketing capability',
+          "Alignment with our vision"
+        ],
+        visualIcon: '🤝'
+      },
+      style: {
+        backgroundColor: 'bg-white dark:bg-slate-900',
+        padding: 'py-16',
       },
     },
     configSchema: {},

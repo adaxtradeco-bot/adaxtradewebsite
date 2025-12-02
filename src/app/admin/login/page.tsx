@@ -20,27 +20,37 @@ export default function AdminLogin() {
     setIsLoading(true);
 
     try {
+      console.log('Attempting login...');
       const response = await fetch('/api/admin/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
+      console.log('Response status:', response.status);
       const data = await response.json();
+      console.log('Response data:', data);
 
-      if (response.ok) {
+      if (response.ok && data.token) {
+        console.log('Login successful, setting cookie and localStorage...');
+        document.cookie = `auth-token=${data.token}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Strict`;
         localStorage.setItem('adminToken', data.token);
         localStorage.setItem('adminUser', JSON.stringify(data.user));
-        router.push('/admin');
+        
+        console.log('Redirecting to /admin...');
+        setTimeout(() => {
+          window.location.href = '/admin';
+        }, 100);
       } else {
+        console.error('Login failed:', data);
         alert(data.error || 'Login failed');
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Login error:', error);
       alert('Login failed. Please try again.');
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   return (

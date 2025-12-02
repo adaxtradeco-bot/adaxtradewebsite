@@ -1,376 +1,775 @@
 <!DOCTYPE html>
-
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>IVAFlow — AI‑Native No‑Code Platform (v1.2)</title>
-<meta content="IVAFlow: Forms, Workflows, Analytics, App Builder, and Integrations — AI‑native, no‑code, enterprise‑grade." name="description"/>
-<link href="styles.css" rel="stylesheet"/>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>IVAFlow — The Intelligent Automation Platform</title>
+    <meta content="Orchestrate people, processes, and things with AI-native automation. No code required." name="description"/>
+    
+    <link href="styles.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Global Enhancements --- */
+        :root {
+            --card-bg: var(--panel);
+            --card-border: var(--line);
+            --card-hover-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.15);
+            /* FIX: Reduced spacing from 8rem to 4rem */
+            --section-padding: 4rem 0; 
+        }
+        
+        /* Global Section Spacing */
+        section { padding: var(--section-padding); position: relative; }
+        .container-xl { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+        /* --- 1. Mega Menu --- */
+        .mega-menu-wrapper {
+            position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(10px);
+            width: 950px; background: var(--panel); border: 1px solid var(--line); border-radius: 16px;
+            padding: 2rem; display: none; grid-template-columns: 1.2fr 1fr 1fr; gap: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3); z-index: 100; opacity: 0; transition: all 0.2s ease;
+        }
+        .nav-item:hover .mega-menu-wrapper { display: grid; opacity: 1; transform: translateX(-50%) translateY(0); }
+        
+        .mega-menu-wrapper.small-mega { width: 600px; grid-template-columns: 1fr 1fr; }
+
+        .mm-col h4 {
+            font-size: 0.85rem; text-transform: uppercase; color: var(--muted); letter-spacing: 1px;
+            margin-bottom: 1rem; font-weight: 700;
+        }
+        .mm-link {
+            display: flex; align-items: center; gap: 12px; padding: 10px; border-radius: 8px;
+            text-decoration: none; color: var(--text); transition: 0.2s;
+        }
+        .mm-link:hover { background: var(--bg); color: var(--accent-blue); }
+        .mm-icon {
+            width: 36px; height: 36px; border-radius: 8px; background: var(--chip-bg);
+            display: flex; align-items: center; justify-content: center; color: var(--brand-gold);
+            border: 1px solid var(--line); font-size: 1.1rem;
+        }
+        .mm-text strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+        .mm-text span { display: block; font-size: 0.8rem; color: var(--muted); font-weight: 400; }
+
+        /* --- 2. Hero Slider --- */
+        .hero-slider { padding: 0; height: 90vh; min-height: 700px; margin-bottom: 0; }
+        .swiper-container { width: 100%; height: 100%; }
+        .swiper-slide {
+            display: flex; align-items: center; justify-content: flex-start; padding-left: 8%;
+            background-size: cover; background-position: center; position: relative;
+        }
+        .swiper-slide::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.6) 50%, transparent 100%); z-index: 1;
+        }
+        .hero-content { position: relative; z-index: 2; text-align: left; color: #fff; max-width: 700px; margin-top: 40px; }
+        .hero-tag {
+            display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--brand-gold); padding: 0.5rem 1rem; font-size: 0.85rem;
+            font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.5rem; backdrop-filter: blur(5px);
+        }
+        .hero-title { font-size: 4rem; font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero-desc { font-size: 1.25rem; color: rgba(255,255,255,0.85); line-height: 1.7; margin-bottom: 2.5rem; }
+        .hero-btns { display: flex; gap: 1rem; align-items: center; }
+        .btn-glow {
+            background: var(--brand-gold); color: #000; padding: 1rem 2.5rem; font-weight: 800;
+            border-radius: 8px; transition: 0.3s; border: none; display: inline-flex; align-items: center; gap: 10px;
+        }
+        .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(245, 158, 11, 0.5); }
+        .btn-glass {
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.3);
+            color: #fff; padding: 1rem 2rem; font-weight: 700; border-radius: 8px; transition: 0.3s;
+        }
+        .btn-glass:hover { background: rgba(255,255,255,0.2); border-color: #fff; }
+        
+        
+        /* === ISOLATED STAKEHOLDER CARDS (NO CONFLICT VERSION) === */
+
+.stakeholder-section .stakeholder-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 32px 26px;
+    transition: all .35s ease;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* HOVER */
+.stakeholder-section .stakeholder-card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+    border-color: var(--accent-blue);
+}
+
+/* GOLD BAR */
+.stakeholder-section .stakeholder-card::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 5px;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--brand-gold), #ffe489);
+    opacity: .9;
+    animation: glowPulseStake 3s infinite ease-in-out;
+}
+
+@keyframes glowPulseStake {
+    0% { opacity: .4; box-shadow: 0 0 0 rgba(247,201,72,0); }
+    50% { opacity: 1; box-shadow: 0 0 12px rgba(247,201,72,.6); }
+    100% { opacity: .4; box-shadow: 0 0 0 rgba(247,201,72,0); }
+}
+
+/* IMAGE (Isolated) */
+.stakeholder-section .stakeholder-card img {
+    width: 70%;
+    max-width: 210px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 18px;
+    filter: drop-shadow(0 0 12px rgba(34,199,184,0.35));
+    transition: .25s ease;
+}
+
+.stakeholder-section .stakeholder-card:hover img {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 20px rgba(34,199,184,0.6));
+}
+
+/* TEXT */
+.stakeholder-section .stakeholder-card h3 {
+    margin-top: 12px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text);
+}
+
+.stakeholder-section .stakeholder-card .quote {
+    color: var(--muted);
+    font-style: italic;
+    margin: 10px 0 15px;
+}
+
+.stakeholder-section .stakeholder-card .fix {
+    color: var(--accent-blue);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* GRID (Isolated) */
+.stakeholder-section .section-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+@media (max-width: 1024px) {
+    .stakeholder-section .section-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 640px) {
+    .stakeholder-section .section-grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+        /* --- 3. Bigger Cards & Spacing --- */
+        .section-header { text-align: center; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto; }
+        .section-badge {
+            display: inline-block; padding: 0.6rem 1.2rem; background: var(--chip-bg); color: var(--accent-blue);
+            font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;
+            border-radius: 50px; margin-bottom: 1.5rem; border: 1px solid var(--line);
+        }
+        .section-title { font-size: 2.8rem; font-weight: 900; color: var(--text); margin-bottom: 1rem; line-height: 1.1; }
+        .lead { font-size: 1.15rem; color: var(--muted); line-height: 1.6; }
+
+        .section-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+        
+        .modern-card {
+            border-radius: 24px; overflow: hidden; border: 1px solid var(--line); background: var(--panel);
+            transition: 0.3s; display: flex; flex-direction: column; height: 100%; min-height: 480px;
+        }
+        .modern-card:hover { transform: translateY(-10px); box-shadow: var(--card-hover-shadow); border-color: var(--accent-blue); }
+        
+        .card-img-wrapper { height: 220px; width: 100%; position: relative; overflow: hidden; background: #f0f0f0; }
+        .card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .modern-card:hover .card-img-wrapper img { transform: scale(1.05); }
+        
+        .card-body { padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-body h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; color: var(--text); }
+        .card-body p { font-size: 1.05rem; color: var(--muted); line-height: 1.7; margin-bottom: 2rem; flex-grow: 1; }
+        
+        .card-link {
+            color: var(--accent-blue); font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+            margin-top: auto; padding: 0.8rem 0; border-top: 1px solid var(--line); width: 100%; transition: 0.2s;
+        }
+        .card-link span { font-size: 1.2rem; transition: 0.2s; }
+        .card-link:hover span { transform: translateX(5px); }
+
+        /* --- 4. Platform Tabs --- */
+        .platform-tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; }
+        .plat-tab {
+            padding: 0.8rem 2rem; border-radius: 50px; border: 1px solid var(--line); background: var(--bg);
+            color: var(--muted); font-weight: 600; cursor: pointer; transition: 0.3s;
+        }
+        .plat-tab.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+        .plat-container { display: none; animation: fadeUp 0.5s ease; }
+        .plat-container.active { display: block; }
+
+        /* --- 5. Why IVAFlow --- */
+        .why-section { background: #0B111A; color: #fff; text-align: center; padding: 6rem 0; }
+        .why-bg-brain {
+            position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 80%; height: 100%;
+            background: url('assets/img/1.png') no-repeat center center; background-size: contain; opacity: 0.15; pointer-events: none;
+        }
+        .why-header { position: relative; z-index: 2; max-width: 900px; margin: 0 auto 4rem; }
+        .why-header h2 { font-size: 3.5rem; font-weight: 900; margin-bottom: 1.5rem; line-height: 1.1; }
+        .why-header p { font-size: 1.3rem; color: rgba(255,255,255,0.8); line-height: 1.8; }
+        
+        .why-cards-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5rem; position: relative; z-index: 2; text-align: left; }
+        .why-feature-box {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); padding: 2.5rem;
+            border-radius: 20px; transition: 0.3s; backdrop-filter: blur(10px); display: flex; flex-direction: column; justify-content: center;
+        }
+        .why-feature-box:hover { background: rgba(255,255,255,0.08); transform: translateY(-10px); border-color: var(--brand-gold); }
+        .why-feature-box h3 { color: #fff; font-size: 1.5rem; margin-bottom: 1rem; font-weight: 800; }
+        .why-feature-box p { color: rgba(255,255,255,0.7); font-size: 1.1rem; line-height: 1.7; margin: 0; }
+        
+        .why-cta { margin-top: 3.5rem; position: relative; z-index: 2; }
+
+        /* --- 6. Experience It --- */
+        .exp-tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 3rem; flex-wrap: wrap; }
+        .exp-btn {
+            padding: 1rem 2rem; border-radius: 50px; background: var(--panel); border: 1px solid var(--line);
+            color: var(--muted); font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+        .exp-btn:hover { background: var(--bg); }
+        .exp-btn.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); box-shadow: 0 10px 30px rgba(15, 105, 255, 0.3); }
+        .exp-content { display: none; animation: fadeUp 0.5s ease; }
+        .exp-content.active { display: block; }
+        .exp-media {
+            position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 90px rgba(0,0,0,0.15);
+            border: 1px solid var(--line); background: #000; aspect-ratio: 16/9;
+        }
+        .exp-media img { width: 100%; height: 100%; object-fit: cover; }
+        .exp-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0; top: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0.1) 100%);
+            padding: 3rem; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start;
+        }
+        .exp-text h3 { color: #fff; margin: 0 0 1rem 0; font-size: 2.2rem; font-weight: 900; }
+        .exp-text p { color: rgba(255,255,255,0.9); margin: 0 0 2rem 0; max-width: 700px; font-size: 1.2rem; line-height: 1.6; }
+        .exp-link { background: var(--brand-gold); color: #000; padding: 0.9rem 2rem; border-radius: 8px; font-weight: 800; text-decoration: none; transition: 0.2s; display: inline-block; }
+        .exp-link:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+
+        /* --- 7. Video Section --- */
+        .video-section { padding: 6rem 0; background: #0B111A; position: relative; overflow: hidden; }
+        .video-container { display: grid; grid-template-columns: 1fr 1.5fr; gap: 4rem; align-items: center; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+        .video-text h2 { font-size: 3.5rem; font-weight: 900; margin-bottom: 1.5rem; line-height: 1.1; color: #fff; }
+        .video-text p { font-size: 1.2rem; color: rgba(255,255,255,0.7); margin-bottom: 2rem; line-height: 1.7; }
+        .video-wrapper {
+            position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 0 80px rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(255,255,255,0.1); aspect-ratio: 16/9; cursor: pointer;
+        }
+        .video-wrapper video { width: 100%; height: 100%; object-fit: cover; }
+        .video-play-icon {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 100px; height: 100px; background: rgba(255,255,255,0.15); backdrop-filter: blur(15px);
+            border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 3rem; transition: 0.3s; padding-left: 8px; pointer-events: none;
+        }
+        .video-wrapper:hover .video-play-icon { background: var(--brand-gold); border-color: var(--brand-gold); color: #000; transform: translate(-50%, -50%) scale(1.1); }
+
+         /* --- 8. CTA Section (Dark) --- */
+        .final-cta { 
+            background: linear-gradient(135deg, #0F172A 0%, #0f131a 100%);
+            color: #fff; text-align: center; padding: 7rem 1rem;
+        }
+        .final-cta h2 { font-size: 3rem; font-weight: 900; margin-bottom: 1rem; }
+        .final-cta p { font-size: 1.2rem; opacity: 0.9; margin-bottom: 3rem; }
+        .btn-white { background: #fff; color: #0F172A; font-weight: 800; padding: 1.1rem 3rem; border-radius: 8px; border: none; cursor: pointer; margin-left: 10px; transition: 0.3s; }
+        .btn-white:hover { box-shadow: 0 10px 25px rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .btn-outline-white { background: transparent; border: 2px solid rgba(255,255,255,0.4); color: #fff; font-weight: 800; padding: 1.1rem 3rem; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+        .cta-subtext { margin-top: 1.5rem; font-size: 0.95rem; opacity: 0.8; font-weight: 500; }
+		/* Luxury Stakeholder Section */
+
+
+        @keyframes fadeUp { from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);} }
+        @media (max-width: 1024px) { .section-grid-4, .why-cards-row, .video-container, .mm-col { grid-template-columns: 1fr; } .why-bg-brain { display: none; } .mega-menu-wrapper { width: 90%; left: 5%; transform: none; } }
+    </style>
 </head>
 <body>
-<!-- ===== HEADER (sticky) ===== -->
-<header class="hdr" data-version="Khodā-ye Sāsān v1.2">
-<nav aria-label="Primary" class="nav">
-<a aria-label="IVAFlow Home" class="logo" href="index.html">IVA<span class="dot"></span></a>
-<ul class="nav-links">
-<li class="nav-item">
-<button aria-expanded="false" aria-haspopup="true" class="nav-btn">Platform ▾</button>
-<div class="mega" role="menu">
-<div class="mega-grid">
-<div>
-<h4>Core Capabilities</h4>
-<ul>
-<li><a href="Form Builder - IVAFlow.html"><span class="ico">📝</span> Form Builder</a></li>
-<li><a href="Workflow Automation - IVAFlow.html"><span class="ico">🔄</span> Workflow Designer</a></li>
-<li><a href="#analytics"><span class="ico">📊</span> Analytics</a></li>
-<li><a href="solutions-appbuilder.html"><span class="ico">🏗</span> App Builder</a></li>
-<li><a href="#integrations"><span class="ico">🔗</span> Integrations (API)</a></li>
-</ul>
-</div>
-<div>
-<h4>Advanced</h4>
-<ul>
-<li><a href="IoT Integration - IVAFlow.html"><span class="ico">📡</span> IoT Integration</a></li>
-<li><a href="#gps"><span class="ico">🗺</span> GPS &amp; Geofencing</a></li>
-<li><a href="#ai"><span class="ico">🤖</span> AI Automation</a></li>
-<li><a href="#multiportal"><span class="ico">🗂</span> Multi‑Portal Architecture</a></li>
-</ul>
-</div>
-<div>
-<h4>Security &amp; Compliance</h4>
-<ul>
-<li><a href="#security"><span class="ico">🛡</span> Enterprise Security</a></li>
-<li><a href="#access"><span class="ico">🔐</span> Access Control</a></li>
-<li><a href="#audit"><span class="ico">📜</span> Audit Logs</a></li>
-</ul>
-</div>
-</div>
-</div>
-</li>
-<li class="nav-item">
-<button aria-expanded="false" aria-haspopup="true" class="nav-btn">Solutions ▾</button>
-<div class="mega" role="menu">
-<div class="mega-grid">
-<div>
-<h4>By Industry</h4>
-<ul>
-<li><a href="Fleet &amp; Logistics Solutions - IVAFlow.html">🚚 Fleet &amp; Logistics</a></li>
-<li><a href="Healthcare Solutions - IVAFlow.html">🏥 Healthcare</a></li>
-<li><a href="Construction Solutions - IVAFlow.html">⚒ Construction</a></li>
-<li><a href="Real Estate Solutions - IVAFlow.html">🏢 Real Estate</a></li>
-<li><a href="oilgas.html">🛢 Oil &amp; Gas</a></li></ul>
-</div>
-<div>
-<h4>By Use Case</h4>
-<ul>
-<li><a href="Fleet &amp; Logistics Solutions - IVAFlow.html">Field Ops</a></li>
-<li><a href="#solutions">Incident Mgmt</a></li>
-<li><a href="#solutions">Approvals</a></li>
-<li><a href="#solutions">Docs &amp; e‑Sign</a></li>
-</ul>
-</div>
-<div>
-<h4>By Role</h4>
-<ul>
-<li><a href="#solutions">Operations</a></li>
-<li><a href="#solutions">IT Directors</a></li>
-<li><a href="#solutions">Digital Leaders</a></li>
-</ul>
-</div>
-</div>
-</div>
-</li>
-<li><a href="#resources">Resources</a></li>
-<li><a href="contact.html">Contact</a></li><li><a href="partnership.html">Partnership</a></li>
-</ul>
-<div class="nav-cta">
-<a class="btn secondary" href="#demo">Book Demo</a>
-<a class="btn brand" href="#signup">Start Free</a>
-<button aria-label="Toggle theme" class="theme-toggle" id="themeToggle"><span id="themeIcon"></span><span id="themeText">Auto</span></button>
-</div>
-</nav>
+
+<header class="hdr">
+    <div class="nav">
+        <a aria-label="IVAFlow Home" class="logo" href="index.html">
+            <img src="assets/img/logo.png" alt="IVA Logo" style="height: 32px; width: auto; margin-right: 8px;">
+            IVAFlow
+        </a>
+        <nav class="nav-links">
+            <div class="nav-item">
+                <button class="nav-btn">Platform ▾</button>
+                <div class="mega-menu-wrapper">
+                    <div class="mm-col">
+                        <h4>Build & Manage</h4>
+                        <a href="forms.html" class="mm-link"><div class="mm-icon">📝</div><div class="mm-text"><strong>Form Builder</strong><span>Drag & drop capture</span></div></a>
+                        <a href="workflow.html" class="mm-link"><div class="mm-icon">⚡</div><div class="mm-text"><strong>Workflow Engine</strong><span>Automate processes</span></div></a>
+                        <a href="#" class="mm-link"><div class="mm-icon">🔄</div><div class="mm-text"><strong>Automation Rules</strong><span>If-this-then-that logic</span></div></a>
+                        <a href="#" class="mm-link"><div class="mm-icon">📱</div><div class="mm-text"><strong>App Builder</strong><span>No-code portals</span></div></a>
+                    </div>
+                    <div class="mm-col">
+                        <h4>Intelligence</h4>
+                        <a href="ai.html" class="mm-link"><div class="mm-icon">🧠</div><div class="mm-text"><strong>IVA AI Copilot</strong><span>Generative design</span></div></a>
+                        <a href="iot.html" class="mm-link"><div class="mm-icon">📡</div><div class="mm-text"><strong>IoT Connect</strong><span>Device integration</span></div></a>
+                    </div>
+                    <div class="mm-col">
+                        <h4>Visibility</h4>
+                        <a href="analytics.html" class="mm-link"><div class="mm-icon">📊</div><div class="mm-text"><strong>Analytics</strong><span>Real-time dashboards</span></div></a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-item">
+                <button class="nav-btn">Solutions ▾</button>
+                <div class="mega-menu-wrapper" style="grid-template-columns: 1fr 1fr;">
+                    <div class="mm-col">
+                        <h4>Industries</h4>
+                        <a href="fleet.html" class="mm-link"><div class="mm-icon">🚚</div><div class="mm-text"><strong>Fleet & Logistics</strong></div></a>
+                        <a href="construction.html" class="mm-link"><div class="mm-icon">🏗️</div><div class="mm-text"><strong>Construction</strong></div></a>
+                        <a href="oil-gas.html" class="mm-link"><div class="mm-icon">🛢️</div><div class="mm-text"><strong>Oil & Gas</strong></div></a>
+                    </div>
+                    <div class="mm-col">
+                        <h4>&nbsp;</h4>
+                        <a href="healthcare.html" class="mm-link"><div class="mm-icon">🏥</div><div class="mm-text"><strong>Healthcare</strong></div></a>
+                        <a href="real-estate.html" class="mm-link"><div class="mm-icon">🏢</div><div class="mm-text"><strong>Real Estate</strong></div></a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-item">
+                <button class="nav-btn">Company ▾</button>
+                <div class="mega-menu-wrapper small-mega">
+                    <div class="mm-col">
+                        <a href="#" class="mm-link"><div class="mm-icon">ℹ️</div><div class="mm-text"><strong>About Us</strong></div></a>
+                        <a href="partnership.html" class="mm-link"><div class="mm-icon">🤝</div><div class="mm-text"><strong>Partnership</strong></div></a>
+                        <a href="#" class="mm-link"><div class="mm-icon">📞</div><div class="mm-text"><strong>Contact Sales</strong></div></a>
+                    </div>
+                </div>
+            </div>
+
+            <a href="#why">Why IVAFlow</a>
+        </nav>
+        <div class="nav-cta">
+            <button class="theme-toggle" id="themeToggle"><span id="themeIcon"></span></button>
+            <a class="btn secondary" href="#">Log In</a>
+            <a class="btn brand" href="#">Get Started</a>
+        </div>
+    </div>
 </header>
-<!-- ===== HERO (split) ===== -->
-<section class="hero hero--split" id="hero">
-<div class="hero-left">
-<span class="hero-badge">AI‑Native • No‑Code • Enterprise</span>
-<h1>Design, automate, and scale your core processes — fast.</h1>
-<p class="hero-subtitle">One platform for forms, workflows, analytics, apps, and integrations — governed and secure from day one.</p>
-<div class="hero-cta">
-<a class="btn brand" href="#signup">Start Free</a>
-<a class="btn secondary" href="#video">Watch Demo ▶</a>
-</div>
-<div class="trust-bar">
-<span class="trust-stat">10× faster to go‑live</span>
-<span class="trust-stat">Zero‑code for teams</span>
-<span class="trust-stat">Enterprise governance</span>
-</div>
-</div>
-<div class="hero-right">
-<div class="hero-canvas">
-<img alt="IVA Neural Core" class="hero-image" src="assets/img/hero-ivaflow-neuralcore-3d.png"/>
-<div class="chip-core">IVA • Neural Core</div>
-<!-- Orbit tags (positions via CSS vars) -->
-<button class="orbit-tag" style="--x:18%;--y:30%">Form</button>
-<button class="orbit-tag" style="--x:82%;--y:36%">Workflow</button>
-<button class="orbit-tag" style="--x:20%;--y:70%">Dashboard</button>
-<button class="orbit-tag" style="--x:78%;--y:68%">App Builder</button>
-<!-- Subtle glow dots -->
-<span class="glow-dot gd1"></span>
-<span class="glow-dot gd2"></span>
-<span class="glow-dot gd3"></span>
-<span class="glow-dot gd4"></span>
-</div>
-</div>
+
+<section class="hero-slider">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" style="background-image: url('assets/img/1.png');">
+                <div class="hero-content">
+                    <div class="hero-tag">⚡ The OS for Modern Operations</div>
+                    <h1 class="hero-title">Where Operations <br>Finally Flow.</h1>
+                    <p class="hero-desc">Unify people, processes, and devices. Build enterprise-grade apps in minutes with AI assistance.</p>
+                    <div class="hero-btns">
+                        <a href="#platform-ecosystem" class="btn-glow">Explore Platform <span>→</span></a>
+                        <a href="#" class="btn-glass">Talk to Sales</a>
+                    </div>
+                </div>
+            </div>
+             <div class="swiper-slide" style="background-image: url('assets/img/4.png');">
+                <div class="hero-content">
+                    <div class="hero-tag">🚚 Intelligent Fleet</div>
+                    <h1 class="hero-title">Real-Time Visibility<br>for Every Asset.</h1>
+                    <p class="hero-desc">Connect fleet, sensors, and drivers. Automated dispatch and predictive maintenance in one view.</p>
+                    <div class="hero-btns">
+                        <a href="fleet.html" class="btn-glow">View Fleet Solution <span>→</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('assets/img/Smart2.png');">
+                <div class="hero-content">
+                    <div class="hero-tag">📝 Smart Forms</div>
+                    <h1 class="hero-title">Data Collection,<br>Reimagined.</h1>
+                    <p class="hero-desc">Offline-ready forms with conditional logic. Validate data at the source, anywhere.</p>
+                    <div class="hero-btns">
+                        <a href="forms.html" class="btn-glow">Try Form Builder <span>→</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
 </section>
-<!-- ===== PROBLEM ===== -->
-<section class="problem-section" id="problems">
-<div class="section-header">
-<span class="section-badge">Sound Familiar?</span>
-<h2>Drowning in spreadsheets, emails, and manual approvals?</h2>
-<p>Replace chaos, silos, and bottlenecks with a single governed system your whole org can see and trust.</p>
-</div>
-<div class="problems-grid">
-<div class="problem-card">
-<div class="problem-icon">🌀</div>
-<h3>Manual Chaos &amp; Rework</h3>
-<p>Repetitive tasks and copy‑paste work consume your team’s day. Standardize and automate the busywork.</p>
-</div>
-<div class="problem-card">
-<div class="problem-icon">🧩</div>
-<h3>Disconnected Tools</h3>
-<p>Data lives across chat, email, and spreadsheets — no single source of truth.</p>
-</div>
-<div class="problem-card">
-<div class="problem-icon">⏳</div>
-<h3>IT Bottlenecks</h3>
-<p>Small tweaks fight for attention with strategic projects. Empower owners within guardrails.</p>
-</div>
-<div class="problem-card">
-<div class="problem-icon">👀</div>
-<h3>Zero Visibility</h3>
-<p>Approvals disappear into inboxes. Get live, stage‑by‑stage tracking and ownership.</p>
-</div>
-</div>
+
+<section class="section container-xl stakeholder-section">
+    <div class="section-header">
+        <span class="section-badge">Key Stakeholders</span>
+        <h2 class="section-title">Solve the Problems of Key Stakeholders</h2>
+        <p class="lead">IVAFlow connects the field, office, and leadership with clarity and automation.</p>
+    </div>
+
+    <div class="section-grid-4">
+
+        <div class="stakeholder-card">
+            <img src="assets/img/stakeholder-ops.png">
+            <h3>Operations Manager</h3>
+            <p class="quote">“I don’t know the team’s status until end-of-day.”</p>
+            <p class="fix">Real-time dashboards + GPS visibility</p>
+        </div>
+
+        <div class="stakeholder-card">
+            <img src="assets/img/stakeholder-it.png">
+            <h3>IT Director / CTO</h3>
+            <p class="quote">“My backlog is 6 months long.”</p>
+            <p class="fix">Secure No-Code governance control</p>
+        </div>
+
+        <div class="stakeholder-card">
+            <img src="assets/img/stakeholder-field.png">
+            <h3>Field Technician</h3>
+            <p class="quote">“No internet. Lost photos. Paper forms.”</p>
+            <p class="fix">Offline-first mobile app + auto sync</p>
+        </div>
+
+        <div class="stakeholder-card">
+            <img src="assets/img/stakeholder-ceo.png">
+            <h3>Executive / CEO</h3>
+            <p class="quote">“Issues reach me too late.”</p>
+            <p class="fix">Unified visibility across workflows</p>
+        </div>
+
+    </div>
 </section>
-<!-- ===== SOLUTIONS (tabbed 5) ===== -->
-<section class="section solution-section" id="solutions-tabs">
-<div class="section-header">
-<span class="section-badge">One Platform, Everything You Need</span>
-<h2>Solutions — Forms · Workflow · Analytics · App Builder · Integrations</h2>
-<p>Switch tabs to see how IVAFlow covers the full lifecycle from intake to insights.</p>
-</div>
-<div class="tabs">
-<button aria-selected="true" class="tab-btn active" data-tab="forms">Forms</button>
-<button class="tab-btn" data-tab="workflow">Workflow</button>
-<button class="tab-btn" data-tab="analytics">Analytics</button>
-<button class="tab-btn" data-tab="appbuilder">App Builder</button>
-<button class="tab-btn" data-tab="integrations">Integrations</button>
-</div>
-<div class="tab-panels">
-<div class="tab-panel" id="panel-forms">
-<div class="split">
-<div>
-<h3 class="h3">Visual Form Builder</h3>
-<ul class="checklist">
-<li>30+ fields, conditional logic</li>
-<li>File uploads, e‑sign, validations</li>
-<li>Multi‑step &amp; mobile‑first layouts</li>
-</ul>
-<div class="btn-row">
-<a class="btn brand" href="#forms">Explore Forms</a>
-<a class="btn secondary" href="#templates">Templates</a>
-</div>
-</div>
-<div>
-<div class="media-16x9"><img alt="Forms UI" src="assets/img/forms-ui-3d.png"/></div>
-</div>
-</div>
-</div>
-<div class="tab-panel" hidden="" id="panel-workflow">
-<div class="split">
-<div>
-<h3 class="h3">BPMN‑Style Workflow Engine</h3>
-<ul class="checklist">
-<li>Unlimited stages, SLA timers</li>
-<li>Smart routing, retries, rollbacks</li>
-<li>Versioning &amp; audit trails</li>
-</ul>
-<div class="btn-row">
-<a class="btn brand" href="#workflow">See Workflows</a>
-<a class="btn secondary" href="#case-studies">Case Studies</a>
-</div>
-</div>
-<div>
-<div class="media-16x9"><img alt="Workflow" src="assets/img/workflow-bpmn-3d.png"/></div>
-</div>
-</div>
-</div>
-<div class="tab-panel" hidden="" id="panel-analytics">
-<div class="split">
-<div>
-<h3 class="h3">Dashboards &amp; Reporting</h3>
-<ul class="checklist">
-<li>50+ charts, drill‑downs</li>
-<li>Alerts, scheduled exports</li>
-<li>Warehouse &amp; BI friendly</li>
-</ul>
-<div class="btn-row">
-<a class="btn brand" href="#analytics">Build Dashboard</a>
-<a class="btn secondary" href="#docs">Docs</a>
-</div>
-</div>
-<div>
-<div class="media-16x9"><img alt="Analytics" src="assets/img/analytics-dashboard-hologram-3d.png"/></div>
-</div>
-</div>
-</div>
-<div class="tab-panel" hidden="" id="panel-appbuilder">
-<div class="split">
-<div>
-<h3 class="h3">App &amp; Portal Builder</h3>
-<ul class="checklist">
-<li>RBAC, reusable blocks, workspaces</li>
-<li>Responsive, PWA, offline</li>
-<li>Embed flows &amp; lists anywhere</li>
-</ul>
-<div class="btn-row">
-<a class="btn brand" href="#appbuilder">Start Building</a>
-<a class="btn secondary" href="#gallery">Gallery</a>
-</div>
-</div>
-<div>
-<div class="media-16x9"><img alt="App Builder" src="assets/img/appbuilder-blocks-3d.png"/></div>
-</div>
-</div>
-</div>
-<div class="tab-panel" hidden="" id="panel-integrations">
-<div class="split">
-<div>
-<h3 class="h3">Universal Integrations</h3>
-<ul class="checklist">
-<li>REST/SOAP/GraphQL &amp; webhooks</li>
-<li>Event streams &amp; 500+ connectors</li>
-<li>Secure keys &amp; secrets vault</li>
-</ul>
-<div class="btn-row">
-<a class="btn brand" href="#integrations">View Integrations</a>
-<a class="btn secondary" href="#api">API Reference</a>
-</div>
-</div>
-<div>
-<div class="media-16x9"><img alt="Integrations" src="assets/img/integrations-nodes-network-3d.png"/></div>
-</div>
-</div>
-</div>
-</div>
+
+
+
+<section class="section container-xl" style="padding-top: 3rem;" id="platform-ecosystem">
+    <div class="section-header">
+        <span class="section-badge">The Platform</span>
+        <h2 class="section-title">The Complete Automation Ecosystem</h2>
+        <p class="lead">One unified OS for all your operational needs.</p>
+    </div>
+
+    <div class="platform-tabs">
+        <button class="plat-tab active" onclick="showPlat('core', this)">By Core Feature</button>
+        <button class="plat-tab" onclick="showPlat('industry', this)">By Industry</button>
+        <button class="plat-tab" onclick="showPlat('usecase', this)">By Use Case</button>
+    </div>
+
+    <div id="plat-core" class="plat-container active">
+        <div class="section-grid-4">
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/2.png"></div>
+                <div class="card-body">
+                    <h3>Smart Forms</h3>
+                    <p>Intelligent data capture with offline support, photo uploads, and real-time validation.</p>
+                    <a href="forms.html" class="card-link">Explore Forms <span>→</span></a>
+                </div>
+            </div>
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/5.png"></div>
+                <div class="card-body">
+                    <h3>Workflow & Automation</h3>
+                    <p>Visually orchestrate complex logic, approvals, and "if-this-then-that" automated rules.</p>
+                    <a href="workflow.html" class="card-link">See Engine <span>→</span></a>
+                </div>
+            </div>
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/Analytics3.png"></div>
+                <div class="card-body">
+                    <h3>Analytics</h3>
+                    <p>Turn raw data into decisions with real-time, customizable dashboards and reports.</p>
+                    <a href="analytics.html" class="card-link">View Analytics <span>→</span></a>
+                </div>
+            </div>
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/Nocode4.png"></div>
+                <div class="card-body">
+                    <h3>No-Code Apps</h3>
+                    <p>Build branded, mobile-responsive employee portals instantly without writing code.</p>
+                    <a href="appbuilder.html" class="card-link">Start Building <span>→</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="plat-industry" class="plat-container">
+        <div class="section-grid-4">
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/4.png"></div>
+                <div class="card-body"><h3>Fleet Management</h3><p>End-to-end dispatching, tracking, and maintenance.</p><a href="fleet.html" class="card-link">View Fleet <span>→</span></a></div>
+            </div>
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/1.png"></div>
+                <div class="card-body"><h3>Construction</h3><p>Manage site inspections and safety reporting.</p><a href="construction.html" class="card-link">View Construction <span>→</span></a></div>
+            </div>
+             <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/2.png"></div>
+                <div class="card-body"><h3>Healthcare</h3><p>Secure patient intake and compliance.</p><a href="healthcare.html" class="card-link">View Healthcare <span>→</span></a></div>
+            </div>
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/Remoteasset3.png"></div>
+                <div class="card-body"><h3>Oil & Gas</h3><p>Remote asset monitoring and HSE.</p><a href="oil-gas.html" class="card-link">View Oil & Gas <span>→</span></a></div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="plat-usecase" class="plat-container">
+         <div class="section-grid-4">
+             <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/approval5.png"></div>
+                <div class="card-body"><h3>Approvals</h3><p>Streamline internal requests and sign-offs.</p><a href="#" class="card-link">View Use Case <span>→</span></a></div>
+            </div>
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/Onboard2.png"></div>
+                <div class="card-body"><h3>Onboarding</h3><p>Automate document collection and training.</p><a href="#" class="card-link">See Flow <span>→</span></a></div>
+            </div>
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/Incident3.png"></div>
+                <div class="card-body"><h3>Incident Mgmt</h3><p>Report and resolve safety incidents instantly.</p><a href="#" class="card-link">View Solution <span>→</span></a></div>
+            </div>
+            <div class="modern-card">
+                <div class="card-img-wrapper"><img src="assets/img/Field1.png"></div>
+                <div class="card-body"><h3>Field Service</h3><p>Track work orders in field.</p><a href="#" class="card-link">Explore Field <span>→</span></a></div>
+            </div>
+        </div>
+    </div>
 </section>
-<!-- ===== USP / DIFFERENTIATORS (tabbed image) ===== -->
-<section class="usp-section">
-<div class="container narrow">
-<div class="usp-header">
-<h2 class="section-title">Not Just Another Tool—A Complete Platform</h2>
-<p class="lead">All‑in‑one, AI‑native, and built for complex operations. Click an item to preview.</p>
-</div>
-<div class="usp-grid container wide70">
-<div aria-label="Platform Differentiators" class="usp-tabs" role="tablist">
-<button class="usp-tab active" data-target="usp-allin">
-<div class="usp-ico">🧩</div>
-<div class="usp-copy">
-<strong>All‑in‑One Platform</strong>
-<span>Forms, workflows, apps, dashboards, GPS, IoT, and APIs — unified.</span>
-</div>
-</button>
-<button class="usp-tab" data-target="usp-iot">
-<div class="usp-ico">📡</div>
-<div class="usp-copy">
-<strong>IoT‑Native Architecture</strong>
-<span>Connect any sensor, device, or equipment directly to your flows.</span>
-</div>
-</button>
-<button class="usp-tab" data-target="usp-speed">
-<div class="usp-ico">⚡</div>
-<div class="usp-copy">
-<strong>Enterprise Power, Startup Speed</strong>
-<span>Enterprise features with SaaS simplicity — start in minutes.</span>
-</div>
-</button>
-<button class="usp-tab" data-target="usp-complex">
-<div class="usp-ico">📚</div>
-<div class="usp-copy">
-<strong>Built for Complex Ops</strong>
-<span>Oil &amp; gas, construction, logistics, healthcare, government.</span>
-</div>
-</button>
-<div class="usp-actions">
-<a class="btn brand" href="#demo">Try a Guided Demo</a>
-<a class="btn secondary" href="#docs">Read the Docs</a>
-</div>
-</div>
-<div class="usp-media">
-<div class="usp-pane active" id="usp-allin">
-<div class="media-16x9"><img alt="All-in-one" src="assets/img/solution-platform-modules-3d.png"/></div>
-</div>
-<div class="usp-pane" hidden="" id="usp-iot">
-<div class="media-16x9"><img alt="IoT native" src="assets/img/integrations-nodes-network-3d.png"/></div>
-</div>
-<div class="usp-pane" hidden="" id="usp-speed">
-<div class="media-16x9"><img alt="Speed" src="assets/img/problems-chaos-vs-clarity-3d.png"/></div>
-</div>
-<div class="usp-pane" hidden="" id="usp-complex">
-<div class="media-16x9"><img alt="Complex Ops" src="assets/img/analytics-dashboard-hologram-3d.png"/></div>
-</div>
-</div>
-</div>
-</div>
+
+<section class="why-section" style="padding-top: 3rem;" id="why">
+    <div class="why-bg-brain"></div> 
+    <div class="container-xl">
+
+        <div class="why-header">
+            <span class="hero-tag">Why IVAFlow?</span>
+            <h2>The Unified Operational Backbone for Modern Enterprises</h2>
+            <p>IVAFlow replaces fragmented tools with a secure, governed, AI-powered platform that brings clarity, speed, and consistency to every operation.</p>
+        </div>
+
+        <div class="why-cards-row">
+
+            <div class="why-feature-box">
+                <h3>End-to-End Operational Alignment</h3>
+                <p>Forms, workflows, data models, field operations, and dashboards work together in one governed system eliminating duplicate work.</p>
+            </div>
+
+            <div class="why-feature-box">
+                <h3>No-Code with Enterprise Governance</h3>
+                <p>Business teams build apps and workflows at startup speed, while IT maintains full control over access, security, compliance, and lifecycle management.</p>
+            </div>
+
+            <div class="why-feature-box">
+                <h3>Real-Time Visibility & Intelligence</h3>
+                <p>Live dashboards, SLA tracking, GPS-enabled field insights, and AI suggestions ensure leaders see issues early and act with confidence.</p>
+            </div>
+
+        </div>
+
+        <div class="why-cta">
+            <a href="#" class="btn-glow">Discover the Advantage <span>→</span></a>
+        </div>
+
+    </div>
 </section>
-<!-- ===== CTA ===== -->
-<section class="cta-section">
-<div class="cta-content">
-<h2>Ready to Rethink How Work Flows?</h2>
-<p>Join teams that turned ad‑hoc processes into reliable, auditable workflows with IVAFlow.</p>
-<div>
-<a class="btn btn-outline-light" href="#book">Schedule Demo</a>
-<a class="btn btn-light" href="#signup">Start Free</a>
-</div>
-<div class="cta-foot">No credit card • 14‑day trial • Cancel anytime</div>
-</div>
+
+
+<section class="section container">
+    <div class="section-header">
+        <span class="section-badge">Experience It</span>
+        <h2 class="section-title">See the Platform in Action</h2>
+        <p class="lead">A user interface designed for efficiency. Click below to explore.</p>
+    </div>
+    <div class="exp-tabs">
+        <button class="exp-btn active" onclick="showExp('ui-forms', this)"><span>📝</span> Form Builder</button>
+        <button class="exp-btn" onclick="showExp('ui-workflow', this)"><span>⚡</span> Workflows</button>
+        <button class="exp-btn" onclick="showExp('ui-dashboard', this)"><span>📊</span> Dashboards</button>
+        <button class="exp-btn" onclick="showExp('ui-iot', this)"><span>📡</span> IoT & Fleet</button>
+    </div>
+    <div class="exp-wrapper">
+        <div id="ui-forms" class="exp-content active">
+            <div class="exp-media">
+                <img src="assets/img/UI-Forms2.png">
+                <div class="exp-overlay">
+                    <div class="exp-text">
+                        <h3>Intelligent Form Builder</h3>
+                        <p>Easily design complex, multi-page forms with conditional logic. Capture data online or offline, and validate inputs in real-time to ensure data integrity.</p>
+                    </div>
+                    <a href="forms.html" class="exp-link">Explore Forms →</a>
+                </div>
+            </div>
+        </div>
+        <div id="ui-workflow" class="exp-content">
+            <div class="exp-media">
+                <img src="assets/img/UI-Workflow5.png">
+                <div class="exp-overlay">
+                    <div class="exp-text">
+                        <h3>Visual Workflow Designer</h3>
+                        <p>Map out business processes using a simple drag-and-drop canvas. Automate approvals, route tasks based on rules, and eliminate manual handoffs.</p>
+                    </div>
+                    <a href="workflow.html" class="exp-link">See Workflows →</a>
+                </div>
+            </div>
+        </div>
+        <div id="ui-dashboard" class="exp-content">
+            <div class="exp-media">
+                <img src="assets/img/Analytics3.png">
+                <div class="exp-overlay">
+                    <div class="exp-text">
+                        <h3>Real-Time Analytics</h3>
+                        <p>Gain instant visibility into your operations. Build custom dashboards to track KPIs, monitor asset health, and spot trends before they become problems.</p>
+                    </div>
+                    <a href="analytics.html" class="exp-link">View Analytics →</a>
+                </div>
+            </div>
+        </div>
+        <div id="ui-iot" class="exp-content">
+            <div class="exp-media">
+                <img src="assets/img/4.png">
+                <div class="exp-overlay">
+                    <div class="exp-text">
+                        <h3>IoT & Fleet Tracking</h3>
+                        <p>Seamlessly integrate physical assets into your digital workflows. Monitor GPS location, sensor data, and equipment status in real-time.</p>
+                    </div>
+                    <a href="iot.html" class="exp-link">Discover IoT →</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
-<!-- ===== FOOTER ===== -->
-<footer class="ft">
-<div class="ft-grid">
-<div>
-<div class="ft-logo">IVA<span class="dot"></span></div>
-<p>AI‑native, no‑code automation platform to design forms, orchestrate workflows, visualize data, and build apps — fast.</p>
-</div>
-<div>
-<h4>Platform</h4>
-<a href="Form Builder - IVAFlow.html">Forms</a><br/>
-<a href="Workflow Automation - IVAFlow.html">Workflow</a><br/>
-<a href="index.html#analytics">Analytics</a><br/>
-<a href="solutions-appbuilder.html">App Builder</a><br/>
-<a href="index.html#integrations">Integrations</a>
-</div>
-<div>
-<h4>Solutions</h4>
-<a href="Fleet &amp; Logistics Solutions - IVAFlow.html">Fleet</a><br/>
-<a href="Healthcare Solutions - IVAFlow.html">Healthcare</a><br/>
-<a href="Construction Solutions - IVAFlow.html">Construction</a><br/>
-<a href="Real Estate Solutions - IVAFlow.html">Real Estate</a><br/>
-<a href="industry.html">Manufacturing</a><br/>
-<a href="index.html#solutions-tabs">Government</a>
-<a href="oilgas.html">Oil &amp; Gas</a><br/></div>
-<div>
-<h4>Company</h4>
-<a href="partnership.html">Partnership</a><br/>
-<a href="index.html#about">About</a><br/>
-<a href="index.html#careers">Careers</a><br/>
-<a href="contact.html">Contact</a>
-</div>
-</div>
-<div class="ft-bottom">© 2025 IVAFlow • Privacy • Terms • Security</div>
+
+<section class="video-section">
+    <div class="container video-container">
+        <div class="video-text">
+            <span class="hero-tag" style="color:#fff; border-color:rgba(255,255,255,0.2);">Watch Demo</span>
+            <h2>See How Fast You Can Build.</h2>
+            <p>From a blank canvas to a fully automated workflow in under 60 seconds. No coding required.</p>
+            <ul style="list-style:none; padding:0; margin-bottom:2rem; color:#fff;">
+                <li style="margin-bottom:0.5rem; display:flex; align-items:center; gap:10px;">✅ <strong>Drag & Drop</strong> interface</li>
+                <li style="margin-bottom:0.5rem; display:flex; align-items:center; gap:10px;">✅ <strong>Instant</strong> deployment</li>
+            </ul>
+        </div>
+        <div class="video-wrapper" id="videoContainer">
+            <video src="assets/img/videohome.mp4" poster="assets/img/videocoverhome.png"></video>
+            <div class="video-play-icon" id="playIcon">▶</div>
+        </div>
+    </div>
+</section>
+
+<section class="final-cta">
+    <h2>Ready to Rethink How Work Flows?</h2>
+    <p>Join teams that turned ad-hoc processes into reliable, auditable workflows with IVAFlow.</p>
+    <div class="cta-btn-group">
+        <button class="btn-outline-white">Schedule Demo</button>
+        <button class="btn-white">Start Free</button>
+    </div>
+    <div class="cta-subtext">No credit card • 14-day trial • Cancel anytime</div>
+</section>
+
+<footer class="ft-modern">
+    <div class="container-xl">
+        <div class="ft-top">
+            <div class="ft-brand-col">
+                <a href="index.html" class="ft-logo">
+                    <img src="assets/img/logo.png" alt="IVAFlow Logo" style="height: 32px;">
+                    <span>IVAFlow</span>
+                </a>
+                <p class="ft-desc">
+                    The AI-native automation platform for modern enterprises. Design forms, orchestrate workflows, and build apps—without writing a single line of code.
+                </p>
+                <div class="ft-socials">
+                    <a href="#" aria-label="LinkedIn"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                    <a href="#" aria-label="Twitter"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg></a>
+                    <a href="#" aria-label="GitHub"><svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                </div>
+            </div>
+
+            <div class="ft-links-wrapper">
+                <div class="ft-col">
+                    <h4>Platform</h4>
+                    <ul>
+                        <li><a href="forms.html">Form Builder</a></li>
+                        <li><a href="workflow.html">Workflow Engine</a></li>
+                        <li><a href="analytics.html">Analytics & BI</a></li>
+                        <li><a href="appbuilder.html">App Builder</a></li>
+                        <li><a href="iot.html">IoT Integration</a></li>
+                    </ul>
+                </div>
+                <div class="ft-col">
+                    <h4>Solutions</h4>
+                    <ul>
+                        <li><a href="fleet.html">Fleet & Logistics</a></li>
+                        <li><a href="healthcare.html">Healthcare</a></li>
+                        <li><a href="construction.html">Construction</a></li>
+                        <li><a href="oil-gas.html">Oil & Gas</a></li>
+                        <li><a href="real-estate.html">Real Estate</a></li>
+                    </ul>
+                </div>
+                <div class="ft-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="partnership.html">Partners</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="#">Careers</a> <span class="ft-badge">Hiring</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="ft-bottom">
+            <div class="ft-legal">
+                <span>&copy; 2025 IVAFlow Inc. All rights reserved.</span>
+                <div class="ft-legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Security</a>
+                </div>
+            </div>
+            <div class="ft-lang">
+                <span>English (US)</span>
+            </div>
+        </div>
+    </div>
 </footer>
+
 <script src="app.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', { loop: true, effect: 'fade', speed: 1000, autoplay: { delay: 5000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, });
+    function showExp(id, btn) { document.querySelectorAll('.exp-content').forEach(el => el.classList.remove('active')); document.querySelectorAll('.exp-btn').forEach(el => el.classList.remove('active')); document.getElementById(id).classList.add('active'); btn.classList.add('active'); }
+    function showPlat(id, btn) { document.querySelectorAll('.plat-container').forEach(el => el.classList.remove('active')); document.querySelectorAll('.plat-tab').forEach(el => el.classList.remove('active')); document.getElementById('plat-' + id).classList.add('active'); btn.classList.add('active'); }
+    
+    // Video Player Logic
+    const vWrapper = document.getElementById('videoContainer');
+    const video = vWrapper.querySelector('video');
+    const icon = document.getElementById('playIcon');
+    vWrapper.addEventListener('click', () => {
+        if(video.paused) {
+            video.play();
+            icon.style.opacity = '0';
+            video.setAttribute('controls', 'true');
+        } else {
+            video.pause();
+            icon.style.opacity = '1';
+            video.removeAttribute('controls');
+        }
+    });
+</script>
+
 </body>
 </html>

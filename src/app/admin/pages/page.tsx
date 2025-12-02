@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Toast from '@/components/ui/Toast';
 
 interface Page {
   id: string;
@@ -16,11 +17,13 @@ interface Page {
   status: 'published' | 'draft';
   language: 'en' | 'ar';
   lastModified: string;
+  isHomepage?: boolean;
 }
 
 export default function AdminPages() {
   const [pages, setPages] = useState<Page[]>([]);
   const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
     const fetchPages = async () => {
@@ -53,6 +56,45 @@ export default function AdminPages() {
     if (filter === 'all') return true;
     return page.status === filter;
   });
+
+  const handleSetHomepage = async (pageId: string) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        setToast({ message: 'Authentication required', type: 'error' });
+        return;
+      }
+
+      console.log('Setting homepage for page:', pageId);
+
+      const response = await fetch(`/api/admin/pages/${pageId}/set-homepage`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      console.log('Response:', data);
+
+      if (response.ok) {
+        setToast({ message: 'Homepage updated successfully!', type: 'success' });
+        // Refresh pages list after a short delay
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        const errorMsg = data.error || 'Failed to update homepage';
+        const details = data.details ? ` - ${data.details}` : '';
+        setToast({ message: errorMsg + details, type: 'error' });
+        console.error('API Error:', data);
+      }
+    } catch (error) {
+      console.error('Failed to set homepage:', error);
+      setToast({ message: 'Network error occurred', type: 'error' });
+    }
+  };
 
   const getStatusBadge = (status: string) => {
     const baseClasses = 'px-2 py-1 text-xs font-medium rounded-full';
@@ -138,8 +180,15 @@ export default function AdminPages() {
             {filteredPages.map((page) => (
               <tr key={page.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900 dark:text-white">
-                    {page.title}
+                  <div className="flex items-center space-x-2">
+                    <div className="text-sm font-medium text-gray-900 dark:text-white">
+                      {page.title}
+                    </div>
+                    {page.isHomepage && (
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
+                        Homepage
+                      </span>
+                    )}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -174,6 +223,14 @@ export default function AdminPages() {
                     >
                       Edit
                     </Link>
+                    {!page.isHomepage && (
+                      <button
+                        onClick={() => handleSetHomepage(page.id)}
+                        className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                      >
+                        Set Home
+                      </button>
+                    )}
                     <Link
                       href={page.slug}
                       target="_blank"
@@ -191,6 +248,14 @@ export default function AdminPages() {
           </tbody>
         </table>
       </div>
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
     </div>
   );
 }

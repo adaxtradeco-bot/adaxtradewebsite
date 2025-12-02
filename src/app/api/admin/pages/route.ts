@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
         slug: true,
         status: true,
         language: true,
+        isHomepage: true,
         updatedAt: true,
         createdAt: true,
       },

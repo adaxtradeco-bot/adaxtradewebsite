@@ -41,7 +41,11 @@ const faqData = [
 
 
 
-export function CTASection() {
+interface CTASectionProps {
+  glassEffect?: boolean;
+}
+
+export function CTASection({ glassEffect = false }: CTASectionProps) {
   const [openItems, setOpenItems] = useState<string[]>([]);
   const { t } = useTranslation();
 
@@ -68,7 +72,11 @@ export function CTASection() {
           {faqData.map((section, sectionIndex) => (
             <div 
               key={sectionIndex}
-              className="rounded-2xl bg-white/80 dark:bg-white/5 border border-slate-200/60 dark:border-white/10 p-6 shadow-sm hover:shadow-md dark:shadow-none transition-shadow"
+              className={`rounded-2xl p-6 border transition-all ${
+                glassEffect
+                  ? 'bg-white/10 dark:bg-white/5 backdrop-blur-md border-white/20 dark:border-white/10 shadow-lg'
+                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:shadow-md'
+              }`}
             >
               <h3 className="font-semibold text-slate-900 dark:text-white mb-4">{t(`components.faq.${section.category}`)}</h3>
               
@@ -78,7 +86,7 @@ export function CTASection() {
                   const isOpen = openItems.includes(itemId);
                   
                   return (
-                    <div key={itemIndex} className="border-t border-slate-200/40 dark:border-white/10">
+                    <div key={itemIndex} className="border-t border-slate-200 dark:border-slate-700">
                       <button
                         onClick={() => toggleItem(itemId)}
                         className="w-full text-left py-3 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors font-medium"
@@ -105,14 +113,14 @@ export function CTASection() {
         </div>
         
         {/* CTA */}
-        <div className="text-center bg-white/80 dark:bg-white/5 rounded-3xl p-8 border border-slate-200/60 dark:border-violet-400/20 shadow-sm dark:shadow-none">
-          <h3 className="text-2xl font-bold mb-2">{t('components.cta.title')}</h3>
-          <p className="text-slate-600 dark:text-slate-300 mb-8">
+        <div className="text-center bg-gradient-to-r from-fuchsia-600 to-pink-500 rounded-3xl p-8 border border-white/10 shadow-lg">
+          <h3 className="text-2xl font-bold mb-2 text-white">{t('components.cta.title')}</h3>
+          <p className="text-white/90 mb-8">
             {t('components.cta.description')}
           </p>
           <Button 
             size="lg"
-            className="bg-gradient-to-r from-violet-600 to-cyan-500 hover:from-violet-700 hover:to-cyan-600 text-white border-0 shadow-lg hover:shadow-xl transition-shadow"
+            className="bg-white text-fuchsia-600 hover:bg-slate-100 border-0 shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
             {t('components.cta.secondaryButton')}
           </Button>

@@ -10,6 +10,7 @@
 
 @import '../styles/navbar-animations.css';
 @import '../styles/rtl.css';
+@import '../styles/nwm-enhancements.css';
 
 @layer base {
   html {
@@ -91,7 +92,9 @@
   animation: slide-up 0.6s ease-out;
   animation-fill-mode: both;
 }
-
+.flex-direction-column{
+  flex-direction: column;
+}
 .animation-delay-100 {
   animation-delay: 100ms;
 }

@@ -31,6 +31,12 @@ import TestimonialsSection from '@/components/builder-sections/TestimonialsSecti
 import WorkflowSection from '@/components/builder-sections/WorkflowSection';
 import IntegrationsSection from '@/components/builder-sections/IntegrationsSection';
 import ProcessSection from '@/components/builder-sections/ProcessSection';
+import HeroSliderSection from '@/components/builder-sections/HeroSliderSection';
+import StakeholderSection from '@/components/builder-sections/StakeholderSection';
+import PlatformTabsSection from '@/components/builder-sections/PlatformTabsSection';
+import WhySection from '@/components/builder-sections/WhySection';
+import ExperienceTabsSection from '@/components/builder-sections/ExperienceTabsSection';
+import VideoSection from '@/components/builder-sections/VideoSection';
 import { ComplianceBadgesSection } from '@/components/builder-sections/ComplianceBadgesSection';
 import { MediaContentSection } from '@/components/builder-sections/MediaContentSection';
 import SidebarContentSection from '@/components/builder-sections/SidebarContentSection';
@@ -38,6 +44,25 @@ import WorkflowHeroSection from '@/components/builder-sections/WorkflowHeroSecti
 import MetricsSection from '@/components/builder-sections/MetricsSection';
 import TwoColumnMediaSection from '@/components/builder-sections/TwoColumnMediaSection';
 import SimpleCardsSection from '@/components/builder-sections/SimpleCardsSection';
+import BenefitsGridSection from '@/components/builder-sections/BenefitsGridSection';
+import PartnerCardsSection from '@/components/builder-sections/PartnerCardsSection';
+import FeaturesCompactSection from '@/components/builder-sections/FeaturesCompactSection';
+import FeaturesMinimalSection from '@/components/builder-sections/FeaturesMinimalSection';
+import PartnershipHeroSection from '@/components/builder-sections/PartnershipHeroSection';
+import PartnershipHeroInteractive from '@/components/builder-sections/PartnershipHeroInteractive';
+import PartnerBenefitsSection from '@/components/builder-sections/PartnerBenefitsSection';
+import PartnerTypesSection from '@/components/builder-sections/PartnerTypesSection';
+import RequirementsSection from '@/components/builder-sections/RequirementsSection';
+import FormBuilderHeroSection from '@/components/builder-sections/FormBuilderHeroSection';
+import HeroSliderNWMSection from '@/components/builder-sections/HeroSliderNWMSection';
+import WhyNWMSection from '@/components/builder-sections/WhyNWMSection';
+import StakeholdersNWMSection from '@/components/builder-sections/StakeholdersNWMSection';
+import EcosystemNWMSection from '@/components/builder-sections/EcosystemNWMSection';
+import InfographicNWMSection from '@/components/builder-sections/InfographicNWMSection';
+import VideoPreviewNWMSection from '@/components/builder-sections/VideoPreviewNWMSection';
+import PartnersNWMSection from '@/components/builder-sections/PartnersNWMSection';
+import FeaturesGridNWMSection from '@/components/builder-sections/FeaturesGridNWMSection';
+import FinalCTANWMSection from '@/components/builder-sections/FinalCTANWMSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -66,7 +91,18 @@ export function SectionRenderer({
   const renderSection = () => {
     switch (section.type) {
       case 'hero':
+      case 'HeroSection':
         return <HeroSection section={section as any} isBuilder={isBuilder} />;
+      case 'partnership-hero':
+        return <PartnershipHeroSection data={(section as any).data} style={(section as any).style} />;
+      case 'partnership-hero-interactive':
+        return <PartnershipHeroInteractive data={(section as any).data} style={(section as any).style} />;
+      case 'partner-benefits':
+        return <PartnerBenefitsSection data={(section as any).data} style={(section as any).style} />;
+      case 'partner-types':
+        return <PartnerTypesSection data={(section as any).data} style={(section as any).style} />;
+      case 'requirements':
+        return <RequirementsSection data={(section as any).data} style={(section as any).style} />;
       case 'hero-video':
         return <HeroVideoSection section={section as any} isBuilder={isBuilder} />;
       case 'hero-animated':
@@ -74,6 +110,7 @@ export function SectionRenderer({
       case 'features':
         return <FeaturesSection section={section as any} isBuilder={isBuilder} />;
       case 'cta':
+      case 'CTASection':
         return <CTASection data={(section as any).data} style={(section as any).style} />;
       case 'tabs':
         return <TabsSection section={section as any} isBuilder={isBuilder} />;
@@ -88,6 +125,7 @@ export function SectionRenderer({
       case 'testimonial':
         return <TestimonialSection data={(section as any).data} style={(section as any).style} />;
       case 'feature-grid':
+      case 'FeaturesGridSection':
         return <FeatureGridSection data={(section as any).data} style={(section as any).style} />;
       case 'team':
         return <TeamSection data={(section as any).data} style={(section as any).style} />;
@@ -95,6 +133,14 @@ export function SectionRenderer({
         return <IndustryHeroSection section={section as any} isBuilder={isBuilder} />;
       case 'benefit-grid':
         return <BenefitGridSection data={(section as any).data} style={(section as any).style} />;
+      case 'benefits-grid':
+        return <BenefitsGridSection data={(section as any).data} style={(section as any).style} />;
+      case 'partner-cards':
+        return <PartnerCardsSection data={(section as any).data} style={(section as any).style} />;
+      case 'features-compact':
+        return <FeaturesCompactSection data={(section as any).data} style={(section as any).style} />;
+      case 'features-minimal':
+        return <FeaturesMinimalSection data={(section as any).data} style={(section as any).style} />;
       case 'case-study':
         return <CaseStudySection data={(section as any).data} style={(section as any).style} />;
       case 'industry-features':
@@ -129,6 +175,109 @@ export function SectionRenderer({
         return <TwoColumnMediaSection key={section.id} {...(section as any).data} />;
       case 'simple-cards':
         return <SimpleCardsSection key={section.id} {...(section as any).data} />;
+      case 'form-builder-hero':
+        return <FormBuilderHeroSection key={section.id} {...(section as any).data} />;
+      case 'hero-slider':
+        return <HeroSliderSection data={(section as any).data} style={(section as any).style} />;
+      case 'stakeholder':
+        return <StakeholderSection data={(section as any).data} style={(section as any).style} />;
+      case 'platform-tabs':
+        return <PlatformTabsSection data={(section as any).data} style={(section as any).style} />;
+      case 'why':
+        return <WhySection data={(section as any).data} style={(section as any).style} />;
+      case 'experience-tabs':
+        return <ExperienceTabsSection data={(section as any).data} style={(section as any).style} />;
+      case 'video':
+        return <VideoSection data={(section as any).data} style={(section as any).style} />;
+      case 'hero-slider-nwm':
+      case 'HeroSliderNWMSection':
+        return <HeroSliderNWMSection {...(section as any).data} />;
+      case 'why-nwm':
+        return <WhyNWMSection {...(section as any).data} />;
+      case 'stakeholders-nwm':
+        return <StakeholdersNWMSection {...(section as any).data} />;
+      case 'ecosystem-nwm':
+        return <EcosystemNWMSection {...(section as any).data} />;
+      case 'infographic-nwm':
+        return <InfographicNWMSection {...(section as any).data} />;
+      case 'video-preview-nwm':
+        return <VideoPreviewNWMSection {...(section as any).data} />;
+      case 'partners-nwm':
+        return <PartnersNWMSection {...(section as any).data} />;
+      case 'features-grid-nwm':
+        return <FeaturesGridNWMSection {...(section as any).data} />;
+      case 'final-cta-nwm':
+        return <FinalCTANWMSection {...(section as any).data} />;
+      case 'ContentSection':
+        return (
+          <section className="py-16 px-6">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">{(section as any).data?.title}</h2>
+              <p className="text-lg text-slate-600 dark:text-slate-300">{(section as any).data?.content}</p>
+            </div>
+          </section>
+        );
+      case 'CardsSection':
+        return (
+          <section className="py-16 px-6">
+            <div className="max-w-7xl mx-auto">
+              {(section as any).data?.badge && (
+                <div className="text-center mb-4">
+                  <span className="inline-block px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full font-bold text-sm uppercase">
+                    {(section as any).data.badge}
+                  </span>
+                </div>
+              )}
+              <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">{(section as any).data?.title}</h2>
+              <p className="text-center text-slate-600 dark:text-slate-300 mb-12">{(section as any).data?.subtitle}</p>
+              <div className="grid md:grid-cols-3 gap-6">
+                {((section as any).data?.cards || []).map((card: any, idx: number) => (
+                  <div key={idx} className="bg-white dark:bg-neutral-800 rounded-2xl p-6 border border-slate-200 dark:border-neutral-700">
+                    <div className="text-3xl mb-4">{card.icon}</div>
+                    <h3 className="text-xl font-bold mb-2">{card.title}</h3>
+                    <p className="text-slate-600 dark:text-slate-400 mb-4">{card.description}</p>
+                    {card.features && (
+                      <ul className="space-y-2 mb-6">
+                        {card.features.map((f: string, i: number) => (
+                          <li key={i} className="text-sm py-2 border-b border-slate-100 dark:border-neutral-700">{f}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {card.cta && (
+                      <a href={card.cta.href} className="block w-full text-center px-6 py-3 bg-yellow-400 text-slate-900 rounded-full font-bold hover:bg-yellow-500 transition-colors">
+                        {card.cta.text}
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      case 'TwoColumnSection':
+        return (
+          <section className="py-16 px-6 bg-slate-50 dark:bg-neutral-900">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                  <h2 className="text-4xl font-bold mb-4">{(section as any).data?.title}</h2>
+                  <p className="text-lg text-slate-600 dark:text-slate-400 mb-6">{(section as any).data?.subtitle}</p>
+                  <ul className="space-y-4">
+                    {((section as any).data?.items || []).map((item: string, idx: number) => (
+                      <li key={idx} className="flex items-center gap-3 py-3 border-b border-slate-200 dark:border-neutral-700">
+                        <span className="text-blue-500 font-bold text-xl">→</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl min-h-[400px] flex items-center justify-center border border-slate-700">
+                  <div className="text-8xl">{(section as any).data?.image}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
       default:
         return (
           <div className="p-8 bg-gray-100 dark:bg-gray-800 text-center">

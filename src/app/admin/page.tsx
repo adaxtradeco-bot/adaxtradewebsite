@@ -4,34 +4,66 @@
  * Created: 2024-01-15
  */
 
-'use client';
+import { prisma } from '@/lib/prisma';
+import Link from 'next/link';
+import { requireAuth } from '@/lib/auth-server';
 
-import { useState, useEffect } from 'react';
+async function getDashboardStats() {
+  try {
+    const [totalPages, publishedPages, draftPages] = await Promise.all([
+      prisma.page.count(),
+      prisma.page.count({ where: { status: 'published' } }),
+      prisma.page.count({ where: { status: 'draft' } }),
+    ]);
 
-interface DashboardStats {
-  totalPages: number;
-  publishedPages: number;
-  draftPages: number;
-  totalSections: number;
-}
-
-export default function AdminDashboard() {
-  const [stats, setStats] = useState<DashboardStats>({
-    totalPages: 0,
-    publishedPages: 0,
-    draftPages: 0,
-    totalSections: 0,
+  // Count sections from builder pages
+  const builderPages = await prisma.page.findMany({
+    where: { isBuilderPage: true },
+    select: { builderData: true },
   });
 
-  useEffect(() => {
-    // Mock data - replace with actual API call
-    setStats({
-      totalPages: 8,
-      publishedPages: 6,
-      draftPages: 2,
-      totalSections: 12,
+  let totalSections = 0;
+  builderPages.forEach(page => {
+    if (page.builderData) {
+      try {
+        const data = JSON.parse(page.builderData);
+        totalSections += data.sections?.length || 0;
+      } catch (e) {
+        // Skip invalid JSON
+      }
+    }
+  });
+
+    return { totalPages, publishedPages, draftPages, totalSections };
+  } catch (error) {
+    console.error('Dashboard stats error:', error);
+    return { totalPages: 0, publishedPages: 0, draftPages: 0, totalSections: 0 };
+  }
+}
+
+async function getRecentPages() {
+  try {
+    return await prisma.page.findMany({
+      take: 3,
+      orderBy: { updatedAt: 'desc' },
+      select: {
+        id: true,
+        title: true,
+        updatedAt: true,
+        status: true,
+      },
     });
-  }, []);
+  } catch (error) {
+    console.error('Recent pages error:', error);
+    return [];
+  }
+}
+
+export default async function AdminDashboard() {
+  await requireAuth();
+  
+  const stats = await getDashboardStats();
+  const recentPages = await getRecentPages();
 
   const statCards = [
     {
@@ -102,7 +134,7 @@ export default function AdminDashboard() {
             Quick Actions
           </h2>
           <div className="space-y-3">
-            <button className="w-full text-left p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+            <Link href="/admin/pages" className="block w-full text-left p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
               <div className="flex items-center">
                 <span className="text-2xl mr-3">➕</span>
                 <div>
@@ -114,23 +146,23 @@ export default function AdminDashboard() {
                   </p>
                 </div>
               </div>
-            </button>
+            </Link>
             
-            <button className="w-full text-left p-3 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
+            <Link href="/admin/sections" className="block w-full text-left p-3 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
               <div className="flex items-center">
-                <span className="text-2xl mr-3">🖼️</span>
+                <span className="text-2xl mr-3">🧩</span>
                 <div>
                   <p className="font-medium text-gray-900 dark:text-white">
-                    Upload Media
+                    Manage Sections
                   </p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Add images and files
+                    View and edit page sections
                   </p>
                 </div>
               </div>
-            </button>
+            </Link>
             
-            <button className="w-full text-left p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+            <Link href="/admin/translations" className="block w-full text-left p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
               <div className="flex items-center">
                 <span className="text-2xl mr-3">🌐</span>
                 <div>
@@ -142,50 +174,59 @@ export default function AdminDashboard() {
                   </p>
                 </div>
               </div>
-            </button>
+            </Link>
+            
+            <Link href="/admin/menus" className="block w-full text-left p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors">
+              <div className="flex items-center">
+                <span className="text-2xl mr-3">📋</span>
+                <div>
+                  <p className="font-medium text-gray-900 dark:text-white">
+                    Manage Menus
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Build navigation menus
+                  </p>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            Recent Activity
+            Recent Pages
           </h2>
           <div className="space-y-3">
-            <div className="flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-              <span className="text-xl mr-3">📝</span>
-              <div>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  App Builder page updated
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  2 hours ago
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-              <span className="text-xl mr-3">🖼️</span>
-              <div>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  New image uploaded
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  5 hours ago
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700">
-              <span className="text-xl mr-3">🌐</span>
-              <div>
-                <p className="font-medium text-gray-900 dark:text-white">
-                  Arabic translations updated
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  1 day ago
-                </p>
-              </div>
-            </div>
+            {recentPages.length > 0 ? (
+              recentPages.map((page) => (
+                <Link
+                  key={page.id}
+                  href={`/admin/pages/edit/${page.id}`}
+                  className="flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                >
+                  <span className="text-xl mr-3">
+                    {page.status === 'published' ? '✅' : '📝'}
+                  </span>
+                  <div className="flex-1">
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {page.title}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {new Date(page.updatedAt).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </p>
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <p className="text-gray-600 dark:text-gray-400 text-center py-4">
+                No pages yet. Create your first page!
+              </p>
+            )}
           </div>
         </div>
       </div>

@@ -17,10 +17,65 @@ interface PropertyPanelProps {
   onClose: () => void;
 }
 
+function ImageUploader({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+  const [uploading, setUploading] = React.useState(false);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const token = localStorage.getItem('adminToken');
+
+      const response = await fetch('/api/admin/media', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        onChange(data.url);
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      {value && (
+        <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+          <img src={value} alt="Preview" className="w-full h-full object-cover" />
+        </div>
+      )}
+      <div className="flex gap-2">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="Image URL"
+          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+        />
+        <label className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer text-sm font-medium whitespace-nowrap">
+          {uploading ? '⏳' : '📤'}
+          <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={uploading} />
+        </label>
+      </div>
+    </div>
+  );
+}
+
 function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (updates: Partial<SectionConfig>) => void }) {
   const [jsonText, setJsonText] = React.useState(JSON.stringify(section.data, null, 2));
   const [error, setError] = React.useState('');
   const [hasChanges, setHasChanges] = React.useState(false);
+  const [showImageHelper, setShowImageHelper] = React.useState(false);
   const sectionIdRef = React.useRef(section.id);
 
   React.useEffect(() => {
@@ -29,6 +84,7 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
       setJsonText(JSON.stringify(section.data, null, 2));
       setError('');
       setHasChanges(false);
+      setShowImageHelper(false);
     }
   }, [section.id]);
 
@@ -57,6 +113,75 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
     }
   };
 
+  const handleImageUpload = (field: string, url: string) => {
+    try {
+      const data = JSON.parse(jsonText);
+      const keys = field.split('.');
+      let obj = data;
+      
+      // Navigate to parent object, creating missing objects
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (obj[key] === undefined || obj[key] === null || typeof obj[key] !== 'object') {
+          obj[key] = {};
+        }
+        obj = obj[key];
+      }
+      
+      // Set the final value
+      obj[keys[keys.length - 1]] = url;
+      
+      const newJson = JSON.stringify(data, null, 2);
+      setJsonText(newJson);
+      setHasChanges(true);
+    } catch (err) {
+      console.error('Failed to update image:', err);
+    }
+  };
+
+  const imageFields = React.useMemo(() => {
+    try {
+      const data = JSON.parse(jsonText);
+      const fields: Array<{ path: string; value: string }> = [];
+      
+      const findImageFields = (obj: any, prefix = '', parentKey = '') => {
+        for (const key in obj) {
+          const path = prefix ? `${prefix}.${key}` : key;
+          const value = obj[key];
+          
+          if (typeof value === 'string') {
+            const isImageKey = key.toLowerCase().includes('image') || 
+                              key.toLowerCase().includes('img') || 
+                              key.toLowerCase().includes('media') || 
+                              key.toLowerCase().includes('icon') ||
+                              key.toLowerCase().includes('logo') ||
+                              key.toLowerCase().includes('background');
+            const isImageUrl = value.match(/\.(jpg|jpeg|png|gif|webp|svg|ico)/i) || 
+                              value.startsWith('/uploads/') ||
+                              value.startsWith('http');
+            
+            if (isImageKey || (key.toLowerCase().includes('url') && isImageUrl)) {
+              fields.push({ path, value });
+            }
+          } else if (Array.isArray(value)) {
+            value.forEach((item, idx) => {
+              if (typeof item === 'object' && item !== null) {
+                findImageFields(item, `${path}[${idx}]`, key);
+              }
+            });
+          } else if (typeof value === 'object' && value !== null) {
+            findImageFields(value, path, key);
+          }
+        }
+      };
+      
+      findImageFields(data);
+      return fields;
+    } catch {
+      return [];
+    }
+  }, [jsonText]);
+
   return (
     <div className="space-y-4">
       <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
@@ -64,6 +189,33 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
           ✏️ Edit JSON and click Save to apply changes
         </p>
       </div>
+      
+      {imageFields.length > 0 && (
+        <div>
+          <button
+            type="button"
+            onClick={() => setShowImageHelper(!showImageHelper)}
+            className="w-full px-3 py-2 bg-purple-100 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-md text-sm font-medium hover:bg-purple-200 dark:hover:bg-purple-900/30 transition-colors"
+          >
+            {showImageHelper ? '🖼️ Hide' : '🖼️ Show'} Image Manager ({imageFields.length})
+          </button>
+          {showImageHelper && (
+            <div className="mt-2 space-y-3 max-h-64 overflow-y-auto p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              {imageFields.map((field) => (
+                <div key={field.path}>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    {field.path}
+                  </label>
+                  <ImageUploader
+                    value={field.value}
+                    onChange={(url) => handleImageUpload(field.path, url)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
       {error && (
         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
           <p className="text-sm font-medium text-red-800 dark:text-red-200">⚠️ {error}</p>

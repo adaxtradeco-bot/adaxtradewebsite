@@ -6,11 +6,61 @@
 
 'use client';
 
+import { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { useTranslation } from '@/hooks/useTranslation';
+import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
+import { SectionConfig } from '@/lib/page-builder/section-schemas';
 
 export default function HomePage() {
   const { t } = useTranslation();
+  const params = useParams();
+  const lang = params?.lang as string || 'en';
+  const [homepageData, setHomepageData] = useState<SectionConfig[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
+  useEffect(() => {
+    const fetchHomepage = async () => {
+      try {
+        const response = await fetch(`/api/pages/by-slug?slug=/${lang}`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.page?.builderData) {
+            setHomepageData(data.page.builderData);
+          }
+        } else {
+          const homepageResponse = await fetch('/api/pages/homepage');
+          if (homepageResponse.ok) {
+            const data = await homepageResponse.json();
+            if (data.page?.builderData) {
+              setHomepageData(data.page.builderData);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load homepage:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHomepage();
+  }, [lang]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  // If homepage exists, render it
+  if (homepageData && homepageData.length > 0) {
+    return <PageRenderer sections={homepageData} />;
+  }
+
+  // Fallback to default homepage
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-neutral-900 dark:to-neutral-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">

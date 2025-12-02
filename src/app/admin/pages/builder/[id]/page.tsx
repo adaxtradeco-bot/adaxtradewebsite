@@ -86,9 +86,9 @@ export default function BuilderPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full overflow-x-hidden">
       {/* Exit Button */}
-      <div className="absolute top-4 left-4 z-50">
+      <div className="fixed top-2 left-2 z-50">
         <button
           onClick={handleExit}
           className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg font-medium transition-colors shadow-sm border border-gray-200 dark:border-gray-600 flex items-center space-x-2"
@@ -101,7 +101,7 @@ export default function BuilderPage() {
       </div>
 
       {/* Page Info */}
-      <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50">
+      <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50">
         <div className="bg-white dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600">
           <div className="flex items-center space-x-3">
             <span className="text-sm font-medium text-gray-900 dark:text-white">

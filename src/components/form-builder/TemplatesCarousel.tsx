@@ -37,7 +37,11 @@ const templates = [
   }
 ];
 
-export function TemplatesCarousel() {
+interface TemplatesCarouselProps {
+  glassEffect?: boolean;
+}
+
+export function TemplatesCarousel({ glassEffect = false }: TemplatesCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -69,7 +73,7 @@ export function TemplatesCarousel() {
               variant="outline"
               size="sm"
               onClick={() => scroll('left')}
-              className="border-white/20 dark:border-white/20 border-slate-900/20 text-white dark:text-white text-slate-900 hover:bg-white/10 dark:hover:bg-white/10 hover:bg-slate-900/10"
+              className="border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
               aria-label="Scroll templates left"
             >
               ‹
@@ -78,7 +82,7 @@ export function TemplatesCarousel() {
               variant="outline" 
               size="sm"
               onClick={() => scroll('right')}
-              className="border-white/20 dark:border-white/20 border-slate-900/20 text-white dark:text-white text-slate-900 hover:bg-white/10 dark:hover:bg-white/10 hover:bg-slate-900/10"
+              className="border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
               aria-label="Scroll templates right"
             >
               ›
@@ -94,9 +98,13 @@ export function TemplatesCarousel() {
           {templates.map((template) => (
             <div 
               key={template.id}
-              className="flex-none w-80 rounded-xl bg-white/5 dark:bg-white/5 bg-slate-900/5 border border-white/10 dark:border-white/10 border-slate-900/20 p-6 hover:-translate-y-1 transition-transform"
+              className={`flex-none w-80 rounded-xl p-6 border transition-all hover:-translate-y-1 ${
+                glassEffect
+                  ? 'bg-white/10 dark:bg-white/5 backdrop-blur-md border-white/20 dark:border-white/10 shadow-lg'
+                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:shadow-md'
+              }`}
             >
-              <h3 className="text-lg font-semibold mb-2">{template.title}</h3>
+              <h3 className="text-lg font-semibold mb-2 text-slate-900 dark:text-white">{template.title}</h3>
               <p className="text-sm text-slate-600 dark:text-slate-300">{template.description}</p>
             </div>
           ))}

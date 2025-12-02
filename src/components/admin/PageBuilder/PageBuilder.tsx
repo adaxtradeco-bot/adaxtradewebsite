@@ -133,7 +133,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave }: PageBuilde
   };
 
   return (
-    <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+    <div className="h-screen w-full flex flex-col bg-gray-50 dark:bg-gray-900 overflow-x-hidden">
       {/* Toolbar */}
       <Toolbar
         onSave={handleSave}
@@ -147,8 +147,10 @@ export function PageBuilder({ pageId, initialSections = [], onSave }: PageBuilde
       <div className="flex-1 flex overflow-hidden">
         {!isPreviewMode && (
           <>
-            {/* Section Library */}
-            <SectionLibrary onAddSection={handleAddSection} />
+            {/* Section Library - Hidden when section is selected */}
+            {!selectedSectionId && (
+              <SectionLibrary onAddSection={handleAddSection} />
+            )}
 
             {/* Main Canvas */}
             <div className="flex-1 flex flex-col">

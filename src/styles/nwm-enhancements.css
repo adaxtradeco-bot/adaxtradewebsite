@@ -1,0 +1,286 @@
+/* NWMFlow Enhanced Styles - Light Theme & Advanced Animations */
+
+/* Light theme utilities */
+.light {
+  --tw-bg-opacity: 1;
+}
+
+/* Smooth fade-in animation */
+@keyframes nf-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: nf-fade-in 0.42s ease-out;
+}
+
+/* Pulse animation for decorative elements */
+@keyframes nf-pulse-glow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-glow {
+  animation: nf-pulse-glow 3s ease-in-out infinite;
+}
+
+/* Gradient animation for borders */
+@keyframes nf-gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient-shift {
+  background-size: 200% 200%;
+  animation: nf-gradient-shift 3s ease infinite;
+}
+
+/* Glass morphism effect */
+.glass-effect {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Light theme hover lift */
+.light .hover-lift:hover {
+  box-shadow: 0 20px 40px rgba(19, 34, 102, 0.25);
+}
+
+/* Gradient text effect */
+.gradient-text {
+  background: linear-gradient(112deg, #5cf2ff, #8b5cff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Light theme gradient text */
+.light .gradient-text {
+  background: linear-gradient(112deg, #0ec2d8, #7442ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer effect for loading states */
+@keyframes nf-shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: nf-shimmer 2s infinite;
+}
+
+/* Section separator styles */
+.section-separator {
+  position: relative;
+}
+
+.section-separator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 75%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(92, 242, 255, 0.5),
+    transparent
+  );
+}
+
+.light .section-separator::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(14, 194, 216, 0.5),
+    transparent
+  );
+}
+
+/* Floating animation for decorative elements */
+@keyframes nf-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: nf-float 3s ease-in-out infinite;
+}
+
+/* Glow effect on hover */
+.glow-on-hover {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.glow-on-hover::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(45deg, #5cf2ff, #8b5cff, #5cf2ff);
+  background-size: 200% 200%;
+  opacity: 0;
+  z-index: -1;
+  filter: blur(10px);
+  transition: opacity 0.3s ease;
+}
+
+.glow-on-hover:hover::after {
+  opacity: 0.7;
+  animation: nf-gradient-shift 2s ease infinite;
+}
+
+/* Light theme glow */
+.light .glow-on-hover::after {
+  background: linear-gradient(45deg, #0ec2d8, #7442ff, #0ec2d8);
+}
+
+/* Card hover effects */
+.card-hover-effect {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-hover-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(92, 242, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.card-hover-effect:hover::before {
+  left: 100%;
+}
+
+/* Light theme card hover */
+.light .card-hover-effect::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(14, 194, 216, 0.15),
+    transparent
+  );
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050616;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #5cf2ff, #8b5cff);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4dd9e6, #7442ff);
+}
+
+/* Light theme scrollbar */
+.light ::-webkit-scrollbar-track {
+  background: #f5f7ff;
+}
+
+.light ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0ec2d8, #7442ff);
+}
+
+.light ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #0db3c4, #6838e6);
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .section-separator::before {
+    width: 90%;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #5cf2ff;
+  outline-offset: 2px;
+}
+
+.light *:focus-visible {
+  outline-color: #0ec2d8;
+}

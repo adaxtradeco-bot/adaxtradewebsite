@@ -32,6 +32,7 @@ model Page {
   builderData   String?   // JSON array of builder section configurations
   isBuilderPage Boolean   @default(false) // Flag for builder-created pages
   builderVersion String?  // Track builder version for migrations
+  isHomepage    Boolean   @default(false) // Flag for homepage
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -68,4 +69,17 @@ model SectionTemplate {
   usageCount   Int      @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Menu {
+  id        String   @id @default(cuid())
+  name      String   // Main Menu, Footer Menu, etc.
+  location  String   // header, footer, sidebar
+  language  String   @default("en")
+  items     String   // JSON array of menu items
+  status    String   @default("active") // active, inactive
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([location, language])
 }

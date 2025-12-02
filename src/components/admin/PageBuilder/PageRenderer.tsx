@@ -14,8 +14,12 @@ interface PageRendererProps {
 }
 
 export function PageRenderer({ sections, isPreview = false }: PageRendererProps) {
-  // Ensure sections is an array
-  const sectionsArray = Array.isArray(sections) ? sections : [];
+  // Handle both array format and { sections: [...] } format
+  const sectionsArray = Array.isArray(sections) 
+    ? sections 
+    : (sections as any)?.sections 
+    ? (sections as any).sections 
+    : [];
   
   if (sectionsArray.length === 0) {
     return (
@@ -34,7 +38,7 @@ export function PageRenderer({ sections, isPreview = false }: PageRendererProps)
 
   return (
     <div className="min-h-screen">
-      {sectionsArray.map((section) => (
+      {sectionsArray.map((section: SectionConfig) => (
         <SectionRenderer
           key={section.id}
           section={section}

@@ -15,7 +15,11 @@ const features = [
   'AI assistance for speed'
 ];
 
-export function FeaturesGrid() {
+interface FeaturesGridProps {
+  glassEffect?: boolean;
+}
+
+export function FeaturesGrid({ glassEffect = false }: FeaturesGridProps) {
   return (
     <section className="bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white py-16">
       <div className="max-w-7xl mx-auto px-6">
@@ -34,9 +38,13 @@ export function FeaturesGrid() {
           {features.map((feature, index) => (
             <div 
               key={index}
-              className="p-4 rounded-xl bg-white/5 dark:bg-white/5 bg-slate-900/5 border border-white/10 dark:border-white/10 border-slate-900/20 hover:bg-white/10 dark:hover:bg-white/10 hover:bg-slate-900/10 transition-colors"
+              className={`p-4 rounded-xl border transition-all hover:-translate-y-1 ${
+                glassEffect
+                  ? 'bg-white/10 dark:bg-white/5 backdrop-blur-md border-white/20 dark:border-white/10 shadow-lg'
+                  : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:shadow-md'
+              }`}
             >
-              <p className="text-sm text-slate-600 dark:text-slate-300">{feature}</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">{feature}</p>
             </div>
           ))}
         </div>
