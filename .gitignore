@@ -78,14 +78,8 @@ HERO_SLIDES_DATA.ts
 middleware.ts
 update-db-prisma.ts
 
-# Old migration scripts
-scripts/add-homepage-field.ts
-scripts/check-*.js
-scripts/debug-*.js
-scripts/test-*.js
-scripts/migrate-slides.js
-scripts/copy-slides.js
-scripts/update-partnership-hero.ts
+# Scripts folder (exclude all from git)
+scripts/
 
 # Backup files
 prisma/*.backup_*.db
