@@ -66,3 +66,26 @@ lerna-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Debug and test files
+check-*.js
+debug-*.js
+fix-*.js
+test-*.js
+update-db.js
+add_homepage_field.sql
+HERO_SLIDES_DATA.ts
+middleware.ts
+update-db-prisma.ts
+
+# Old migration scripts
+scripts/add-homepage-field.ts
+scripts/check-*.js
+scripts/debug-*.js
+scripts/test-*.js
+scripts/migrate-slides.js
+scripts/copy-slides.js
+scripts/update-partnership-hero.ts
+
+# Backup files
+prisma/*.backup_*.db
