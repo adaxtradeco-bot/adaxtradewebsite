@@ -3,6 +3,8 @@ import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
 import { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'Fleet Management BPMS - Modern Fleet Operations',

@@ -4,6 +4,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'IVAFlow — The Intelligent Automation Platform',
   description: 'Orchestrate people, processes, and things with AI-native automation. No code required.',
