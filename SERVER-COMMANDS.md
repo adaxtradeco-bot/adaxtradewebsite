@@ -1,5 +1,28 @@
 # دستورات سریع سرور
 
+## 🔥 نصب کامل از صفر (پاک کردن همه چیز)
+
+```bash
+# 1. کپی فایل دیتابیس از ویندوز
+scp "d:\my Develop Projects\English Website\prisma\dev.db" czarevitch@192.18.1.26:~/
+
+# 2. اتصال به سرور
+ssh czarevitch@192.18.1.26
+
+# 3. اجرای نصب کامل
+cd ~/apps/english-website
+chmod +x fresh-install.sh
+./fresh-install.sh
+
+# 4. اگر دیتابیس کپی نشده بود، بعد از اجرای اسکریپت:
+scp "d:\my Develop Projects\English Website\prisma\dev.db" czarevitch@192.18.1.26:~/apps/english-website/prisma/
+pm2 restart english-website
+```
+
+**نکته:** این اسکریپت همه چیز را پاک میکند و از نو نصب میکند!
+
+---
+
 ## Setup اولیه (فقط یکبار)
 
 ```bash
