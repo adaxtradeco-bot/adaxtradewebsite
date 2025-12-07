@@ -1,32 +1,30 @@
 @echo off
-echo ================================
-echo   English Website Deployment
-echo ================================
+echo ========================================
+echo   Vercel Deployment Script
+echo ========================================
 echo.
 
-set /p VM_IP="Enter VM IP: "
-set /p VM_USER="Enter VM Username: "
-
-echo.
-echo Deploying to %VM_USER%@%VM_IP%...
+echo [1/5] Checking Git status...
+git status
 echo.
 
-ssh %VM_USER%@%VM_IP% "cd ~/apps/english-website && git pull && npm install && npm run build && pm2 restart english-website"
+echo [2/5] Adding all changes...
+git add .
+echo.
 
-if %ERRORLEVEL% EQU 0 (
-    echo.
-    echo ================================
-    echo   Deployment Successful!
-    echo ================================
-    echo.
-    echo Access: http://%VM_IP%
-    echo.
-) else (
-    echo.
-    echo ================================
-    echo   Deployment Failed!
-    echo ================================
-    echo.
-)
+echo [3/5] Committing changes...
+set /p commit_msg="Enter commit message: "
+git commit -m "%commit_msg%"
+echo.
 
+echo [4/5] Pushing to GitHub...
+git push
+echo.
+
+echo [5/5] Done!
+echo.
+echo ========================================
+echo   Vercel will auto-deploy in 1-2 minutes
+echo   Check: https://vercel.com/dashboard
+echo ========================================
 pause

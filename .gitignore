@@ -87,3 +87,4 @@ scripts/
 
 # Backup files
 prisma/*.backup_*.db
+database-backup.json
