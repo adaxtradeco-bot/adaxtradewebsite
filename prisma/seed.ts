@@ -12,20 +12,28 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database...');
 
-  // Create admin user
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  // Create admin user with strong credentials
+  const adminEmail = 'administrator@ivaflow.com';
+  const adminPassword = 'IVAFlow@2024#SecureAdmin!Prod';
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+  
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin@example.com' },
-    update: {},
+    where: { email: adminEmail },
+    update: { password: hashedPassword },
     create: {
-      email: 'admin@example.com',
-      name: 'Admin User',
+      email: adminEmail,
+      name: 'IVAFlow Administrator',
       password: hashedPassword,
       role: 'admin',
     },
   });
 
-  console.log('👤 Created admin user:', adminUser.email);
+  console.log('\n' + '='.repeat(60));
+  console.log('👤 Admin User Created/Updated');
+  console.log('='.repeat(60));
+  console.log('📧 Email:', adminEmail);
+  console.log('🔐 Password:', adminPassword);
+  console.log('='.repeat(60) + '\n');
 
   // Create pages
   const pages = [
