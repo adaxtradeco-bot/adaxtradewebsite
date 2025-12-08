@@ -1,0 +1,92 @@
+{
+  "type": "hero-slider-nwm",
+  "data": {
+    "autoPlayInterval": 7000,
+    "defaultSnapshotCard": {
+      "title": "One OS, many live systems.",
+      "subtitle": "NWMFlow snapshot",
+      "description": "Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.",
+      "stats": [
+        {
+          "label": "Designed for",
+          "value": "Enterprise"
+        },
+        {
+          "label": "Built-in",
+          "value": "Forms · Workflows · Dashboards"
+        },
+        {
+          "label": "Architecture",
+          "value": "Farm & Portals"
+        }
+      ],
+      "placeholderText": "Product screenshot placeholder"
+    },
+    "slides": [
+      {
+        "id": 1,
+        "label": "Oil & Gas",
+        "title": "Transform Energy Operations",
+        "desc": "Streamline field operations, safety compliance, and asset management",
+        "badge": "INDUSTRY SOLUTION",
+        "mediaType": "video",
+        "mediaSrc": "/videos/oilgas.mp4",
+        "mediaPoster": "/images/oilgas-poster.jpg",
+        "snapshotCard": {
+          "title": "Built for Energy Sector",
+          "subtitle": "Oil & Gas Solution",
+          "description": "Complete digital transformation for upstream, midstream, and downstream operations.",
+          "stats": [
+            {
+              "label": "Industry",
+              "value": "Oil & Gas"
+            },
+            {
+              "label": "Modules",
+              "value": "Safety · Compliance · Asset Tracking"
+            },
+            {
+              "label": "Integration",
+              "value": "SCADA · IoT · ERP"
+            }
+          ],
+          "placeholderText": "Oil & Gas Dashboard Preview"
+        }
+      },
+      {
+        "id": 2,
+        "label": "Healthcare",
+        "title": "Modernize Patient Care",
+        "desc": "Digital workflows for hospitals, clinics, and healthcare providers",
+        "badge": "HEALTHCARE",
+        "mediaType": "image",
+        "mediaSrc": "/images/healthcare.jpg",
+        "snapshotCard": {
+          "title": "Healthcare Operations Platform",
+          "subtitle": "Patient-Centric Solution",
+          "description": "End-to-end digital healthcare management system.",
+          "stats": [
+            {
+              "label": "For",
+              "value": "Hospitals & Clinics"
+            },
+            {
+              "label": "Features",
+              "value": "EMR · Scheduling · Billing"
+            }
+          ],
+          "placeholderText": "Healthcare Dashboard"
+        }
+      },
+      {
+        "id": 3,
+        "label": "Real Estate",
+        "title": "Smart Property Management",
+        "desc": "Automate property operations, tenant management, and maintenance",
+        "badge": "REAL ESTATE",
+        "mediaType": "video",
+        "mediaSrc": "/videos/realestate.mp4"
+      }
+    ]
+  }
+}

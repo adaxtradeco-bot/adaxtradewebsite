@@ -18,6 +18,18 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
       type: 'hero-slider-nwm',
       order: 0,
       data: {
+        autoPlayInterval: 7000,
+        defaultSnapshotCard: {
+          title: 'One OS, many live systems.',
+          subtitle: 'NWMFlow snapshot',
+          description: 'Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.',
+          stats: [
+            { label: 'Designed for', value: 'Enterprise' },
+            { label: 'Built-in', value: 'Forms · Workflows · Dashboards' },
+            { label: 'Architecture', value: 'Farm & Portals' }
+          ],
+          placeholderText: 'Product screenshot placeholder'
+        },
         slides: [
           {
             id: 0,
@@ -27,9 +39,19 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
             badge: 'Government',
             mediaType: 'image',
             mediaSrc: '/placeholder-hero.jpg',
+            snapshotCard: {
+              title: 'Built for Government',
+              subtitle: 'Citizen Services Solution',
+              description: 'Complete digital transformation for public sector operations.',
+              stats: [
+                { label: 'Sector', value: 'Government' },
+                { label: 'Features', value: 'Request Management · Workflows' },
+                { label: 'Compliance', value: 'GDPR · Accessibility' }
+              ],
+              placeholderText: 'Government Dashboard Preview'
+            }
           },
         ],
-        autoPlayInterval: 7000,
       },
       style: {
         backgroundColor: 'bg-slate-950',

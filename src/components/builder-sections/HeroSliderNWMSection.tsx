@@ -2,6 +2,17 @@
 
 import { useState, useEffect } from 'react';
 
+interface SnapshotCard {
+  title: string;
+  subtitle: string;
+  description: string;
+  stats: {
+    label: string;
+    value: string;
+  }[];
+  placeholderText?: string;
+}
+
 interface HeroSlide {
   id: number;
   label: string;
@@ -11,16 +22,19 @@ interface HeroSlide {
   mediaType: 'video' | 'image';
   mediaSrc: string;
   mediaPoster?: string;
+  snapshotCard?: SnapshotCard;
 }
 
 interface HeroSliderNWMSectionProps {
   slides: HeroSlide[];
   autoPlayInterval?: number;
+  defaultSnapshotCard?: SnapshotCard;
 }
 
 export default function HeroSliderNWMSection({ 
   slides = [],
-  autoPlayInterval = 7000 
+  autoPlayInterval = 7000,
+  defaultSnapshotCard
 }: HeroSliderNWMSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -107,37 +121,58 @@ export default function HeroSliderNWMSection({
                   </div>
 
                   {/* Right Card */}
-                  <div className="rounded-3xl border border-slate-300/70 dark:border-slate-700/50 bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl p-6 shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 hover:scale-[1.02] relative overflow-hidden group">
-                    {/* Glass effect overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
-                    <span className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-400 relative z-10">NWMFlow snapshot</span>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white mt-3 mb-2 relative z-10">
-                      One OS, many <span className="bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">live systems</span>.
-                    </h2>
-                    <p className="text-slate-700 dark:text-slate-300 text-sm mb-4 relative z-10">
-                      Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.
-                    </p>
+                  {(() => {
+                    const card = slide.snapshotCard || defaultSnapshotCard || {
+                      title: 'One OS, many live systems.',
+                      subtitle: 'NWMFlow snapshot',
+                      description: 'Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.',
+                      stats: [
+                        { label: 'Designed for', value: slide.label },
+                        { label: 'Built-in', value: 'Forms · Workflows · Dashboards' },
+                        { label: 'Architecture', value: 'Farm & Portals' }
+                      ],
+                      placeholderText: 'Product screenshot placeholder'
+                    };
 
-                    <div className="grid grid-cols-2 gap-3 mb-4 relative z-10">
-                      <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/30">
-                        <span className="text-xs text-slate-600 dark:text-slate-400">Designed for</span>
-                        <span className="block text-sm font-medium text-slate-900 dark:text-white">{slide.label}</span>
-                      </div>
-                      <div className="p-3 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/30">
-                        <span className="text-xs text-slate-600 dark:text-slate-400">Built-in</span>
-                        <span className="block text-sm font-medium text-slate-900 dark:text-white">Forms · Workflows · Dashboards</span>
-                      </div>
-                      <div className="col-span-2 p-3 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/30">
-                        <span className="text-xs text-slate-600 dark:text-slate-400">Architecture</span>
-                        <span className="block text-sm font-medium text-slate-900 dark:text-white">Farm & Portals</span>
-                      </div>
-                    </div>
+                    return (
+                      <div className="rounded-3xl border border-slate-300/70 dark:border-slate-700/50 bg-white/80 dark:bg-slate-900/60 backdrop-blur-xl p-6 shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 hover:scale-[1.02] relative overflow-hidden group">
+                        {/* Glass effect overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        
+                        <span className="text-xs uppercase tracking-widest text-slate-600 dark:text-slate-400 relative z-10">{card.subtitle}</span>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mt-3 mb-2 relative z-10">
+                          {card.title.includes('live systems') ? (
+                            <>
+                              {card.title.split('live systems')[0]}
+                              <span className="bg-gradient-to-r from-cyan-400 to-violet-400 bg-clip-text text-transparent">live systems</span>
+                              {card.title.split('live systems')[1]}
+                            </>
+                          ) : card.title}
+                        </h2>
+                        <p className="text-slate-700 dark:text-slate-300 text-sm mb-4 relative z-10">
+                          {card.description}
+                        </p>
 
-                    <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-600 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center relative z-10 group-hover:border-solid transition-all duration-300">
-                      <span className="text-sm text-slate-600 dark:text-slate-400">Product screenshot placeholder</span>
-                    </div>
-                  </div>
+                        <div className={`grid ${card.stats.length === 2 ? 'grid-cols-2' : card.stats.length === 3 ? 'grid-cols-2' : 'grid-cols-1'} gap-3 mb-4 relative z-10`}>
+                          {card.stats.map((stat, idx) => (
+                            <div 
+                              key={idx} 
+                              className={`p-3 rounded-xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700/30 ${
+                                card.stats.length === 3 && idx === 2 ? 'col-span-2' : ''
+                              }`}
+                            >
+                              <span className="text-xs text-slate-600 dark:text-slate-400">{stat.label}</span>
+                              <span className="block text-sm font-medium text-slate-900 dark:text-white">{stat.value}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-600 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center relative z-10 group-hover:border-solid transition-all duration-300">
+                          <span className="text-sm text-slate-600 dark:text-slate-400">{card.placeholderText || 'Product screenshot placeholder'}</span>
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             </div>

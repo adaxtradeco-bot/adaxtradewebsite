@@ -47,13 +47,22 @@ export function ModernNavbar() {
       fetch(`/api/menu?location=header&language=${currentLang}`)
         .then(res => res.json())
         .then(data => {
+          console.log('🔍 Menu API Response:', data);
           if (data.items && data.items.length > 0) {
             const converted = convertMenuToNavigation(data.items);
+            console.log('✅ Converted Menu Items:', converted);
+            console.log('📊 Menu Items Count:', converted.length);
+            converted.forEach((item, i) => {
+              console.log(`${i + 1}. ${item.label}`, item.dropdown ? '✓ HAS DROPDOWN' : '✗ NO DROPDOWN');
+            });
             setDbMenuItems(converted);
           }
           setMenuLoaded(true);
         })
-        .catch(() => setMenuLoaded(true));
+        .catch((err) => {
+          console.error('❌ Menu fetch error:', err);
+          setMenuLoaded(true);
+        });
     });
   }, [currentLang]);
 
@@ -223,13 +232,6 @@ const CloseIcon = () => (
                   )}
                 </div>
               ))}
-              
-              <Link
-                href={`/${currentLang}/pricing`}
-                className="flex items-center gap-1 h-8 px-2.5 rounded-lg bg-transparent cursor-pointer transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11 text-neutral-600 dark:text-neutral-400 font-medium text-sm leading-5 tracking-tight whitespace-nowrap hidden md:flex"
-              >
-                {t('nav.pricing')}
-              </Link>
             </div>
           </div>
 
