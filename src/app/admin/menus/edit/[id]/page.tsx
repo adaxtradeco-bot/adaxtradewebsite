@@ -100,7 +100,7 @@ export default function MenuEditor() {
   const addDropdownToItem = (itemId: string) => {
     setItems(items.map(item => {
       if (item.id === itemId) {
-        return {
+        const updated = {
           ...item,
           dropdown: {
             columns: [{
@@ -109,6 +109,11 @@ export default function MenuEditor() {
             }]
           }
         };
+        // Update selectedItem if it's the current item
+        if (selectedItem?.id === itemId) {
+          setSelectedItem(updated);
+        }
+        return updated;
       }
       return item;
     }));
@@ -117,7 +122,7 @@ export default function MenuEditor() {
   const addColumnToDropdown = (itemId: string) => {
     setItems(items.map(item => {
       if (item.id === itemId && item.dropdown) {
-        return {
+        const updated = {
           ...item,
           dropdown: {
             columns: [
@@ -126,6 +131,11 @@ export default function MenuEditor() {
             ]
           }
         };
+        // Update selectedItem if it's the current item
+        if (selectedItem?.id === itemId) {
+          setSelectedItem(updated);
+        }
+        return updated;
       }
       return item;
     }));
@@ -147,7 +157,12 @@ export default function MenuEditor() {
             }
           ]
         };
-        return { ...item, dropdown: { columns: newColumns } };
+        const updated = { ...item, dropdown: { columns: newColumns } };
+        // Update selectedItem if it's the current item
+        if (selectedItem?.id === itemId) {
+          setSelectedItem(updated);
+        }
+        return updated;
       }
       return item;
     }));
@@ -213,7 +228,12 @@ export default function MenuEditor() {
         const newColumns = [...item.dropdown.columns];
         const [movedColumn] = newColumns.splice(fromIndex, 1);
         newColumns.splice(toIndex, 0, movedColumn);
-        return { ...item, dropdown: { columns: newColumns } };
+        const updated = { ...item, dropdown: { columns: newColumns } };
+        // Update selectedItem if it's the current item
+        if (selectedItem?.id === itemId) {
+          setSelectedItem(updated);
+        }
+        return updated;
       }
       return item;
     }));
@@ -227,7 +247,12 @@ export default function MenuEditor() {
         const [movedItem] = newItems.splice(fromIndex, 1);
         newItems.splice(toIndex, 0, movedItem);
         newColumns[columnIndex] = { ...newColumns[columnIndex], items: newItems };
-        return { ...item, dropdown: { columns: newColumns } };
+        const updated = { ...item, dropdown: { columns: newColumns } };
+        // Update selectedItem if it's the current item
+        if (selectedItem?.id === itemId) {
+          setSelectedItem(updated);
+        }
+        return updated;
       }
       return item;
     }));
@@ -247,9 +272,18 @@ export default function MenuEditor() {
         // If no columns left, remove dropdown entirely
         if (newColumns.length === 0) {
           const { dropdown, ...itemWithoutDropdown } = item;
+          // Update selectedItem if it's the current item
+          if (selectedItem?.id === itemId) {
+            setSelectedItem(itemWithoutDropdown);
+          }
           return itemWithoutDropdown;
         }
-        return { ...item, dropdown: { columns: newColumns } };
+        const updated = { ...item, dropdown: { columns: newColumns } };
+        // Update selectedItem if it's the current item
+        if (selectedItem?.id === itemId) {
+          setSelectedItem(updated);
+        }
+        return updated;
       }
       return item;
     }));
