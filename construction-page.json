@@ -1,0 +1,286 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "type": "page",
+  "data": {
+    "page": {
+      "title": "Construction Solutions - IVAFlow",
+      "slug": "industries/construction",
+      "metaTitle": "Construction Solutions - IVAFlow",
+      "metaDescription": "Construction Automation That Works On-Site. Digitize your construction operations with mobile-first forms, GPS tracking, photo documentation, and offline capability.",
+      "language": "en",
+      "builderData": [
+        {
+          "id": "hero-construction",
+          "type": "hero",
+          "order": 0,
+          "data": {
+            "title": "Construction Automation That Works On-Site",
+            "subtitle": "Digitize your construction operations with mobile-first forms, GPS tracking, photo documentation, and offline capability. Built for the field.",
+            "description": "Transform your construction operations with digital tools designed for harsh environments and remote locations.",
+            "buttons": [
+              {
+                "text": "Get Started",
+                "href": "/contact",
+                "variant": "primary",
+                "size": "lg"
+              },
+              {
+                "text": "Watch Demo",
+                "href": "/contact",
+                "variant": "secondary",
+                "size": "lg"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-gradient-to-br from-slate-900 via-orange-900 to-orange-800",
+            "textColor": "text-white",
+            "padding": "py-20",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "stats-construction",
+          "type": "stats",
+          "order": 1,
+          "data": {
+            "title": "",
+            "subtitle": "",
+            "stats": [
+              {
+                "value": "40%",
+                "label": "Time Saved",
+                "icon": "⏱️"
+              },
+              {
+                "value": "85%",
+                "label": "Less Paperwork",
+                "icon": "📋"
+              },
+              {
+                "value": "100%",
+                "label": "Compliance",
+                "icon": "✅"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-orange-50",
+            "textColor": "text-slate-900",
+            "padding": "py-12"
+          }
+        },
+        {
+          "id": "features-challenges",
+          "type": "features",
+          "order": 2,
+          "data": {
+            "title": "Construction Pain Points We Solve",
+            "subtitle": "The unique challenges of managing construction projects and field teams",
+            "items": [
+              {
+                "title": "Paper-Based Processes",
+                "description": "Clipboards, paper forms, manual data entry—wasting hours every day and prone to errors and loss.",
+                "icon": "📋"
+              },
+              {
+                "title": "Poor Field Visibility",
+                "description": "No real-time view of worker locations, equipment status, or project progress across multiple sites.",
+                "icon": "📍"
+              },
+              {
+                "title": "Safety Compliance",
+                "description": "Tracking safety inspections, incident reports, and regulatory compliance is manual and time-consuming.",
+                "icon": "⚠️"
+              },
+              {
+                "title": "Equipment Management",
+                "description": "Difficult to track equipment location, maintenance schedules, and usage across job sites.",
+                "icon": "🔧"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-white",
+            "textColor": "text-slate-900",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "workflow-construction-tools",
+          "type": "workflow",
+          "order": 5,
+          "data": {
+            "title": "Digital Tools Built for Construction",
+            "subtitle": "Everything you need to run efficient, compliant construction operations",
+            "workflows": [
+              {
+                "id": "solution-1",
+                "title": "Mobile Site Inspections",
+                "description": "Conduct site inspections digitally with photo capture, GPS location, and instant reporting.",
+                "icon": "📱",
+                "steps": [
+                  "Custom inspection checklists",
+                  "Photo + GPS proof",
+                  "Offline mode capability",
+                  "Instant report generation"
+                ]
+              },
+              {
+                "id": "solution-2",
+                "title": "Safety Management",
+                "description": "Track safety incidents, toolbox talks, and compliance documentation automatically.",
+                "icon": "⚠️",
+                "steps": [
+                  "Incident reporting workflows",
+                  "Safety checklist automation",
+                  "Compliance tracking",
+                  "Alert notifications"
+                ]
+              },
+              {
+                "id": "solution-3",
+                "title": "Worker Management",
+                "description": "Track attendance, certifications, and worker assignments with GPS geofencing.",
+                "icon": "👷",
+                "steps": [
+                  "GPS-based check-in/out",
+                  "Certification tracking",
+                  "Time sheet automation",
+                  "Shift scheduling"
+                ]
+              },
+              {
+                "id": "solution-4",
+                "title": "Equipment Tracking",
+                "description": "Monitor equipment location, maintenance, and usage across all your sites.",
+                "icon": "🔧",
+                "steps": [
+                  "Asset tracking with GPS",
+                  "Maintenance scheduling",
+                  "Usage logs",
+                  "Service history"
+                ]
+              },
+              {
+                "id": "solution-5",
+                "title": "Document Management",
+                "description": "Store and share plans, permits, contracts, and photos in one secure location.",
+                "icon": "📄",
+                "steps": [
+                  "Centralized document storage",
+                  "Version control",
+                  "Role-based access",
+                  "Mobile access"
+                ]
+              },
+              {
+                "id": "solution-6",
+                "title": "Progress Tracking",
+                "description": "Monitor project milestones, daily reports, and completion status in real-time.",
+                "icon": "📅",
+                "steps": [
+                  "Daily progress reports",
+                  "Milestone tracking",
+                  "Photo documentation",
+                  "Client portals"
+                ]
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-slate-50",
+            "textColor": "text-slate-900",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "workflow-construction-features",
+          "type": "workflow",
+          "order": 4,
+          "data": {
+            "title": "Built for the Construction Site",
+            "subtitle": "Features designed specifically for field teams and harsh environments",
+            "workflows": [
+              {
+                "id": "feature-1",
+                "title": "Offline Mode for Remote Sites",
+                "description": "Work anywhere without internet connectivity. All data syncs automatically when connection is restored—no data loss, ever.",
+                "icon": "📡",
+                "steps": [
+                  "Fill out forms completely offline",
+                  "Capture photos and GPS without internet",
+                  "Automatic sync when online",
+                  "Perfect for remote locations"
+                ]
+              },
+              {
+                "id": "feature-2",
+                "title": "Photo Documentation with GPS",
+                "description": "Every photo is automatically tagged with GPS coordinates, timestamp, and linked to the specific form or inspection.",
+                "icon": "📷",
+                "steps": [
+                  "Auto-capture GPS location",
+                  "Timestamp verification",
+                  "Annotate photos on-site",
+                  "Organized by project/task"
+                ]
+              },
+              {
+                "id": "feature-3",
+                "title": "Geofencing & Attendance",
+                "description": "Automate worker check-in and check-out based on their physical location. Ensure workers are on the right site at the right time.",
+                "icon": "📍",
+                "steps": [
+                  "Automatic site check-in/out",
+                  "Geofence-based alerts",
+                  "Accurate time tracking",
+                  "Prevent time theft"
+                ]
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-orange-50",
+            "textColor": "text-slate-900",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "cta-construction",
+          "type": "cta",
+          "order": 5,
+          "data": {
+            "title": "Ready to Digitize Your Construction Operations?",
+            "description": "Join construction companies who've already automated their field operations with IVAFlow.",
+            "buttons": [
+              {
+                "text": "Start Free Trial",
+                "href": "/contact",
+                "variant": "primary",
+                "size": "lg"
+              },
+              {
+                "text": "Schedule Demo",
+                "href": "/contact",
+                "variant": "secondary",
+                "size": "lg"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-gradient-to-r from-orange-600 to-red-600",
+            "textColor": "text-white",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        }
+      ]
+    },
+    "sections": []
+  }
+}

@@ -1,0 +1,306 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "type": "page",
+  "data": {
+    "page": {
+      "title": "IoT Integration - IVAFlow",
+      "slug": "industries/iot-integration",
+      "metaTitle": "IoT Integration - IVAFlow",
+      "metaDescription": "Connect the Physical & Digital World. The only BPMS built for IoT from day one.",
+      "language": "en",
+      "builderData": [
+        {
+          "id": "hero-iot",
+          "type": "hero",
+          "order": 0,
+          "data": {
+            "title": "Connect the Physical & Digital World",
+            "subtitle": "The only BPMS built for IoT from day one. Connect any sensor, device, or industrial equipment directly to your workflows—no middleware required.",
+            "description": "Transform physical events into automated digital workflows with native IoT integration.",
+            "buttons": [
+              {
+                "text": "Explore IoT Solutions",
+                "href": "/contact",
+                "variant": "primary",
+                "size": "lg"
+              },
+              {
+                "text": "Watch Demo",
+                "href": "/contact",
+                "variant": "secondary",
+                "size": "lg"
+              }
+            ],
+            "badges": [
+              { "text": "🔗 Any IoT device triggers workflows automatically", "variant": "info" },
+              { "text": "⚙️ Industrial sensors and machinery integration", "variant": "success" },
+              { "text": "📡 Real-time data streaming and alerts", "variant": "default" },
+              { "text": "🎛️ Bi-directional device control", "variant": "warning" }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-gradient-to-br from-slate-900 via-cyan-900 to-teal-800",
+            "textColor": "text-white",
+            "padding": "py-20",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "features-iot-built",
+          "type": "features",
+          "order": 1,
+          "data": {
+            "title": "Built for Industrial IoT",
+            "subtitle": "Native integration with sensors, devices, and industrial equipment",
+            "items": [
+              {
+                "title": "Device Connectivity",
+                "description": "Connect any IoT device using standard protocols like MQTT, HTTP, CoAP, and WebSockets.",
+                "icon": "📡"
+              },
+              {
+                "title": "Event-Driven Workflows",
+                "description": "Trigger workflows automatically when sensors detect changes or devices send data.",
+                "icon": "⚡"
+              },
+              {
+                "title": "Device Control",
+                "description": "Send commands back to devices to control actuators, relays, and industrial equipment.",
+                "icon": "🎛️"
+              },
+              {
+                "title": "Real-Time Monitoring",
+                "description": "Visualize live data streams from all connected devices in customizable dashboards.",
+                "icon": "📊"
+              },
+              {
+                "title": "Secure Communication",
+                "description": "Enterprise-grade security for all device communications with TLS encryption and authentication.",
+                "icon": "🔒"
+              },
+              {
+                "title": "Edge Computing",
+                "description": "Process data at the edge for low-latency responses and reduced bandwidth usage.",
+                "icon": "⚙️"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-white",
+            "textColor": "text-slate-900",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "features-iot-devices",
+          "type": "features",
+          "order": 2,
+          "data": {
+            "title": "Connect Any IoT Device",
+            "subtitle": "From simple sensors to complex industrial equipment",
+            "items": [
+              {
+                "title": "Environmental Sensors",
+                "description": "Temperature, humidity, air quality, light, and weather sensors",
+                "icon": "🌡️"
+              },
+              {
+                "title": "GPS Trackers",
+                "description": "Vehicle tracking, asset location, and geofencing devices",
+                "icon": "📍"
+              },
+              {
+                "title": "Motion & Security",
+                "description": "PIR sensors, door contacts, cameras, and alarm systems",
+                "icon": "🚨"
+              },
+              {
+                "title": "Industrial Equipment",
+                "description": "PLCs, SCADA systems, and manufacturing machinery",
+                "icon": "⚙️"
+              },
+              {
+                "title": "Utility Meters",
+                "description": "Water, gas, electricity, and energy consumption monitors",
+                "icon": "💧"
+              },
+              {
+                "title": "Medical Devices",
+                "description": "Patient monitors, diagnostic equipment, and health trackers",
+                "icon": "🏥"
+              },
+              {
+                "title": "Fleet Telematics",
+                "description": "Vehicle diagnostics, fuel sensors, and driver behavior monitors",
+                "icon": "🚗"
+              },
+              {
+                "title": "Construction Equipment",
+                "description": "Heavy machinery sensors, site monitoring, and safety systems",
+                "icon": "🏗️"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-slate-50",
+            "textColor": "text-slate-900",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "workflow-iot-usecases",
+          "type": "workflow",
+          "order": 3,
+          "data": {
+            "title": "IoT Use Cases That Drive ROI",
+            "subtitle": "See how businesses use IVAFlow to connect devices and automate operations",
+            "workflows": [
+              {
+                "id": "usecase-1",
+                "title": "Predictive Maintenance",
+                "description": "Monitor industrial equipment health and predict failures before they happen.",
+                "icon": "🏭",
+                "steps": [
+                  "Vibration sensor detects anomaly",
+                  "Auto-create maintenance ticket",
+                  "Notify technician",
+                  "Schedule repair and order parts"
+                ]
+              },
+              {
+                "id": "usecase-2",
+                "title": "Cold Chain Monitoring",
+                "description": "Ensure product quality with continuous temperature tracking and automatic alerts.",
+                "icon": "🌡️",
+                "steps": [
+                  "Temperature exceeds threshold",
+                  "Send SMS alert",
+                  "Log incident",
+                  "Generate compliance report"
+                ]
+              },
+              {
+                "id": "usecase-3",
+                "title": "Fleet Management",
+                "description": "Track vehicles in real-time and optimize routes based on live telematics data.",
+                "icon": "🚗",
+                "steps": [
+                  "Vehicle enters geofence",
+                  "Auto check-in driver",
+                  "Track fuel consumption",
+                  "Optimize routes automatically"
+                ]
+              },
+              {
+                "id": "usecase-4",
+                "title": "Smart Building Automation",
+                "description": "Control HVAC, lighting, and security systems based on occupancy and conditions.",
+                "icon": "🏢",
+                "steps": [
+                  "Motion sensor detects presence",
+                  "Adjust lighting & AC",
+                  "Log energy usage",
+                  "Generate savings report"
+                ]
+              },
+              {
+                "id": "usecase-5",
+                "title": "Safety & Compliance",
+                "description": "Monitor environmental conditions and ensure regulatory compliance automatically.",
+                "icon": "⚠️",
+                "steps": [
+                  "Gas sensor detects leak",
+                  "Trigger alarm and evacuate",
+                  "Notify emergency team",
+                  "Create incident report"
+                ]
+              },
+              {
+                "id": "usecase-6",
+                "title": "Utility Management",
+                "description": "Track water, gas, and electricity consumption with automated meter reading.",
+                "icon": "💧",
+                "steps": [
+                  "Smart meter sends reading",
+                  "Calculate usage and detect anomalies",
+                  "Alert on leaks",
+                  "Generate billing data"
+                ]
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-slate-50",
+            "textColor": "text-slate-900",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "stats-iot-results",
+          "type": "stats",
+          "order": 4,
+          "data": {
+            "title": "Proven Results with IoT Integration",
+            "subtitle": "Real metrics from organizations using IVAFlow IoT",
+            "stats": [
+              {
+                "value": "85%",
+                "label": "Reduction in Equipment Downtime",
+                "icon": "📉"
+              },
+              {
+                "value": "40%",
+                "label": "Energy Cost Savings",
+                "icon": "💡"
+              },
+              {
+                "value": "100%",
+                "label": "Real-time Device Monitoring",
+                "icon": "📊"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-slate-100",
+            "textColor": "text-slate-900",
+            "padding": "py-16"
+          }
+        },
+        {
+          "id": "cta-iot",
+          "type": "cta",
+          "order": 5,
+          "data": {
+            "title": "Ready to Connect Your Devices?",
+            "description": "Start integrating IoT devices into your workflows today. No hardware expertise required.",
+            "buttons": [
+              {
+                "text": "Start Free Trial",
+                "href": "/contact",
+                "variant": "primary",
+                "size": "lg"
+              },
+              {
+                "text": "Talk to IoT Expert",
+                "href": "/contact",
+                "variant": "secondary",
+                "size": "lg"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-gradient-to-r from-cyan-600 to-teal-600",
+            "textColor": "text-white",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        }
+      ]
+    },
+    "sections": []
+  }
+}

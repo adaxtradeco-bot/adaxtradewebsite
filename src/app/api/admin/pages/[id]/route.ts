@@ -57,10 +57,26 @@ export async function PUT(
 
     const data = await request.json();
     
+    // Check if slug is being updated and if it's unique
+    if (data.slug) {
+      const existingPage = await prisma.page.findUnique({
+        where: { slug: data.slug }
+      });
+      
+      // If slug exists and it's not the current page, return error
+      if (existingPage && existingPage.id !== params.id) {
+        return NextResponse.json(
+          { error: 'Slug already exists. Please choose a different slug.' },
+          { status: 400 }
+        );
+      }
+    }
+    
     const page = await prisma.page.update({
       where: { id: params.id },
       data: {
         title: data.title,
+        slug: data.slug,
         status: data.status,
         metaTitle: data.metaTitle,
         metaDescription: data.metaDescription,

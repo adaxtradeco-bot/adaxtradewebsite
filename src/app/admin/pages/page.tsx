@@ -9,6 +9,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Toast from '@/components/ui/Toast';
+import ImportExportButtons from '@/components/admin/ImportExport/ImportExportButtons';
+import { ImportResult } from '@/lib/import-export/types';
+import { ImportExportManager } from '@/lib/import-export/utils';
 
 interface Page {
   id: string;
@@ -24,6 +27,7 @@ export default function AdminPages() {
   const [pages, setPages] = useState<Page[]>([]);
   const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<{ isOpen: boolean; pageId: string; pageTitle: string }>({ isOpen: false, pageId: '', pageTitle: '' });
 
   useEffect(() => {
     const fetchPages = async () => {
@@ -96,6 +100,35 @@ export default function AdminPages() {
     }
   };
 
+  const handleDeletePage = async (pageId: string) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        setToast({ message: 'Authentication required', type: 'error' });
+        return;
+      }
+
+      const response = await fetch(`/api/admin/pages/${pageId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setToast({ message: 'Page deleted successfully!', type: 'success' });
+        setPages(pages.filter(page => page.id !== pageId));
+        setDeleteConfirm({ isOpen: false, pageId: '', pageTitle: '' });
+      } else {
+        const errorData = await response.json();
+        setToast({ message: errorData.error || 'Failed to delete page', type: 'error' });
+      }
+    } catch (error) {
+      console.error('Failed to delete page:', error);
+      setToast({ message: 'Network error occurred', type: 'error' });
+    }
+  };
+
   const getStatusBadge = (status: string) => {
     const baseClasses = 'px-2 py-1 text-xs font-medium rounded-full';
     if (status === 'published') {
@@ -124,12 +157,60 @@ export default function AdminPages() {
           </p>
         </div>
         
-        <Link
-          href="/admin/pages/new"
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-        >
-          Create New Page
-        </Link>
+        <div className="flex space-x-3">
+          <button
+            onClick={() => {
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.accept = '.json';
+              input.onchange = async (e) => {
+                const file = (e.target as HTMLInputElement).files?.[0];
+                if (!file) return;
+                
+                try {
+                  const data = await ImportExportManager.parseUploadedFile(file);
+                  const validation = ImportExportManager.validateImportData(data);
+                  
+                  if (!validation.valid) {
+                    setToast({ message: 'Invalid file: ' + validation.errors.join(', '), type: 'error' });
+                    return;
+                  }
+                  
+                  const response = await fetch('/api/admin/import-export', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      action: 'import',
+                      data,
+                      options: { autoImportSections: true, validateData: true }
+                    })
+                  });
+                  
+                  const result = await response.json();
+                  
+                  if (result.success) {
+                    setToast({ message: result.message, type: 'success' });
+                    setTimeout(() => window.location.reload(), 1000);
+                  } else {
+                    setToast({ message: result.message, type: 'error' });
+                  }
+                } catch (error) {
+                  setToast({ message: 'Import failed', type: 'error' });
+                }
+              };
+              input.click();
+            }}
+            className="flex items-center px-3 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700"
+          >
+            📁 Import Page
+          </button>
+          <Link
+            href="/admin/pages/new"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            Create New Page
+          </Link>
+        </div>
       </div>
 
       {/* Filters */}
@@ -210,36 +291,58 @@ export default function AdminPages() {
                   {new Date(page.lastModified).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div className="flex space-x-2">
-                    <Link
-                      href={`/admin/pages/builder/${page.id}`}
-                      className="text-violet-600 hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-300"
-                    >
-                      Builder
-                    </Link>
-                    <Link
-                      href={`/admin/pages/edit/${page.id}`}
-                      className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
-                    >
-                      Edit
-                    </Link>
-                    {!page.isHomepage && (
-                      <button
-                        onClick={() => handleSetHomepage(page.id)}
-                        className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex space-x-2">
+                      <Link
+                        href={`/admin/pages/builder/${page.id}`}
+                        className="text-violet-600 hover:text-violet-900 dark:text-violet-400 dark:hover:text-violet-300"
                       >
-                        Set Home
+                        Builder
+                      </Link>
+                      <Link
+                        href={`/admin/pages/edit/${page.id}`}
+                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        Edit
+                      </Link>
+                      {!page.isHomepage && (
+                        <button
+                          onClick={() => handleSetHomepage(page.id)}
+                          className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
+                        >
+                          Set Home
+                        </button>
+                      )}
+                      <Link
+                        href={page.slug}
+                        target="_blank"
+                        className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                      >
+                        View
+                      </Link>
+                      <button 
+                        onClick={() => setDeleteConfirm({ isOpen: true, pageId: page.id, pageTitle: page.title })}
+                        className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"
+                      >
+                        Delete
                       </button>
-                    )}
-                    <Link
-                      href={page.slug}
-                      target="_blank"
-                      className="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300"
+                    </div>
+                    <button
+                      onClick={() => {
+                        const exportData = ImportExportManager.exportPage(page);
+                        const blob = ImportExportManager.generateDownloadBlob(exportData);
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `page-${page.slug}-${Date.now()}.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                      }}
+                      className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
                     >
-                      View
-                    </Link>
-                    <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                      Delete
+                      📥 Export
                     </button>
                   </div>
                 </td>
@@ -248,6 +351,34 @@ export default function AdminPages() {
           </tbody>
         </table>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm.isOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 max-w-md w-full mx-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              Delete Page
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              Are you sure you want to delete "{deleteConfirm.pageTitle}"? This action cannot be undone.
+            </p>
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={() => setDeleteConfirm({ isOpen: false, pageId: '', pageTitle: '' })}
+                className="px-4 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeletePage(deleteConfirm.pageId)}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {toast && (
         <Toast

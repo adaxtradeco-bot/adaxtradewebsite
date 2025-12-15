@@ -1,0 +1,207 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "type": "page",
+  "data": {
+    "page": {
+      "title": "Healthcare Solutions - IVAFlow",
+      "slug": "industries/healthcare",
+      "metaTitle": "Healthcare Solutions - IVAFlow",
+      "metaDescription": "HIPAA-compliant automation for patient intake, appointment scheduling, equipment tracking, and compliance documentation.",
+      "language": "en",
+      "builderData": [
+        {
+          "id": "hero-healthcare",
+          "type": "hero",
+          "order": 0,
+          "data": {
+            "title": "Healthcare Workflow Automation",
+            "subtitle": "HIPAA-compliant automation for patient intake, appointment scheduling, equipment tracking, and compliance documentation.",
+            "description": "Transform your healthcare operations with secure, compliant workflows that improve patient experience and operational efficiency.",
+            "buttons": [
+              {
+                "text": "Get Started",
+                "href": "/contact",
+                "variant": "primary",
+                "size": "lg"
+              },
+              {
+                "text": "Request Demo",
+                "href": "/contact",
+                "variant": "secondary",
+                "size": "lg"
+              }
+            ],
+            "badges": [
+              { "text": "🔒 HIPAA Compliant", "variant": "success" },
+              { "text": "✓ SOC 2 Certified", "variant": "info" },
+              { "text": "📋 Audit Ready", "variant": "default" }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-gradient-to-br from-cyan-900 via-blue-900 to-slate-900",
+            "textColor": "text-white",
+            "padding": "py-20",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "features-healthcare-challenges",
+          "type": "features",
+          "order": 1,
+          "data": {
+            "title": "Healthcare Challenges We Solve",
+            "subtitle": "Problems We Solve for Healthcare",
+            "items": [
+              {
+                "title": "Manual Patient Intake",
+                "description": "Paper forms, duplicate data entry, and errors slow down patient onboarding and waste staff time.",
+                "icon": "📋"
+              },
+              {
+                "title": "Appointment Management",
+                "description": "Scheduling conflicts, no-shows, and manual reminders create inefficiency and lost revenue.",
+                "icon": "📅"
+              },
+              {
+                "title": "Compliance Complexity",
+                "description": "HIPAA regulations, documentation requirements, and audit trails are difficult to maintain manually.",
+                "icon": "🔒"
+              },
+              {
+                "title": "Equipment Tracking",
+                "description": "Medical equipment maintenance, calibration schedules, and usage logs are hard to track and report.",
+                "icon": "🔧"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-white",
+            "textColor": "text-slate-900",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "workflow-healthcare",
+          "type": "workflow",
+          "order": 3,
+          "data": {
+            "title": "Digital Solutions for Patient Care",
+            "subtitle": "HIPAA-compliant workflows that improve patient experience and operational efficiency",
+            "workflows": [
+              {
+                "id": "workflow-1",
+                "title": "Patient Intake & Registration",
+                "description": "Digital forms for patient information, insurance details, and medical history with e-signature support.",
+                "icon": "👤",
+                "steps": [
+                  "HIPAA-compliant forms",
+                  "Insurance verification",
+                  "E-signature capture",
+                  "Auto-populate from records"
+                ]
+              },
+              {
+                "id": "workflow-2",
+                "title": "Appointment Scheduling",
+                "description": "Automated scheduling, reminders, and rescheduling workflows that reduce no-shows.",
+                "icon": "📅",
+                "steps": [
+                  "Online booking portal",
+                  "SMS & email reminders",
+                  "Calendar integration",
+                  "Waitlist management"
+                ]
+              },
+              {
+                "id": "workflow-3",
+                "title": "Equipment Management",
+                "description": "Track medical equipment maintenance, calibration, and usage with automated reminders.",
+                "icon": "🔧",
+                "steps": [
+                  "Maintenance scheduling",
+                  "Calibration tracking",
+                  "Usage logs",
+                  "Service history"
+                ]
+              },
+              {
+                "id": "workflow-4",
+                "title": "Compliance Documentation",
+                "description": "Automated workflows for regulatory compliance, audits, and documentation requirements.",
+                "icon": "📋",
+                "steps": [
+                  "Audit trail logging",
+                  "Compliance checklists",
+                  "Document versioning",
+                  "Access control"
+                ]
+              },
+              {
+                "id": "workflow-5",
+                "title": "Staff Scheduling",
+                "description": "Manage shifts, certifications, and availability with automated scheduling workflows.",
+                "icon": "👥",
+                "steps": [
+                  "Shift management",
+                  "Certification tracking",
+                  "Time-off requests",
+                  "Coverage alerts"
+                ]
+              },
+              {
+                "id": "workflow-6",
+                "title": "Incident Reporting",
+                "description": "Document and track incidents, near-misses, and safety events with automatic routing.",
+                "icon": "⚠️",
+                "steps": [
+                  "Incident documentation",
+                  "Automatic routing",
+                  "Investigation workflows",
+                  "Trend analysis"
+                ]
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-slate-50",
+            "textColor": "text-slate-900",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        },
+        {
+          "id": "cta-healthcare",
+          "type": "cta",
+          "order": 3,
+          "data": {
+            "title": "Ready to Transform Your Healthcare Operations?",
+            "description": "Join healthcare organizations improving patient care with IVAFlow's HIPAA-compliant automation.",
+            "buttons": [
+              {
+                "text": "Start Free Trial",
+                "href": "/contact",
+                "variant": "primary",
+                "size": "lg"
+              },
+              {
+                "text": "Schedule Demo",
+                "href": "/contact",
+                "variant": "secondary",
+                "size": "lg"
+              }
+            ]
+          },
+          "style": {
+            "backgroundColor": "bg-gradient-to-r from-cyan-600 to-blue-600",
+            "textColor": "text-white",
+            "padding": "py-16",
+            "alignment": "center"
+          }
+        }
+      ]
+    },
+    "sections": []
+  }
+}

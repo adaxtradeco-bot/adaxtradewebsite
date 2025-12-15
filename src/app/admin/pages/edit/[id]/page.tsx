@@ -31,6 +31,8 @@ export default function PageEditor() {
   const [page, setPage] = useState<PageData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPage = async () => {
@@ -92,19 +94,25 @@ export default function PageEditor() {
         },
         body: JSON.stringify({
           title: page.title,
+          slug: page.slug,
           status: page.status,
           sections: page.sections,
         }),
       });
 
       if (response.ok) {
-        alert('Page saved successfully!');
+        setSuccess('Page saved successfully!');
+        setError(null);
+        setTimeout(() => setSuccess(null), 3000);
       } else {
-        alert('Failed to save page');
+        const errorData = await response.json();
+        setError(errorData.error || 'Failed to save page');
+        setSuccess(null);
       }
     } catch (error) {
       console.error('Save error:', error);
-      alert('Failed to save page');
+      setError('Failed to save page');
+      setSuccess(null);
     } finally {
       setIsSaving(false);
     }
@@ -161,13 +169,26 @@ export default function PageEditor() {
         </div>
       </div>
 
+      {/* Success/Error Messages */}
+      {success && (
+        <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <p className="text-green-800 dark:text-green-200">{success}</p>
+        </div>
+      )}
+      
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+          <p className="text-red-800 dark:text-red-200">{error}</p>
+        </div>
+      )}
+
       {/* Page Settings */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
         <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
           Page Settings
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Page Title
@@ -178,6 +199,22 @@ export default function PageEditor() {
               onChange={(e) => setPage({ ...page, title: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
             />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Page Slug (URL)
+            </label>
+            <input
+              type="text"
+              value={page.slug}
+              onChange={(e) => setPage({ ...page, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-/]/g, '-').replace(/-+/g, '-') })}
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              placeholder="page-url-slug or folder/page-slug"
+            />
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              URL: /{page.slug}
+            </p>
           </div>
           
           <div>
