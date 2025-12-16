@@ -1078,6 +1078,96 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+  {
+    id: 'fusion-teams-tabs',
+    name: 'Fusion Teams Tabs',
+    type: 'fusion-teams-tabs',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Interactive tabs showcasing different team types with enable/disable options',
+    icon: '👥',
+    defaultData: {
+      id: '',
+      type: 'fusion-teams-tabs',
+      order: 0,
+      data: {
+        mainTitle: 'Building apps with fusion teams',
+        mainDescription: 'Fusion teams are a blend of business and technology experts who come together to build custom solutions',
+        trustedByText: 'Trusted by',
+        tabs: [
+          {
+            id: 'it-leaders',
+            title: 'IT Leaders',
+            subtitle: 'If you have a huge backlog of internal applications and processes to be built',
+            description: 'IVAFlow is the IDEAL platform for',
+            benefits: [
+              'Building dozens of custom applications',
+              'Automating simple to complex processes',
+              'Handling ticketing and support requests'
+            ],
+            image: '/assets/it-leaders.webp',
+            imageAlt: 'Low Code platform for IT Leaders',
+            trustedByImage: '/assets/logo-strip-desktop-1.webp',
+            trustedByAlt: 'Logo Strip - Desktop-1',
+            enabled: true
+          },
+          {
+            id: 'developers',
+            title: 'Developers',
+            subtitle: 'If you want to accelerate app development and reduce manual coding efforts',
+            description: 'IVAFlow is the right choice for your team',
+            benefits: [
+              'Delivers 10x productivity',
+              'Uses AI to automate repetitive tasks',
+              'Integrates smoothly with enterprise systems'
+            ],
+            image: '/assets/developers.webp',
+            imageAlt: 'Low code platform for Developers',
+            trustedByImage: '/assets/logo-strip-desktop-2.webp',
+            trustedByAlt: 'Logo Strip - Desktop-2',
+            enabled: true
+          },
+          {
+            id: 'process-owners',
+            title: 'Process owners',
+            subtitle: 'If you need to streamline workflows without relying on IT',
+            description: 'IVAFlow is the right choice for your team',
+            benefits: [
+              'Automates simple to complex processes',
+              'Provides no-code tools for faster execution',
+              'Enhances operational efficiency with AI'
+            ],
+            image: '/assets/process-owners.webp',
+            imageAlt: 'Process owners to build required custom apps',
+            trustedByImage: '/assets/logo-strip-desktop-2.webp',
+            trustedByAlt: 'Logo Strip - Desktop-2',
+            enabled: true
+          },
+          {
+            id: 'business-users',
+            title: 'Business users',
+            subtitle: 'If you need a user-friendly platform to simplify daily tasks',
+            description: 'IVAFlow is the right choice for your team',
+            benefits: [
+              'Requires no coding to create and modify processes',
+              'Uses AI to automate and optimize work',
+              'Improves efficiency with intuitive workflows'
+            ],
+            image: '/assets/business-users.webp',
+            imageAlt: 'User friendly platform for Business users',
+            trustedByImage: '/assets/logo-strip-desktop-2.webp',
+            trustedByAlt: 'Logo Strip - Desktop-2',
+            enabled: true
+          }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-white dark:bg-slate-900',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20 lg:py-28',
+      },
+    },
+    configSchema: {},
+  },
 
 ];
 
