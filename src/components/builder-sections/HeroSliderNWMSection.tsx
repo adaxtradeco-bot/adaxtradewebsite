@@ -13,6 +13,12 @@ interface SnapshotCard {
   placeholderText?: string;
 }
 
+interface StatItem {
+  label: string;
+  value: string;
+  description: string;
+}
+
 interface HeroSlide {
   id: number;
   label: string;
@@ -23,6 +29,7 @@ interface HeroSlide {
   mediaSrc: string;
   mediaPoster?: string;
   snapshotCard?: SnapshotCard;
+  statistics?: StatItem[];
 }
 
 interface HeroSliderNWMSectionProps {
@@ -97,20 +104,19 @@ export default function HeroSliderNWMSection({
                       <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight drop-shadow-lg">{slide.title}</h1>
                       <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 max-w-xl">{slide.desc}</p>
 
-                      <div className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm text-slate-600 dark:text-slate-400 pt-2">
-                        <div className="relative pl-3 md:pl-4 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-6 md:before:h-8 before:bg-gradient-to-b before:from-cyan-500 before:to-violet-500 before:rounded-full">
-                          <span className="block mb-1 text-xs">Avg go-live</span>
-                          <span className="font-medium text-slate-900 dark:text-slate-200 text-sm md:text-base">4–8 weeks</span>
+                      {slide.statistics && slide.statistics.length > 0 && (
+                        <div className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm text-slate-600 dark:text-slate-400 pt-2">
+                          {slide.statistics.map((stat, statIndex) => (
+                            <div 
+                              key={statIndex}
+                              className="relative pl-3 md:pl-4 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-6 md:before:h-8 before:bg-gradient-to-b before:from-cyan-500 before:to-violet-500 before:rounded-full"
+                            >
+                              <span className="block mb-1 text-xs">{stat.description}</span>
+                              <span className="font-medium text-slate-900 dark:text-slate-200 text-sm md:text-base">{stat.value}</span>
+                            </div>
+                          ))}
                         </div>
-                        <div className="relative pl-3 md:pl-4 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-6 md:before:h-8 before:bg-gradient-to-b before:from-cyan-500 before:to-violet-500 before:rounded-full">
-                          <span className="block mb-1 text-xs">Code required</span>
-                          <span className="font-medium text-slate-900 dark:text-slate-200 text-sm md:text-base">0 lines</span>
-                        </div>
-                        <div className="relative pl-3 md:pl-4 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-6 md:before:h-8 before:bg-gradient-to-b before:from-cyan-500 before:to-violet-500 before:rounded-full">
-                          <span className="block mb-1 text-xs">Coverage</span>
-                          <span className="font-medium text-slate-900 dark:text-slate-200 text-sm md:text-base">End-to-end ops</span>
-                        </div>
-                      </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 pt-3 md:pt-4">

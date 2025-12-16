@@ -63,6 +63,8 @@ import VideoPreviewNWMSection from '@/components/builder-sections/VideoPreviewNW
 import PartnersNWMSection from '@/components/builder-sections/PartnersNWMSection';
 import FeaturesGridNWMSection from '@/components/builder-sections/FeaturesGridNWMSection';
 import FinalCTANWMSection from '@/components/builder-sections/FinalCTANWMSection';
+import HOMEsLIDERpRO from '@/components/builder-sections/HOMEsLIDERpRO';
+
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -179,6 +181,7 @@ export function SectionRenderer({
         return <FormBuilderHeroSection key={section.id} {...(section as any).data} />;
       case 'hero-slider':
         return <HeroSliderSection data={(section as any).data} style={(section as any).style} />;
+
       case 'stakeholder':
         return <StakeholderSection data={(section as any).data} style={(section as any).style} />;
       case 'platform-tabs':
@@ -208,6 +211,8 @@ export function SectionRenderer({
         return <FeaturesGridNWMSection {...(section as any).data} />;
       case 'final-cta-nwm':
         return <FinalCTANWMSection {...(section as any).data} />;
+      case 'home-slider-pro':
+        return <HOMEsLIDERpRO data={(section as any).data} style={(section as any).style} />;
       case 'ContentSection':
         return (
           <section className="py-16 px-6">

@@ -1034,6 +1034,51 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+  {
+    id: 'home-slider-pro',
+    name: 'HOMEsLIDERpRO',
+    type: 'home-slider-pro',
+    category: SECTION_CATEGORIES.HEADERS,
+    description: 'Professional BPMS industry slider with animated process word clouds',
+    icon: '🔄',
+    defaultData: {
+      id: '',
+      type: 'home-slider-pro',
+      order: 0,
+      data: {
+        autoplay: true,
+        interval: 6000,
+        slides: [
+          {
+            industry: 'Fleet & Logistics',
+            headline: 'Design fleet workflows without hardcoding',
+            description: 'Model, automate, and evolve fleet-related operational processes using a flexible BPMS.',
+            bullets: [
+              'Visual process modeling',
+              'Role-based task flows',
+              'Exception handling',
+              'Integration-ready workflows'
+            ],
+            processTags: [
+              { text: 'Vehicle Onboarding', size: 'md' },
+              { text: 'Maintenance Request', size: 'lg' },
+              { text: 'Dispatch Approval', size: 'sm' },
+              { text: 'Incident Report', size: 'md' },
+              { text: 'Driver Assignment', size: 'lg' },
+              { text: 'Compliance Check', size: 'sm' }
+            ]
+          }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-gradient-to-br from-slate-50 via-white to-blue-50/30',
+        textColor: 'text-slate-900',
+        padding: 'py-20',
+      },
+    },
+    configSchema: {},
+  },
+
 ];
 
 export function getSectionTemplate(type: string): SectionTemplate | undefined {

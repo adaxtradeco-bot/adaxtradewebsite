@@ -1,0 +1,73 @@
+{
+  "slides": [
+    {
+      "title": "Design fleet workflows without hardcoding",
+      "subtitle": "Fleet & Logistics",
+      "description": "Model, automate, and evolve fleet-related operational processes using a flexible BPMS.",
+      "tag": "BPMS Use Case",
+      "backgroundImage": "/assets/fleet-bg.jpg",
+      "buttons": [
+        {
+          "text": "Get Started",
+          "href": "/get-started",
+          "variant": "primary"
+        },
+        {
+          "text": "Learn More",
+          "href": "/learn-more",
+          "variant": "secondary"
+        }
+      ],
+      "statistics": [
+        {
+          "label": "avg-go-live",
+          "value": "4–8 weeks",
+          "description": "Avg go-live"
+        },
+        {
+          "label": "code-required",
+          "value": "0 lines",
+          "description": "Code required"
+        },
+        {
+          "label": "coverage",
+          "value": "End-to-end ops",
+          "description": "Coverage"
+        }
+      ]
+    },
+    {
+      "title": "Orchestrate property processes end-to-end",
+      "subtitle": "Real Estate",
+      "description": "Standardize and automate real estate operational workflows with configurable processes.",
+      "tag": "BPMS Use Case",
+      "backgroundImage": "/assets/realestate-bg.jpg",
+      "buttons": [
+        {
+          "text": "Explore Solutions",
+          "href": "/real-estate",
+          "variant": "primary"
+        }
+      ],
+      "statistics": [
+        {
+          "label": "setup-time",
+          "value": "2–4 weeks",
+          "description": "Setup time"
+        },
+        {
+          "label": "automation-rate",
+          "value": "95%",
+          "description": "Automation rate"
+        },
+        {
+          "label": "roi-improvement",
+          "value": "300%",
+          "description": "ROI improvement"
+        }
+      ]
+    }
+  ],
+  "autoplay": true,
+  "interval": 6000
+}

@@ -2,6 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 
+interface StatItem {
+  label: string;
+  value: string;
+  description: string;
+}
+
 interface Slide {
   title: string;
   subtitle: string;
@@ -9,6 +15,7 @@ interface Slide {
   tag: string;
   backgroundImage?: string;
   buttons: Array<{ text: string; href: string; variant: 'primary' | 'secondary' }>;
+  statistics?: StatItem[];
 }
 
 interface HeroSliderSectionProps {
@@ -65,7 +72,7 @@ export default function HeroSliderSection({ data, style }: HeroSliderSectionProp
                 {slide.description}
               </p>
               
-              <div className="flex gap-4">
+              <div className="flex gap-4 mb-8">
                 {slide.buttons.map((button, btnIndex) => (
                   <a
                     key={btnIndex}
@@ -80,6 +87,20 @@ export default function HeroSliderSection({ data, style }: HeroSliderSectionProp
                   </a>
                 ))}
               </div>
+              
+              {slide.statistics && slide.statistics.length > 0 && (
+                <div className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm text-slate-300 pt-2">
+                  {slide.statistics.map((stat, statIndex) => (
+                    <div 
+                      key={statIndex}
+                      className="relative pl-3 md:pl-4 before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:w-1 before:h-6 md:before:h-8 before:bg-gradient-to-b before:from-cyan-500 before:to-violet-500 before:rounded-full"
+                    >
+                      <span className="block mb-1 text-xs text-slate-400">{stat.description}</span>
+                      <span className="font-medium text-white text-sm md:text-base">{stat.value}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
