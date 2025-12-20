@@ -65,6 +65,7 @@ import FeaturesGridNWMSection from '@/components/builder-sections/FeaturesGridNW
 import FinalCTANWMSection from '@/components/builder-sections/FinalCTANWMSection';
 import HOMEsLIDERpRO from '@/components/builder-sections/HOMEsLIDERpRO';
 import FusionTeamsTabsSection from '@/components/builder-sections/FusionTeamsTabsSection';
+import PlatformFeaturesSection from '@/components/builder-sections/PlatformFeaturesSection';
 
 
 interface SectionRendererProps {
@@ -216,6 +217,8 @@ export function SectionRenderer({
         return <HOMEsLIDERpRO data={(section as any).data} style={(section as any).style} />;
       case 'fusion-teams-tabs':
         return <FusionTeamsTabsSection data={(section as any).data} style={(section as any).style} />;
+      case 'platform-features':
+        return <PlatformFeaturesSection data={(section as any).data} style={(section as any).style} />;
       case 'ContentSection':
         return (
           <section className="py-16 px-6">

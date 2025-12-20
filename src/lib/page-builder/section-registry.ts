@@ -1168,6 +1168,75 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+  {
+    id: 'platform-features',
+    name: 'Platform Features',
+    type: 'platform-features',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Two-column feature list with optional content and background image',
+    icon: '⚡',
+    defaultData: {
+      id: '',
+      type: 'platform-features',
+      order: 0,
+      data: {
+        title: 'is the answer',
+        titleHighlight: 'A low-code/no-code platform',
+        subtitle: 'You need a platform that',
+        backgroundImage: '/assets/fold-5.png',
+        leftFeatures: [
+          {
+            icon: '/assets/dt-icon-1.webp',
+            text: 'Is governed by IT',
+            enabled: true
+          },
+          {
+            icon: '/assets/dt-icon2.webp',
+            text: 'Keeps your data protected',
+            enabled: true
+          },
+          {
+            icon: '/assets/dt-3.svg',
+            text: 'Handles multiple types of work',
+            enabled: true
+          },
+          {
+            icon: '/assets/dt-icon4.webp',
+            text: 'Turns business users into responsible citizen developers',
+            enabled: true
+          }
+        ],
+        rightFeatures: [
+          {
+            icon: '/assets/dt-r-1.svg',
+            text: 'Loves integrations',
+            enabled: true
+          },
+          {
+            icon: '/assets/dt-r-2.svg',
+            text: 'Generates analytics across apps',
+            enabled: true
+          },
+          {
+            icon: '/assets/dt-r-3.svg',
+            text: 'Scales up for large enterprises',
+            enabled: true
+          },
+          {
+            icon: '/assets/dt-r-4.webp',
+            text: 'Doesn\'t restrict developers',
+            enabled: true
+          }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-white dark:bg-slate-900',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20',
+      },
+    },
+    configSchema: {},
+  },
 
 ];
 
