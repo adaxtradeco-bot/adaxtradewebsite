@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { SmartImage } from '@/components/ui/SmartImage';
 
 interface Stakeholder {
   title: string;
@@ -47,10 +48,10 @@ export default function StakeholderSection({ data, style }: StakeholderSectionPr
               <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1 w-16 h-1.5 bg-gradient-to-r from-yellow-400 to-yellow-200 rounded-full animate-pulse" />
               
               <div className="mb-6">
-                <img
+                <SmartImage
                   src={stakeholder.image}
                   alt={stakeholder.title}
-                  className="w-3/4 max-w-[210px] mx-auto h-auto object-contain filter drop-shadow-lg transition-transform duration-300 hover:scale-110"
+                  className="w-3/4 max-w-[210px] mx-auto h-auto filter drop-shadow-lg transition-transform duration-300 hover:scale-110"
                 />
               </div>
               

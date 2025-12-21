@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { SmartImage } from '@/components/ui/SmartImage';
 
 interface ExperienceTab {
   id: string;
@@ -60,10 +61,10 @@ export default function ExperienceTabsSection({ data, style }: ExperienceTabsSec
         </div>
 
         <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 bg-black aspect-video">
-          <img
+          <SmartImage
             src={data.tabs[activeTab].image}
             alt={data.tabs[activeTab].title}
-            className="w-full h-full object-cover"
+            className="w-full h-full"
           />
           
           <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/10 flex flex-col justify-end p-12">

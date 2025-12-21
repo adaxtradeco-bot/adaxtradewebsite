@@ -4,6 +4,8 @@
 
 'use client';
 
+import { SmartImage } from '@/components/ui/SmartImage';
+
 interface HeroFeature {
   icon: string;
   label: string;
@@ -106,10 +108,10 @@ export default function FormBuilderHeroSection({
             <div className="rounded-3xl bg-gradient-to-br from-fuchsia-600/20 to-pink-500/20 dark:from-fuchsia-600/20 dark:to-pink-500/20 p-6 border border-white/10 dark:border-white/10 backdrop-blur-sm">
               {mediaType === 'image' && mediaUrl ? (
                 <div className="aspect-[4/3] rounded-2xl border border-white/10 dark:border-white/10 overflow-hidden mb-4">
-                  <img 
+                  <SmartImage 
                     src={mediaUrl} 
                     alt={mediaAlt}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
                   />
                 </div>
               ) : mediaType === 'video' && mediaUrl ? (

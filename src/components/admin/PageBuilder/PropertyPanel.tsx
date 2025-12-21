@@ -18,9 +18,28 @@ interface PropertyPanelProps {
   onClose: () => void;
 }
 
-function ImageUploader({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+function ImageUploader({ value, onChange, field, onSettingsChange }: { 
+  value: string; 
+  onChange: (url: string, settings?: any) => void; 
+  field?: string;
+  onSettingsChange?: (settings: any) => void;
+}) {
   const [uploading, setUploading] = React.useState(false);
   const [showMediaBrowser, setShowMediaBrowser] = React.useState(false);
+  const [showAdvanced, setShowAdvanced] = React.useState(false);
+  const [imageSettings, setImageSettings] = React.useState({
+    alt: '',
+    maxWidth: '',
+    maxHeight: '',
+    objectFit: 'cover' as 'cover' | 'contain' | 'fill' | 'scale-down' | 'none'
+  });
+
+  // Extract alt text if it exists in the field name or value
+  React.useEffect(() => {
+    if (field && field.toLowerCase().includes('alt')) {
+      setImageSettings(prev => ({ ...prev, alt: value }));
+    }
+  }, [field, value]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -49,12 +68,22 @@ function ImageUploader({ value, onChange }: { value: string; onChange: (url: str
     }
   };
 
+  const isAltField = field && field.toLowerCase().includes('alt');
+
   return (
     <>
       <div className="space-y-2">
-        {value && (
+        {!isAltField && value && (
           <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
-            <img src={value} alt="Preview" className="w-full h-full object-cover" />
+            <img 
+              src={value} 
+              alt="Preview" 
+              className={`w-full h-full object-${imageSettings.objectFit}`}
+              style={{
+                maxWidth: imageSettings.maxWidth ? `${imageSettings.maxWidth}px` : undefined,
+                maxHeight: imageSettings.maxHeight ? `${imageSettings.maxHeight}px` : undefined
+              }}
+            />
             <button
               onClick={() => onChange('')}
               className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full hover:bg-red-700 text-xs"
@@ -65,28 +94,134 @@ function ImageUploader({ value, onChange }: { value: string; onChange: (url: str
           </div>
         )}
         
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="Image URL or path"
-            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-          />
-          
-          <button
-            type="button"
-            onClick={() => setShowMediaBrowser(true)}
-            className="px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium whitespace-nowrap"
-          >
-            📚 Browse
-          </button>
-          
-          <label className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer text-sm font-medium whitespace-nowrap">
-            {uploading ? '⏳' : '📤'} Upload
-            <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={uploading} />
-          </label>
-        </div>
+        {isAltField ? (
+          <div>
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              placeholder="Alt text for accessibility"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+            />
+          </div>
+        ) : (
+          <>
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                placeholder="Image URL or path"
+                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+              />
+              
+              <button
+                type="button"
+                onClick={() => setShowMediaBrowser(true)}
+                className="px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium whitespace-nowrap"
+              >
+                📚 Browse
+              </button>
+              
+              <label className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer text-sm font-medium whitespace-nowrap">
+                {uploading ? '⏳' : '📤'} Upload
+                <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={uploading} />
+              </label>
+            </div>
+            
+            {value && (
+              <button
+                type="button"
+                onClick={() => setShowAdvanced(!showAdvanced)}
+                className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+              >
+                {showAdvanced ? '🔽 Hide' : '🔧 Show'} Advanced Settings
+              </button>
+            )}
+            
+            {showAdvanced && value && (
+              <div className="space-y-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-md border">
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Max Width (px)
+                    </label>
+                    <input
+                      type="number"
+                      value={imageSettings.maxWidth}
+                      onChange={(e) => setImageSettings(prev => ({ ...prev, maxWidth: e.target.value }))}
+                      placeholder="Auto"
+                      className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                      Max Height (px)
+                    </label>
+                    <input
+                      type="number"
+                      value={imageSettings.maxHeight}
+                      onChange={(e) => setImageSettings(prev => ({ ...prev, maxHeight: e.target.value }))}
+                      placeholder="Auto"
+                      className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Object Fit
+                  </label>
+                  <select
+                    value={imageSettings.objectFit}
+                    onChange={(e) => setImageSettings(prev => ({ ...prev, objectFit: e.target.value as any }))}
+                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  >
+                    <option value="cover">Cover (crop to fill)</option>
+                    <option value="contain">Contain (fit inside)</option>
+                    <option value="fill">Fill (stretch to fill)</option>
+                    <option value="scale-down">Scale Down (smaller of contain/none)</option>
+                    <option value="none">None (original size)</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Alt Text
+                  </label>
+                  <input
+                    type="text"
+                    value={imageSettings.alt}
+                    onChange={(e) => setImageSettings(prev => ({ ...prev, alt: e.target.value }))}
+                    placeholder="Describe the image for accessibility"
+                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  />
+                </div>
+                
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      // Apply settings to image URL
+                      onChange(value, imageSettings);
+                      onSettingsChange?.(imageSettings);
+                    }}
+                    className="flex-1 px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
+                  >
+                    ✓ Apply Settings
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setImageSettings({ alt: '', maxWidth: '', maxHeight: '', objectFit: 'cover' })}
+                    className="px-2 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
 
       <MediaBrowser
@@ -144,7 +279,7 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
     }
   };
 
-  const handleImageUpload = (field: string, url: string) => {
+  const handleImageUpload = (field: string, url: string, settings?: any) => {
     try {
       const data = JSON.parse(jsonText);
       const keys = field.split('.');
@@ -172,7 +307,25 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
       
       // Set the final value
       const finalKey = keys[keys.length - 1];
-      obj[finalKey] = url;
+      
+      if (settings && Object.keys(settings).length > 0) {
+        // Create image object with settings
+        obj[finalKey] = {
+          src: url,
+          alt: settings.alt || '',
+          maxWidth: settings.maxWidth || null,
+          maxHeight: settings.maxHeight || null,
+          objectFit: settings.objectFit || 'cover'
+        };
+        
+        // Also set alt field if it exists
+        const altKey = finalKey.replace(/image|img|media|src/i, 'Alt').replace(/Alt$/, 'Alt');
+        if (altKey !== finalKey && settings.alt) {
+          obj[altKey] = settings.alt;
+        }
+      } else {
+        obj[finalKey] = url;
+      }
       
       // Clean up any duplicate entries like slides[0] at root level
       const newData = { ...data };
@@ -256,7 +409,14 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
             {showImageHelper ? '🖼️ Hide' : '🖼️ Show'} Image Manager ({imageFields.length})
           </button>
           {showImageHelper && (
-            <div className="mt-2 space-y-3 max-h-64 overflow-y-auto p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div className="mt-2 space-y-3 max-h-80 overflow-y-auto p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+              <div className="text-xs text-gray-600 dark:text-gray-400 mb-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded border">
+                📝 <strong>Image Manager Tips:</strong><br/>
+                • Alt fields: Only accept text for accessibility<br/>
+                • Image fields: Upload/browse images + advanced settings<br/>
+                • Use object-fit to control how images scale<br/>
+                • Set max dimensions to limit image size
+              </div>
               {imageFields.map((field) => (
                 <div key={field.path}>
                   <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -264,7 +424,8 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
                   </label>
                   <ImageUploader
                     value={field.value}
-                    onChange={(url) => handleImageUpload(field.path, url)}
+                    onChange={(url, settings) => handleImageUpload(field.path, url, settings)}
+                    field={field.path}
                   />
                 </div>
               ))}
@@ -433,7 +594,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
   };
 
   return (
-    <div className="w-80 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col">
+    <div className="w-96 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col">
       {/* Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">

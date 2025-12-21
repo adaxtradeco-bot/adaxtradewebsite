@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { SmartImage } from '@/components/ui/SmartImage';
 
 interface TabItem {
   id: string;
@@ -83,11 +84,9 @@ export default function FusionTeamsTabsSection({ data, style }: FusionTeamsTabsS
               <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-center">
                 {/* Image */}
                 <div className="xl:col-span-4 hidden xl:block">
-                  <Image
+                  <SmartImage
                     src={tab.image}
                     alt={tab.imageAlt}
-                    width={352}
-                    height={500}
                     className="w-full h-auto rounded-lg"
                   />
                 </div>
@@ -133,12 +132,10 @@ export default function FusionTeamsTabsSection({ data, style }: FusionTeamsTabsS
                       <p className="text-lg font-semibold mb-4 text-slate-700 dark:text-slate-300">
                         {data.trustedByText}
                       </p>
-                      <Image
+                      <SmartImage
                         src={tab.trustedByImage}
                         alt={tab.trustedByAlt}
-                        width={2000}
-                        height={130}
-                        className="w-full h-auto max-h-32 object-contain"
+                        className="w-full h-auto max-h-32"
                       />
                     </div>
                   </div>

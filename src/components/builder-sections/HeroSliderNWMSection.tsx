@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { SmartImage } from '@/components/ui/SmartImage';
 
 interface SnapshotCard {
   title: string;
@@ -90,10 +91,10 @@ export default function HeroSliderNWMSection({
                     playsInline
                   />
                 ) : (
-                  <img
-                    className="w-full h-full object-cover scale-105 saturate-110 contrast-105"
+                  <SmartImage
                     src={slide.mediaSrc}
                     alt={slide.label}
+                    className="w-full h-full scale-105 saturate-110 contrast-105"
                   />
                 )}
                 <div className="absolute inset-0 bg-slate-50/50 dark:bg-slate-950/40 md:backdrop-blur-sm z-10" />
@@ -195,10 +196,10 @@ export default function HeroSliderNWMSection({
 
                         <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-600 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center relative z-10 md:group-hover:border-solid transition-all duration-300 overflow-hidden">
                           {card.preview ? (
-                            <img 
+                            <SmartImage 
                               src={card.preview} 
                               alt="Dashboard preview" 
-                              className="w-full h-full object-fill rounded-lg"
+                              className="w-full h-full rounded-lg"
                             />
                           ) : (
                             <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-2">{card.placeholderText || 'Product screenshot placeholder'}</span>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { SmartImage } from '@/components/ui/SmartImage';
 
 interface Card {
   title: string;
@@ -69,10 +70,10 @@ export default function PlatformTabsSection({ data, style }: PlatformTabsSection
               className="bg-white dark:bg-slate-800 rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:border-blue-500 flex flex-col min-h-[480px]"
             >
               <div className="h-56 overflow-hidden bg-slate-100 dark:bg-slate-700">
-                <img
+                <SmartImage
                   src={card.image}
                   alt={card.title}
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  className="w-full h-full transition-transform duration-500 hover:scale-110"
                 />
               </div>
               
