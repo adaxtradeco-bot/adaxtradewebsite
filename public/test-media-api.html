@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Media API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        div { margin: 20px 0; padding: 10px; border: 1px solid #ccc; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f8f9fa; padding: 10px; overflow: auto; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Media API</h1>
+    
+    <div>
+        <h2>1️⃣ Test Authentication</h2>
+        <button onclick="testAuth()">🔐 Test Login</button>
+        <div id="authResult"></div>
+    </div>
+    
+    <div>
+        <h2>2️⃣ Test Media List</h2>
+        <button onclick="testMediaList()">📋 List Media Files</button>
+        <div id="mediaListResult"></div>
+    </div>
+    
+    <div>
+        <h2>3️⃣ Test Media Upload</h2>
+        <input type="file" id="fileInput" accept="image/*">
+        <button onclick="testUpload()">📤 Upload File</button>
+        <div id="uploadResult"></div>
+    <div>
+        <h2>4️⃣ Test Direct File Access</h2>
+        <button onclick="testDirectAccess()">🖼️ Test Image Display</button>
+        <div id="directAccessResult"></div>
+    </div>
+        let token = null;
+
+        async function testAuth() {
+            document.getElementById('authResult').innerHTML = '⏳ Testing authentication...';
+            
+            try {
+                const response = await fetch('/api/admin/auth', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: 'administrator@ivaflow.com',
+                        password: 'IVAFlow@2024#SecureAdmin!Prod'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (response.ok && data.token) {
+                    token = data.token;
+                    localStorage.setItem('adminToken', token);
+                    document.getElementById('authResult').innerHTML = 
+                        `<div class="success">✅ Login successful!</div><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('authResult').innerHTML = 
+                        `<div class="error">❌ Login failed</div><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+            } catch (error) {
+                document.getElementById('authResult').innerHTML = 
+                    `<div class="error">❌ Network Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testMediaList() {
+            if (!token) {
+                token = localStorage.getItem('adminToken');
+            }
+            
+            if (!token) {
+                document.getElementById('mediaListResult').innerHTML = 
+                    '<div class="error">❌ Please login first</div>';
+                return;
+            }
+
+            document.getElementById('mediaListResult').innerHTML = '⏳ Loading media files...';
+
+            try {
+                const response = await fetch('/api/admin/media', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('mediaListResult').innerHTML = 
+                        `<div class="success">✅ Media files loaded (${data.files?.length || 0} files)</div><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('mediaListResult').innerHTML = 
+                        `<div class="error">❌ Failed to load media</div><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+            } catch (error) {
+                document.getElementById('mediaListResult').innerHTML = 
+                    `<div class="error">❌ Network Error: ${error.message}</div>`;
+            }
+        }
+
+        async function testUpload() {
+            if (!token) {
+                token = localStorage.getItem('adminToken');
+            }
+            
+            if (!token) {
+                document.getElementById('uploadResult').innerHTML = 
+                    '<div class="error">❌ Please login first</div>';
+                return;
+            }
+
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                document.getElementById('uploadResult').innerHTML = 
+                    '<div class="error">❌ Please select a file</div>';
+                return;
+            }
+
+            document.getElementById('uploadResult').innerHTML = '⏳ Uploading file...';
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const response = await fetch('/api/admin/media', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('uploadResult').innerHTML = 
+                        `<div class="success">✅ File uploaded successfully!</div><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                } else {
+                    document.getElementById('uploadResult').innerHTML = 
+                        `<div class="error">❌ Upload failed</div><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                }
+            } catch (error) {
+                document.getElementById('uploadResult').innerHTML = 
+                    `<div class="error">❌ Network Error: ${error.message}</div>`;
+            }
+        }
+
+        // Auto-load token on page load
+        window.onload = function() {
+            token = localStorage.getItem('adminToken');
+            if (token) {
+                document.getElementById('authResult').innerHTML = 
+                    '<div class="success">✅ Token found in localStorage</div>';
+            }
+        };
+
+        async function testDirectAccess() {
+            document.getElementById('directAccessResult').innerHTML = '⏳ Testing file access...';
+            
+            // Test with a known file
+            const testFiles = [
+                '1764486431683-Improve-workflow-process.png',
+                '1764486445854-0e604c8e03b7b033031b1da1b297745b.png'
+            ];
+            
+            let html = '';
+            
+            for (const filename of testFiles) {
+                html += `<div style="margin: 10px 0;">`;
+                html += `<p><strong>Testing:</strong> ${filename}</p>`;
+                html += `<img src="/api/media/${filename}" style="max-width: 200px; border: 1px solid #ccc;" onerror="this.style.display='none'; this.nextSibling.style.display='block';" />`;
+                html += `<div style="display: none; color: red;">❌ Failed to load image</div>`;
+                html += `</div>`;
+            }
+            
+            document.getElementById('directAccessResult').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

@@ -10,6 +10,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
+import { MediaBrowser } from './MediaBrowser';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -19,6 +20,7 @@ interface PropertyPanelProps {
 
 function ImageUploader({ value, onChange }: { value: string; onChange: (url: string) => void }) {
   const [uploading, setUploading] = React.useState(false);
+  const [showMediaBrowser, setShowMediaBrowser] = React.useState(false);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -48,26 +50,55 @@ function ImageUploader({ value, onChange }: { value: string; onChange: (url: str
   };
 
   return (
-    <div className="space-y-2">
-      {value && (
-        <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
-          <img src={value} alt="Preview" className="w-full h-full object-cover" />
+    <>
+      <div className="space-y-2">
+        {value && (
+          <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
+            <img src={value} alt="Preview" className="w-full h-full object-cover" />
+            <button
+              onClick={() => onChange('')}
+              className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full hover:bg-red-700 text-xs"
+              title="Remove image"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+        
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Image URL or path"
+            className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+          />
+          
+          <button
+            type="button"
+            onClick={() => setShowMediaBrowser(true)}
+            className="px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium whitespace-nowrap"
+          >
+            📚 Browse
+          </button>
+          
+          <label className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer text-sm font-medium whitespace-nowrap">
+            {uploading ? '⏳' : '📤'} Upload
+            <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={uploading} />
+          </label>
         </div>
-      )}
-      <div className="flex gap-2">
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Image URL"
-          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-        />
-        <label className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer text-sm font-medium whitespace-nowrap">
-          {uploading ? '⏳' : '📤'}
-          <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={uploading} />
-        </label>
       </div>
-    </div>
+
+      <MediaBrowser
+        isOpen={showMediaBrowser}
+        onClose={() => setShowMediaBrowser(false)}
+        onSelect={(url) => {
+          onChange(url);
+          setShowMediaBrowser(false);
+        }}
+        acceptTypes={['image/*']}
+      />
+    </>
   );
 }
 
@@ -119,19 +150,39 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
       const keys = field.split('.');
       let obj = data;
       
-      // Navigate to parent object, creating missing objects
+      // Handle array notation like slides[0].mediaSrc
       for (let i = 0; i < keys.length - 1; i++) {
         const key = keys[i];
-        if (obj[key] === undefined || obj[key] === null || typeof obj[key] !== 'object') {
-          obj[key] = {};
+        const arrayMatch = key.match(/^(.+)\[(\d+)\]$/);
+        
+        if (arrayMatch) {
+          const [, arrayName, index] = arrayMatch;
+          const idx = parseInt(index);
+          
+          if (!obj[arrayName]) obj[arrayName] = [];
+          if (!obj[arrayName][idx]) obj[arrayName][idx] = {};
+          obj = obj[arrayName][idx];
+        } else {
+          if (obj[key] === undefined || obj[key] === null || typeof obj[key] !== 'object') {
+            obj[key] = {};
+          }
+          obj = obj[key];
         }
-        obj = obj[key];
       }
       
       // Set the final value
-      obj[keys[keys.length - 1]] = url;
+      const finalKey = keys[keys.length - 1];
+      obj[finalKey] = url;
       
-      const newJson = JSON.stringify(data, null, 2);
+      // Clean up any duplicate entries like slides[0] at root level
+      const newData = { ...data };
+      Object.keys(newData).forEach(key => {
+        if (key.match(/^slides\[\d+\]$/)) {
+          delete newData[key];
+        }
+      });
+      
+      const newJson = JSON.stringify(newData, null, 2);
       setJsonText(newJson);
       setHasChanges(true);
     } catch (err) {
@@ -155,12 +206,17 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
                               key.toLowerCase().includes('media') || 
                               key.toLowerCase().includes('icon') ||
                               key.toLowerCase().includes('logo') ||
-                              key.toLowerCase().includes('background');
+                              key.toLowerCase().includes('background') ||
+                              key.toLowerCase().includes('preview') ||
+                              key.toLowerCase().includes('poster') ||
+                              key === 'mediaSrc' ||
+                              key === 'mediaPoster';
             const isImageUrl = value.match(/\.(jpg|jpeg|png|gif|webp|svg|ico)/i) || 
                               value.startsWith('/uploads/') ||
+                              value.startsWith('/api/media/') ||
                               value.startsWith('http');
             
-            if (isImageKey || (key.toLowerCase().includes('url') && isImageUrl)) {
+            if (isImageKey || (key.toLowerCase().includes('url') && isImageUrl) || (key.toLowerCase().includes('src') && isImageUrl)) {
               fields.push({ path, value });
             }
           } else if (Array.isArray(value)) {

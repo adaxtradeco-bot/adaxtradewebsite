@@ -6,6 +6,7 @@ interface SnapshotCard {
   title: string;
   subtitle: string;
   description: string;
+  preview?: string;
   stats: {
     label: string;
     value: string;
@@ -30,6 +31,16 @@ interface HeroSlide {
   mediaPoster?: string;
   snapshotCard?: SnapshotCard;
   statistics?: StatItem[];
+  cta?: {
+    primaryButton?: {
+      text: string;
+      link: string;
+    };
+    secondaryButton?: {
+      text: string;
+      link: string;
+    };
+  };
 }
 
 interface HeroSliderNWMSectionProps {
@@ -120,11 +131,17 @@ export default function HeroSliderNWMSection({
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-3 pt-3 md:pt-4">
-                      <button className="w-full sm:w-auto px-5 md:px-6 py-2.5 md:py-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-medium text-sm md:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:-translate-y-0.5 transition-all duration-300 hover:scale-105">
-                        Start with a live demo
+                      <button 
+                        className="w-full sm:w-auto px-5 md:px-6 py-2.5 md:py-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-medium text-sm md:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:-translate-y-0.5 transition-all duration-300 hover:scale-105"
+                        onClick={() => slide.cta?.primaryButton?.link && (window.location.href = slide.cta.primaryButton.link)}
+                      >
+                        {slide.cta?.primaryButton?.text || 'Start with a live demo'}
                       </button>
-                      <button className="w-full sm:w-auto px-5 md:px-6 py-2.5 md:py-3 rounded-full border border-slate-300 dark:border-slate-600 bg-white/90 dark:bg-slate-900/80 text-slate-900 dark:text-white text-sm md:text-base hover:bg-white dark:hover:bg-slate-800 hover:-translate-y-0.5 transition-all duration-300 md:backdrop-blur-md">
-                        Become a partner
+                      <button 
+                        className="w-full sm:w-auto px-5 md:px-6 py-2.5 md:py-3 rounded-full border border-slate-300 dark:border-slate-600 bg-white/90 dark:bg-slate-900/80 text-slate-900 dark:text-white text-sm md:text-base hover:bg-white dark:hover:bg-slate-800 hover:-translate-y-0.5 transition-all duration-300 md:backdrop-blur-md"
+                        onClick={() => slide.cta?.secondaryButton?.link && (window.location.href = slide.cta.secondaryButton.link)}
+                      >
+                        {slide.cta?.secondaryButton?.text || 'Become a partner'}
                       </button>
                     </div>
                   </div>
@@ -176,8 +193,16 @@ export default function HeroSliderNWMSection({
                           ))}
                         </div>
 
-                        <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-600 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center relative z-10 md:group-hover:border-solid transition-all duration-300">
-                          <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-2">{card.placeholderText || 'Product screenshot placeholder'}</span>
+                        <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-600 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center relative z-10 md:group-hover:border-solid transition-all duration-300 overflow-hidden">
+                          {card.preview ? (
+                            <img 
+                              src={card.preview} 
+                              alt="Dashboard preview" 
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-2">{card.placeholderText || 'Product screenshot placeholder'}</span>
+                          )}
                         </div>
                       </div>
                     );

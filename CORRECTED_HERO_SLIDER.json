@@ -1,0 +1,67 @@
+{
+  "autoPlayInterval": 7000,
+  "defaultSnapshotCard": {
+    "title": "One OS, many live systems.",
+    "subtitle": "NWMFlow snapshot", 
+    "description": "Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.",
+    "preview": "/api/media/default-preview.png",
+    "stats": [
+      {
+        "label": "Designed for",
+        "value": "Enterprise"
+      },
+      {
+        "label": "Built-in", 
+        "value": "Forms · Workflows · Dashboards"
+      },
+      {
+        "label": "Architecture",
+        "value": "Farm & Portals"
+      }
+    ],
+    "placeholderText": "Product screenshot placeholder"
+  },
+  "slides": [
+    {
+      "id": 0,
+      "label": "Citizen Requests",
+      "title": "Modern public services without the legacy mess.",
+      "desc": "Design and launch end-to-end citizen request systems.",
+      "badge": "Government",
+      "mediaType": "image",
+      "mediaSrc": "/api/media/1766221720075-BPMS-Fleet-managenment.jpg",
+      "mediaPoster": "/placeholder-poster.jpg",
+      "snapshotCard": {
+        "title": "Built for Government",
+        "subtitle": "Citizen Services Solution",
+        "description": "Complete digital transformation for public sector operations.",
+        "preview": "/api/media/government-dashboard-preview.png",
+        "stats": [
+          {
+            "label": "Sector",
+            "value": "Government"
+          },
+          {
+            "label": "Features", 
+            "value": "Request Management · Workflows"
+          },
+          {
+            "label": "Compliance",
+            "value": "GDPR · Accessibility"
+          }
+        ],
+        "placeholderText": "Government Dashboard Preview"
+      },
+      "cta": {
+        "primaryButton": {
+          "text": "Start with a live demo",
+          "link": "/demo"
+        },
+        "secondaryButton": {
+          "text": "Become a partner",
+          "link": "/partnership"
+        }
+      }
+    }
+  ]
+}

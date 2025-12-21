@@ -8,7 +8,6 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 model User {
@@ -83,4 +82,11 @@ model Menu {
   updatedAt DateTime @updatedAt
 
   @@unique([location, language])
+}
+
+model SiteSettings {
+  id        String   @id @default(cuid())
+  data      String   // JSON string of all settings
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

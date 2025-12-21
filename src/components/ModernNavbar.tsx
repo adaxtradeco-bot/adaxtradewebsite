@@ -12,7 +12,9 @@ import { Button } from './ui/Button';
 import { useTheme } from '@/hooks/useTheme';
 import { useTranslation } from '@/hooks/useTranslation';
 import { useLanguage } from '@/lib/i18n/context';
-import { LanguageSwitch } from './LanguageSwitch';
+import { Logo } from './ui/Logo';
+import { ConditionalLanguageSwitch } from './ConditionalLanguageSwitch';
+import { ConditionalContactSales } from './ConditionalContactSales';
 import { useParams } from 'next/navigation';
 
 interface DropdownItem {
@@ -174,15 +176,7 @@ const CloseIcon = () => (
         <div className="relative flex justify-between items-center max-w-7xl mx-auto gap-13 px-5 py-3.5">
           {/* Logo Section */}
           <div className="flex items-center gap-5">
-            <Link 
-              href={`/${currentLang}`} 
-              className="flex-shrink-0"
-              aria-label="English Website Home"
-            >
-              <div className="text-xl font-bold text-primary-600 dark:text-primary-400">
-                English Website
-              </div>
-            </Link>
+            <Logo href={`/${currentLang}`} />
 
             {/* Desktop Navigation Links */}
             <div className="hidden lg:flex items-center gap-2">
@@ -237,14 +231,9 @@ const CloseIcon = () => (
 
           {/* CTA Section */}
           <div className="flex items-center gap-2.5">
-            <Link
-              href={`/${currentLang}/contact-sales`}
-              className="hidden sm:flex items-center h-8 px-3 border-0 rounded-lg bg-neutral-100 dark:bg-white/10 hover:bg-neutral-200 dark:hover:bg-white/15 text-neutral-600 dark:text-neutral-300 font-semibold text-sm leading-4 tracking-tight transition-colors duration-200"
-            >
-              {t('nav.contactSales')}
-            </Link>
+            <ConditionalContactSales variant="desktop" />
 
-            <LanguageSwitch />
+            <ConditionalLanguageSwitch />
 
             <Button
               variant="outline"
@@ -342,9 +331,7 @@ const CloseIcon = () => (
           <div className="fixed left-0 top-0 z-[9999] flex flex-col w-full max-w-sm h-full bg-white dark:bg-neutral-900 animate-in slide-in-from-left duration-300">
             {/* Mobile Header */}
             <div className="flex justify-between items-center px-4 py-3.5 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800">
-              <Link href="/" className="text-xl font-bold text-primary-600 dark:text-primary-400">
-                English Website
-              </Link>
+              <Logo href="/" size="sm" />
               <div className="flex items-center gap-2.5">
                 <Button
                   variant="outline"
@@ -442,13 +429,10 @@ const CloseIcon = () => (
 
               {/* Mobile CTAs */}
               <div className="flex flex-col gap-2.5 px-5.5 py-5.5 bg-white dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
-                <Link
-                  href={`/${currentLang}/contact-sales`}
-                  className="flex justify-center items-center w-full h-12 border-0 rounded-lg bg-neutral-100 dark:bg-white/10 text-neutral-600 dark:text-neutral-300 font-semibold text-lg transition-colors duration-200 hover:bg-neutral-200 dark:hover:bg-white/15"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {t('nav.contactSales')}
-                </Link>
+                <ConditionalContactSales 
+                  variant="mobile" 
+                  className="" 
+                />
               </div>
             </div>
           </div>

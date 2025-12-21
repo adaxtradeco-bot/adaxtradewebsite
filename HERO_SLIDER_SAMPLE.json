@@ -1,0 +1,91 @@
+{
+  "slides": [
+    {
+      "id": 1,
+      "label": "Business Automation",
+      "title": "Automate Your Business Operations",
+      "desc": "Transform your business with intelligent automation workflows that adapt to your needs.",
+      "badge": "AUTOMATION PLATFORM",
+      "mediaType": "image",
+      "mediaSrc": "/api/media/1764486431683-Improve-workflow-process.png",
+      "mediaPoster": "/api/media/1764486445854-0e604c8e03b7b033031b1da1b297745b.png",
+      "snapshotCard": {
+        "title": "One OS, many live systems.",
+        "subtitle": "NWMFlow snapshot",
+        "description": "Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.",
+        "preview": "/api/media/1764487489176-asset-managment.png",
+        "stats": [
+          { "label": "Designed for", "value": "Business Automation" },
+          { "label": "Built-in", "value": "Forms · Workflows · Dashboards" },
+          { "label": "Architecture", "value": "Farm & Portals" }
+        ],
+        "placeholderText": "Dashboard preview"
+      },
+      "statistics": [
+        {
+          "label": "Efficiency",
+          "value": "300%",
+          "description": "Faster processing"
+        },
+        {
+          "label": "Cost Reduction",
+          "value": "60%",
+          "description": "Lower operational costs"
+        }
+      ],
+      "cta": {
+        "primaryButton": {
+          "text": "Start with a live demo",
+          "link": "/demo"
+        },
+        "secondaryButton": {
+          "text": "Become a partner",
+          "link": "/partnership"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "label": "Fleet Management",
+      "title": "Smart Fleet Operations",
+      "desc": "Optimize your fleet with real-time tracking and intelligent route planning.",
+      "badge": "FLEET PLATFORM",
+      "mediaType": "video",
+      "mediaSrc": "/api/media/fleet-video.mp4",
+      "mediaPoster": "/api/media/fleet-poster.jpg",
+      "snapshotCard": {
+        "title": "Real-time fleet control.",
+        "subtitle": "Fleet Management",
+        "description": "Monitor, track, and optimize your entire fleet from a single dashboard.",
+        "preview": "/api/media/fleet-dashboard.png",
+        "stats": [
+          { "label": "Designed for", "value": "Fleet Management" },
+          { "label": "Features", "value": "GPS · Analytics · Maintenance" },
+          { "label": "Integration", "value": "IoT & Mobile Apps" }
+        ]
+      },
+      "cta": {
+        "primaryButton": {
+          "text": "View Fleet Demo",
+          "link": "/fleet-demo"
+        },
+        "secondaryButton": {
+          "text": "Contact Sales",
+          "link": "/contact-sales"
+        }
+      }
+    }
+  ],
+  "autoPlayInterval": 7000,
+  "showCardOnMobile": true,
+  "defaultSnapshotCard": {
+    "title": "One OS, many live systems.",
+    "subtitle": "NWMFlow snapshot",
+    "description": "Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.",
+    "preview": "/api/media/default-preview.png",
+    "stats": [
+      { "label": "Platform", "value": "No-code OS" },
+      { "label": "Built-in", "value": "Forms · Workflows · Dashboards" }
+    ]
+  }
+}

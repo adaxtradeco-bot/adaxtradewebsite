@@ -8,6 +8,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useSidebar } from '@/hooks/useSidebar';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: '📊' },
@@ -25,6 +26,7 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { isCollapsed, toggle } = useSidebar();
   const isLoginPage = pathname === '/admin/login';
 
   const handleLogout = () => {
@@ -41,11 +43,28 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg flex flex-col">
-        <div className="flex h-16 items-center px-6 border-b border-gray-200 dark:border-gray-700">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-            Admin Panel
-          </h1>
+      <div className={`fixed inset-y-0 left-0 z-50 bg-white dark:bg-gray-800 shadow-lg flex flex-col transition-all duration-300 ${
+        isCollapsed ? 'w-16' : 'w-64'
+      }`}>
+        <div className="flex h-16 items-center border-b border-gray-200 dark:border-gray-700">
+          <div className={`flex items-center justify-between w-full ${
+            isCollapsed ? 'px-4' : 'px-6'
+          }`}>
+            {!isCollapsed && (
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                Admin Panel
+              </h1>
+            )}
+            <button
+              onClick={toggle}
+              className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              <span className="text-lg">
+                {isCollapsed ? '▶️' : '◀️'}
+              </span>
+            </button>
+          </div>
         </div>
         
         <nav className="mt-6 px-3 flex-1">
@@ -56,14 +75,24 @@ export default function AdminLayout({
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                    className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors group relative ${
                       isActive
                         ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200'
                         : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }`}
+                    title={isCollapsed ? item.name : undefined}
                   >
-                    <span className="mr-3 text-lg">{item.icon}</span>
-                    {item.name}
+                    <span className={`text-lg ${isCollapsed ? 'mx-auto' : 'mr-3'}`}>
+                      {item.icon}
+                    </span>
+                    {!isCollapsed && (
+                      <span className="truncate">{item.name}</span>
+                    )}
+                    {isCollapsed && (
+                      <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+                        {item.name}
+                      </div>
+                    )}
                   </Link>
                 </li>
               );
@@ -74,18 +103,26 @@ export default function AdminLayout({
         <div className="p-3 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+            className="flex items-center w-full px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors group relative"
+            title={isCollapsed ? 'Logout' : undefined}
           >
-            <span className="mr-3 text-lg">🚪</span>
-            Logout
+            <span className={`text-lg ${isCollapsed ? 'mx-auto' : 'mr-3'}`}>🚪</span>
+            {!isCollapsed && <span>Logout</span>}
+            {isCollapsed && (
+              <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-50">
+                Logout
+              </div>
+            )}
           </button>
         </div>
       </div>
 
       {/* Main content */}
-      <div className="pl-64">
+      <div className={`transition-all duration-300 ${
+        isCollapsed ? 'pl-16' : 'pl-64'
+      }`}>
         <main className="py-6">
-          <div className="mx-auto  px-6">
+          <div className="mx-auto px-6">
             {children}
           </div>
         </main>
