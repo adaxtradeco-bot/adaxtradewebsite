@@ -19,8 +19,8 @@ interface PropertyPanelProps {
 }
 
 function ImageUploader({ value, onChange, field, onSettingsChange }: { 
-  value: string; 
-  onChange: (url: string, settings?: any) => void; 
+  value: string | any; 
+  onChange: (url: string | any, settings?: any) => void; 
   field?: string;
   onSettingsChange?: (settings: any) => void;
 }) {
@@ -34,10 +34,18 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
     objectFit: 'cover' as 'cover' | 'contain' | 'fill' | 'scale-down' | 'none'
   });
 
-  // Extract alt text if it exists in the field name or value
+  // Extract alt text and existing settings if they exist
   React.useEffect(() => {
     if (field && field.toLowerCase().includes('alt')) {
       setImageSettings(prev => ({ ...prev, alt: value }));
+    } else if (typeof value === 'object' && value !== null && value.src) {
+      // Load existing settings from object
+      setImageSettings({
+        alt: value.alt || '',
+        maxWidth: value.maxWidth || '',
+        maxHeight: value.maxHeight || '',
+        objectFit: value.objectFit || 'cover'
+      });
     }
   }, [field, value]);
 
@@ -69,14 +77,16 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
   };
 
   const isAltField = field && field.toLowerCase().includes('alt');
+  const currentValue = typeof value === 'object' && value !== null && value.src ? value.src : value;
+  const isImageObject = typeof value === 'object' && value !== null && value.src;
 
   return (
     <>
       <div className="space-y-2">
-        {!isAltField && value && (
+        {!isAltField && currentValue && (
           <div className="relative w-full h-32 rounded-lg overflow-hidden border border-gray-300 dark:border-gray-600">
             <img 
-              src={value} 
+              src={currentValue} 
               alt="Preview" 
               className={`w-full h-full object-${imageSettings.objectFit}`}
               style={{
@@ -109,7 +119,7 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
             <div className="flex gap-2">
               <input
                 type="text"
-                value={value}
+                value={currentValue}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder="Image URL or path"
                 className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
@@ -129,17 +139,17 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
               </label>
             </div>
             
-            {value && (
+            {currentValue && (
               <button
                 type="button"
                 onClick={() => setShowAdvanced(!showAdvanced)}
                 className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
               >
-                {showAdvanced ? '🔽 Hide' : '🔧 Show'} Advanced Settings
+                {showAdvanced ? '🔽 Hide' : '🔧 Show'} Advanced Settings {isImageObject ? '(Applied)' : ''}
               </button>
             )}
             
-            {showAdvanced && value && (
+            {showAdvanced && currentValue && (
               <div className="space-y-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-md border">
                 <div className="grid grid-cols-2 gap-2">
                   <div>
@@ -203,7 +213,14 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
                     type="button"
                     onClick={() => {
                       // Apply settings to image URL
-                      onChange(value, imageSettings);
+                      const newImageObject = {
+                        src: currentValue,
+                        alt: imageSettings.alt || '',
+                        maxWidth: imageSettings.maxWidth || null,
+                        maxHeight: imageSettings.maxHeight || null,
+                        objectFit: imageSettings.objectFit || 'cover'
+                      };
+                      onChange(newImageObject, imageSettings);
                       onSettingsChange?.(imageSettings);
                     }}
                     className="flex-1 px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
@@ -279,7 +296,7 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
     }
   };
 
-  const handleImageUpload = (field: string, url: string, settings?: any) => {
+  const handleImageUpload = (field: string, urlOrObject: string | any, settings?: any) => {
     try {
       const data = JSON.parse(jsonText);
       const keys = field.split('.');
@@ -308,23 +325,18 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
       // Set the final value
       const finalKey = keys[keys.length - 1];
       
-      if (settings && Object.keys(settings).length > 0) {
-        // Create image object with settings
-        obj[finalKey] = {
-          src: url,
-          alt: settings.alt || '',
-          maxWidth: settings.maxWidth || null,
-          maxHeight: settings.maxHeight || null,
-          objectFit: settings.objectFit || 'cover'
-        };
+      // If it's already an object with settings, use it directly
+      if (typeof urlOrObject === 'object' && urlOrObject !== null && urlOrObject.src) {
+        obj[finalKey] = urlOrObject;
         
         // Also set alt field if it exists
         const altKey = finalKey.replace(/image|img|media|src/i, 'Alt').replace(/Alt$/, 'Alt');
-        if (altKey !== finalKey && settings.alt) {
-          obj[altKey] = settings.alt;
+        if (altKey !== finalKey && urlOrObject.alt) {
+          obj[altKey] = urlOrObject.alt;
         }
       } else {
-        obj[finalKey] = url;
+        // It's a simple string URL
+        obj[finalKey] = urlOrObject;
       }
       
       // Clean up any duplicate entries like slides[0] at root level
@@ -370,6 +382,22 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
                               value.startsWith('http');
             
             if (isImageKey || (key.toLowerCase().includes('url') && isImageUrl) || (key.toLowerCase().includes('src') && isImageUrl)) {
+              fields.push({ path, value });
+            }
+          } else if (typeof value === 'object' && value !== null && value.src) {
+            // Handle image objects with settings
+            const isImageKey = key.toLowerCase().includes('image') || 
+                              key.toLowerCase().includes('img') || 
+                              key.toLowerCase().includes('media') || 
+                              key.toLowerCase().includes('icon') ||
+                              key.toLowerCase().includes('logo') ||
+                              key.toLowerCase().includes('background') ||
+                              key.toLowerCase().includes('preview') ||
+                              key.toLowerCase().includes('poster') ||
+                              key === 'mediaSrc' ||
+                              key === 'mediaPoster';
+            
+            if (isImageKey) {
               fields.push({ path, value });
             }
           } else if (Array.isArray(value)) {
@@ -424,7 +452,7 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
                   </label>
                   <ImageUploader
                     value={field.value}
-                    onChange={(url, settings) => handleImageUpload(field.path, url, settings)}
+                    onChange={(urlOrObject, settings) => handleImageUpload(field.path, urlOrObject, settings)}
                     field={field.path}
                   />
                 </div>
