@@ -198,7 +198,7 @@ export default function HeroSliderNWMSection({
                             <img 
                               src={card.preview} 
                               alt="Dashboard preview" 
-                              className="w-full h-full object-cover rounded-lg"
+                              className="w-full h-full object-fill rounded-lg"
                             />
                           ) : (
                             <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-2">{card.placeholderText || 'Product screenshot placeholder'}</span>
