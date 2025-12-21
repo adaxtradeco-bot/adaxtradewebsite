@@ -96,6 +96,27 @@ export function MediaBrowser({ isOpen, onClose, onSelect, acceptTypes = ['image/
     }
   };
 
+  const handleDelete = async (fileUrl: string) => {
+    if (!confirm('Are you sure you want to delete this file?')) return;
+    
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`/api/admin/media?url=${encodeURIComponent(fileUrl)}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        await loadMediaFiles();
+        if (selectedFile === fileUrl) {
+          setSelectedFile(null);
+        }
+      }
+    } catch (error) {
+      console.error('Delete failed:', error);
+    }
+  };
+
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -178,7 +199,7 @@ export function MediaBrowser({ isOpen, onClose, onSelect, acceptTypes = ['image/
                   }`}
                   onClick={() => setSelectedFile(file.url)}
                 >
-                  <div className="aspect-square rounded-t-lg overflow-hidden bg-gray-100 dark:bg-gray-700">
+                  <div className="aspect-square rounded-t-lg overflow-hidden bg-gray-100 dark:bg-gray-700 relative group">
                     {file.type?.startsWith('image/') ? (
                       <img
                         src={file.url}
@@ -190,6 +211,19 @@ export function MediaBrowser({ isOpen, onClose, onSelect, acceptTypes = ['image/
                         {file.type?.startsWith('video/') ? '🎥' : '📄'}
                       </div>
                     )}
+                    
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(file.url);
+                      }}
+                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                      title="Delete file"
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
                   </div>
                   
                   <div className="p-3">

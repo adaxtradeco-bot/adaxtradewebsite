@@ -5,9 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { put } from '@vercel/blob';
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,26 +51,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'settings');
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true });
-    }
-
     // Generate unique filename
     const timestamp = Date.now();
     const extension = file.name.split('.').pop();
-    const filename = `${type}-${timestamp}.${extension}`;
-    const filepath = join(uploadsDir, filename);
+    const filename = `settings/${type}-${timestamp}.${extension}`;
 
-    // Write file
-    await writeFile(filepath, buffer);
+    // Upload to Vercel Blob
+    const blob = await put(filename, file, {
+      access: 'public',
+    });
 
     // Return public URL
-    const publicUrl = `/uploads/settings/${filename}`;
+    const publicUrl = blob.url;
 
     return NextResponse.json({
       success: true,

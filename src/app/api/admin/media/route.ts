@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir, readdir, stat, unlink } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
+import { put, list, del } from '@vercel/blob';
 import { verifyToken } from '@/lib/auth';
 
 // GET - List all media files
@@ -14,27 +12,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+    const { blobs } = await list();
     
-    if (!existsSync(uploadDir)) {
-      return NextResponse.json({ files: [] });
-    }
-
-    const files = await readdir(uploadDir);
-    const fileDetails = await Promise.all(
-      files.map(async (filename) => {
-        const filepath = path.join(uploadDir, filename);
-        const stats = await stat(filepath);
-        
-        return {
-          filename,
-          url: `/api/media/${filename}`,
-          size: stats.size,
-          uploadDate: stats.birthtime.toISOString(),
-          type: getFileType(filename)
-        };
-      })
-    );
+    const fileDetails = blobs.map((blob) => ({
+      filename: blob.pathname.split('/').pop() || blob.pathname,
+      url: blob.url,
+      size: blob.size,
+      uploadDate: blob.uploadedAt,
+      type: getFileType(blob.pathname)
+    }));
 
     // Sort by upload date (newest first)
     fileDetails.sort((a, b) => new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime());
@@ -63,23 +49,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    if (!existsSync(uploadDir)) {
-      await mkdir(uploadDir, { recursive: true });
-    }
-
-    const filename = `${Date.now()}-${file.name.replace(/\s/g, '-')}`;
-    const filepath = path.join(uploadDir, filename);
+    const filename = `media/${Date.now()}-${file.name.replace(/\s/g, '-')}`;
     
-    await writeFile(filepath, buffer);
+    const blob = await put(filename, file, {
+      access: 'public',
+    });
 
     return NextResponse.json({ 
-      url: `/api/media/${filename}`,
-      filename,
-      size: buffer.length,
+      url: blob.url,
+      filename: blob.pathname,
+      size: blob.size,
       type: file.type
     });
   } catch (error) {
@@ -99,20 +78,13 @@ export async function DELETE(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const filename = searchParams.get('filename');
+    const url = searchParams.get('url');
     
-    if (!filename) {
-      return NextResponse.json({ error: 'Filename required' }, { status: 400 });
+    if (!url) {
+      return NextResponse.json({ error: 'File URL required' }, { status: 400 });
     }
 
-    const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-    const filepath = path.join(uploadDir, filename);
-    
-    if (!existsSync(filepath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 });
-    }
-
-    await unlink(filepath);
+    await del(url);
 
     return NextResponse.json({ success: true });
   } catch (error) {
@@ -122,19 +94,21 @@ export async function DELETE(request: NextRequest) {
 }
 
 // Helper function to determine file type
-function getFileType(filename: string): string {
-  const ext = path.extname(filename).toLowerCase();
+function getFileType(pathname: string): string {
+  const ext = pathname.split('.').pop()?.toLowerCase();
   
-  if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'].includes(ext)) {
-    return 'image/' + ext.slice(1);
+  if (!ext) return 'application/octet-stream';
+  
+  if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) {
+    return 'image/' + ext;
   }
-  if (['.mp4', '.avi', '.mov', '.wmv'].includes(ext)) {
-    return 'video/' + ext.slice(1);
+  if (['mp4', 'avi', 'mov', 'wmv'].includes(ext)) {
+    return 'video/' + ext;
   }
-  if (ext === '.pdf') {
+  if (ext === 'pdf') {
     return 'application/pdf';
   }
-  if (['.doc', '.docx'].includes(ext)) {
+  if (['doc', 'docx'].includes(ext)) {
     return 'application/msword';
   }
   
