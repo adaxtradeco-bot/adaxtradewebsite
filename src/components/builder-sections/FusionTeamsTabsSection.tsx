@@ -10,7 +10,7 @@ interface TabItem {
   subtitle: string;
   description: string;
   benefits: string[];
-  image: string;
+  image: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   imageAlt: string;
   trustedByImage: string;
   trustedByAlt: string;

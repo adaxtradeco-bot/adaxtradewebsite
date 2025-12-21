@@ -6,7 +6,7 @@ import { SmartImage } from '@/components/ui/SmartImage';
 interface Card {
   title: string;
   description: string;
-  image: string;
+  image: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   link: string;
 }
 

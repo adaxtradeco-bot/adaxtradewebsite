@@ -10,7 +10,7 @@ interface ImageSettings {
   alt?: string;
   maxWidth?: string | number;
   maxHeight?: string | number;
-  objectFit?: 'cover' | 'contain' | 'fill' | 'scale-down' | 'none';
+  objectFit?: 'cover' | 'contain' | 'fill' | 'scale-down' | 'none' | string;
 }
 
 interface SmartImageProps {
@@ -29,9 +29,15 @@ export function SmartImage({ src, alt, className = '', style = {}, ...props }: S
 
   const imageStyle: React.CSSProperties = {
     ...style,
-    objectFit: imageData.objectFit || 'cover',
-    ...(imageData.maxWidth && { maxWidth: typeof imageData.maxWidth === 'number' ? `${imageData.maxWidth}px` : imageData.maxWidth }),
-    ...(imageData.maxHeight && { maxHeight: typeof imageData.maxHeight === 'number' ? `${imageData.maxHeight}px` : imageData.maxHeight }),
+    objectFit: (imageData.objectFit || 'cover') as React.CSSProperties['objectFit'],
+    ...(imageData.maxWidth && { 
+      maxWidth: typeof imageData.maxWidth === 'number' ? `${imageData.maxWidth}px` : 
+                imageData.maxWidth.includes('px') ? imageData.maxWidth : `${imageData.maxWidth}px`
+    }),
+    ...(imageData.maxHeight && { 
+      maxHeight: typeof imageData.maxHeight === 'number' ? `${imageData.maxHeight}px` : 
+                 imageData.maxHeight.includes('px') ? imageData.maxHeight : `${imageData.maxHeight}px`
+    }),
   };
 
   const objectFitClass = imageData.objectFit ? `object-${imageData.objectFit}` : 'object-cover';

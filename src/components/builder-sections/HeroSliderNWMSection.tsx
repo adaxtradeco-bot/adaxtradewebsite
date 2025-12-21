@@ -7,7 +7,7 @@ interface SnapshotCard {
   title: string;
   subtitle: string;
   description: string;
-  preview?: string;
+  preview?: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   stats: {
     label: string;
     value: string;
@@ -28,7 +28,7 @@ interface HeroSlide {
   desc: string;
   badge: string;
   mediaType: 'video' | 'image';
-  mediaSrc: string;
+  mediaSrc: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   mediaPoster?: string;
   snapshotCard?: SnapshotCard;
   statistics?: StatItem[];
@@ -83,7 +83,7 @@ export default function HeroSliderNWMSection({
                 {slide.mediaType === 'video' ? (
                   <video
                     className="hidden md:block w-full h-full object-cover scale-105 saturate-110 contrast-105"
-                    src={slide.mediaSrc}
+                    src={typeof slide.mediaSrc === 'string' ? slide.mediaSrc : slide.mediaSrc.src}
                     poster={slide.mediaPoster}
                     autoPlay={slide.id === activeSlide}
                     muted

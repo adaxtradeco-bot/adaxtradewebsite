@@ -9,7 +9,7 @@ interface ExperienceTab {
   icon: string;
   title: string;
   description: string;
-  image: string;
+  image: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   link: string;
 }
 

@@ -5,7 +5,7 @@ import { SmartImage } from '@/components/ui/SmartImage';
 
 interface Stakeholder {
   title: string;
-  image: string;
+  image: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   quote: string;
   solution: string;
 }

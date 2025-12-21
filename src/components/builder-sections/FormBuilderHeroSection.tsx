@@ -26,7 +26,7 @@ interface FormBuilderHeroSectionProps {
   };
   badges: string[];
   mediaType?: 'placeholder' | 'image' | 'video';
-  mediaUrl?: string;
+  mediaUrl?: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   mediaAlt?: string;
   canvasIcon?: string;
   canvasLabel?: string;
@@ -117,7 +117,7 @@ export default function FormBuilderHeroSection({
               ) : mediaType === 'video' && mediaUrl ? (
                 <div className="aspect-[4/3] rounded-2xl border border-white/10 dark:border-white/10 overflow-hidden mb-4">
                   <video 
-                    src={mediaUrl}
+                    src={typeof mediaUrl === 'string' ? mediaUrl : mediaUrl.src}
                     className="w-full h-full object-cover"
                     autoPlay
                     loop
