@@ -9,6 +9,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
+import { SectionCSSLoader } from '@/components/SectionCSSLoader';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 
 export default function DynamicPage() {
@@ -66,7 +67,12 @@ export default function DynamicPage() {
   }
 
   if (pageData && pageData.length > 0) {
-    return <PageRenderer sections={pageData} />;
+    return (
+      <>
+        <SectionCSSLoader sections={pageData} pageId={fullSlug} />
+        <PageRenderer sections={pageData} />
+      </>
+    );
   }
 
   return null;

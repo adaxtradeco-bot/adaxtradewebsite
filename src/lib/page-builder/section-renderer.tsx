@@ -73,13 +73,15 @@ interface SectionRendererProps {
   isBuilder?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
+  adminMode?: boolean;
 }
 
 export function SectionRenderer({ 
   section, 
   isBuilder = false, 
   isSelected = false, 
-  onSelect 
+  onSelect,
+  adminMode = false
 }: SectionRendererProps) {
   const commonProps = {
     section,
@@ -93,7 +95,8 @@ export function SectionRenderer({
   const wrapperProps = isBuilder ? { isSelected, onSelect } : {};
 
   const renderSection = () => {
-    switch (section.type) {
+    const sectionContent = (() => {
+      switch (section.type) {
       case 'hero':
       case 'HeroSection':
         return <HeroSection section={section as any} isBuilder={isBuilder} />;
@@ -298,12 +301,17 @@ export function SectionRenderer({
           </div>
         );
     }
-  };
+  })();
+
+  return sectionContent;
+};
 
   return (
-    <WrapperComponent {...wrapperProps}>
-      {renderSection()}
-    </WrapperComponent>
+    <div id={`section-${section.id}`}>
+      <WrapperComponent {...wrapperProps}>
+        {renderSection()}
+      </WrapperComponent>
+    </div>
   );
 }
 

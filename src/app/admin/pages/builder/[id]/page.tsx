@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { PageBuilder } from '@/components/admin/PageBuilder/PageBuilder';
 import { loadBuilderPage, saveBuilderPage, BuilderPageData } from '@/lib/page-builder/builder-api';
@@ -18,6 +18,7 @@ export default function BuilderPage() {
   const [pageData, setPageData] = useState<BuilderPageData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [customStylesMode, setCustomStylesMode] = useState(false);
 
   useEffect(() => {
     const loadPage = async () => {
@@ -100,6 +101,47 @@ export default function BuilderPage() {
         </button>
       </div>
 
+      {/* Custom Styles Toggle */}
+      <div className="fixed top-2 right-2 z-50 flex gap-2">
+        <button
+          onClick={() => {
+            const event = new CustomEvent('openGlobalCSSEditor');
+            window.dispatchEvent(event);
+          }}
+          className="px-3 py-2 rounded-lg font-medium transition-colors shadow-sm border bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-2"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span>Global CSS</span>
+        </button>
+        <button
+          onClick={() => {
+            const event = new CustomEvent('openPageCSSEditor', { detail: { pageId: pageData.id, pageTitle: pageData.title } });
+            window.dispatchEvent(event);
+          }}
+          className="px-3 py-2 rounded-lg font-medium transition-colors shadow-sm border bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center space-x-2"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span>Page CSS</span>
+        </button>
+        <button
+          onClick={() => setCustomStylesMode(!customStylesMode)}
+          className={`px-3 py-2 rounded-lg font-medium transition-colors shadow-sm border flex items-center space-x-2 ${
+            customStylesMode
+              ? 'bg-red-500 text-white border-red-600 hover:bg-red-600'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700'
+          }`}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5z" />
+          </svg>
+          <span>{customStylesMode ? 'Exit Section CSS' : 'Section CSS'}</span>
+        </button>
+      </div>
+
       {/* Page Info */}
       <div className="fixed top-2 left-1/2 transform -translate-x-1/2 z-50">
         <div className="bg-white dark:bg-gray-800 px-4 py-2 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600">
@@ -126,6 +168,7 @@ export default function BuilderPage() {
         pageId={pageData.id}
         initialSections={pageData.builderData || []}
         onSave={handleSave}
+        adminMode={customStylesMode}
       />
     </div>
   );

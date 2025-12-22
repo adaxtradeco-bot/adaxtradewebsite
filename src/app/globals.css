@@ -11,6 +11,7 @@
 @import '../styles/navbar-animations.css';
 @import '../styles/rtl.css';
 @import '../styles/nwm-enhancements.css';
+@import '../styles/custom-sections.css';
 
 @layer base {
   html {

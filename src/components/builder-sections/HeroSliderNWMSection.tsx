@@ -69,17 +69,19 @@ export default function HeroSliderNWMSection({
   if (!slides || slides.length === 0) return null;
 
   return (
-    <section className="relative w-full overflow-hidden bg-slate-50 dark:bg-slate-950">
-      <div className="relative min-h-[60vh] md:min-h-[72vh] pt-6 md:pt-10 pb-6 md:pb-10 bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+    <section
+      className="hero-slider-nwm relative w-full overflow-hidden bg-slate-50 dark:bg-slate-950"
+    >
+      <div className="hero-slider-container relative min-h-[60vh] md:min-h-[72vh] pt-6 md:pt-10 pb-6 md:pb-10 bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
         {/* Slider Track */}
         <div 
-          className="flex transition-transform duration-700 ease-out"
+          className="hero-slider-track flex transition-transform duration-700 ease-out"
           style={{ transform: `translateX(-${activeSlide * 100}%)` }}
         >
           {slides.map((slide) => (
-            <div key={slide.id} className="relative flex-shrink-0 w-full min-h-[50vh] md:min-h-[60vh]">
+            <div key={slide.id} className="hero-slide relative flex-shrink-0 w-full min-h-[50vh] md:min-h-[60vh]">
               {/* Background Media */}
-              <div className="absolute inset-0 z-0 overflow-hidden">
+              <div className="hero-slide-media absolute inset-0 z-0 overflow-hidden">
                 {slide.mediaType === 'video' ? (
                   <video
                     className="hidden md:block w-full h-full object-cover scale-105 saturate-110 contrast-105"
@@ -101,23 +103,23 @@ export default function HeroSliderNWMSection({
               </div>
 
               {/* Content */}
-              <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6">
-                <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 md:gap-10 items-end">
+              <div className="hero-slide-content relative z-20 max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6">
+                <div className="hero-slide-layout flex flex-col lg:grid lg:grid-cols-2 gap-6 md:gap-10 items-end">
                   {/* Left Content */}
-                  <div className="space-y-4 md:space-y-6 animate-fade-in">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-600/70 dark:border-cyan-500/50 bg-cyan-500/20 dark:bg-cyan-500/10 text-xs md:text-sm text-cyan-900 dark:text-cyan-100 md:backdrop-blur-md">
+                  <div className="hero-slide-left space-y-4 md:space-y-6 animate-fade-in">
+                    <div className="hero-slide-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-600/70 dark:border-cyan-500/50 bg-cyan-500/20 dark:bg-cyan-500/10 text-xs md:text-sm text-cyan-900 dark:text-cyan-100 md:backdrop-blur-md">
                       <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                       <span className="hidden sm:inline">No-code OS for real-world operations</span>
                       <span className="sm:hidden">No-code OS</span>
                     </div>
 
-                    <div className="space-y-3 md:space-y-4">
-                      <p className="text-xs md:text-sm uppercase tracking-widest text-slate-600 dark:text-slate-400">{slide.badge}</p>
-                      <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight drop-shadow-lg">{slide.title}</h1>
-                      <p className="text-base md:text-lg text-slate-700 dark:text-slate-300 max-w-xl">{slide.desc}</p>
+                    <div className="hero-slide-text space-y-3 md:space-y-4">
+                      <p className="hero-slide-category text-xs md:text-sm uppercase tracking-widest text-slate-600 dark:text-slate-400">{slide.badge}</p>
+                      <h1 className="hero-slide-title text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight drop-shadow-lg">{slide.title}</h1>
+                      <p className="hero-slide-description text-base md:text-lg text-slate-700 dark:text-slate-300 max-w-xl">{slide.desc}</p>
 
                       {slide.statistics && slide.statistics.length > 0 && (
-                        <div className="flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm text-slate-600 dark:text-slate-400 pt-2">
+                        <div className="hero-slide-stats flex flex-wrap gap-4 md:gap-6 text-xs md:text-sm text-slate-600 dark:text-slate-400 pt-2">
                           {slide.statistics.map((stat, statIndex) => (
                             <div 
                               key={statIndex}
@@ -131,15 +133,15 @@ export default function HeroSliderNWMSection({
                       )}
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-3 pt-3 md:pt-4">
+                    <div className="hero-slide-buttons flex flex-col sm:flex-row gap-3 pt-3 md:pt-4">
                       <button 
-                        className="w-full sm:w-auto px-5 md:px-6 py-2.5 md:py-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-medium text-sm md:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:-translate-y-0.5 transition-all duration-300 hover:scale-105"
+                        className="hero-slide-primary-btn w-full sm:w-auto px-5 md:px-6 py-2.5 md:py-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 text-slate-950 font-medium text-sm md:text-base hover:shadow-lg hover:shadow-cyan-500/50 hover:-translate-y-0.5 transition-all duration-300 hover:scale-105"
                         onClick={() => slide.cta?.primaryButton?.link && (window.location.href = slide.cta.primaryButton.link)}
                       >
                         {slide.cta?.primaryButton?.text || 'Start with a live demo'}
                       </button>
                       <button 
-                        className="w-full sm:w-auto px-5 md:px-6 py-2.5 md:py-3 rounded-full border border-slate-300 dark:border-slate-600 bg-white/90 dark:bg-slate-900/80 text-slate-900 dark:text-white text-sm md:text-base hover:bg-white dark:hover:bg-slate-800 hover:-translate-y-0.5 transition-all duration-300 md:backdrop-blur-md"
+                        className="hero-slide-secondary-btn w-full sm:w-auto px-5 md:px-6 py-2.5 md:py-3 rounded-full border border-slate-300 dark:border-slate-600 bg-white/90 dark:bg-slate-900/80 text-slate-900 dark:text-white text-sm md:text-base hover:bg-white dark:hover:bg-slate-800 hover:-translate-y-0.5 transition-all duration-300 md:backdrop-blur-md"
                         onClick={() => slide.cta?.secondaryButton?.link && (window.location.href = slide.cta.secondaryButton.link)}
                       >
                         {slide.cta?.secondaryButton?.text || 'Become a partner'}
@@ -162,7 +164,7 @@ export default function HeroSliderNWMSection({
                     };
 
                     return (
-                      <div className="rounded-2xl md:rounded-3xl border border-slate-300/70 dark:border-slate-700/50 bg-white/80 dark:bg-slate-900/60 md:backdrop-blur-xl p-4 md:p-6 shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 hover:scale-[1.02] relative overflow-hidden group">
+                      <div className="hero-slide-card rounded-2xl md:rounded-3xl border border-slate-300/70 dark:border-slate-700/50 bg-white/80 dark:bg-slate-900/60 md:backdrop-blur-xl p-4 md:p-6 shadow-2xl hover:shadow-cyan-500/20 transition-all duration-500 hover:scale-[1.02] relative overflow-hidden group">
                         {/* Glass effect overlay */}
                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-violet-500/5 opacity-0 md:group-hover:opacity-100 transition-opacity duration-500" />
                         
@@ -215,7 +217,7 @@ export default function HeroSliderNWMSection({
         </div>
 
         {/* Navigation */}
-        <div className="relative z-20 max-w-7xl mx-auto px-4 md:px-6 mt-4 md:mt-6">
+        <div className="hero-slider-navigation relative z-20 max-w-7xl mx-auto px-4 md:px-6 mt-4 md:mt-6">
           <div className="flex flex-col items-center gap-3">
             {/* Desktop: Pills with labels */}
             <div className="hidden md:flex flex-wrap gap-2 justify-center">

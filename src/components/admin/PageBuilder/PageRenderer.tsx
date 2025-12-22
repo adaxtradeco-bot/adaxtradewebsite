@@ -6,6 +6,7 @@
 
 import React from 'react';
 import { SectionRenderer } from '@/lib/page-builder/section-renderer';
+import { SectionCSSLoader } from '@/components/SectionCSSLoader';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 
 interface PageRendererProps {
@@ -38,6 +39,7 @@ export function PageRenderer({ sections, isPreview = false }: PageRendererProps)
 
   return (
     <div className="min-h-screen">
+      <SectionCSSLoader sections={sectionsArray} />
       {sectionsArray.map((section: SectionConfig) => (
         <SectionRenderer
           key={section.id}

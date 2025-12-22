@@ -1,0 +1,127 @@
+/* Custom Section Styles */
+/* This file contains base styles for sections with custom styling capabilities */
+
+/* Section Base Styles */
+.section-base {
+  position: relative;
+  width: 100%;
+}
+
+/* Custom Style Indicators */
+.section-customized {
+  position: relative;
+}
+
+.section-customized::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+  opacity: 0.3;
+  z-index: 1;
+}
+
+/* Admin Mode Indicators */
+.admin-mode .section-customized {
+  outline: 1px dashed #06b6d4;
+  outline-offset: 2px;
+}
+
+.admin-mode .section-customized::after {
+  content: 'Custom Styled';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: #06b6d4;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Section Hover Effects in Admin Mode */
+.admin-mode .section-base:hover {
+  outline: 1px solid #06b6d4;
+  outline-offset: 2px;
+}
+
+/* Custom CSS Editor Styles */
+.css-editor {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 200px;
+  resize: vertical;
+}
+
+.css-editor:focus {
+  outline: none;
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+}
+
+/* CSS Syntax Highlighting Classes */
+.css-property { color: #9cdcfe; }
+.css-value { color: #ce9178; }
+.css-selector { color: #d7ba7d; }
+.css-comment { color: #6a9955; font-style: italic; }
+
+/* Section ID Display */
+.section-id-display {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.admin-mode .section-base:hover .section-id-display {
+  opacity: 1;
+}
+
+/* Responsive Utilities for Custom Sections */
+@media (max-width: 768px) {
+  .admin-mode .section-customized::after {
+    font-size: 8px;
+    padding: 1px 4px;
+  }
+  
+  .section-id-display {
+    font-size: 9px;
+    padding: 1px 4px;
+  }
+}
+
+/* Animation for Custom Style Application */
+.custom-style-applied {
+  animation: customStylePulse 0.5s ease-out;
+}
+
+@keyframes customStylePulse {
+  0% { 
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4);
+  }
+  70% { 
+    box-shadow: 0 0 0 10px rgba(6, 182, 212, 0);
+  }
+  100% { 
+    box-shadow: 0 0 0 0 rgba(6, 182, 212, 0);
+  }
+}

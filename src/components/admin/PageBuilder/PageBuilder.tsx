@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { Canvas } from './Canvas';
@@ -14,6 +14,7 @@ import { SectionLibrary } from './SectionLibrary';
 import { PropertyPanel } from './PropertyPanel';
 import { Toolbar } from './Toolbar';
 import { PreviewModes } from './PreviewModes';
+import { InlineCSSEditor } from '@/components/ui/InlineCSSEditor';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { SECTION_TEMPLATES } from '@/lib/page-builder/section-registry';
 
@@ -21,17 +22,55 @@ interface PageBuilderProps {
   pageId: string;
   initialSections?: SectionConfig[];
   onSave?: (sections: SectionConfig[]) => Promise<void>;
+  adminMode?: boolean;
 }
 
-export function PageBuilder({ pageId, initialSections = [], onSave }: PageBuilderProps) {
+export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false }: PageBuilderProps) {
   const [sections, setSections] = useState<SectionConfig[]>(Array.isArray(initialSections) ? initialSections : []);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [draggedSection, setDraggedSection] = useState<SectionConfig | null>(null);
+  const [cssEditorSection, setCssEditorSection] = useState<{
+    sectionId: string;
+    sectionType: string;
+    sectionOrder: number;
+  } | null>(null);
+  const [globalCSSEditor, setGlobalCSSEditor] = useState(false);
+  const [pageCSSEditor, setPageCSSEditor] = useState<{
+    pageId: string;
+    pageTitle: string;
+  } | null>(null);
 
   const selectedSection = Array.isArray(sections) ? sections.find(s => s.id === selectedSectionId) : null;
+
+  // Listen for CSS editor events
+  useEffect(() => {
+    const handleOpenCSSEditor = (event: CustomEvent) => {
+      const { sectionId, sectionType, sectionOrder } = event.detail;
+      setCssEditorSection({ sectionId, sectionType, sectionOrder });
+    };
+
+    const handleOpenGlobalCSSEditor = () => {
+      setGlobalCSSEditor(true);
+    };
+
+    const handleOpenPageCSSEditor = (event: CustomEvent) => {
+      const { pageId, pageTitle } = event.detail;
+      setPageCSSEditor({ pageId, pageTitle });
+    };
+
+    window.addEventListener('openCSSEditor', handleOpenCSSEditor as EventListener);
+    window.addEventListener('openGlobalCSSEditor', handleOpenGlobalCSSEditor);
+    window.addEventListener('openPageCSSEditor', handleOpenPageCSSEditor as EventListener);
+    
+    return () => {
+      window.removeEventListener('openCSSEditor', handleOpenCSSEditor as EventListener);
+      window.removeEventListener('openGlobalCSSEditor', handleOpenGlobalCSSEditor);
+      window.removeEventListener('openPageCSSEditor', handleOpenPageCSSEditor as EventListener);
+    };
+  }, []);
 
   // Add new section from library
   const handleAddSection = useCallback((templateType: string) => {
@@ -171,6 +210,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave }: PageBuilde
                     onSectionDelete={handleDeleteSection}
                     onSectionDuplicate={handleDuplicateSection}
                     previewMode={previewMode}
+                    adminMode={adminMode}
                   />
                 </SortableContext>
                 
@@ -210,6 +250,33 @@ export function PageBuilder({ pageId, initialSections = [], onSave }: PageBuilde
           </div>
         )}
       </div>
+
+      {/* Inline CSS Editor */}
+      {cssEditorSection && (
+        <InlineCSSEditor
+          sectionId={cssEditorSection.sectionId}
+          type="section"
+          onClose={() => setCssEditorSection(null)}
+        />
+      )}
+
+      {/* Global CSS Editor */}
+      {globalCSSEditor && (
+        <InlineCSSEditor
+          sectionId="global"
+          type="global"
+          onClose={() => setGlobalCSSEditor(false)}
+        />
+      )}
+
+      {/* Page CSS Editor */}
+      {pageCSSEditor && (
+        <InlineCSSEditor
+          sectionId={pageCSSEditor.pageId}
+          type="page"
+          onClose={() => setPageCSSEditor(null)}
+        />
+      )}
     </div>
   );
 }

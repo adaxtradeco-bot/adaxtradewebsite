@@ -11,6 +11,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { SectionRenderer } from '@/lib/page-builder/section-renderer';
+import { SectionCSSLoader } from '@/components/SectionCSSLoader';
 
 interface CanvasProps {
   sections: SectionConfig[];
@@ -20,6 +21,7 @@ interface CanvasProps {
   onSectionDuplicate: (sectionId: string) => void;
   previewMode: 'desktop' | 'tablet' | 'mobile';
   isPreview?: boolean;
+  adminMode?: boolean;
 }
 
 export function Canvas({
@@ -30,6 +32,7 @@ export function Canvas({
   onSectionDuplicate,
   previewMode,
   isPreview = false,
+  adminMode = false,
 }: CanvasProps) {
   const getCanvasWidth = () => {
     switch (previewMode) {
@@ -44,6 +47,7 @@ export function Canvas({
 
   return (
     <div className="flex-1 overflow-auto bg-gray-100 dark:bg-gray-800 p-4">
+      <SectionCSSLoader sections={sections} />
       <div className={`mx-auto ${getCanvasWidth()} bg-white dark:bg-gray-900 shadow-lg rounded-lg overflow-hidden`}>
         {sections.length === 0 ? (
           <div className="p-16 text-center">
@@ -67,6 +71,7 @@ export function Canvas({
                 onDelete={() => onSectionDelete(section.id)}
                 onDuplicate={() => onSectionDuplicate(section.id)}
                 isPreview={isPreview}
+                adminMode={adminMode}
               />
             ))
         )}
@@ -82,6 +87,7 @@ interface SortableSectionProps {
   onDelete: () => void;
   onDuplicate: () => void;
   isPreview: boolean;
+  adminMode?: boolean;
 }
 
 function SortableSection({
@@ -91,6 +97,7 @@ function SortableSection({
   onDelete,
   onDuplicate,
   isPreview,
+  adminMode = false,
 }: SortableSectionProps) {
   const {
     attributes,
@@ -121,6 +128,7 @@ function SortableSection({
         isBuilder={!isPreview}
         isSelected={isSelected}
         onSelect={onSelect}
+        adminMode={adminMode && !isPreview}
       />
 
       {/* Builder Controls */}
@@ -143,6 +151,26 @@ function SortableSection({
           <div className={`absolute top-2 right-2 flex space-x-1 transition-opacity ${
             isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
           }`}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                // Open CSS editor for this section
+                const event = new CustomEvent('openCSSEditor', { 
+                  detail: { 
+                    sectionId: section.id,
+                    sectionType: section.type,
+                    sectionOrder: section.order
+                  } 
+                });
+                window.dispatchEvent(event);
+              }}
+              className="p-2 bg-white dark:bg-gray-800 rounded shadow-sm hover:bg-cyan-50 dark:hover:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400"
+              title="Custom CSS"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v6a2 2 0 002 2h4a2 2 0 002-2V5z" />
+              </svg>
+            </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();

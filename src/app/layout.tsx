@@ -3,6 +3,7 @@ import { SiteSettingsProvider } from '@/hooks/useSiteSettings';
 import { ThemeProvider } from 'next-themes';
 import { ThemeManager } from '@/components/ThemeManager';
 import { FaviconManager } from '@/components/FaviconManager';
+import { GlobalCSSLoader } from '@/components/GlobalCSSLoader';
 
 export default function RootLayout({
   children,
@@ -16,6 +17,7 @@ export default function RootLayout({
           <SiteSettingsProvider>
             <ThemeManager />
             <FaviconManager />
+            <GlobalCSSLoader />
             {children}
           </SiteSettingsProvider>
         </ThemeProvider>
