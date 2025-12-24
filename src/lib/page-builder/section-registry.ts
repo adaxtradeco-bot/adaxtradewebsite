@@ -1237,6 +1237,168 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+  {
+    id: 'interactive-feature-wall',
+    name: 'Interactive Feature Wall',
+    type: 'interactive-feature-wall',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Interactive grid of feature tiles with dynamic preview area',
+    icon: '🎯',
+    defaultData: {
+      id: '',
+      type: 'interactive-feature-wall',
+      order: 0,
+      data: {
+        title: 'Everything you need in one converged AI platform',
+        subtitle: '100+ features to maximize human and AI productivity.',
+        gridColumns: 3,
+        previewAspectRatio: 'video',
+        theme: 'light',
+        showDescriptions: false,
+        features: [
+          {
+            id: 'tasks',
+            key: 'tasks',
+            title: 'Tasks',
+            icon: 'check',
+            previewImage: '/images/features/tasks.png',
+            description: 'Manage and track tasks efficiently'
+          },
+          {
+            id: 'docs',
+            key: 'docs',
+            title: 'Docs',
+            icon: 'doc',
+            previewImage: '/images/features/docs.png',
+            description: 'Create and collaborate on documents'
+          },
+          {
+            id: 'calendar',
+            key: 'calendar',
+            title: 'Calendar',
+            icon: 'calendar',
+            previewImage: '/images/features/calendar.png',
+            description: 'Schedule and manage events'
+          },
+          {
+            id: 'chat',
+            key: 'chat',
+            title: 'Chat',
+            icon: 'users',
+            previewImage: '/images/features/chat.png',
+            description: 'Real-time team communication'
+          },
+          {
+            id: 'dashboards',
+            key: 'dashboards',
+            title: 'Dashboards',
+            icon: 'chart',
+            previewImage: '/images/features/dashboards.png',
+            description: 'Visualize data and metrics'
+          },
+          {
+            id: 'automations',
+            key: 'automations',
+            title: 'Automations',
+            icon: 'zap',
+            previewImage: '/images/features/automations.png',
+            description: 'Automate repetitive workflows'
+          }
+        ],
+        defaultActiveFeature: 'tasks'
+      },
+      style: {
+        backgroundColor: 'bg-white dark:bg-slate-900',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20',
+        alignment: 'center',
+      },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'wall-of-features',
+    name: 'Wall of Features',
+    type: 'wall-of-features',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Feature grid with tiles like ClickUp - interactive wall of features',
+    icon: '🧩',
+    defaultData: {
+      id: '',
+      type: 'wall-of-features',
+      order: 0,
+      data: {
+        title: 'Everything you need in one converged AI platform',
+        subtitle: '100+ features to maximize human and AI productivity.',
+        features: [
+          // Empty tiles for spacing
+          { id: '1', title: '', type: 'empty', position: { row: 1, column: 1 } },
+          { id: '2', title: '', type: 'empty', position: { row: 1, column: 2 } },
+          { id: '3', title: '', type: 'empty', position: { row: 1, column: 3 } },
+          { id: '4', title: '', type: 'empty', position: { row: 1, column: 4 } },
+          { id: '5', title: '', type: 'empty', position: { row: 1, column: 5 } },
+          { id: '6', title: '', type: 'empty', position: { row: 1, column: 6 } },
+          { id: '7', title: '', type: 'empty', position: { row: 1, column: 7 } },
+          { id: '8', title: '', type: 'empty', position: { row: 1, column: 8 } },
+          { id: '9', title: '', type: 'empty', position: { row: 1, column: 9 } },
+          { id: '10', title: '', type: 'empty', position: { row: 1, column: 10 } },
+          
+          // Feature tiles
+          { id: '11', title: 'Dependencies', type: 'button', position: { row: 2, column: 1 } },
+          { id: '12', title: 'Connected Search', type: 'button', position: { row: 2, column: 2 } },
+          { id: '13', title: 'Tasks', type: 'button', position: { row: 2, column: 3 } },
+          { id: '14', title: 'Mind Maps', type: 'button', position: { row: 2, column: 4 } },
+          { id: '15', title: 'Wikis', type: 'button', position: { row: 2, column: 5 } },
+          { id: '16', title: 'AI Notetaker', type: 'button', position: { row: 2, column: 6 } },
+          { id: '17', title: 'Calendar', type: 'button', position: { row: 2, column: 7 } },
+          { id: '18', title: 'Proofing', type: 'button', position: { row: 2, column: 8 } },
+          { id: '19', title: 'Portfolios', type: 'button', position: { row: 2, column: 9 } },
+          { id: '20', title: 'Templates', type: 'button', position: { row: 2, column: 10 } },
+          
+          // More feature tiles
+          { id: '21', title: 'Reminders', type: 'button', position: { row: 3, column: 1 } },
+          { id: '22', title: 'Reporting', type: 'button', position: { row: 3, column: 2 } },
+          { id: '23', title: 'Goals', type: 'button', position: { row: 3, column: 3 } },
+          
+          // Parent tiles (large)
+          { 
+            id: '24', 
+            title: 'Projects', 
+            type: 'parent', 
+            size: 'large',
+            href: '/teams/project-management',
+            image: 'https://images.ctfassets.net/w8fc6tgspyjz/3SIBpiSpDlsgeZOt1H2pLh/ca8361470a3b4d2abced5749b7c65aa8/feature-projects.png',
+            position: { row: 3, column: 4, rowSpan: 2, columnSpan: 2 }
+          },
+          { 
+            id: '25', 
+            title: 'Docs', 
+            type: 'parent', 
+            size: 'large',
+            href: '/features/docs',
+            image: 'https://images.ctfassets.net/w8fc6tgspyjz/7mdFNyxKlaswOGGUAgxM2p/bcb9154ce8ec1e023087cab1f3d94b94/feature-docs.png',
+            position: { row: 3, column: 6, rowSpan: 2, columnSpan: 2 }
+          },
+          
+          // Continue with more tiles...
+          { id: '26', title: 'Sprints', type: 'button', position: { row: 3, column: 8 } },
+          { id: '27', title: 'Custom Status', type: 'button', position: { row: 3, column: 9 } },
+          { id: '28', title: 'AI Writer', type: 'button', position: { row: 3, column: 10 } },
+        ],
+        backgroundColor: '#e8e8e8',
+        tileBackgroundColor: '#ffffff',
+        textColor: '#838383',
+        hoverTextColor: '#202020',
+      },
+      style: {
+        backgroundColor: 'bg-white dark:bg-slate-900',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20',
+        alignment: 'center',
+      },
+    },
+    configSchema: {},
+  },
 
 ];
 

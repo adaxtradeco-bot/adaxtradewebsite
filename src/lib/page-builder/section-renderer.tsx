@@ -66,6 +66,8 @@ import FinalCTANWMSection from '@/components/builder-sections/FinalCTANWMSection
 import HOMEsLIDERpRO from '@/components/builder-sections/HOMEsLIDERpRO';
 import FusionTeamsTabsSection from '@/components/builder-sections/FusionTeamsTabsSection';
 import PlatformFeaturesSection from '@/components/builder-sections/PlatformFeaturesSection';
+import InteractiveFeatureWall from '@/components/builder-sections/InteractiveFeatureWall';
+import WallOfFeaturesSection from '@/components/builder-sections/WallOfFeaturesSection';
 
 
 interface SectionRendererProps {
@@ -222,6 +224,10 @@ export function SectionRenderer({
         return <FusionTeamsTabsSection data={(section as any).data} style={(section as any).style} />;
       case 'platform-features':
         return <PlatformFeaturesSection data={(section as any).data} style={(section as any).style} />;
+      case 'interactive-feature-wall':
+        return <InteractiveFeatureWall {...(section as any).data} />;
+      case 'wall-of-features':
+        return <WallOfFeaturesSection data={(section as any).data} isBuilder={isBuilder} onEdit={onSelect} />;
       case 'ContentSection':
         return (
           <section className="py-16 px-6">

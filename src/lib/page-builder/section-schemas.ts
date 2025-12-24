@@ -9,7 +9,7 @@ import { z } from 'zod';
 // Base section configuration
 export const BaseSectionSchema = z.object({
   id: z.string(),
-  type: z.enum(['hero', 'HeroSection', 'partnership-hero', 'partnership-hero-interactive', 'hero-video', 'hero-animated', 'features', 'features-compact', 'features-minimal', 'cta', 'CTASection', 'tabs', 'faq', 'timeline', 'pricing', 'stats', 'testimonial', 'testimonials', 'feature-grid', 'FeaturesGridSection', 'team', 'usecases', 'divider', 'industry-hero', 'benefit-grid', 'benefits-grid', 'case-study', 'industry-features', 'feature-cards', 'partner-cards', 'partner-benefits', 'partner-types', 'requirements', 'industry-cards', 'properties', 'location', 'workflow', 'integrations', 'process', 'compliance', 'media-content', 'sidebar-content', 'workflow-hero', 'metrics', 'two-column-media', 'simple-cards', 'form-builder-hero', 'hero-slider', 'home-slider-pro', 'stakeholder', 'platform-tabs', 'why', 'experience-tabs', 'video', 'hero-slider-nwm', 'HeroSliderNWMSection', 'why-nwm', 'stakeholders-nwm', 'ecosystem-nwm', 'infographic-nwm', 'video-preview-nwm', 'partners-nwm', 'features-grid-nwm', 'final-cta-nwm', 'fusion-teams-tabs', 'platform-features', 'ContentSection', 'CardsSection', 'TwoColumnSection']),
+  type: z.enum(['hero', 'HeroSection', 'partnership-hero', 'partnership-hero-interactive', 'hero-video', 'hero-animated', 'features', 'features-compact', 'features-minimal', 'cta', 'CTASection', 'tabs', 'faq', 'timeline', 'pricing', 'stats', 'testimonial', 'testimonials', 'feature-grid', 'FeaturesGridSection', 'team', 'usecases', 'divider', 'industry-hero', 'benefit-grid', 'benefits-grid', 'case-study', 'industry-features', 'feature-cards', 'partner-cards', 'partner-benefits', 'partner-types', 'requirements', 'industry-cards', 'properties', 'location', 'workflow', 'integrations', 'process', 'compliance', 'media-content', 'sidebar-content', 'workflow-hero', 'metrics', 'two-column-media', 'simple-cards', 'form-builder-hero', 'hero-slider', 'home-slider-pro', 'stakeholder', 'platform-tabs', 'why', 'experience-tabs', 'video', 'hero-slider-nwm', 'HeroSliderNWMSection', 'why-nwm', 'stakeholders-nwm', 'ecosystem-nwm', 'infographic-nwm', 'video-preview-nwm', 'partners-nwm', 'features-grid-nwm', 'final-cta-nwm', 'fusion-teams-tabs', 'platform-features', 'ContentSection', 'CardsSection', 'TwoColumnSection', 'interactive-feature-wall', 'wall-of-features']),
   order: z.number(),
   data: z.record(z.string(), z.any()),
   style: z.object({
@@ -125,6 +125,63 @@ export const FAQSectionSchema = BaseSectionSchema.extend({
   }),
 });
 
+// Interactive Feature Wall section schema
+export const InteractiveFeatureWallSchema = BaseSectionSchema.extend({
+  type: z.literal('interactive-feature-wall'),
+  data: z.object({
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+    features: z.array(z.object({
+      id: z.string(),
+      key: z.string(),
+      title: z.string(),
+      icon: z.enum(['check', 'doc', 'calendar', 'users', 'chart', 'settings', 'zap', 'shield', 'globe', 'smartphone', 'database', 'cloud']),
+      previewImage: z.string(),
+      description: z.string().optional(),
+    })),
+    defaultActiveFeature: z.string().optional(),
+    gridColumns: z.union([z.literal(2), z.literal(3), z.literal(4)]).optional(),
+    previewAspectRatio: z.enum(['square', 'video', 'wide']).optional(),
+    showDescriptions: z.boolean().optional(),
+    theme: z.enum(['light', 'dark', 'gradient']).optional(),
+  }),
+});
+
+// Wall of Features section schema
+export const WallOfFeaturesSchema = BaseSectionSchema.extend({
+  type: z.literal('wall-of-features'),
+  data: z.object({
+    title: z.string().default('Everything you need in one converged AI platform'),
+    subtitle: z.string().default('100+ features to maximize human and AI productivity.'),
+    features: z.array(z.object({
+      id: z.string(),
+      title: z.string(),
+      icon: z.string().optional(),
+      faIcon: z.object({
+        name: z.string(),
+        type: z.enum(['solid', 'regular', 'light', 'thin', 'duotone', 'brands']),
+        size: z.enum(['xs', 'sm', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl']),
+        color: z.string().optional(),
+      }).optional(),
+      iconSvg: z.string().optional(),
+      type: z.enum(['button', 'link', 'empty', 'parent']).default('button'),
+      href: z.string().optional(),
+      image: z.string().optional(),
+      size: z.enum(['small', 'large']).default('small'),
+      position: z.object({
+        row: z.number(),
+        column: z.number(),
+        rowSpan: z.number().default(1),
+        columnSpan: z.number().default(1),
+      }),
+    })).default([]),
+    backgroundColor: z.string().default('#e8e8e8'),
+    tileBackgroundColor: z.string().default('#ffffff'),
+    textColor: z.string().default('#838383'),
+    hoverTextColor: z.string().default('#202020'),
+  }),
+});
+
 // Union of all section schemas
 export const SectionSchema = BaseSectionSchema;
 
@@ -135,3 +192,5 @@ export type CTASectionConfig = z.infer<typeof CTASectionSchema>;
 export type TabsSectionConfig = z.infer<typeof TabsSectionSchema>;
 export type UseCasesSectionConfig = z.infer<typeof UseCasesSectionSchema>;
 export type FAQSectionConfig = z.infer<typeof FAQSectionSchema>;
+export type InteractiveFeatureWallConfig = z.infer<typeof InteractiveFeatureWallSchema>;
+export type WallOfFeaturesConfig = z.infer<typeof WallOfFeaturesSchema>;

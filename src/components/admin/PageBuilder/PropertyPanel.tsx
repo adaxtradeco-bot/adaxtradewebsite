@@ -11,6 +11,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { MediaBrowser } from './MediaBrowser';
+import InteractiveFeatureWallPropertyPanel from './InteractiveFeatureWallPropertyPanel';
+import { WallOfFeaturesPropertyPanel } from './WallOfFeaturesPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -512,6 +514,10 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
 
   const renderSectionSpecificFields = () => {
     switch (section.type) {
+      case 'interactive-feature-wall':
+        return <InteractiveFeatureWallPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'wall-of-features':
+        return <WallOfFeaturesPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero':
         return (
           <>

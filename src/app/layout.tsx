@@ -12,6 +12,12 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning>
+      <head>
+        <link 
+          rel="stylesheet" 
+          href="/fontawesome/all.css" 
+        />
+      </head>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SiteSettingsProvider>
