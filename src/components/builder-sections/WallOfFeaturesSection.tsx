@@ -110,88 +110,88 @@ export function WallOfFeaturesSection({
 
     // Secondary tiles (visible grid) - Complete 10x8 grid
     // Row 1
-    { id: 'calendar', title: 'Calendar', faIcon: { name: 'calendar', type: 'solid', size: 'lg', color: '#3B82F6' }, kind: 'secondary', col: 1, row: 1 },
-    { id: 'dashboards', title: 'Dashboards', faIcon: { name: 'chart-line', type: 'solid', size: 'lg', color: '#10B981' }, kind: 'secondary', col: 2, row: 1 },
-    { id: 'whiteboards', title: 'Whiteboards', faIcon: { name: 'chalkboard', type: 'solid', size: 'lg', color: '#F59E0B' }, kind: 'secondary', col: 3, row: 1 },
-    { id: 'forms', title: 'Forms', faIcon: { name: 'wpforms', type: 'brands', size: 'lg', color: '#8B5CF6' }, kind: 'secondary', col: 4, row: 1 },
-    { id: 'automation', title: 'Automation', faIcon: { name: 'robot', type: 'solid', size: 'lg', color: '#EF4444' }, kind: 'secondary', col: 5, row: 1 },
-    { id: 'integrations', title: 'Integrations', faIcon: { name: 'plug', type: 'solid', size: 'lg', color: '#06B6D4' }, kind: 'secondary', col: 6, row: 1 },
-    { id: 'reports', title: 'Reports', faIcon: { name: 'chart-bar', type: 'solid', size: 'lg', color: '#84CC16' }, kind: 'secondary', col: 7, row: 1 },
-    { id: 'analytics', title: 'Analytics', faIcon: { name: 'chart-pie', type: 'solid', size: 'lg', color: '#F97316' }, kind: 'secondary', col: 8, row: 1 },
-    { id: 'ai-assistant', title: 'AI Assistant', faIcon: { name: 'brain', type: 'solid', size: 'lg', color: '#A855F7' }, kind: 'secondary', col: 9, row: 1 },
-    { id: 'notifications', title: 'Notifications', faIcon: { name: 'bell', type: 'solid', size: 'lg', color: '#EC4899' }, kind: 'secondary', col: 10, row: 1 },
+    { id: 'calendar', title: 'Calendar', faIcon: { name: 'calendar', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#3B82F6' }, kind: 'secondary', col: 1, row: 1 },
+    { id: 'dashboards', title: 'Dashboards', faIcon: { name: 'chart-line', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#10B981' }, kind: 'secondary', col: 2, row: 1 },
+    { id: 'whiteboards', title: 'Whiteboards', faIcon: { name: 'chalkboard', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F59E0B' }, kind: 'secondary', col: 3, row: 1 },
+    { id: 'forms', title: 'Forms', faIcon: { name: 'wpforms', type: 'brands', size: 'lg', color: '#6B7280', hoverColor: '#8B5CF6' }, kind: 'secondary', col: 4, row: 1 },
+    { id: 'automation', title: 'Automation', faIcon: { name: 'robot', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EF4444' }, kind: 'secondary', col: 5, row: 1 },
+    { id: 'integrations', title: 'Integrations', faIcon: { name: 'plug', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#06B6D4' }, kind: 'secondary', col: 6, row: 1 },
+    { id: 'reports', title: 'Reports', faIcon: { name: 'chart-bar', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#84CC16' }, kind: 'secondary', col: 7, row: 1 },
+    { id: 'analytics', title: 'Analytics', faIcon: { name: 'chart-pie', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F97316' }, kind: 'secondary', col: 8, row: 1 },
+    { id: 'ai-assistant', title: 'AI Assistant', faIcon: { name: 'brain', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#A855F7' }, kind: 'secondary', col: 9, row: 1 },
+    { id: 'notifications', title: 'Notifications', faIcon: { name: 'bell', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EC4899' }, kind: 'secondary', col: 10, row: 1 },
 
     // Row 2
-    { id: 'time-tracking', title: 'Time Tracking', faIcon: { name: 'clock', type: 'solid', size: 'lg', color: '#3B82F6' }, kind: 'secondary', col: 1, row: 2 },
-    { id: 'gantt', title: 'Gantt Charts', faIcon: { name: 'chart-gantt', type: 'solid', size: 'lg', color: '#10B981' }, kind: 'secondary', col: 2, row: 2 },
-    { id: 'kanban', title: 'Kanban', faIcon: { name: 'columns', type: 'solid', size: 'lg', color: '#F59E0B' }, kind: 'secondary', col: 3, row: 2 },
-    { id: 'team-calendar', title: 'Team Calendar', faIcon: { name: 'calendar-days', type: 'solid', size: 'lg', color: '#8B5CF6' }, kind: 'secondary', col: 4, row: 2 },
-    { id: 'workflows', title: 'Workflows', faIcon: { name: 'diagram-project', type: 'solid', size: 'lg', color: '#EF4444' }, kind: 'secondary', col: 5, row: 2 },
-    { id: 'approvals', title: 'Approvals', faIcon: { name: 'check-circle', type: 'solid', size: 'lg', color: '#06B6D4' }, kind: 'secondary', col: 6, row: 2 },
-    { id: 'search', title: 'Search', faIcon: { name: 'magnifying-glass', type: 'solid', size: 'lg', color: '#84CC16' }, kind: 'secondary', col: 7, row: 2 },
-    { id: 'templates', title: 'Templates', faIcon: { name: 'file-lines', type: 'solid', size: 'lg', color: '#F97316' }, kind: 'secondary', col: 8, row: 2 },
-    { id: 'custom-fields', title: 'Custom Fields', faIcon: { name: 'tags', type: 'solid', size: 'lg', color: '#A855F7' }, kind: 'secondary', col: 9, row: 2 },
-    { id: 'permissions', title: 'Permissions', faIcon: { name: 'shield-halved', type: 'solid', size: 'lg', color: '#EC4899' }, kind: 'secondary', col: 10, row: 2 },
+    { id: 'time-tracking', title: 'Time Tracking', faIcon: { name: 'clock', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#3B82F6' }, kind: 'secondary', col: 1, row: 2 },
+    { id: 'gantt', title: 'Gantt Charts', faIcon: { name: 'chart-gantt', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#10B981' }, kind: 'secondary', col: 2, row: 2 },
+    { id: 'kanban', title: 'Kanban', faIcon: { name: 'columns', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F59E0B' }, kind: 'secondary', col: 3, row: 2 },
+    { id: 'team-calendar', title: 'Team Calendar', faIcon: { name: 'calendar-days', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#8B5CF6' }, kind: 'secondary', col: 4, row: 2 },
+    { id: 'workflows', title: 'Workflows', faIcon: { name: 'diagram-project', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EF4444' }, kind: 'secondary', col: 5, row: 2 },
+    { id: 'approvals', title: 'Approvals', faIcon: { name: 'check-circle', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#06B6D4' }, kind: 'secondary', col: 6, row: 2 },
+    { id: 'search', title: 'Search', faIcon: { name: 'magnifying-glass', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#84CC16' }, kind: 'secondary', col: 7, row: 2 },
+    { id: 'templates', title: 'Templates', faIcon: { name: 'file-lines', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F97316' }, kind: 'secondary', col: 8, row: 2 },
+    { id: 'custom-fields', title: 'Custom Fields', faIcon: { name: 'tags', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#A855F7' }, kind: 'secondary', col: 9, row: 2 },
+    { id: 'permissions', title: 'Permissions', faIcon: { name: 'shield-halved', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EC4899' }, kind: 'secondary', col: 10, row: 2 },
 
     // Row 3 (center area empty for preview)
-    { id: 'workload', title: 'Workload', faIcon: { name: 'scale-balanced', type: 'solid', size: 'lg', color: '#3B82F6' }, kind: 'secondary', col: 1, row: 3 },
-    { id: 'timeline', title: 'Timeline', faIcon: { name: 'timeline', type: 'solid', size: 'lg', color: '#10B981' }, kind: 'secondary', col: 2, row: 3 },
-    { id: 'milestones', title: 'Milestones', faIcon: { name: 'flag-checkered', type: 'solid', size: 'lg', color: '#F59E0B' }, kind: 'secondary', col: 3, row: 3 },
+    { id: 'workload', title: 'Workload', faIcon: { name: 'scale-balanced', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#3B82F6' }, kind: 'secondary', col: 1, row: 3 },
+    { id: 'timeline', title: 'Timeline', faIcon: { name: 'timeline', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#10B981' }, kind: 'secondary', col: 2, row: 3 },
+    { id: 'milestones', title: 'Milestones', faIcon: { name: 'flag-checkered', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F59E0B' }, kind: 'secondary', col: 3, row: 3 },
     // Columns 4-7 empty for preview
-    { id: 'dependencies', title: 'Dependencies', faIcon: { name: 'link', type: 'solid', size: 'lg', color: '#8B5CF6' }, kind: 'secondary', col: 8, row: 3 },
-    { id: 'resources', title: 'Resources', faIcon: { name: 'users', type: 'solid', size: 'lg', color: '#EF4444' }, kind: 'secondary', col: 9, row: 3 },
-    { id: 'api', title: 'API', faIcon: { name: 'code', type: 'solid', size: 'lg', color: '#06B6D4' }, kind: 'secondary', col: 10, row: 3 },
+    { id: 'dependencies', title: 'Dependencies', faIcon: { name: 'link', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#8B5CF6' }, kind: 'secondary', col: 8, row: 3 },
+    { id: 'resources', title: 'Resources', faIcon: { name: 'users', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EF4444' }, kind: 'secondary', col: 9, row: 3 },
+    { id: 'api', title: 'API', faIcon: { name: 'code', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#06B6D4' }, kind: 'secondary', col: 10, row: 3 },
 
     // Row 4 (center area empty for preview)
-    { id: 'goals-okrs', title: 'OKRs', faIcon: { name: 'bullseye', type: 'solid', size: 'lg', color: '#84CC16' }, kind: 'secondary', col: 1, row: 4 },
-    { id: 'sprints', title: 'Sprints', faIcon: { name: 'person-running', type: 'solid', size: 'lg', color: '#F97316' }, kind: 'secondary', col: 2, row: 4 },
-    { id: 'backlogs', title: 'Backlogs', faIcon: { name: 'list-ul', type: 'solid', size: 'lg', color: '#A855F7' }, kind: 'secondary', col: 3, row: 4 },
+    { id: 'goals-okrs', title: 'OKRs', faIcon: { name: 'bullseye', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#84CC16' }, kind: 'secondary', col: 1, row: 4 },
+    { id: 'sprints', title: 'Sprints', faIcon: { name: 'person-running', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F97316' }, kind: 'secondary', col: 2, row: 4 },
+    { id: 'backlogs', title: 'Backlogs', faIcon: { name: 'list-ul', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#A855F7' }, kind: 'secondary', col: 3, row: 4 },
     // Columns 4-7 empty for preview
-    { id: 'portfolios', title: 'Portfolios', faIcon: { name: 'briefcase', type: 'solid', size: 'lg', color: '#EC4899' }, kind: 'secondary', col: 8, row: 4 },
-    { id: 'budgets', title: 'Budgets', faIcon: { name: 'dollar-sign', type: 'solid', size: 'lg', color: '#3B82F6' }, kind: 'secondary', col: 9, row: 4 },
-    { id: 'invoicing', title: 'Invoicing', faIcon: { name: 'file-invoice', type: 'solid', size: 'lg', color: '#10B981' }, kind: 'secondary', col: 10, row: 4 },
+    { id: 'portfolios', title: 'Portfolios', faIcon: { name: 'briefcase', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EC4899' }, kind: 'secondary', col: 8, row: 4 },
+    { id: 'budgets', title: 'Budgets', faIcon: { name: 'dollar-sign', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#3B82F6' }, kind: 'secondary', col: 9, row: 4 },
+    { id: 'invoicing', title: 'Invoicing', faIcon: { name: 'file-invoice', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#10B981' }, kind: 'secondary', col: 10, row: 4 },
 
     // Row 5 (center area empty for preview)
-    { id: 'clients', title: 'Clients', faIcon: { name: 'building', type: 'solid', size: 'lg', color: '#F59E0B' }, kind: 'secondary', col: 1, row: 5 },
-    { id: 'projects', title: 'Projects', faIcon: { name: 'folder', type: 'solid', size: 'lg', color: '#8B5CF6' }, kind: 'secondary', col: 2, row: 5 },
-    { id: 'task-lists', title: 'Task Lists', faIcon: { name: 'list-check', type: 'solid', size: 'lg', color: '#EF4444' }, kind: 'secondary', col: 3, row: 5 },
+    { id: 'clients', title: 'Clients', faIcon: { name: 'building', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F59E0B' }, kind: 'secondary', col: 1, row: 5 },
+    { id: 'projects', title: 'Projects', faIcon: { name: 'folder', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#8B5CF6' }, kind: 'secondary', col: 2, row: 5 },
+    { id: 'task-lists', title: 'Task Lists', faIcon: { name: 'list-check', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EF4444' }, kind: 'secondary', col: 3, row: 5 },
     // Columns 4-7 empty for preview
-    { id: 'files', title: 'Files', faIcon: { name: 'paperclip', type: 'solid', size: 'lg', color: '#06B6D4' }, kind: 'secondary', col: 8, row: 5 },
-    { id: 'comments', title: 'Comments', faIcon: { name: 'comment', type: 'solid', size: 'lg', color: '#84CC16' }, kind: 'secondary', col: 9, row: 5 },
-    { id: 'mentions', title: 'Mentions', faIcon: { name: 'at', type: 'solid', size: 'lg', color: '#F97316' }, kind: 'secondary', col: 10, row: 5 },
+    { id: 'files', title: 'Files', faIcon: { name: 'paperclip', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#06B6D4' }, kind: 'secondary', col: 8, row: 5 },
+    { id: 'comments', title: 'Comments', faIcon: { name: 'comment', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#84CC16' }, kind: 'secondary', col: 9, row: 5 },
+    { id: 'mentions', title: 'Mentions', faIcon: { name: 'at', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F97316' }, kind: 'secondary', col: 10, row: 5 },
 
     // Row 6 (center area empty for preview)
-    { id: 'email', title: 'Email', faIcon: { name: 'envelope', type: 'solid', size: 'lg', color: '#A855F7' }, kind: 'secondary', col: 1, row: 6 },
-    { id: 'slack', title: 'Slack', faIcon: { name: 'slack', type: 'brands', size: 'lg', color: '#EC4899' }, kind: 'secondary', col: 2, row: 6 },
-    { id: 'zoom', title: 'Zoom', faIcon: { name: 'video', type: 'solid', size: 'lg', color: '#3B82F6' }, kind: 'secondary', col: 3, row: 6 },
+    { id: 'email', title: 'Email', faIcon: { name: 'envelope', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#A855F7' }, kind: 'secondary', col: 1, row: 6 },
+    { id: 'slack', title: 'Slack', faIcon: { name: 'slack', type: 'brands', size: 'lg', color: '#6B7280', hoverColor: '#EC4899' }, kind: 'secondary', col: 2, row: 6 },
+    { id: 'zoom', title: 'Zoom', faIcon: { name: 'video', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#3B82F6' }, kind: 'secondary', col: 3, row: 6 },
     // Columns 4-7 empty for preview
-    { id: 'github', title: 'GitHub', faIcon: { name: 'github', type: 'brands', size: 'lg', color: '#10B981' }, kind: 'secondary', col: 8, row: 6 },
-    { id: 'jira', title: 'Jira', faIcon: { name: 'jira', type: 'brands', size: 'lg', color: '#F59E0B' }, kind: 'secondary', col: 9, row: 6 },
-    { id: 'figma', title: 'Figma', faIcon: { name: 'figma', type: 'brands', size: 'lg', color: '#8B5CF6' }, kind: 'secondary', col: 10, row: 6 },
+    { id: 'github', title: 'GitHub', faIcon: { name: 'github', type: 'brands', size: 'lg', color: '#6B7280', hoverColor: '#10B981' }, kind: 'secondary', col: 8, row: 6 },
+    { id: 'jira', title: 'Jira', faIcon: { name: 'jira', type: 'brands', size: 'lg', color: '#6B7280', hoverColor: '#F59E0B' }, kind: 'secondary', col: 9, row: 6 },
+    { id: 'figma', title: 'Figma', faIcon: { name: 'figma', type: 'brands', size: 'lg', color: '#6B7280', hoverColor: '#8B5CF6' }, kind: 'secondary', col: 10, row: 6 },
 
     // Row 7
-    { id: 'mobile', title: 'Mobile App', faIcon: { name: 'mobile-screen', type: 'solid', size: 'lg', color: '#EF4444' }, kind: 'secondary', col: 1, row: 7 },
-    { id: 'offline', title: 'Offline Mode', faIcon: { name: 'wifi-slash', type: 'solid', size: 'lg', color: '#06B6D4' }, kind: 'secondary', col: 2, row: 7 },
-    { id: 'security', title: 'Security', faIcon: { name: 'shield', type: 'solid', size: 'lg', color: '#84CC16' }, kind: 'secondary', col: 3, row: 7 },
-    { id: 'sso', title: 'SSO', faIcon: { name: 'key', type: 'solid', size: 'lg', color: '#F97316' }, kind: 'secondary', col: 4, row: 7 },
-    { id: 'audit-logs', title: 'Audit Logs', faIcon: { name: 'clipboard-list', type: 'solid', size: 'lg', color: '#A855F7' }, kind: 'secondary', col: 5, row: 7 },
-    { id: 'compliance', title: 'Compliance', faIcon: { name: 'certificate', type: 'solid', size: 'lg', color: '#EC4899' }, kind: 'secondary', col: 6, row: 7 },
-    { id: 'backup', title: 'Backup', faIcon: { name: 'hard-drive', type: 'solid', size: 'lg', color: '#3B82F6' }, kind: 'secondary', col: 7, row: 7 },
-    { id: 'export', title: 'Export', faIcon: { name: 'file-export', type: 'solid', size: 'lg', color: '#10B981' }, kind: 'secondary', col: 8, row: 7 },
-    { id: 'import', title: 'Import', faIcon: { name: 'file-import', type: 'solid', size: 'lg', color: '#F59E0B' }, kind: 'secondary', col: 9, row: 7 },
-    { id: 'support', title: 'Support', faIcon: { name: 'headset', type: 'solid', size: 'lg', color: '#8B5CF6' }, kind: 'secondary', col: 10, row: 7 },
+    { id: 'mobile', title: 'Mobile App', faIcon: { name: 'mobile-screen', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EF4444' }, kind: 'secondary', col: 1, row: 7 },
+    { id: 'offline', title: 'Offline Mode', faIcon: { name: 'wifi-slash', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#06B6D4' }, kind: 'secondary', col: 2, row: 7 },
+    { id: 'security', title: 'Security', faIcon: { name: 'shield', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#84CC16' }, kind: 'secondary', col: 3, row: 7 },
+    { id: 'sso', title: 'SSO', faIcon: { name: 'key', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F97316' }, kind: 'secondary', col: 4, row: 7 },
+    { id: 'audit-logs', title: 'Audit Logs', faIcon: { name: 'clipboard-list', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#A855F7' }, kind: 'secondary', col: 5, row: 7 },
+    { id: 'compliance', title: 'Compliance', faIcon: { name: 'certificate', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EC4899' }, kind: 'secondary', col: 6, row: 7 },
+    { id: 'backup', title: 'Backup', faIcon: { name: 'hard-drive', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#3B82F6' }, kind: 'secondary', col: 7, row: 7 },
+    { id: 'export', title: 'Export', faIcon: { name: 'file-export', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#10B981' }, kind: 'secondary', col: 8, row: 7 },
+    { id: 'import', title: 'Import', faIcon: { name: 'file-import', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F59E0B' }, kind: 'secondary', col: 9, row: 7 },
+    { id: 'support', title: 'Support', faIcon: { name: 'headset', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#8B5CF6' }, kind: 'secondary', col: 10, row: 7 },
 
     // Row 8
-    { id: 'training', title: 'Training', faIcon: { name: 'graduation-cap', type: 'solid', size: 'lg', color: '#EF4444' }, kind: 'secondary', col: 1, row: 8 },
-    { id: 'onboarding', title: 'Onboarding', faIcon: { name: 'rocket', type: 'solid', size: 'lg', color: '#06B6D4' }, kind: 'secondary', col: 2, row: 8 },
-    { id: 'webinars', title: 'Webinars', faIcon: { name: 'tv', type: 'solid', size: 'lg', color: '#84CC16' }, kind: 'secondary', col: 3, row: 8 },
-    { id: 'documentation', title: 'Documentation', faIcon: { name: 'book', type: 'solid', size: 'lg', color: '#F97316' }, kind: 'secondary', col: 4, row: 8 },
-    { id: 'tutorials', title: 'Tutorials', faIcon: { name: 'play-circle', type: 'solid', size: 'lg', color: '#A855F7' }, kind: 'secondary', col: 5, row: 8 },
-    { id: 'help-center', title: 'Help Center', faIcon: { name: 'circle-question', type: 'solid', size: 'lg', color: '#EC4899' }, kind: 'secondary', col: 6, row: 8 },
-    { id: 'community', title: 'Community', faIcon: { name: 'users-rectangle', type: 'solid', size: 'lg', color: '#3B82F6' }, kind: 'secondary', col: 7, row: 8 },
-    { id: 'updates', title: 'Updates', faIcon: { name: 'arrows-rotate', type: 'solid', size: 'lg', color: '#10B981' }, kind: 'secondary', col: 8, row: 8 },
-    { id: 'roadmap', title: 'Roadmap', faIcon: { name: 'map', type: 'solid', size: 'lg', color: '#F59E0B' }, kind: 'secondary', col: 9, row: 8 },
-    { id: 'feedback', title: 'Feedback', faIcon: { name: 'comment-dots', type: 'solid', size: 'lg', color: '#8B5CF6' }, kind: 'secondary', col: 10, row: 8 },
+    { id: 'training', title: 'Training', faIcon: { name: 'graduation-cap', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EF4444' }, kind: 'secondary', col: 1, row: 8 },
+    { id: 'onboarding', title: 'Onboarding', faIcon: { name: 'rocket', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#06B6D4' }, kind: 'secondary', col: 2, row: 8 },
+    { id: 'webinars', title: 'Webinars', faIcon: { name: 'tv', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#84CC16' }, kind: 'secondary', col: 3, row: 8 },
+    { id: 'documentation', title: 'Documentation', faIcon: { name: 'book', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F97316' }, kind: 'secondary', col: 4, row: 8 },
+    { id: 'tutorials', title: 'Tutorials', faIcon: { name: 'play-circle', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#A855F7' }, kind: 'secondary', col: 5, row: 8 },
+    { id: 'help-center', title: 'Help Center', faIcon: { name: 'circle-question', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#EC4899' }, kind: 'secondary', col: 6, row: 8 },
+    { id: 'community', title: 'Community', faIcon: { name: 'users-rectangle', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#3B82F6' }, kind: 'secondary', col: 7, row: 8 },
+    { id: 'updates', title: 'Updates', faIcon: { name: 'arrows-rotate', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#10B981' }, kind: 'secondary', col: 8, row: 8 },
+    { id: 'roadmap', title: 'Roadmap', faIcon: { name: 'map', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#F59E0B' }, kind: 'secondary', col: 9, row: 8 },
+    { id: 'feedback', title: 'Feedback', faIcon: { name: 'comment-dots', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#8B5CF6' }, kind: 'secondary', col: 10, row: 8 },
   ];
 
   const allFeatures: FeatureItem[] = features.length > 0 
@@ -294,7 +294,7 @@ export function WallOfFeaturesSection({
                 >
                   <div className="text-2xl mb-1">
                     {feature.faIcon ? (
-                      <IconDisplay icon={feature.faIcon} />
+                      <IconDisplay icon={feature.faIcon} enableHover={true} />
                     ) : (
                       feature.icon || '📋'
                     )}
@@ -349,6 +349,9 @@ export function WallOfFeaturesSection({
         }
         .animate-fade {
           animation: fade 0.35s ease-out;
+        }
+        :global(.hover-icon:hover) {
+          color: var(--hover-color) !important;
         }
       `}</style>
     </section>

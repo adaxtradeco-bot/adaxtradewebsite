@@ -14,6 +14,7 @@ export interface IconConfig {
   type: 'solid' | 'regular' | 'light' | 'thin' | 'duotone' | 'brands';
   size: 'xs' | 'sm' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
   color?: string;
+  hoverColor?: string;
 }
 
 interface IconPickerProps {
@@ -323,9 +324,10 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
 interface IconDisplayProps {
   icon: IconConfig;
   className?: string;
+  enableHover?: boolean;
 }
 
-export function IconDisplay({ icon, className = '' }: IconDisplayProps) {
+export function IconDisplay({ icon, className = '', enableHover = false }: IconDisplayProps) {
   const getIconClass = () => {
     const typeMap = {
       solid: 'fas',
@@ -350,10 +352,15 @@ export function IconDisplay({ icon, className = '' }: IconDisplayProps) {
     return `${typeMap[icon.type]} fa-${icon.name} ${sizeMap[icon.size] || ''}`;
   };
 
+  const baseStyle = { color: icon.color };
+  const hoverStyle = enableHover && icon.hoverColor ? {
+    '--hover-color': icon.hoverColor
+  } : {};
+
   return (
     <i 
-      className={`${getIconClass()} ${className}`}
-      style={{ color: icon.color }}
+      className={`${getIconClass()} ${className} ${enableHover ? 'transition-colors duration-200 hover-icon' : ''}`}
+      style={{ ...baseStyle, ...hoverStyle }}
     />
   );
 }
