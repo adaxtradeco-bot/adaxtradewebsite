@@ -138,26 +138,17 @@ export default function SettingsPage() {
         const mergedSettings = { ...defaultSettings, ...data };
         setSettings(mergedSettings);
         
-        // Set previews with cache busting for existing images
+        // Set previews for existing images without cache busting initially
         if (mergedSettings.logo?.lightUrl) {
-          const lightLogoUrl = mergedSettings.logo.lightUrl.includes('?') 
-            ? mergedSettings.logo.lightUrl 
-            : `${mergedSettings.logo.lightUrl}?t=${Date.now()}`;
-          lightLogoUpload.setPreview(lightLogoUrl);
+          lightLogoUpload.setPreview(mergedSettings.logo.lightUrl);
         }
         
         if (mergedSettings.logo?.darkUrl) {
-          const darkLogoUrl = mergedSettings.logo.darkUrl.includes('?') 
-            ? mergedSettings.logo.darkUrl 
-            : `${mergedSettings.logo.darkUrl}?t=${Date.now()}`;
-          darkLogoUpload.setPreview(darkLogoUrl);
+          darkLogoUpload.setPreview(mergedSettings.logo.darkUrl);
         }
         
         if (mergedSettings.favicon?.url) {
-          const faviconUrl = mergedSettings.favicon.url.includes('?') 
-            ? mergedSettings.favicon.url 
-            : `${mergedSettings.favicon.url}?t=${Date.now()}`;
-          faviconUpload.setPreview(faviconUrl);
+          faviconUpload.setPreview(mergedSettings.favicon.url);
         }
       } else {
         console.error('Failed to load settings:', response.statusText);
@@ -336,12 +327,17 @@ export default function SettingsPage() {
                     {(lightLogoUpload.preview || settings.logo.lightUrl) ? (
                       <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 bg-white">
                         <img
-                          src={lightLogoUpload.preview || settings.logo.lightUrl}
+                          key={`light-logo-${Date.now()}`}
+                          src={lightLogoUpload.preview || `${settings.logo.lightUrl}?v=${Date.now()}`}
                           alt={settings.logo.alt || 'Light logo preview'}
                           className="max-w-full h-auto"
                           style={{
                             maxWidth: `${settings.logo.width}px`,
                             maxHeight: `${settings.logo.height}px`
+                          }}
+                          onLoad={() => {
+                            // Force re-render after image loads
+                            console.log('Light logo loaded successfully');
                           }}
                         />
                         {lightLogoUpload.isUploading && (
@@ -391,12 +387,17 @@ export default function SettingsPage() {
                     {(darkLogoUpload.preview || settings.logo.darkUrl) ? (
                       <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-800">
                         <img
-                          src={darkLogoUpload.preview || settings.logo.darkUrl}
+                          key={`dark-logo-${Date.now()}`}
+                          src={darkLogoUpload.preview || `${settings.logo.darkUrl}?v=${Date.now()}`}
                           alt={settings.logo.alt || 'Dark logo preview'}
                           className="max-w-full h-auto"
                           style={{
                             maxWidth: `${settings.logo.width}px`,
                             maxHeight: `${settings.logo.height}px`
+                          }}
+                          onLoad={() => {
+                            // Force re-render after image loads
+                            console.log('Dark logo loaded successfully');
                           }}
                         />
                         {darkLogoUpload.isUploading && (
@@ -728,9 +729,13 @@ export default function SettingsPage() {
                   {(faviconUpload.preview || settings.favicon.url) ? (
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
                       <img
-                        src={faviconUpload.preview || settings.favicon.url}
+                        key={`favicon-${Date.now()}`}
+                        src={faviconUpload.preview || `${settings.favicon.url}?v=${Date.now()}`}
                         alt="Favicon preview"
                         className="w-8 h-8 mx-auto"
+                        onLoad={() => {
+                          console.log('Favicon loaded successfully');
+                        }}
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.style.display = 'none';

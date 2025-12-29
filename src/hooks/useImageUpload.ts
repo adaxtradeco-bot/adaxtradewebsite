@@ -50,15 +50,17 @@ export function useImageUpload({
       const data = await response.json();
       
       if (response.ok && data.success) {
-        // Clean up blob URL
-        URL.revokeObjectURL(previewUrl);
+        // Keep the blob URL for a moment to ensure smooth transition
+        setTimeout(() => {
+          URL.revokeObjectURL(previewUrl);
+        }, 1000);
         
-        // Set server URL using API route with cache busting
-        const serverUrl = `/api${data.url}?t=${Date.now()}`;
+        // Set server URL with cache busting
+        const serverUrl = `${data.url}?t=${Date.now()}`;
         setPreview(serverUrl);
         
-        // Call success with the server URL (not the original URL)
-        onSuccess?.(serverUrl);
+        // Call success with the clean server URL (without cache busting for storage)
+        onSuccess?.(data.url);
       } else {
         // Revert preview on error
         URL.revokeObjectURL(previewUrl);
