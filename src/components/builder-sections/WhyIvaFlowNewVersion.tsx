@@ -24,7 +24,6 @@ export default function WhyIvaFlowNewVersion({ data }: WhyIvaFlowNewVersionProps
   return (
     <section 
       className={`relative overflow-hidden py-12 md:py-20 px-4 md:px-6 ${styling.backgroundColor}`}
-      style={styling.customStyles}
     >
       {/* BACKDROP */}
       <div className="absolute inset-0">
