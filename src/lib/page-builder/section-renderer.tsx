@@ -68,6 +68,7 @@ import FusionTeamsTabsSection from '@/components/builder-sections/FusionTeamsTab
 import PlatformFeaturesSection from '@/components/builder-sections/PlatformFeaturesSection';
 import InteractiveFeatureWall from '@/components/builder-sections/InteractiveFeatureWall';
 import WallOfFeaturesSection from '@/components/builder-sections/WallOfFeaturesSection';
+import WhyIvaFlowNewVersion from '@/components/builder-sections/WhyIvaFlowNewVersion';
 
 
 interface SectionRendererProps {
@@ -228,6 +229,8 @@ export function SectionRenderer({
         return <InteractiveFeatureWall {...(section as any).data} />;
       case 'wall-of-features':
         return <WallOfFeaturesSection data={(section as any).data} isBuilder={isBuilder} onEdit={onSelect} />;
+      case 'why-ivaflow-new-version':
+        return <WhyIvaFlowNewVersion data={(section as any).data} />;
       case 'ContentSection':
         return (
           <section className="py-16 px-6">
