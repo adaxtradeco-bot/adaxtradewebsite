@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <title>Setiran Form Builder — Collect Data Seamlessly (No-Code)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+          integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <style>
+    :root{ --ink:#1e293b; --brand:#7c3aed; --brand2:#06b6d4; --light-bg:#f8fafc; --card-bg:#ffffff; }
+    html,body{ background:var(--light-bg); color:#334155; }
+    .pill{ background:linear-gradient(90deg, var(--brand), var(--brand2)); }
+    .bg-grid{ background:
+      radial-gradient(1200px 800px at 85% -20%, rgba(124,58,237,.08), transparent 45%),
+      radial-gradient(900px 600px at -10% 120%, rgba(6,182,212,.08), transparent 55%),
+      var(--light-bg); }
+    .reveal{ opacity:0; transform:translateY(18px); transition:opacity .5s ease, transform .5s ease; will-change:opacity, transform;}
+    .reveal.show{ opacity:1; transform:translateY(0); }
+    .lift{ transition:transform .25s ease, box-shadow .25s ease; will-change:transform; }
+    .lift:hover{ transform:translateY(-6px); box-shadow:0 12px 28px rgba(0,0,0,.12); }
+    .soft-line{ background:linear-gradient(90deg, transparent, rgba(148,163,184,.3), transparent); height:1px; }
+    .badge{ font-size:.75rem; padding:.35rem .6rem; border:1px solid rgba(148,163,184,.3); border-radius:.65rem; background:rgba(255,255,255,.8); color:#475569; }
+    .acc-body{ display:none; }
+    .hscroll{ overflow-x:auto; scroll-behavior:smooth; }
+    .hscroll::-webkit-scrollbar{ height:8px; }
+    .hscroll::-webkit-scrollbar-thumb{ background:rgba(148,163,184,.4); border-radius:999px; }
+    .masonry{ column-count:1; column-gap:1rem; }
+    @media (min-width: 768px){ .masonry{ column-count:2; } }
+    @media (min-width: 1280px){ .masonry{ column-count:3; } }
+    .masonry-item{ break-inside:avoid; margin:0 0 1rem; }
+    figure.placeholder{ border:1px dashed rgba(148,163,184,.3); background:rgba(255,255,255,.5); }
+    figure.placeholder img{ width:100%; height:auto; display:block; }
+    figure.placeholder figcaption{ font-size:.75rem; color:#64748b; padding:.5rem .75rem; border-top:1px dashed rgba(148,163,184,.3); }
+    section, header { isolation:isolate; position:relative; z-index:0; }
+  </style>
+</head>
+<body class="antialiased selection:bg-violet-200 selection:text-violet-900">
+
+  <!-- NAV + HERO -->
+  <header class="bg-grid">
+    <nav class="mx-auto max-w-7xl px-6 py-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full pill"></div>
+        <span class="text-slate-800 font-semibold">Setiran Form Builder</span>
+      </div>
+      <div class="hidden md:flex items-center gap-6 text-slate-600">
+        <a href="#why" class="hover:text-slate-900">Why</a>
+        <a href="#designer" class="hover:text-slate-900">Designer</a>
+        <a href="#fields" class="hover:text-slate-900">Fields</a>
+        <a href="#smart" class="hover:text-slate-900">Smart Logic</a>
+        <a href="#integrations" class="hover:text-slate-900">Integrations</a>
+        <a href="#analytics" class="hover:text-slate-900">Analytics</a>
+        <a href="#mobile" class="hover:text-slate-900">Mobile & Voice</a>
+        <a href="#gov" class="hover:text-slate-900">Governance</a>
+        <a href="#bpms" class="hover:text-slate-900">BPMS</a>
+        <a href="#faq" class="hover:text-slate-900">FAQ</a>
+      </div>
+      <a href="#cta" class="px-4 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800">Request a Demo</a>
+    </nav>
+
+    <section class="mx-auto max-w-7xl px-6 pt-10 pb-20 lg:pt-16">
+      <div class="grid lg:grid-cols-[1.15fr_.85fr] gap-10 items-center">
+        <div class="reveal">
+          <span class="inline-flex items-center gap-2 text-xs px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Collect form data seamlessly. Gain real-time visibility.
+          </span>
+          <h1 class="mt-5 text-4xl md:text-5xl font-extrabold leading-tight text-slate-900">
+            Design Forms that <span class="text-violet-600">Run Your Processes</span> — No Code.
+          </h1>
+          <p class="mt-5 text-slate-600 max-w-xl">
+            Build multi-step, responsive forms with AI assistance, dynamic logic, and deep integrations. Validate at the source, automate downstream, and keep a complete audit trail.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <a href="#designer" class="px-5 py-3 rounded-xl font-semibold pill text-white">Open the Designer</a>
+            <a href="#templates" class="px-5 py-3 rounded-xl font-semibold border border-slate-300 text-slate-700 hover:bg-slate-50">Browse Templates</a>
+          </div>
+          <div class="mt-8 flex gap-3 text-xs">
+            <span class="badge">No-Code</span>
+            <span class="badge">AI-Assisted</span>
+            <span class="badge">Enterprise</span>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="rounded-3xl overflow-hidden p-5 shadow-lg border border-slate-200"
+               style="background:
+                 radial-gradient(900px 600px at 80% -20%, rgba(124,58,237,.06), transparent 50%),
+                 radial-gradient(700px 500px at -10% 120%, rgba(6,182,212,.06), transparent 55%),
+                 #ffffff;">
+            <figure class="placeholder rounded-2xl overflow-hidden">
+              <img src="https://placehold.co/980x420/f1f5f9/475569?text=Form+Canvas+%7C+Fields+%7C+Rules+%7C+Preview" alt="Form canvas mock">
+              <figcaption>Canvas + field palette, live preview and properties.</figcaption>
+            </figure>
+            <div class="grid grid-cols-3 gap-3 mt-4">
+              <div class="lift rounded-xl bg-slate-50 border border-slate-200 p-3 text-center"><div class="text-lg">🧩</div><div class="text-xs text-slate-600">Drag & Drop</div></div>
+              <div class="lift rounded-xl bg-slate-50 border border-slate-200 p-3 text-center"><div class="text-lg">✅</div><div class="text-xs text-slate-600">Validations</div></div>
+              <div class="lift rounded-xl bg-slate-50 border border-slate-200 p-3 text-center"><div class="text-lg">🔗</div><div class="text-xs text-slate-600">Integrations</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <div class="soft-line"></div>
+
+  <!-- WHY -->
+  <section id="why" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="reveal text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Why Choose an Enterprise Form Builder?</h2>
+      <p class="mt-3 text-slate-600">
+        Replace fragile spreadsheets and rigid off-the-shelf forms with tailored, governed data collection that plugs into your systems. Ship faster, standardize quality, and keep security tight.
+      </p>
+    </div>
+    <ul class="reveal mt-6 text-sm max-w-3xl mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+      <li class="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800">Build in days, not months</li>
+      <li class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800">Multi-step, responsive layouts</li>
+      <li class="p-3 rounded-xl bg-violet-50 border border-violet-200 text-violet-800">Conditional logic & validations</li>
+      <li class="p-3 rounded-xl bg-cyan-50 border border-cyan-200 text-cyan-800">CRM/ERP/API integrations</li>
+      <li class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800">Audit trails & role-based access</li>
+      <li class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-800">AI assistance for speed</li>
+    </ul>
+  </section>
+
+  <!-- DESIGNER -->
+  <section id="designer" class="bg-gradient-to-b from-cyan-50 to-transparent">
+    <div class="mx-auto max-w-7xl px-6 py-16 grid lg:grid-cols-2 gap-12 items-center">
+      <div class="reveal order-2 lg:order-1">
+        <figure class="placeholder rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-lg">
+          <img src="https://placehold.co/1000x560/f1f5f9/475569?text=Designer+Drag+%26+Drop" alt="Drag & drop designer">
+          <figcaption>Visual designer: drag fields, arrange columns, preview live.</figcaption>
+        </figure>
+      </div>
+      <div class="reveal order-1 lg:order-2">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Visual Designer & Real-Time Preview</h2>
+        <p class="mt-3 text-slate-600">
+          Assemble forms by dragging fields onto the canvas. Switch between desktop, tablet and mobile views, and see every change instantly. Start from templates or build from scratch.
+        </p>
+        <ul class="mt-6 grid sm:grid-cols-2 gap-4 text-sm">
+          <li class="p-4 rounded-xl bg-white border border-slate-200 lift shadow-sm">Drag-and-drop canvas</li>
+          <li class="p-4 rounded-xl bg-white border border-slate-200 lift shadow-sm">Responsive previews</li>
+          <li class="p-4 rounded-xl bg-white border border-slate-200 lift shadow-sm">Multi-column layouts</li>
+          <li class="p-4 rounded-xl bg-white border border-slate-200 lift shadow-sm">Starter templates</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIELDS -->
+  <section id="fields" class="mx-auto max-w-7xl px-6 py-16 grid lg:grid-cols-[280px_1fr] gap-10">
+    <aside class="reveal">
+      <div class="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm" id="fieldTabs">
+        <button data-tab="basics" class="w-full text-left px-3 py-2 rounded-lg bg-violet-100 text-violet-800 mb-2">Basics</button>
+        <button data-tab="advanced" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 mb-2 text-slate-700">Advanced</button>
+        <button data-tab="appearance" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 mb-2 text-slate-700">Appearance</button>
+        <button data-tab="validation" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-50 text-slate-700">Validation</button>
+      </div>
+    </aside>
+    <div class="reveal rounded-2xl bg-white border border-slate-200 p-6 shadow-sm">
+      <div id="tab-basics">
+        <h2 class="text-3xl font-bold text-slate-900">Rich Field Library & Customization</h2>
+        <p class="mt-2 text-slate-600">
+          Choose from 30+ field types—text, numbers, dates, files, signatures, maps and more. Add defaults, help text and options, then fine-tune visibility and roles.
+        </p>
+        <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+          <li class="p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-800">Text, number, choice</li>
+          <li class="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800">File & image upload</li>
+          <li class="p-3 rounded-lg bg-violet-50 border border-violet-200 text-violet-800">Date & time, signatures</li>
+          <li class="p-3 rounded-lg bg-cyan-50 border border-cyan-200 text-cyan-800">Maps & location</li>
+        </ul>
+      </div>
+      <div id="tab-advanced" class="hidden">
+        <h2 class="text-3xl font-bold text-slate-900">Advanced & Relational Fields</h2>
+        <p class="mt-2 text-slate-600">
+          Capture complex data with computational fields, master-detail (child tables), API-connected lookups and nested forms. Import rows in bulk via CSV.
+        </p>
+        <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+          <li class="p-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800">Computational fields</li>
+          <li class="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-800">Master-detail tables</li>
+          <li class="p-3 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-800">API lookups</li>
+          <li class="p-3 rounded-lg bg-teal-50 border border-teal-200 text-teal-800">Nested forms</li>
+        </ul>
+      </div>
+      <div id="tab-appearance" class="hidden">
+        <h2 class="text-3xl font-bold text-slate-900">Branding & Appearance</h2>
+        <p class="mt-2 text-slate-600">
+          Apply your brand with themes and custom CSS. Group fields into sections, add icons or placeholders, and keep layouts clean and consistent.
+        </p>
+        <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+          <li class="p-3 rounded-lg bg-purple-50 border border-purple-200 text-purple-800">Themes & CSS classes</li>
+          <li class="p-3 rounded-lg bg-pink-50 border border-pink-200 text-pink-800">Field grouping</li>
+          <li class="p-3 rounded-lg bg-orange-50 border border-orange-200 text-orange-800">Help text & hints</li>
+          <li class="p-3 rounded-lg bg-lime-50 border border-lime-200 text-lime-800">Icons & placeholders</li>
+        </ul>
+      </div>
+      <div id="tab-validation" class="hidden">
+        <h2 class="text-3xl font-bold text-slate-900">Validation & Role-Based Visibility</h2>
+        <p class="mt-2 text-slate-600">
+          Validate inputs in real time and restrict visibility by role. Enforce patterns for email, phone and IDs, and toggle mandatory status dynamically.
+        </p>
+        <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-sm">
+          <li class="p-3 rounded-lg bg-red-50 border border-red-200 text-red-800">Regex & pattern rules</li>
+          <li class="p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-yellow-800">Mandatory/optional toggles</li>
+          <li class="p-3 rounded-lg bg-green-50 border border-green-200 text-green-800">Role-based visibility</li>
+          <li class="p-3 rounded-lg bg-sky-50 border border-sky-200 text-sky-800">Inline error messages</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SMART LOGIC -->
+  <section id="smart" class="bg-gradient-to-b from-violet-50 to-transparent">
+    <div class="mx-auto max-w-7xl px-6 py-16">
+      <div class="reveal text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Dynamic Logic, Multi-Step, and Events</h2>
+        <p class="mt-3 text-slate-600">
+          Make forms adapt in real time: show only what matters, compute live totals, and trigger downstream actions. Break lengthy inputs into easy steps to boost completion.
+        </p>
+      </div>
+      <ul class="reveal mt-8 grid md:grid-cols-3 gap-5 text-sm">
+        <li class="rounded-2xl bg-white border border-slate-200 p-5 lift shadow-sm">
+          <h3 class="font-semibold text-slate-900">Conditional Logic</h3>
+          <p class="mt-2 text-slate-600">Show/hide fields, set required/optional, enable/disable based on inputs.</p>
+        </li>
+        <li class="rounded-2xl bg-white border border-slate-200 p-5 lift shadow-sm">
+          <h3 class="font-semibold text-slate-900">Wizard Steps</h3>
+          <p class="mt-2 text-slate-600">Split into pages with progress indicators and validation at each step.</p>
+        </li>
+        <li class="rounded-2xl bg-white border border-slate-200 p-5 lift shadow-sm">
+          <h3 class="font-semibold text-slate-900">Events & Actions</h3>
+          <p class="mt-2 text-slate-600">On submit/update: notify, create records, call APIs, or start workflows.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TEMPLATES -->
+  <section id="templates" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="reveal flex items-end justify-between">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Start Faster with Templates</h2>
+      <div class="flex gap-2">
+        <button id="tplPrev" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">‹</button>
+        <button id="tplNext" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">›</button>
+      </div>
+    </div>
+    <p class="reveal mt-3 text-slate-600 max-w-3xl">
+      Download pre-built forms for HR, Finance, Sales, Ops and IT—or use them as blueprints. Customize fields, steps and validations to match policy.
+    </p>
+    <div id="tplScroller" class="hscroll mt-6">
+      <div class="min-w-max flex gap-4">
+        <div class="w-[320px] rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 p-6 lift shadow-sm">
+          <div class="text-lg font-semibold text-blue-900">Employee Onboarding</div>
+          <p class="text-sm text-blue-700 mt-1">Checklists, docs, signatures, approvals.</p>
+        </div>
+        <div class="w-[320px] rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100 border border-emerald-200 p-6 lift shadow-sm">
+          <div class="text-lg font-semibold text-emerald-900">Leave Requests</div>
+          <p class="text-sm text-emerald-700 mt-1">Policy-aware approvals and calendars.</p>
+        </div>
+        <div class="w-[320px] rounded-xl bg-gradient-to-br from-violet-50 to-violet-100 border border-violet-200 p-6 lift shadow-sm">
+          <div class="text-lg font-semibold text-violet-900">Expense Claims</div>
+          <p class="text-sm text-violet-700 mt-1">Receipts, limits, multi-level approvals.</p>
+        </div>
+        <div class="w-[320px] rounded-xl bg-gradient-to-br from-cyan-50 to-cyan-100 border border-cyan-200 p-6 lift shadow-sm">
+          <div class="text-lg font-semibold text-cyan-900">IT Access</div>
+          <p class="text-sm text-cyan-700 mt-1">Provisioning, de-provisioning, audit.</p>
+        </div>
+        <div class="w-[320px] rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 border border-amber-200 p-6 lift shadow-sm">
+          <div class="text-lg font-semibold text-amber-900">Marketing Brief</div>
+          <p class="text-sm text-amber-700 mt-1">Intake, assets, deadlines, approvals.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTEGRATIONS -->
+  <section id="integrations" class="bg-gradient-to-b from-indigo-50 to-transparent">
+    <div class="mx-auto max-w-7xl px-6 py-16 grid lg:grid-cols-2 gap-12 items-center">
+      <div class="reveal">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Integrations & Automation</h2>
+        <p class="mt-3 text-slate-600">
+          Connect forms to everyday apps so data flows automatically. Pre-populate fields, validate against master data, and push submissions to CRM, ERP and project tools.
+        </p>
+        <ul class="mt-6 grid grid-cols-2 gap-3 text-sm">
+          <li class="p-3 rounded-lg bg-blue-50 border border-blue-200 text-blue-800">CRM & email lists</li>
+          <li class="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800">Accounting & invoices</li>
+          <li class="p-3 rounded-lg bg-violet-50 border border-violet-200 text-violet-800">Project & tickets</li>
+          <li class="p-3 rounded-lg bg-cyan-50 border border-cyan-200 text-cyan-800">File storage & e-signature</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <figure class="placeholder rounded-2xl overflow-hidden shadow-lg">
+          <img src="https://placehold.co/1100x420/f1f5f9/475569?text=Integration+Diagram" alt="Integration diagram">
+          <figcaption>Hub-and-spoke: Forms ↔ CRM/ERP/Email/Storage/Accounting via APIs & webhooks.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANALYTICS -->
+  <section id="analytics" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="reveal text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Reporting, Analytics & Visualization</h2>
+      <p class="mt-3 text-slate-600">
+        Explore responses in real time with views and filters. Build tabular reports, pivots and charts—then export to XLS/CSV/PDF or feed dashboards.
+      </p>
+    </div>
+    <div class="masonry mt-10">
+      <div class="masonry-item reveal rounded-2xl bg-gradient-to-br from-rose-50 to-rose-100 border border-rose-200 p-5 shadow-sm">
+        <h3 class="font-semibold text-rose-900">Custom Views</h3>
+        <p class="text-sm text-rose-700 mt-2">Tables, galleries, spreadsheet-like editors.</p>
+      </div>
+      <div class="masonry-item reveal rounded-2xl bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 p-5 shadow-sm">
+        <h3 class="font-semibold text-orange-900">Pivot & Charts</h3>
+        <p class="text-sm text-orange-700 mt-2">Slice metrics, visualize trends and KPIs.</p>
+      </div>
+      <div class="masonry-item reveal rounded-2xl bg-gradient-to-br from-teal-50 to-teal-100 border border-teal-200 p-5 shadow-sm">
+        <h3 class="font-semibold text-teal-900">Exports</h3>
+        <p class="text-sm text-teal-700 mt-2">Export XLS/CSV/PDF for sharing and audit.</p>
+      </div>
+      <div class="masonry-item reveal rounded-2xl bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 p-5 shadow-sm">
+        <h3 class="font-semibold text-purple-900">Live Dashboards</h3>
+        <p class="text-sm text-purple-700 mt-2">Embed widgets and reports in portals.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOBILE & VOICE -->
+  <section id="mobile" class="bg-gradient-to-b from-cyan-50 to-transparent">
+    <div class="mx-auto max-w-7xl px-6 py-16">
+      <div class="reveal text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Mobile & Voice — Forms Anywhere</h2>
+        <p class="mt-3 text-slate-600">
+          Capture data on the go. Forms are responsive, can work offline, and even collect answers via phone with voice or keypad—ideal for outreach at scale.
+        </p>
+      </div>
+      <div class="mt-8 grid md:grid-cols-3 gap-5">
+        <div class="reveal rounded-2xl bg-white border border-slate-200 p-5 lift shadow-sm">
+          <h3 class="font-semibold text-slate-900">Responsive by Default</h3>
+          <p class="text-sm text-slate-600 mt-2">Optimized for phones and tablets.</p>
+        </div>
+        <div class="reveal rounded-2xl bg-white border border-slate-200 p-5 lift shadow-sm">
+          <h3 class="font-semibold text-slate-900">Offline Mode</h3>
+          <p class="text-sm text-slate-600 mt-2">Fill forms offline and sync later.</p>
+        </div>
+        <div class="reveal rounded-2xl bg-white border border-slate-200 p-5 lift shadow-sm">
+          <h3 class="font-semibold text-slate-900">Voice Forms</h3>
+          <p class="text-sm text-slate-600 mt-2">Automated call campaigns & capture.</p>
+        </div>
+      </div>
+      <figure class="reveal placeholder rounded-2xl overflow-hidden mt-8 shadow-lg">
+        <img src="https://placehold.co/1200x360/f1f5f9/475569?text=Phones+%2F+Voice+Flow+Illustration" alt="Mobile & voice illustration">
+        <figcaption>Mock: mobile screens + IVR flow showing voice form capture.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- GOVERNANCE -->
+  <section id="gov" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="reveal text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Governance, Security & Compliance</h2>
+      <p class="mt-3 text-slate-600">
+        Protect sensitive data with role-based access, field-level permissions and full audit trails. Meet policy and regulatory requirements with confidence.
+      </p>
+    </div>
+    <div class="mt-10 grid md:grid-cols-3 gap-5">
+      <div class="reveal rounded-2xl bg-gradient-to-br from-red-50 to-red-100 border border-red-200 p-5 lift shadow-sm">
+        <h3 class="font-semibold text-red-900">Role-Based Access</h3>
+        <p class="text-sm text-red-700 mt-2">Control who can view, edit, or approve.</p>
+      </div>
+      <div class="reveal rounded-2xl bg-gradient-to-br from-yellow-50 to-yellow-100 border border-yellow-200 p-5 lift shadow-sm">
+        <h3 class="font-semibold text-yellow-900">Audit Trails</h3>
+        <p class="text-sm text-yellow-700 mt-2">Track every submission and change.</p>
+      </div>
+      <div class="reveal rounded-2xl bg-gradient-to-br from-green-50 to-green-100 border border-green-200 p-5 lift shadow-sm">
+        <h3 class="font-semibold text-green-900">Encryption & SSO</h3>
+        <p class="text-sm text-green-700 mt-2">SOC2/GDPR ready, SSL, and SSO support.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- BPMS -->
+  <section id="bpms" class="bg-gradient-to-b from-violet-50 to-transparent">
+    <div class="mx-auto max-w-7xl px-6 py-16">
+      <div class="reveal flex items-end justify-between">
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900">Integrated with Your BPMS</h2>
+        <div class="flex gap-2">
+          <button id="ucPrev" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">‹</button>
+          <button id="ucNext" class="px-3 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700">›</button>
+        </div>
+      </div>
+      <p class="reveal mt-3 text-slate-600 max-w-3xl">
+        Use forms to kick off and participate in workflows. Route approvals, update records, and sync dashboards—end-to-end.
+      </p>
+      <div class="mt-6 rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+        <div id="ucTrack" class="flex gap-4 p-6">
+          <div class="min-w-[320px] rounded-xl border border-slate-200 bg-gradient-to-br from-indigo-50 to-indigo-100 p-6 lift shadow-sm"><div class="text-lg font-semibold text-indigo-900">Onboarding Flow</div><p class="text-sm text-indigo-700 mt-1">Multi-step forms + approvals.</p></div>
+          <div class="min-w-[320px] rounded-xl border border-slate-200 bg-gradient-to-br from-pink-50 to-pink-100 p-6 lift shadow-sm"><div class="text-lg font-semibold text-pink-900">Service Requests</div><p class="text-sm text-pink-700 mt-1">SLAs, notifications, escalations.</p></div>
+          <div class="min-w-[320px] rounded-xl border border-slate-200 bg-gradient-to-br from-lime-50 to-lime-100 p-6 lift shadow-sm"><div class="text-lg font-semibold text-lime-900">Compliance Checks</div><p class="text-sm text-lime-700 mt-1">Conditional steps + signatures.</p></div>
+          <div class="min-w-[320px] rounded-xl border border-slate-200 bg-gradient-to-br from-sky-50 to-sky-100 p-6 lift shadow-sm"><div class="text-lg font-semibold text-sky-900">Vendor Intake</div><p class="text-sm text-sky-700 mt-1">Data validation + integrations.</p></div>
+          <div class="min-w-[320px] rounded-xl border border-slate-200 bg-gradient-to-br from-fuchsia-50 to-fuchsia-100 p-6 lift shadow-sm"><div class="text-lg font-semibold text-fuchsia-900">Change Requests</div><p class="text-sm text-fuchsia-700 mt-1">Approvals + audit logs.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ + CTA -->
+  <section id="faq" class="mx-auto max-w-7xl px-6 py-16">
+    <div class="reveal text-center max-w-3xl mx-auto">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900">FAQ</h2>
+      <p class="mt-3 text-slate-600">
+        Everything you need to know before building your first form.
+      </p>
+    </div>
+    <div class="mt-8 grid lg:grid-cols-2 gap-6">
+      <div class="reveal rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+        <h3 class="font-semibold text-slate-900 mb-3">Getting Started</h3>
+        <div class="border-t border-slate-200">
+          <button class="acc-head w-full text-left py-3 hover:text-slate-900 text-slate-700">Do I need coding skills?</button>
+          <div class="acc-body text-sm text-slate-600 pb-3">No—build visually. Add custom code only if you want extra control.</div>
+        </div>
+        <div class="border-t border-slate-200">
+          <button class="acc-head w-full text-left py-3 hover:text-slate-900 text-slate-700">How do templates work?</button>
+          <div class="acc-body text-sm text-slate-600 pb-3">Pick a template, customize steps, fields and rules, connect systems.</div>
+        </div>
+      </div>
+      <div class="reveal rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
+        <h3 class="font-semibold text-slate-900 mb-3">Security & Scaling</h3>
+        <div class="border-t border-slate-200">
+          <button class="acc-head w-full text-left py-3 hover:text-slate-900 text-slate-700">Is it enterprise-ready?</button>
+          <div class="acc-body text-sm text-slate-600 pb-3">Yes. Role-based access, SSO, audit logs, encryption, and compliance.</div>
+        </div>
+        <div class="border-t border-slate-200">
+          <button class="acc-head w-full text-left py-3 hover:text-slate-900 text-slate-700">Can it integrate with our stack?</button>
+          <div class="acc-body text-sm text-slate-600 pb-3">Use native connectors, REST APIs, and webhooks to sync data.</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cta" class="reveal mt-12 text-center">
+      <h3 class="text-2xl font-bold text-slate-900">Ready to modernize your forms?</h3>
+      <p class="mt-2 text-slate-600">Book a tailored demo or start from a template to see results fast.</p>
+      <a href="#" class="inline-block mt-6 px-6 py-3 rounded-xl font-semibold pill text-white">Request a Demo</a>
+    </div>
+  </section>
+
+  <footer class="border-t border-slate-200">
+    <div class="mx-auto max-w-7xl px-6 py-10 text-sm text-slate-500 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div>© <span id="year"></span> Setiran. All rights reserved.</div>
+      <div class="flex gap-4">
+        <a href="#" class="hover:text-slate-900">Privacy</a>
+        <a href="#" class="hover:text-slate-900">Security</a>
+        <a href="#" class="hover:text-slate-900">Status</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target);} });
+    }, { threshold:.15 });
+    document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+
+    $('#fieldTabs button').on('click', function(){
+      $('#fieldTabs button').removeClass('bg-violet-100 text-violet-800').addClass('text-slate-700');
+      $(this).addClass('bg-violet-100 text-violet-800').removeClass('text-slate-700');
+      const tab = $(this).data('tab');
+      $('#tab-basics, #tab-advanced, #tab-appearance, #tab-validation').addClass('hidden');
+      $('#tab-'+tab).removeClass('hidden');
+    });
+
+    $('.acc-head').on('click', function(){
+      const $body = $(this).next('.acc-body');
+      $('.acc-body').not($body).slideUp(160);
+      $body.stop(true,true).slideToggle(180);
+    });
+
+    function makeAutoScroller(scrollerSel, prevSel, nextSel){
+      const $scroller = $(scrollerSel);
+      let itemWidth = 320 + 16;
+      function recalc(){
+        const $first = $scroller.find('> div > div').first();
+        if($first.length){ itemWidth = $first.outerWidth(true); }
+      }
+      recalc();
+      $(window).on('resize', recalc);
+
+      function move(dir=1){
+        const maxScroll = $scroller[0].scrollWidth - $scroller[0].clientWidth;
+        let target = $scroller.scrollLeft() + dir*itemWidth;
+        if(target < 0) target = 0;
+        if(target > maxScroll) target = 0;
+        $scroller.stop(true).animate({scrollLeft: target}, 450);
+      }
+
+      $(prevSel).on('click', ()=> move(-1));
+      $(nextSel).on('click', ()=> move(1));
+
+      let timer = setInterval(()=> move(1), 2600);
+      $scroller.on('mouseenter', ()=> clearInterval(timer));
+      $scroller.on('mouseleave', ()=> timer = setInterval(()=> move(1), 2600));
+    }
+    makeAutoScroller('#tplScroller', '#tplPrev', '#tplNext');
+
+    (function(){
+      const $track = $('#ucTrack');
+      const $wrap = $track.parent();
+      let cardW = 0, index = 0;
+
+      function recalc(){
+        cardW = $track.children().first().outerWidth(true) || 360;
+        index = Math.max(0, Math.min(index, $track.children().length - Math.ceil($wrap.width()/cardW)));
+        $track.css({ transform:`translateX(${-index*cardW}px)` });
+      }
+      recalc();
+      $(window).on('resize', recalc);
+
+      function move(dir=1){
+        const visible = Math.floor($wrap.width()/cardW) || 1;
+        const maxIndex = Math.max(0, $track.children().length - visible);
+        index = index + dir;
+        if(index > maxIndex) index = 0;
+        if(index < 0) index = maxIndex;
+        $track.css({ transition:'transform .45s ease', transform:`translateX(${-index*cardW}px)` });
+      }
+
+      $('#ucPrev').on('click', ()=> move(-1));
+      $('#ucNext').on('click', ()=> move(1));
+
+      let timer = setInterval(()=> move(1), 2800);
+      $wrap.on('mouseenter', ()=> clearInterval(timer));
+      $wrap.on('mouseleave', ()=> timer = setInterval(()=> move(1), 2800));
+    })();
+  </script>
+</body>
+</html>

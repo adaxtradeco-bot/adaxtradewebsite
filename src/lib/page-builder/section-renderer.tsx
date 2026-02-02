@@ -53,7 +53,22 @@ import PartnershipHeroInteractive from '@/components/builder-sections/Partnershi
 import PartnerBenefitsSection from '@/components/builder-sections/PartnerBenefitsSection';
 import PartnerTypesSection from '@/components/builder-sections/PartnerTypesSection';
 import RequirementsSection from '@/components/builder-sections/RequirementsSection';
-import FormBuilderHeroSection from '@/components/builder-sections/FormBuilderHeroSection';
+
+import FormBuilderFeaturesSection from '@/components/builder-sections/FormBuilderFeaturesSection';
+import FormBuilderWhySection from '@/components/builder-sections/FormBuilderWhySection';
+import DynamicFormsContentSection from '@/components/builder-sections/DynamicFormsContentSection';
+import FormBuilderTemplatesSection from '@/components/builder-sections/FormBuilderTemplatesSection';
+import FormBuilderIntegrationsSection from '@/components/builder-sections/FormBuilderIntegrationsSection';
+import FormBuilderAnalyticsSection from '@/components/builder-sections/FormBuilderAnalyticsSection';
+import FormBuilderMobileVoiceSection from '@/components/builder-sections/FormBuilderMobileVoiceSection';
+import FormBuilderGovernanceSection from '@/components/builder-sections/FormBuilderGovernanceSection';
+import FormBuilderBPMSSection from '@/components/builder-sections/FormBuilderBPMSSection';
+import FormBuilderFAQSection from '@/components/builder-sections/FormBuilderFAQSection';
+import FormBuilderFinalCTASection from '@/components/builder-sections/FormBuilderFinalCTASection';
+import FieldTypesSection from '@/components/builder-sections/FieldTypesSection';
+import DynamicLogicSection from '@/components/builder-sections/DynamicLogicSection';
+import { FormBuilderHeroSection } from '@/components/builder-sections/FormBuilderHeroSection';
+
 import HeroSliderNWMSection from '@/components/builder-sections/HeroSliderNWMSection';
 import WhyNWMSection from '@/components/builder-sections/WhyNWMSection';
 import StakeholdersNWMSection from '@/components/builder-sections/StakeholdersNWMSection';
@@ -185,8 +200,32 @@ export function SectionRenderer({
         return <TwoColumnMediaSection key={section.id} {...(section as any).data} />;
       case 'simple-cards':
         return <SimpleCardsSection key={section.id} {...(section as any).data} />;
+      case 'form-builder-why':
+        return <FormBuilderWhySection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'field-types':
+        return <FieldTypesSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'dynamic-forms-content':
+        return <DynamicFormsContentSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'form-builder-templates':
+        return <FormBuilderTemplatesSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'form-builder-integrations':
+        return <FormBuilderIntegrationsSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'form-builder-analytics':
+        return <FormBuilderAnalyticsSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'form-builder-mobile-voice':
+        return <FormBuilderMobileVoiceSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'form-builder-governance':
+        return <FormBuilderGovernanceSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'form-builder-bpms':
+        return <FormBuilderBPMSSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'form-builder-faq':
+        return <FormBuilderFAQSection key={section.id} data={(section as any).data} style={(section as any).style} />;
+      case 'form-builder-final-cta':
+        return <FormBuilderFinalCTASection key={section.id} data={(section as any).data} style={(section as any).style} />;
       case 'form-builder-hero':
-        return <FormBuilderHeroSection key={section.id} {...(section as any).data} />;
+        return <FormBuilderHeroSection section={section} />;
+      case 'form-builder-features':
+        return <FormBuilderFeaturesSection data={(section as any).data} style={(section as any).style} />;
       case 'hero-slider':
         return <HeroSliderSection data={(section as any).data} style={(section as any).style} />;
 
@@ -229,8 +268,55 @@ export function SectionRenderer({
         return <InteractiveFeatureWall {...(section as any).data} />;
       case 'wall-of-features':
         return <WallOfFeaturesSection data={(section as any).data} isBuilder={isBuilder} onEdit={onSelect} />;
-      case 'why-ivaflow-new-version':
-        return <WhyIvaFlowNewVersion data={(section as any).data} />;
+      case 'showcase':
+        return (
+          <section className="py-16 px-6">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">{(section as any).data?.title}</h2>
+                <p className="text-lg text-slate-600 dark:text-slate-300">{(section as any).data?.subtitle}</p>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {((section as any).data?.items || []).map((item: any, idx: number) => (
+                  <div key={idx} className="bg-white dark:bg-neutral-800 rounded-xl p-6 border border-slate-200 dark:border-neutral-700">
+                    {item.image && (
+                      <div className="mb-4 h-32 bg-slate-100 dark:bg-neutral-700 rounded-lg flex items-center justify-center">
+                        <span className="text-slate-400">Image</span>
+                      </div>
+                    )}
+                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                    <p className="text-slate-600 dark:text-slate-400 mb-4">{item.description}</p>
+                    {item.features && (
+                      <ul className="space-y-1">
+                        {item.features.map((feature: string, i: number) => (
+                          <li key={i} className="text-sm text-slate-500 dark:text-slate-400">• {feature}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      case 'logo-cloud':
+        return (
+          <section className="py-16 px-6 bg-slate-50 dark:bg-neutral-900">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">{(section as any).data?.title}</h2>
+                <p className="text-lg text-slate-600 dark:text-slate-300">{(section as any).data?.subtitle}</p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
+                {((section as any).data?.logos || []).map((logo: any, idx: number) => (
+                  <div key={idx} className="flex items-center justify-center p-4 bg-white dark:bg-neutral-800 rounded-lg border border-slate-200 dark:border-neutral-700">
+                    <span className="text-slate-400 text-sm">{logo.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
       case 'ContentSection':
         return (
           <section className="py-16 px-6">

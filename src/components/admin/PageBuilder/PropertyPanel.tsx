@@ -518,6 +518,51 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <InteractiveFeatureWallPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'wall-of-features':
         return <WallOfFeaturesPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'hero-slider':
+        return (
+          <>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Autoplay
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    {...register('autoplay')}
+                    className="mr-2"
+                  />
+                  <span className="text-sm">Enable automatic slide transitions</span>
+                </label>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Interval (ms)
+                </label>
+                <input
+                  type="number"
+                  {...register('interval')}
+                  min="1000"
+                  step="500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+              
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  💡 <strong>Per-Slide Settings:</strong><br/>
+                  Use the JSON editor below to configure individual slides. Each slide can have:
+                  <br/>• <code>useImageInsteadOfCard: true</code> - Replace card with image
+                  <br/>• <code>cardImage: "path/to/image.jpg"</code> - Image to display
+                  <br/>• Standard card content (title, description, buttons, etc.)
+                </p>
+              </div>
+            </div>
+            <JSONEditor section={section} onUpdate={onUpdate} />
+          </>
+        );
+
       case 'hero':
         return (
           <>
