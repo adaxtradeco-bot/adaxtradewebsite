@@ -101,7 +101,7 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
     name: 'Stakeholders (NWM Style)',
     type: 'stakeholders-nwm',
     category: 'Content',
-    description: '4-column stakeholder cards with pills',
+    description: '4-column stakeholder cards with pills and media support',
     icon: '👥',
     defaultData: {
       id: '',
@@ -111,19 +111,35 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
         eyebrow: 'Value for every stakeholder',
         title: 'Solve the problems of key stakeholders.',
         description: 'NWMFlow turns process chaos into guided experience.',
-        mediaPlaceholder: 'Drop stakeholder demo video here',
+        mediaPlaceholder: 'Drop stakeholder demo video or image here',
+        mediaImage: '', // Add this field for image support
         cards: [
           {
             title: 'Executives',
             description: 'See live performance and SLAs.',
             pills: ['Real-time dashboards', 'SLA compliance'],
           },
+          {
+            title: 'Business owners',
+            description: 'Iterate on processes without developers.',
+            pills: ['Visual modeling', 'Instant publishing'],
+          },
+          {
+            title: 'IT teams',
+            description: 'Keep control of identity and data.',
+            pills: ['API builder', 'Secure by design'],
+          },
+          {
+            title: 'Partners',
+            description: 'Package knowledge into templates.',
+            pills: ['Template marketplace', 'Co-selling'],
+          },
         ],
       },
       style: {
-        backgroundColor: 'bg-slate-950',
-        textColor: 'text-white',
-        padding: 'py-20',
+        backgroundColor: 'bg-white dark:bg-slate-950',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-12 md:py-20',
       },
     },
     configSchema: {},

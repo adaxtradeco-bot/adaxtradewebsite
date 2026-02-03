@@ -1,5 +1,7 @@
 'use client';
 
+import { SmartImage } from '@/components/ui/SmartImage';
+
 interface StakeholderCard {
   title: string;
   description: string;
@@ -11,6 +13,7 @@ interface StakeholdersNWMSectionProps {
   title: string;
   description: string;
   mediaPlaceholder?: string;
+  mediaImage?: string;
   cards: StakeholderCard[];
 }
 
@@ -19,6 +22,7 @@ export default function StakeholdersNWMSection({
   title,
   description,
   mediaPlaceholder = 'Drop stakeholder demo video or image here',
+  mediaImage,
   cards = []
 }: StakeholdersNWMSectionProps) {
   return (
@@ -35,11 +39,21 @@ export default function StakeholdersNWMSection({
           <p className="text-base md:text-lg text-slate-700 dark:text-slate-300">{description}</p>
         </div>
 
-        {/* Media Placeholder */}
+        {/* Media Section */}
         <div className="mb-6 md:mb-10">
-          <div className="rounded-2xl md:rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center md:backdrop-blur-sm hover:border-solid transition-all duration-300">
-            <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4">{mediaPlaceholder}</span>
-          </div>
+          {mediaImage ? (
+            <div className="rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-cyan-500/50 transition-all duration-300">
+              <SmartImage
+                src={mediaImage}
+                alt="Stakeholders media"
+                className="w-full aspect-video object-cover"
+              />
+            </div>
+          ) : (
+            <div className="rounded-2xl md:rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center md:backdrop-blur-sm hover:border-solid transition-all duration-300">
+              <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4">{mediaPlaceholder}</span>
+            </div>
+          )}
         </div>
 
         {/* Cards Grid */}
