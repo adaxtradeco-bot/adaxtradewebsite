@@ -41,9 +41,23 @@ function transformFeatures(schemaFeatures: WallOfFeaturesConfig['data']['feature
     previewImage: feature.image, // Both small and large can have preview images
     col: feature.position.column,
     row: feature.position.row,
-    w: feature.position.columnSpan,
-    h: feature.position.rowSpan,
+    w: feature.size === 'large' ? 2 : (feature.position.columnSpan || 1), // Large features occupy 2x2
+    h: feature.size === 'large' ? 2 : (feature.position.rowSpan || 1),
   }));
+}
+
+// Check if a position is occupied by a large feature
+function isPositionOccupied(features: FeatureItem[], row: number, col: number): boolean {
+  return features.some(feature => {
+    if (feature.w && feature.h && feature.w > 1 && feature.h > 1) {
+      // Check if this position falls within the large feature's area
+      return (
+        row >= feature.row && row < feature.row + feature.h &&
+        col >= feature.col && col < feature.col + feature.w
+      );
+    }
+    return false;
+  });
 }
 
 export function WallOfFeaturesSection({
@@ -254,12 +268,36 @@ export function WallOfFeaturesSection({
                  height: '508px' // 4 tiles * 127px = 508px
                }}>
             <div className="w-full h-full rounded-2xl bg-white dark:bg-slate-800 shadow-2xl dark:shadow-slate-900/50 overflow-hidden border border-gray-200 dark:border-slate-700">
-              <img
-                key={active}
-                src={activeFeature?.previewImage}
-                className="w-full h-full object-cover animate-fade"
-                alt=""
-              />
+              {activeFeature?.previewImage && (
+                (() => {
+                  const isVideo = activeFeature.previewImage.includes('.mp4') || 
+                                  activeFeature.previewImage.includes('.webm') || 
+                                  activeFeature.previewImage.includes('video/');
+                  
+                  if (isVideo) {
+                    return (
+                      <video
+                        key={active}
+                        src={activeFeature.previewImage}
+                        className="w-full h-full object-cover animate-fade"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                      />
+                    );
+                  } else {
+                    return (
+                      <img
+                        key={active}
+                        src={activeFeature.previewImage}
+                        className="w-full h-full object-cover animate-fade"
+                        alt=""
+                      />
+                    );
+                  }
+                })()
+              )}
             </div>
           </div>
 
@@ -275,6 +313,12 @@ export function WallOfFeaturesSection({
           >
             {visibleFeatures.map((feature: FeatureItem) => {
               const isLargeFeature = feature.w && feature.w > 1;
+              
+              // Skip rendering if this position is occupied by a large feature
+              if (!isLargeFeature && isPositionOccupied(visibleFeatures, feature.row, feature.col)) {
+                return null;
+              }
+              
               return (
                 <button
                   key={feature.id}
@@ -286,7 +330,7 @@ export function WallOfFeaturesSection({
                   className={`relative z-30 flex flex-col items-center justify-center text-center
                     transition-all duration-200 ${
                       isLargeFeature
-                        ? 'border-0' // No border for large features
+                        ? 'border-2 border-gray-400 dark:border-slate-500 rounded-lg' // Border around large features
                         : 'border border-gray-300 dark:border-slate-600'
                     }
                     hover:bg-gray-100 dark:hover:bg-slate-800 hover:border-gray-400 dark:hover:border-slate-500

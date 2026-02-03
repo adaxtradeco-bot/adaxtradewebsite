@@ -9,7 +9,7 @@
 import React, { useState } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { IconButton, IconDisplay, type IconConfig } from '@/components/ui/IconPicker';
-import { SmartImage } from '@/components/ui/SmartImage';
+import { MediaUpload } from '@/components/ui/MediaUpload';
 import { Plus, Trash2, Copy } from 'lucide-react';
 
 interface WallOfFeaturesPropertyPanelProps {
@@ -207,19 +207,21 @@ export function WallOfFeaturesPropertyPanel({
         </div>
 
         {/* Features List */}
-        <div className="space-y-2 max-h-64 overflow-y-auto">
+        <div className="space-y-2 max-h-96 overflow-y-auto">
           {displayFeatures.map((feature: any) => (
             <div
               key={feature.id}
-              className={`p-3 border rounded-md cursor-pointer transition-colors ${
+              className={`p-3 border rounded-md transition-colors ${
                 selectedFeature === feature.id
                   ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
                   : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
               }`}
-              onClick={() => setSelectedFeature(feature.id)}
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+              <div className="flex items-center justify-between mb-3">
+                <div 
+                  className="flex items-center gap-3 cursor-pointer flex-1"
+                  onClick={() => setSelectedFeature(feature.id)}
+                >
                   <div className="text-lg">
                     {feature.faIcon ? (
                       <IconDisplay icon={feature.faIcon} />
@@ -280,6 +282,29 @@ export function WallOfFeaturesPropertyPanel({
                   )}
                 </div>
               </div>
+              
+              {/* Preview Image Upload for each feature */}
+              {!showDefaultFeatures && (
+                <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                  <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">
+                    Preview Media
+                  </label>
+                  <MediaUpload
+                    src={feature.image || ''}
+                    alt={`${feature.title} preview`}
+                    width={150}
+                    height={90}
+                    className="w-full max-w-[150px]"
+                    onMediaChange={(newSrc: string) => updateFeature(feature.id, { image: newSrc })}
+                    showUploadButton={true}
+                    uploadButtonText="Upload"
+                    acceptedTypes="image/*,video/*"
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Image or video for center preview
+                  </p>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -322,11 +347,31 @@ export function WallOfFeaturesPropertyPanel({
               </label>
               <select
                 value={selectedFeatureData.size}
-                onChange={(e) => updateFeature(selectedFeature!, { size: e.target.value })}
+                onChange={(e) => {
+                  const newSize = e.target.value as 'small' | 'large';
+                  const updates: any = { size: newSize };
+                  
+                  // Auto-adjust position for large features
+                  if (newSize === 'large') {
+                    updates.position = {
+                      ...selectedFeatureData.position,
+                      rowSpan: 2,
+                      columnSpan: 2
+                    };
+                  } else {
+                    updates.position = {
+                      ...selectedFeatureData.position,
+                      rowSpan: 1,
+                      columnSpan: 1
+                    };
+                  }
+                  
+                  updateFeature(selectedFeature!, updates);
+                }}
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               >
-                <option value="small">Small</option>
-                <option value="large">Large</option>
+                <option value="small">Small (1x1)</option>
+                <option value="large">Large (2x2)</option>
               </select>
             </div>
 
@@ -348,20 +393,22 @@ export function WallOfFeaturesPropertyPanel({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Preview Image (for center display)
+              Preview Media (for center display)
             </label>
-            <SmartImage
+            <MediaUpload
               src={selectedFeatureData.image || ''}
               alt={`${selectedFeatureData.title} preview`}
               width={200}
               height={120}
-              className="w-full max-w-xs rounded-md border border-gray-300 dark:border-gray-600"
-              onImageChange={(newSrc: string) => updateFeature(selectedFeature!, { image: newSrc })}
+              className="w-full max-w-xs"
+              onMediaChange={(newSrc: string) => updateFeature(selectedFeature!, { image: newSrc })}
               showUploadButton={true}
-              uploadButtonText="Upload Preview Image"
+              uploadButtonText="Upload Media"
+              acceptedTypes="image/*,video/*"
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              This image will appear in the center preview area when this feature is active
+              This image or video will appear in the center preview area when this feature is active.
+              Supports: JPG, PNG, GIF, MP4, WebM
             </p>
           </div>
 
@@ -389,7 +436,7 @@ export function WallOfFeaturesPropertyPanel({
               <input
                 type="number"
                 min="1"
-                max="10"
+                max={selectedFeatureData.size === 'large' ? "9" : "10"}
                 value={selectedFeatureData.position.column}
                 onChange={(e) => updateFeature(selectedFeature!, {
                   position: { ...selectedFeatureData.position, column: parseInt(e.target.value) }
@@ -398,61 +445,13 @@ export function WallOfFeaturesPropertyPanel({
               />
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Center Preview Images Settings */}
-      {!showDefaultFeatures && features.length > 0 && (
-        <div className="space-y-4 border-t border-gray-200 dark:border-gray-700 pt-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Center Preview Images
-          </h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">
-            Configure images that appear in the center preview area. Any feature can have a preview image.
-          </p>
           
-          {features.map((feature: any) => (
-            <div key={feature.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-md">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="text-lg">
-                  {feature.faIcon ? (
-                    <IconDisplay icon={feature.faIcon} />
-                  ) : (
-                    feature.icon || '📋'
-                  )}
-                </div>
-                <div className="font-medium text-gray-900 dark:text-white">
-                  {feature.title} 
-                  <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
-                    ({feature.size === 'large' ? 'Large' : 'Small'})
-                    {feature.image && ' 🖼️'}
-                  </span>
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Preview Image
-                </label>
-                <SmartImage
-                  src={feature.image || ''}
-                  alt={`${feature.title} preview`}
-                  width={200}
-                  height={120}
-                  className="w-full max-w-xs rounded-md border border-gray-300 dark:border-gray-600"
-                  onImageChange={(newSrc: string) => updateFeature(feature.id, { image: newSrc })}
-                  showUploadButton={true}
-                  uploadButtonText="Upload Preview Image"
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                  This image will appear in the center when this feature is active
-                </p>
-              </div>
-            </div>
-          ))}
-          
-          {features.length === 0 && (
-            <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-              <p>No features found. Add features to configure preview images.</p>
+          {selectedFeatureData.size === 'large' && (
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-md">
+              <p className="text-sm text-blue-700 dark:text-blue-300">
+                <strong>Large Feature:</strong> This feature will occupy a 2x2 grid space (4 tiles total).
+                Make sure there's enough space at row {selectedFeatureData.position.row}-{selectedFeatureData.position.row + 1} and column {selectedFeatureData.position.column}-{selectedFeatureData.position.column + 1}.
+              </p>
             </div>
           )}
         </div>
