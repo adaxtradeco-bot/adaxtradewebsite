@@ -25,66 +25,49 @@ export function WallOfFeaturesPropertyPanel({
   const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
   const [showDefaultFeatures, setShowDefaultFeatures] = useState(false);
 
-  // Default features for reference
+  // Default features for reference - استفاده از همان فیچرهای کامپوننت اصلی
   const defaultFeatures = [
-    {
-      id: 'calendar',
-      title: 'Calendar',
-      faIcon: { name: 'calendar', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#3B82F6' },
-      type: 'button' as const,
-      size: 'small' as const,
-      position: { row: 1, column: 1, rowSpan: 1, columnSpan: 1 },
-    },
-    {
-      id: 'dashboards',
-      title: 'Dashboards',
-      faIcon: { name: 'chart-line', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#10B981' },
-      type: 'button' as const,
-      size: 'small' as const,
-      position: { row: 1, column: 2, rowSpan: 1, columnSpan: 1 },
-    },
-    {
-      id: 'whiteboards',
-      title: 'Whiteboards', 
-      faIcon: { name: 'chalkboard', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#F59E0B' },
-      type: 'button' as const,
-      size: 'small' as const,
-      position: { row: 1, column: 3, rowSpan: 1, columnSpan: 1 },
-    },
-    {
-      id: 'forms',
-      title: 'Forms',
-      faIcon: { name: 'wpforms', type: 'brands' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#8B5CF6' },
-      type: 'button' as const,
-      size: 'small' as const,
-      position: { row: 1, column: 4, rowSpan: 1, columnSpan: 1 },
-    },
-    {
-      id: 'automation',
-      title: 'Automation',
-      faIcon: { name: 'robot', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#EF4444' },
-      type: 'button' as const,
-      size: 'small' as const,
-      position: { row: 1, column: 5, rowSpan: 1, columnSpan: 1 },
-    },
-    {
-      id: 'docs',
-      title: 'Docs',
-      faIcon: { name: 'file-lines', type: 'solid' as const, size: 'lg' as const, color: '#10B981' },
-      type: 'button' as const,
-      size: 'large' as const,
-      image: '/images/features/docs.png',
-      position: { row: 2, column: 3, rowSpan: 2, columnSpan: 2 },
-    },
-    {
-      id: 'tasks',
-      title: 'Tasks',
-      faIcon: { name: 'list-check', type: 'solid' as const, size: 'lg' as const, color: '#3B82F6' },
-      type: 'button' as const,
-      size: 'large' as const,
-      image: '/images/features/tasks.png',
-      position: { row: 2, column: 5, rowSpan: 2, columnSpan: 2 },
-    },
+    // Row 1
+    { id: 'calendar', title: 'Calendar', faIcon: { name: 'calendar', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#3B82F6' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 1, rowSpan: 1, columnSpan: 1 } },
+    { id: 'dashboards', title: 'Dashboards', faIcon: { name: 'chart-line', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#10B981' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 2, rowSpan: 1, columnSpan: 1 } },
+    { id: 'whiteboards', title: 'Whiteboards', faIcon: { name: 'chalkboard', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#F59E0B' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 3, rowSpan: 1, columnSpan: 1 } },
+    { id: 'forms', title: 'Forms', faIcon: { name: 'wpforms', type: 'brands' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#8B5CF6' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 4, rowSpan: 1, columnSpan: 1 } },
+    { id: 'automation', title: 'Automation', faIcon: { name: 'robot', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#EF4444' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 5, rowSpan: 1, columnSpan: 1 } },
+    { id: 'integrations', title: 'Integrations', faIcon: { name: 'plug', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#06B6D4' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 6, rowSpan: 1, columnSpan: 1 } },
+    { id: 'reports', title: 'Reports', faIcon: { name: 'chart-bar', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#84CC16' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 7, rowSpan: 1, columnSpan: 1 } },
+    { id: 'analytics', title: 'Analytics', faIcon: { name: 'chart-pie', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#F97316' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 8, rowSpan: 1, columnSpan: 1 } },
+    { id: 'ai-assistant', title: 'AI Assistant', faIcon: { name: 'brain', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#A855F7' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 9, rowSpan: 1, columnSpan: 1 } },
+    { id: 'notifications', title: 'Notifications', faIcon: { name: 'bell', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#EC4899' }, type: 'button' as const, size: 'small' as const, position: { row: 1, column: 10, rowSpan: 1, columnSpan: 1 } },
+
+    // Row 2
+    { id: 'time-tracking', title: 'Time Tracking', faIcon: { name: 'clock', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#3B82F6' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 1, rowSpan: 1, columnSpan: 1 } },
+    { id: 'gantt', title: 'Gantt Charts', faIcon: { name: 'chart-gantt', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#10B981' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 2, rowSpan: 1, columnSpan: 1 } },
+    { id: 'kanban', title: 'Kanban', faIcon: { name: 'columns', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#F59E0B' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 3, rowSpan: 1, columnSpan: 1 } },
+    { id: 'team-calendar', title: 'Team Calendar', faIcon: { name: 'calendar-days', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#8B5CF6' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 4, rowSpan: 1, columnSpan: 1 } },
+    { id: 'workflows', title: 'Workflows', faIcon: { name: 'diagram-project', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#EF4444' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 5, rowSpan: 1, columnSpan: 1 } },
+    { id: 'approvals', title: 'Approvals', faIcon: { name: 'check-circle', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#06B6D4' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 6, rowSpan: 1, columnSpan: 1 } },
+    { id: 'search', title: 'Search', faIcon: { name: 'magnifying-glass', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#84CC16' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 7, rowSpan: 1, columnSpan: 1 } },
+    { id: 'templates', title: 'Templates', faIcon: { name: 'file-lines', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#F97316' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 8, rowSpan: 1, columnSpan: 1 } },
+    { id: 'custom-fields', title: 'Custom Fields', faIcon: { name: 'tags', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#A855F7' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 9, rowSpan: 1, columnSpan: 1 } },
+    { id: 'permissions', title: 'Permissions', faIcon: { name: 'shield-halved', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#EC4899' }, type: 'button' as const, size: 'small' as const, position: { row: 2, column: 10, rowSpan: 1, columnSpan: 1 } },
+
+    // Row 3 - با فیچرهای بزرگ
+    { id: 'workload', title: 'Workload', faIcon: { name: 'scale-balanced', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#3B82F6' }, type: 'button' as const, size: 'small' as const, position: { row: 3, column: 1, rowSpan: 1, columnSpan: 1 } },
+    { id: 'timeline', title: 'Timeline', faIcon: { name: 'timeline', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#10B981' }, type: 'button' as const, size: 'small' as const, position: { row: 3, column: 2, rowSpan: 1, columnSpan: 1 } },
+    { id: 'milestones', title: 'Milestones', faIcon: { name: 'flag-checkered', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#F59E0B' }, type: 'button' as const, size: 'small' as const, position: { row: 3, column: 3, rowSpan: 1, columnSpan: 1 } },
+    
+    // فیچرهای بزرگ برای preview
+    { id: 'docs', title: 'Docs', faIcon: { name: 'file-lines', type: 'solid' as const, size: 'lg' as const, color: '#10B981' }, type: 'button' as const, size: 'large' as const, image: '/images/features/docs.png', position: { row: 3, column: 4, rowSpan: 2, columnSpan: 2 } },
+    { id: 'tasks', title: 'Tasks', faIcon: { name: 'list-check', type: 'solid' as const, size: 'lg' as const, color: '#3B82F6' }, type: 'button' as const, size: 'large' as const, image: '/images/features/tasks.png', position: { row: 3, column: 6, rowSpan: 2, columnSpan: 2 } },
+    
+    { id: 'dependencies', title: 'Dependencies', faIcon: { name: 'link', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#8B5CF6' }, type: 'button' as const, size: 'small' as const, position: { row: 3, column: 8, rowSpan: 1, columnSpan: 1 } },
+    { id: 'resources', title: 'Resources', faIcon: { name: 'users', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#EF4444' }, type: 'button' as const, size: 'small' as const, position: { row: 3, column: 9, rowSpan: 1, columnSpan: 1 } },
+    { id: 'api', title: 'API', faIcon: { name: 'code', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#06B6D4' }, type: 'button' as const, size: 'small' as const, position: { row: 3, column: 10, rowSpan: 1, columnSpan: 1 } },
+
+    // ادامه فیچرها تا row 8...
+    { id: 'mobile', title: 'Mobile App', faIcon: { name: 'mobile-screen', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#EF4444' }, type: 'button' as const, size: 'small' as const, position: { row: 4, column: 1, rowSpan: 1, columnSpan: 1 } },
+    { id: 'security', title: 'Security', faIcon: { name: 'shield', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#84CC16' }, type: 'button' as const, size: 'small' as const, position: { row: 4, column: 2, rowSpan: 1, columnSpan: 1 } },
+    { id: 'backup', title: 'Backup', faIcon: { name: 'hard-drive', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#3B82F6' }, type: 'button' as const, size: 'small' as const, position: { row: 4, column: 3, rowSpan: 1, columnSpan: 1 } },
   ];
 
   // Show actual features or default features for editing
@@ -201,7 +184,11 @@ export function WallOfFeaturesPropertyPanel({
           <div className="flex items-center gap-2">
             {features.length === 0 && (
               <button
-                onClick={() => setShowDefaultFeatures(!showDefaultFeatures)}
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setShowDefaultFeatures(!showDefaultFeatures);
+                }}
                 className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-sm"
               >
                 {showDefaultFeatures ? 'Hide' : 'Show'} Default Features
