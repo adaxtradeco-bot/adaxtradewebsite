@@ -167,6 +167,7 @@ export const WallOfFeaturesSchema = BaseSectionSchema.extend({
       type: z.enum(['button', 'link', 'empty', 'parent']).default('button'),
       href: z.string().optional(),
       image: z.string().optional(),
+      imageObjectFit: z.enum(['cover', 'contain', 'fill', 'scale-down', 'none']).default('fill'),
       size: z.enum(['small', 'large']).default('small'),
       position: z.object({
         row: z.number(),

@@ -20,6 +20,9 @@ interface MediaUploadProps {
   showUploadButton?: boolean;
   uploadButtonText?: string;
   acceptedTypes?: string;
+  objectFit?: 'cover' | 'contain' | 'fill' | 'scale-down' | 'none';
+  onObjectFitChange?: (objectFit: string) => void;
+  showObjectFitControls?: boolean;
 }
 
 export function MediaUpload({
@@ -31,7 +34,10 @@ export function MediaUpload({
   onMediaChange,
   showUploadButton = true,
   uploadButtonText = 'Upload Media',
-  acceptedTypes = 'image/*,video/*'
+  acceptedTypes = 'image/*,video/*',
+  objectFit = 'fill',
+  onObjectFitChange,
+  showObjectFitControls = false
 }: MediaUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewSrc, setPreviewSrc] = useState(src);
@@ -110,7 +116,7 @@ export function MediaUpload({
         <div className={`relative ${className}`} style={{ width, height }}>
           <video
             src={previewSrc}
-            className="w-full h-full object-cover rounded-md"
+            className={`w-full h-full object-${objectFit} rounded-md`}
             controls
             preload="metadata"
           />
@@ -135,7 +141,7 @@ export function MediaUpload({
         <img
           src={previewSrc}
           alt={alt}
-          className="w-full h-full object-cover rounded-md"
+          className={`w-full h-full object-${objectFit} rounded-md`}
         />
         <div className="absolute top-2 right-2">
           <button
@@ -153,6 +159,25 @@ export function MediaUpload({
   return (
     <div className="space-y-2">
       {renderMedia()}
+      
+      {showObjectFitControls && previewSrc && (
+        <div className="space-y-2">
+          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400">
+            Display Mode
+          </label>
+          <select
+            value={objectFit}
+            onChange={(e) => onObjectFitChange?.(e.target.value)}
+            className="w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          >
+            <option value="fill">Fill (stretch to fit)</option>
+            <option value="cover">Cover (crop to fit)</option>
+            <option value="contain">Contain (fit inside)</option>
+            <option value="scale-down">Scale Down</option>
+            <option value="none">None (original size)</option>
+          </select>
+        </div>
+      )}
       
       {showUploadButton && (
         <div className="flex items-center gap-2">

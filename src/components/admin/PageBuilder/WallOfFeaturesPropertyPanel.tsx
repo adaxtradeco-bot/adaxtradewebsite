@@ -108,11 +108,9 @@ export function WallOfFeaturesPropertyPanel({
   };
 
   const updateFeature = (featureId: string, updates: any) => {
-    console.log('Updating feature:', featureId, 'with:', updates); // Debug log
     const updatedFeatures = features.map((feature: any) =>
       feature.id === featureId ? { ...feature, ...updates } : feature
     );
-    console.log('Updated features:', updatedFeatures); // Debug log
     updateData({ features: updatedFeatures });
   };
 
@@ -298,6 +296,9 @@ export function WallOfFeaturesPropertyPanel({
                     height={90}
                     className="w-full max-w-[150px]"
                     onMediaChange={(newSrc: string) => updateFeature(feature.id, { image: newSrc })}
+                    objectFit={feature.imageObjectFit || 'fill'}
+                    onObjectFitChange={(objectFit: string) => updateFeature(feature.id, { imageObjectFit: objectFit })}
+                    showObjectFitControls={!!feature.image}
                     showUploadButton={true}
                     uploadButtonText="Upload"
                     acceptedTypes="image/*,video/*"
@@ -404,6 +405,9 @@ export function WallOfFeaturesPropertyPanel({
               height={120}
               className="w-full max-w-xs"
               onMediaChange={(newSrc: string) => updateFeature(selectedFeature!, { image: newSrc })}
+              objectFit={selectedFeatureData.imageObjectFit || 'fill'}
+              onObjectFitChange={(objectFit: string) => updateFeature(selectedFeature!, { imageObjectFit: objectFit })}
+              showObjectFitControls={!!selectedFeatureData.image}
               showUploadButton={true}
               uploadButtonText="Upload Media"
               acceptedTypes="image/*,video/*"

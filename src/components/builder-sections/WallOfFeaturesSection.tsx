@@ -24,6 +24,7 @@ type FeatureItem = {
   faIcon?: IconConfig; // FontAwesome icon
   kind: 'primary' | 'secondary';
   previewImage?: string; // فقط primary
+  imageObjectFit?: string;
   col: number;
   row: number;
   w?: number;
@@ -39,6 +40,7 @@ function transformFeatures(schemaFeatures: WallOfFeaturesConfig['data']['feature
     faIcon: feature.faIcon,
     kind: feature.size === 'large' ? 'primary' : 'secondary',
     previewImage: feature.image, // Both small and large can have preview images
+    imageObjectFit: feature.imageObjectFit,
     col: feature.position.column,
     row: feature.position.row,
     w: feature.size === 'large' ? 2 : (feature.position.columnSpan || 1), // Large features occupy 2x2
@@ -273,13 +275,14 @@ export function WallOfFeaturesSection({
                   const isVideo = activeFeature.previewImage.includes('.mp4') || 
                                   activeFeature.previewImage.includes('.webm') || 
                                   activeFeature.previewImage.includes('video/');
+                  const objectFit = activeFeature.imageObjectFit || 'fill';
                   
                   if (isVideo) {
                     return (
                       <video
                         key={active}
                         src={activeFeature.previewImage}
-                        className="w-full h-full object-cover animate-fade"
+                        className={`w-full h-full object-${objectFit} animate-fade`}
                         autoPlay
                         muted
                         loop
@@ -291,7 +294,7 @@ export function WallOfFeaturesSection({
                       <img
                         key={active}
                         src={activeFeature.previewImage}
-                        className="w-full h-full object-cover animate-fade"
+                        className={`w-full h-full object-${objectFit} animate-fade`}
                         alt=""
                       />
                     );
