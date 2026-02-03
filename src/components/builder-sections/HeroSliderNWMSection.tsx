@@ -30,6 +30,8 @@ interface HeroSlide {
   mediaType: 'video' | 'image';
   mediaSrc: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   mediaPoster?: string;
+  useImageInsteadOfCard?: boolean;
+  cardImage?: string;
   snapshotCard?: SnapshotCard;
   statistics?: StatItem[];
   cta?: {
@@ -151,6 +153,22 @@ export default function HeroSliderNWMSection({
 
                   {/* Right Card */}
                   {showCardOnMobile && (() => {
+                    // Check if slide wants image instead of card
+                    if (slide.useImageInsteadOfCard && slide.cardImage) {
+                      return (
+                        <div className="hero-slide-image-card max-w-3xl">
+                          <div className="relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                            <img
+                              src={slide.cardImage}
+                              alt={`${slide.title} - ${slide.label}`}
+                              className="w-full h-auto object-cover"
+                              style={{ aspectRatio: '16/9' }}
+                            />
+                          </div>
+                        </div>
+                      );
+                    }
+
                     const card = slide.snapshotCard || defaultSnapshotCard || {
                       title: 'One OS, many live systems.',
                       subtitle: 'NWMFlow snapshot',
