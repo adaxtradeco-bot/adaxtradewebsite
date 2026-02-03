@@ -510,6 +510,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
       data: {
         autoplay: true,
         interval: 5000,
+        globalMinHeight: '90vh',
         slides: [
           {
             title: 'Transform Your Business',
@@ -519,6 +520,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
             backgroundImage: '/assets/hero-bg-1.jpg',
             useImageInsteadOfCard: false,
             cardImage: '',
+            minHeight: '',
             buttons: [
               { text: 'Get Started', href: '#', variant: 'primary' as const },
               { text: 'Learn More', href: '#', variant: 'secondary' as const }
@@ -536,6 +538,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
             backgroundImage: '/assets/hero-bg-2.jpg',
             useImageInsteadOfCard: false,
             cardImage: '',
+            minHeight: '',
             buttons: [
               { text: 'View Demo', href: '#', variant: 'primary' as const },
               { text: 'Contact Sales', href: '#', variant: 'secondary' as const }

@@ -524,6 +524,18 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Global Min Height
+                </label>
+                <input
+                  type="text"
+                  {...register('globalMinHeight')}
+                  placeholder="90vh, 600px, 100%"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Autoplay
                 </label>
                 <label className="flex items-center">
@@ -551,10 +563,15 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
               
               <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
                 <p className="text-sm text-blue-800 dark:text-blue-200">
-                  💡 <strong>Per-Slide Settings:</strong><br/>
+                  💡 <strong>Height Controls:</strong><br/>
+                  • <code>globalMinHeight</code> - Default height for all slides<br/>
+                  • Per-slide <code>minHeight</code> - Overrides global setting<br/>
+                  • Values: "90vh", "600px", "100%", etc.<br/><br/>
+                  <strong>Per-Slide Settings:</strong><br/>
                   Use the JSON editor below to configure individual slides. Each slide can have:
                   <br/>• <code>useImageInsteadOfCard: true</code> - Replace card with image
                   <br/>• <code>cardImage: "path/to/image.jpg"</code> - Image to display
+                  <br/>• <code>minHeight: "80vh"</code> - Custom height for this slide
                   <br/>• Standard card content (title, description, buttons, etc.)
                 </p>
               </div>

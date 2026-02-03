@@ -32,6 +32,7 @@ interface HeroSlide {
   mediaPoster?: string;
   useImageInsteadOfCard?: boolean;
   cardImage?: string;
+  minHeight?: string;
   snapshotCard?: SnapshotCard;
   statistics?: StatItem[];
   cta?: {
@@ -49,6 +50,7 @@ interface HeroSlide {
 interface HeroSliderNWMSectionProps {
   slides: HeroSlide[];
   autoPlayInterval?: number;
+  globalMinHeight?: string;
   defaultSnapshotCard?: SnapshotCard;
   showCardOnMobile?: boolean;
 }
@@ -56,6 +58,7 @@ interface HeroSliderNWMSectionProps {
 export default function HeroSliderNWMSection({ 
   slides = [],
   autoPlayInterval = 7000,
+  globalMinHeight = '60vh',
   defaultSnapshotCard,
   showCardOnMobile = true
 }: HeroSliderNWMSectionProps) {
@@ -68,20 +71,29 @@ export default function HeroSliderNWMSection({
     return () => clearInterval(interval);
   }, [slides.length, autoPlayInterval]);
 
+  const getSlideHeight = (slide: HeroSlide) => {
+    return slide.minHeight || globalMinHeight;
+  };
+
   if (!slides || slides.length === 0) return null;
 
   return (
     <section
       className="hero-slider-nwm relative w-full overflow-hidden bg-slate-50 dark:bg-slate-950"
+      style={{ minHeight: globalMinHeight }}
     >
-      <div className="hero-slider-container relative min-h-[60vh] md:min-h-[72vh] pt-6 md:pt-10 pb-6 md:pb-10 bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
+      <div className="hero-slider-container relative pt-6 md:pt-10 pb-6 md:pb-10 bg-gradient-to-b from-slate-50 via-white to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
         {/* Slider Track */}
         <div 
           className="hero-slider-track flex transition-transform duration-700 ease-out"
           style={{ transform: `translateX(-${activeSlide * 100}%)` }}
         >
           {slides.map((slide) => (
-            <div key={slide.id} className="hero-slide relative flex-shrink-0 w-full min-h-[50vh] md:min-h-[60vh]">
+            <div 
+              key={slide.id} 
+              className="hero-slide relative flex-shrink-0 w-full"
+              style={{ minHeight: getSlideHeight(slide) }}
+            >
               {/* Background Media */}
               <div className="hero-slide-media absolute inset-0 z-0 overflow-hidden">
                 {slide.mediaType === 'video' ? (

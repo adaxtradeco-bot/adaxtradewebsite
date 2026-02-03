@@ -16,6 +16,7 @@ interface Slide {
   backgroundImage?: string;
   useImageInsteadOfCard?: boolean;
   cardImage?: string;
+  minHeight?: string;
   buttons: Array<{ text: string; href: string; variant: 'primary' | 'secondary' }>;
   statistics?: StatItem[];
 }
@@ -25,6 +26,7 @@ interface HeroSliderSectionProps {
     slides: Slide[];
     autoplay?: boolean;
     interval?: number;
+    globalMinHeight?: string;
   };
   style: {
     backgroundColor?: string;
@@ -113,8 +115,12 @@ export default function HeroSliderSection({ data, style }: HeroSliderSectionProp
     return () => clearInterval(timer);
   }, [data.autoplay, data.interval, data.slides.length]);
 
+  const getSlideHeight = (slide: Slide) => {
+    return slide.minHeight || data.globalMinHeight || '90vh';
+  };
+
   return (
-    <section className="relative h-[90vh] min-h-[700px] overflow-hidden">
+    <section className="relative overflow-hidden" style={{ minHeight: data.globalMinHeight || '90vh' }}>
       {data.slides.map((slide, index) => (
         <div
           key={index}
@@ -125,6 +131,7 @@ export default function HeroSliderSection({ data, style }: HeroSliderSectionProp
             backgroundImage: slide.backgroundImage ? `url(${slide.backgroundImage})` : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            minHeight: getSlideHeight(slide),
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-slate-900/95 via-slate-900/60 to-transparent" />
