@@ -108,9 +108,11 @@ export function WallOfFeaturesPropertyPanel({
   };
 
   const updateFeature = (featureId: string, updates: any) => {
+    console.log('Updating feature:', featureId, 'with:', updates); // Debug log
     const updatedFeatures = features.map((feature: any) =>
       feature.id === featureId ? { ...feature, ...updates } : feature
     );
+    console.log('Updated features:', updatedFeatures); // Debug log
     updateData({ features: updatedFeatures });
   };
 

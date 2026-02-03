@@ -36,6 +36,11 @@ export function MediaUpload({
   const [isUploading, setIsUploading] = useState(false);
   const [previewSrc, setPreviewSrc] = useState(src);
 
+  // Update preview when src prop changes
+  React.useEffect(() => {
+    setPreviewSrc(src);
+  }, [src]);
+
   // Detect if the source is a video
   const isVideo = (url: string) => {
     if (!url) return false;
@@ -55,6 +60,7 @@ export function MediaUpload({
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('type', 'media'); // Add required type parameter
 
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
@@ -63,14 +69,17 @@ export function MediaUpload({
 
       if (response.ok) {
         const data = await response.json();
-        const newSrc = data.url || data.path;
+        const newSrc = data.url;
         setPreviewSrc(newSrc);
         onMediaChange?.(newSrc);
       } else {
-        console.error('Upload failed');
+        const errorData = await response.json();
+        console.error('Upload failed:', errorData.error);
+        alert(`Upload failed: ${errorData.error}`);
       }
     } catch (error) {
       console.error('Upload error:', error);
+      alert('Upload failed. Please try again.');
     } finally {
       setIsUploading(false);
     }

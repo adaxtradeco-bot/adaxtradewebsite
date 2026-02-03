@@ -27,10 +27,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
+    // Validate file size (max 10MB for videos, 5MB for images)
+    const maxSize = file.type.startsWith('video/') ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      const maxSizeText = file.type.startsWith('video/') ? '10MB' : '5MB';
       return NextResponse.json(
-        { success: false, error: 'File size too large (max 5MB)' },
+        { success: false, error: `File size too large (max ${maxSizeText})` },
         { status: 400 }
       );
     }
@@ -41,7 +43,10 @@ export async function POST(request: NextRequest) {
       'logo-light': ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'],
       'logo-dark': ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp'],
       favicon: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/webp'],
-      media: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp']
+      media: [
+        'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp',
+        'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-msvideo'
+      ]
     };
 
     if (!allowedTypes[type as keyof typeof allowedTypes].includes(file.type)) {
