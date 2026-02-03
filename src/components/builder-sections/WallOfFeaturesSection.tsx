@@ -222,26 +222,43 @@ export function WallOfFeaturesSection({
   const featuresWithImages = allFeatures.filter((f: FeatureItem) => f.previewImage && f.kind === 'secondary');
   const allPrimaryFeatures = [...primaryFeatures, ...featuresWithImages];
 
-  const [active, setActive] = React.useState(allPrimaryFeatures[0]?.id);
-  const activeFeature = allPrimaryFeatures.find((f: FeatureItem) => f.id === active);
+  // Only features with images for rotation
+  const featuresWithMedia = allFeatures.filter((f: FeatureItem) => f.previewImage);
+
+  const [active, setActive] = React.useState(featuresWithMedia[0]?.id || '');
+  const [userInteracted, setUserInteracted] = React.useState(false);
+  const activeFeature = featuresWithMedia.find((f: FeatureItem) => f.id === active);
 
   /* ---------- Auto Demo ---------- */
   const pauseRef = React.useRef(false);
 
   React.useEffect(() => {
-    if (isBuilder) return;
+    if (isBuilder || featuresWithMedia.length === 0) return;
 
     const id = setInterval(() => {
       if (pauseRef.current) return;
 
       setActive((prev: string) => {
-        const idx = allPrimaryFeatures.findIndex((f: FeatureItem) => f.id === prev);
-        return allPrimaryFeatures[(idx + 1) % allPrimaryFeatures.length].id;
+        const currentIdx = featuresWithMedia.findIndex((f: FeatureItem) => f.id === prev);
+        const nextIdx = Math.floor(Math.random() * featuresWithMedia.length);
+        return featuresWithMedia[nextIdx].id;
       });
     }, 4000);
 
     return () => clearInterval(id);
-  }, [allPrimaryFeatures, isBuilder]);
+  }, [featuresWithMedia, isBuilder]);
+
+  // Resume auto rotation after user interaction
+  React.useEffect(() => {
+    if (userInteracted) {
+      const timeout = setTimeout(() => {
+        setUserInteracted(false);
+        pauseRef.current = false;
+      }, 3000); // Resume after 3 seconds
+
+      return () => clearTimeout(timeout);
+    }
+  }, [userInteracted]);
 
   return (
     <section
@@ -316,6 +333,7 @@ export function WallOfFeaturesSection({
           >
             {visibleFeatures.map((feature: FeatureItem) => {
               const isLargeFeature = feature.w && feature.w > 1;
+              const isActiveFeature = active === feature.id;
               
               // Skip rendering if this position is occupied by a large feature
               if (!isLargeFeature && isPositionOccupied(visibleFeatures, feature.row, feature.col)) {
@@ -340,17 +358,17 @@ export function WallOfFeaturesSection({
                     hover:shadow-sm dark:hover:shadow-slate-900/20`}
                   onClick={e => {
                     e.stopPropagation();
-                    if (!isBuilder && allPrimaryFeatures.length > 0) {
+                    if (!isBuilder && feature.previewImage) {
                       pauseRef.current = true;
-                      // Cycle through primary features when clicking any tile
-                      const currentIdx = allPrimaryFeatures.findIndex((f: FeatureItem) => f.id === active);
-                      const nextIdx = (currentIdx + 1) % allPrimaryFeatures.length;
-                      setActive(allPrimaryFeatures[nextIdx].id);
+                      setUserInteracted(true);
+                      setActive(feature.id);
                     }
                   }}
                 >
-                  <div className={`mb-1 ${
+                  <div className={`mb-1 transition-all duration-200 ${
                     isLargeFeature ? 'text-4xl' : 'text-2xl'
+                  } ${
+                    isActiveFeature && feature.previewImage ? 'font-bold scale-110' : ''
                   }`}>
                     {feature.faIcon ? (
                       <IconDisplay icon={feature.faIcon} enableHover={true} />
@@ -358,8 +376,10 @@ export function WallOfFeaturesSection({
                       feature.icon || '📋'
                     )}
                   </div>
-                  <div className={`font-medium text-gray-700 dark:text-gray-300 ${
+                  <div className={`font-medium text-gray-700 dark:text-gray-300 transition-all duration-200 ${
                     isLargeFeature ? 'text-sm' : 'text-xs'
+                  } ${
+                    isActiveFeature && feature.previewImage ? 'font-bold' : ''
                   }`}>
                     {feature.title}
                   </div>
