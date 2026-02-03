@@ -274,6 +274,7 @@ export function WallOfFeaturesSection({
             data-theme-grid="true"
           >
             {visibleFeatures.map((feature: FeatureItem) => {
+              const isLargeFeature = feature.w && feature.w > 1;
               return (
                 <button
                   key={feature.id}
@@ -284,7 +285,7 @@ export function WallOfFeaturesSection({
                   }}
                   className={`relative z-30 flex flex-col items-center justify-center text-center
                     transition-all duration-200 ${
-                      feature.kind === 'primary' && feature.w && feature.w > 1 
+                      isLargeFeature
                         ? 'border-0' // No border for large features
                         : 'border border-gray-300 dark:border-slate-600'
                     }
@@ -301,14 +302,18 @@ export function WallOfFeaturesSection({
                     }
                   }}
                 >
-                  <div className="text-2xl mb-1">
+                  <div className={`mb-1 ${
+                    isLargeFeature ? 'text-4xl' : 'text-2xl'
+                  }`}>
                     {feature.faIcon ? (
                       <IconDisplay icon={feature.faIcon} enableHover={true} />
                     ) : (
                       feature.icon || '📋'
                     )}
                   </div>
-                  <div className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                  <div className={`font-medium text-gray-700 dark:text-gray-300 ${
+                    isLargeFeature ? 'text-sm' : 'text-xs'
+                  }`}>
                     {feature.title}
                   </div>
                 </button>

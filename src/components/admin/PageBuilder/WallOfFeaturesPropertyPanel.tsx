@@ -348,7 +348,7 @@ export function WallOfFeaturesPropertyPanel({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Preview Image
+              Preview Image (for center display)
             </label>
             <SmartImage
               src={selectedFeatureData.image || ''}
@@ -361,7 +361,7 @@ export function WallOfFeaturesPropertyPanel({
               uploadButtonText="Upload Preview Image"
             />
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Image for center preview area (works for both small and large features)
+              This image will appear in the center preview area when this feature is active
             </p>
           </div>
 
@@ -408,10 +408,10 @@ export function WallOfFeaturesPropertyPanel({
             Center Preview Images
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Configure images that appear in the center preview area. All features can show preview images.
+            Configure images that appear in the center preview area. Any feature can have a preview image.
           </p>
           
-          {features.filter((f: any) => f.image || f.size === 'large').map((feature: any) => (
+          {features.map((feature: any) => (
             <div key={feature.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-md">
               <div className="flex items-center gap-3 mb-3">
                 <div className="text-lg">
@@ -422,7 +422,11 @@ export function WallOfFeaturesPropertyPanel({
                   )}
                 </div>
                 <div className="font-medium text-gray-900 dark:text-white">
-                  {feature.title} {feature.size === 'large' ? '(Large)' : '(Small)'}
+                  {feature.title} 
+                  <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                    ({feature.size === 'large' ? 'Large' : 'Small'})
+                    {feature.image && ' 🖼️'}
+                  </span>
                 </div>
               </div>
               <div>
@@ -439,13 +443,16 @@ export function WallOfFeaturesPropertyPanel({
                   showUploadButton={true}
                   uploadButtonText="Upload Preview Image"
                 />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  This image will appear in the center when this feature is active
+                </p>
               </div>
             </div>
           ))}
           
-          {features.filter((f: any) => f.image || f.size === 'large').length === 0 && (
+          {features.length === 0 && (
             <div className="text-center py-4 text-gray-500 dark:text-gray-400">
-              <p>No features with preview images found. Add an image to any feature to configure preview.</p>
+              <p>No features found. Add features to configure preview images.</p>
             </div>
           )}
         </div>
