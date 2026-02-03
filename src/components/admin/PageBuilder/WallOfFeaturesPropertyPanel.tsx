@@ -71,9 +71,7 @@ export function WallOfFeaturesPropertyPanel({
   ];
 
   // Show actual features or default features for editing
-  const displayFeatures = features.length > 0 && features.some((f: any) => f.title && f.title.trim() !== '') 
-    ? features 
-    : (showDefaultFeatures ? defaultFeatures : []);
+  const displayFeatures = showDefaultFeatures ? defaultFeatures : features;
 
   const updateData = (newData: any) => {
     onUpdate({
@@ -105,6 +103,7 @@ export function WallOfFeaturesPropertyPanel({
     updateData({
       features: [...features, newFeature],
     });
+    setShowDefaultFeatures(false); // Hide default features after adding custom
   };
 
   const updateFeature = (featureId: string, updates: any) => {
@@ -182,20 +181,22 @@ export function WallOfFeaturesPropertyPanel({
             Features ({displayFeatures.length})
           </h3>
           <div className="flex items-center gap-2">
-            {features.length === 0 && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowDefaultFeatures(!showDefaultFeatures);
-                }}
-                className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-sm"
-              >
-                {showDefaultFeatures ? 'Hide' : 'Show'} Default Features
-              </button>
-            )}
             <button
-              onClick={addFeature}
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowDefaultFeatures(!showDefaultFeatures);
+              }}
+              className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-sm"
+            >
+              {showDefaultFeatures ? 'Hide' : 'Show'} Default Features
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                addFeature();
+              }}
               className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
             >
               <Plus className="w-4 h-4" />
@@ -395,6 +396,53 @@ export function WallOfFeaturesPropertyPanel({
               />
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Center Preview Images Settings */}
+      {!showDefaultFeatures && features.length > 0 && (
+        <div className="space-y-4 border-t border-gray-200 dark:border-gray-700 pt-6">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Center Preview Images
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Configure images that appear in the center preview area. Only "Large" features can show preview images.
+          </p>
+          
+          {features.filter((f: any) => f.size === 'large').map((feature: any) => (
+            <div key={feature.id} className="p-3 border border-gray-200 dark:border-gray-700 rounded-md">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="text-lg">
+                  {feature.faIcon ? (
+                    <IconDisplay icon={feature.faIcon} />
+                  ) : (
+                    feature.icon || '📋'
+                  )}
+                </div>
+                <div className="font-medium text-gray-900 dark:text-white">
+                  {feature.title} (Large Feature)
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Preview Image URL
+                </label>
+                <input
+                  type="text"
+                  value={feature.image || ''}
+                  onChange={(e) => updateFeature(feature.id, { image: e.target.value })}
+                  placeholder="/images/features/example.png"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
+          ))}
+          
+          {features.filter((f: any) => f.size === 'large').length === 0 && (
+            <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+              <p>No large features found. Set a feature size to "Large" to configure preview images.</p>
+            </div>
+          )}
         </div>
       )}
 
