@@ -168,6 +168,7 @@ export const WallOfFeaturesSchema = BaseSectionSchema.extend({
       href: z.string().optional(),
       image: z.string().optional(),
       imageObjectFit: z.enum(['cover', 'contain', 'fill', 'scale-down', 'none']).default('fill'),
+      activeColor: z.string().default('#3B82F6'),
       size: z.enum(['small', 'large']).default('small'),
       position: z.object({
         row: z.number(),

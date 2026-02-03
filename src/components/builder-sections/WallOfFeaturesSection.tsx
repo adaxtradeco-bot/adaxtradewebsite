@@ -23,8 +23,9 @@ type FeatureItem = {
   icon?: string; // Legacy emoji support
   faIcon?: IconConfig; // FontAwesome icon
   kind: 'primary' | 'secondary';
-  previewImage?: string; // فقط primary
+  previewImage?: string;
   imageObjectFit?: string;
+  activeColor?: string;
   col: number;
   row: number;
   w?: number;
@@ -39,11 +40,12 @@ function transformFeatures(schemaFeatures: WallOfFeaturesConfig['data']['feature
     icon: feature.icon,
     faIcon: feature.faIcon,
     kind: feature.size === 'large' ? 'primary' : 'secondary',
-    previewImage: feature.image, // Both small and large can have preview images
+    previewImage: feature.image,
     imageObjectFit: feature.imageObjectFit,
+    activeColor: feature.activeColor,
     col: feature.position.column,
     row: feature.position.row,
-    w: feature.size === 'large' ? 2 : (feature.position.columnSpan || 1), // Large features occupy 2x2
+    w: feature.size === 'large' ? 2 : (feature.position.columnSpan || 1),
     h: feature.size === 'large' ? 2 : (feature.position.rowSpan || 1),
   }));
 }
@@ -334,6 +336,7 @@ export function WallOfFeaturesSection({
             {visibleFeatures.map((feature: FeatureItem) => {
               const isLargeFeature = feature.w && feature.w > 1;
               const isActiveFeature = active === feature.id;
+              const activeColor = feature.activeColor || '#3B82F6';
               
               // Skip rendering if this position is occupied by a large feature
               if (!isLargeFeature && isPositionOccupied(visibleFeatures, feature.row, feature.col)) {
@@ -351,7 +354,7 @@ export function WallOfFeaturesSection({
                   className={`relative z-30 flex flex-col items-center justify-center text-center
                     transition-all duration-200 ${
                       isLargeFeature
-                        ? 'border-2 border-gray-400 dark:border-slate-500 rounded-lg' // Border around large features
+                        ? 'border-2 border-gray-400 dark:border-slate-500 rounded-lg'
                         : 'border border-gray-300 dark:border-slate-600'
                     }
                     hover:bg-gray-100 dark:hover:bg-slate-800 hover:border-gray-400 dark:hover:border-slate-500
@@ -369,18 +372,31 @@ export function WallOfFeaturesSection({
                     isLargeFeature ? 'text-4xl' : 'text-2xl'
                   } ${
                     isActiveFeature && feature.previewImage ? 'font-bold scale-110' : ''
-                  }`}>
+                  }`}
+                  style={{
+                    color: isActiveFeature && feature.previewImage ? activeColor : undefined
+                  }}>
                     {feature.faIcon ? (
-                      <IconDisplay icon={feature.faIcon} enableHover={true} />
+                      <IconDisplay 
+                        icon={{
+                          ...feature.faIcon,
+                          color: isActiveFeature && feature.previewImage ? activeColor : feature.faIcon.color,
+                          hoverColor: activeColor
+                        }} 
+                        enableHover={true} 
+                      />
                     ) : (
                       feature.icon || '📋'
                     )}
                   </div>
-                  <div className={`font-medium text-gray-700 dark:text-gray-300 transition-all duration-200 ${
+                  <div className={`font-medium transition-all duration-200 ${
                     isLargeFeature ? 'text-sm' : 'text-xs'
                   } ${
-                    isActiveFeature && feature.previewImage ? 'font-bold' : ''
-                  }`}>
+                    isActiveFeature && feature.previewImage ? 'font-bold' : 'text-gray-700 dark:text-gray-300'
+                  }`}
+                  style={{
+                    color: isActiveFeature && feature.previewImage ? activeColor : undefined
+                  }}>
                     {feature.title}
                   </div>
                 </button>
