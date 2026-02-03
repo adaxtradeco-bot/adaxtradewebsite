@@ -31,7 +31,7 @@ interface HeroSlide {
   mediaSrc: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   mediaPoster?: string;
   useImageInsteadOfCard?: boolean;
-  cardImage?: string;
+  cardImage?: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   minHeight?: string;
   snapshotCard?: SnapshotCard;
   statistics?: StatItem[];
@@ -167,14 +167,22 @@ export default function HeroSliderNWMSection({
                   {showCardOnMobile && (() => {
                     // Check if slide wants image instead of card
                     if (slide.useImageInsteadOfCard && slide.cardImage) {
+                      const imageSrc = typeof slide.cardImage === 'string' ? slide.cardImage : slide.cardImage.src;
+                      const imageAlt = typeof slide.cardImage === 'string' ? `${slide.title} - ${slide.label}` : slide.cardImage.alt || `${slide.title} - ${slide.label}`;
+                      const imageStyle = typeof slide.cardImage === 'object' && slide.cardImage !== null ? {
+                        maxWidth: slide.cardImage.maxWidth ? `${slide.cardImage.maxWidth}px` : undefined,
+                        maxHeight: slide.cardImage.maxHeight ? `${slide.cardImage.maxHeight}px` : undefined,
+                        objectFit: (slide.cardImage.objectFit || 'cover') as React.CSSProperties['objectFit']
+                      } : { objectFit: 'cover' as React.CSSProperties['objectFit'] };
+
                       return (
                         <div className="hero-slide-image-card max-w-3xl">
                           <div className="relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
                             <img
-                              src={slide.cardImage}
-                              alt={`${slide.title} - ${slide.label}`}
-                              className="w-full h-auto object-cover"
-                              style={{ aspectRatio: '16/9' }}
+                              src={imageSrc}
+                              alt={imageAlt}
+                              className="w-full h-auto"
+                              style={{ aspectRatio: '16/9', ...imageStyle }}
                             />
                           </div>
                         </div>

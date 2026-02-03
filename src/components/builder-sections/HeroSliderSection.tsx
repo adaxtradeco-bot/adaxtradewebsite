@@ -15,7 +15,7 @@ interface Slide {
   tag: string;
   backgroundImage?: string;
   useImageInsteadOfCard?: boolean;
-  cardImage?: string;
+  cardImage?: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
   minHeight?: string;
   buttons: Array<{ text: string; href: string; variant: 'primary' | 'secondary' }>;
   statistics?: StatItem[];
@@ -38,15 +38,23 @@ interface HeroSliderSectionProps {
 /**
  * ImageCard Component - Renders image in place of hero card content
  */
-function ImageCard({ image, alt }: { image: string; alt?: string }) {
+function ImageCard({ image, alt }: { image: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string }; alt?: string }) {
+  const imageSrc = typeof image === 'string' ? image : image.src;
+  const imageAlt = typeof image === 'string' ? alt : image.alt || alt;
+  const imageStyle = typeof image === 'object' && image !== null ? {
+    maxWidth: image.maxWidth ? `${image.maxWidth}px` : undefined,
+    maxHeight: image.maxHeight ? `${image.maxHeight}px` : undefined,
+    objectFit: (image.objectFit || 'cover') as React.CSSProperties['objectFit']
+  } : { objectFit: 'cover' as React.CSSProperties['objectFit'] };
+
   return (
     <div className="max-w-3xl">
       <div className="relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
         <img
-          src={image}
-          alt={alt || 'Hero image'}
-          className="w-full h-auto object-cover"
-          style={{ aspectRatio: '16/9' }}
+          src={imageSrc}
+          alt={imageAlt || 'Hero image'}
+          className="w-full h-auto"
+          style={{ aspectRatio: '16/9', ...imageStyle }}
         />
       </div>
     </div>
