@@ -23,6 +23,74 @@ export function WallOfFeaturesPropertyPanel({
   const data = section.data || {};
   const features = data.features || [];
   const [selectedFeature, setSelectedFeature] = useState<string | null>(null);
+  const [showDefaultFeatures, setShowDefaultFeatures] = useState(false);
+
+  // Default features for reference
+  const defaultFeatures = [
+    {
+      id: 'calendar',
+      title: 'Calendar',
+      faIcon: { name: 'calendar', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#3B82F6' },
+      type: 'button' as const,
+      size: 'small' as const,
+      position: { row: 1, column: 1, rowSpan: 1, columnSpan: 1 },
+    },
+    {
+      id: 'dashboards',
+      title: 'Dashboards',
+      faIcon: { name: 'chart-line', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#10B981' },
+      type: 'button' as const,
+      size: 'small' as const,
+      position: { row: 1, column: 2, rowSpan: 1, columnSpan: 1 },
+    },
+    {
+      id: 'whiteboards',
+      title: 'Whiteboards', 
+      faIcon: { name: 'chalkboard', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#F59E0B' },
+      type: 'button' as const,
+      size: 'small' as const,
+      position: { row: 1, column: 3, rowSpan: 1, columnSpan: 1 },
+    },
+    {
+      id: 'forms',
+      title: 'Forms',
+      faIcon: { name: 'wpforms', type: 'brands' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#8B5CF6' },
+      type: 'button' as const,
+      size: 'small' as const,
+      position: { row: 1, column: 4, rowSpan: 1, columnSpan: 1 },
+    },
+    {
+      id: 'automation',
+      title: 'Automation',
+      faIcon: { name: 'robot', type: 'solid' as const, size: 'lg' as const, color: '#6B7280', hoverColor: '#EF4444' },
+      type: 'button' as const,
+      size: 'small' as const,
+      position: { row: 1, column: 5, rowSpan: 1, columnSpan: 1 },
+    },
+    {
+      id: 'docs',
+      title: 'Docs',
+      faIcon: { name: 'file-lines', type: 'solid' as const, size: 'lg' as const, color: '#10B981' },
+      type: 'button' as const,
+      size: 'large' as const,
+      image: '/images/features/docs.png',
+      position: { row: 2, column: 3, rowSpan: 2, columnSpan: 2 },
+    },
+    {
+      id: 'tasks',
+      title: 'Tasks',
+      faIcon: { name: 'list-check', type: 'solid' as const, size: 'lg' as const, color: '#3B82F6' },
+      type: 'button' as const,
+      size: 'large' as const,
+      image: '/images/features/tasks.png',
+      position: { row: 2, column: 5, rowSpan: 2, columnSpan: 2 },
+    },
+  ];
+
+  // Show actual features or default features for editing
+  const displayFeatures = features.length > 0 && features.some((f: any) => f.title && f.title.trim() !== '') 
+    ? features 
+    : (showDefaultFeatures ? defaultFeatures : []);
 
   const updateData = (newData: any) => {
     onUpdate({
@@ -89,7 +157,7 @@ export function WallOfFeaturesPropertyPanel({
     }
   };
 
-  const selectedFeatureData = features.find((f: any) => f.id === selectedFeature);
+  const selectedFeatureData = displayFeatures.find((f: any) => f.id === selectedFeature);
 
   return (
     <div className="space-y-6">
@@ -128,20 +196,30 @@ export function WallOfFeaturesPropertyPanel({
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Features ({features.length})
+            Features ({displayFeatures.length})
           </h3>
-          <button
-            onClick={addFeature}
-            className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
-          >
-            <Plus className="w-4 h-4" />
-            Add Feature
-          </button>
+          <div className="flex items-center gap-2">
+            {features.length === 0 && (
+              <button
+                onClick={() => setShowDefaultFeatures(!showDefaultFeatures)}
+                className="flex items-center gap-2 px-3 py-1.5 bg-gray-600 text-white rounded-md hover:bg-gray-700 text-sm"
+              >
+                {showDefaultFeatures ? 'Hide' : 'Show'} Default Features
+              </button>
+            )}
+            <button
+              onClick={addFeature}
+              className="flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              Add Feature
+            </button>
+          </div>
         </div>
 
         {/* Features List */}
         <div className="space-y-2 max-h-64 overflow-y-auto">
-          {features.map((feature: any) => (
+          {displayFeatures.map((feature: any) => (
             <div
               key={feature.id}
               className={`p-3 border rounded-md cursor-pointer transition-colors ${
@@ -166,30 +244,51 @@ export function WallOfFeaturesPropertyPanel({
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400">
                       Row {feature.position.row}, Col {feature.position.column}
+                      {feature.size === 'large' && ' (Large)'}
+                      {feature.image && ' 🖼️'}
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-1">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      duplicateFeature(feature.id);
-                    }}
-                    className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                    title="Duplicate"
-                  >
-                    <Copy className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteFeature(feature.id);
-                    }}
-                    className="p-1 text-red-400 hover:text-red-600"
-                    title="Delete"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  {!showDefaultFeatures && (
+                    <>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          duplicateFeature(feature.id);
+                        }}
+                        className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                        title="Duplicate"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteFeature(feature.id);
+                        }}
+                        className="p-1 text-red-400 hover:text-red-600"
+                        title="Delete"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </>
+                  )}
+                  {showDefaultFeatures && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Copy default feature to custom features
+                        const newFeature = { ...feature, id: `feature-${Date.now()}` };
+                        updateData({ features: [...features, newFeature] });
+                        setShowDefaultFeatures(false);
+                      }}
+                      className="p-1 text-green-400 hover:text-green-600"
+                      title="Use This Feature"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -198,7 +297,7 @@ export function WallOfFeaturesPropertyPanel({
       </div>
 
       {/* Selected Feature Editor */}
-      {selectedFeatureData && (
+      {selectedFeatureData && !showDefaultFeatures && (
         <div className="space-y-4 border-t border-gray-200 dark:border-gray-700 pt-6">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             Edit Feature
@@ -258,6 +357,24 @@ export function WallOfFeaturesPropertyPanel({
             </div>
           </div>
 
+          {selectedFeatureData.size === 'large' && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Preview Image (for large features)
+              </label>
+              <input
+                type="text"
+                value={selectedFeatureData.image || ''}
+                onChange={(e) => updateFeature(selectedFeature!, { image: e.target.value })}
+                placeholder="/images/features/example.png"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              />
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Image URL for the center preview area (only for large features)
+              </p>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -294,11 +411,33 @@ export function WallOfFeaturesPropertyPanel({
         </div>
       )}
 
-      {features.length === 0 && (
+      {/* Default Features Info */}
+      {selectedFeatureData && showDefaultFeatures && (
+        <div className="space-y-4 border-t border-gray-200 dark:border-gray-700 pt-6">
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-md">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              Default Feature Preview
+            </h3>
+            <div className="text-sm text-gray-700 dark:text-gray-300 space-y-2">
+              <p><strong>Title:</strong> {selectedFeatureData.title}</p>
+              <p><strong>Size:</strong> {selectedFeatureData.size}</p>
+              <p><strong>Position:</strong> Row {selectedFeatureData.position.row}, Column {selectedFeatureData.position.column}</p>
+              {selectedFeatureData.image && (
+                <p><strong>Preview Image:</strong> {selectedFeatureData.image}</p>
+              )}
+            </div>
+            <p className="text-xs text-blue-600 dark:text-blue-400 mt-3">
+              Click the + button next to this feature to add it to your custom features for editing.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {displayFeatures.length === 0 && (
         <div className="text-center py-8 text-gray-500 dark:text-gray-400">
           <div className="text-4xl mb-2">🧩</div>
-          <p>No features added yet</p>
-          <p className="text-sm">Click "Add Feature" to get started</p>
+          <p>No features configured</p>
+          <p className="text-sm">Click "Show Default Features" to see examples or "Add Feature" to create custom ones</p>
         </div>
       )}
     </div>

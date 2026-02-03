@@ -194,7 +194,8 @@ export function WallOfFeaturesSection({
     { id: 'feedback', title: 'Feedback', faIcon: { name: 'comment-dots', type: 'solid', size: 'lg', color: '#6B7280', hoverColor: '#8B5CF6' }, kind: 'secondary', col: 10, row: 8 },
   ];
 
-  const allFeatures: FeatureItem[] = features.length > 0 
+  // Always show default features if no custom features are configured
+  const allFeatures: FeatureItem[] = features.length > 0 && features.some(f => f.title && f.title.trim() !== '')
     ? transformFeatures(features) 
     : defaultFeatures;
 
