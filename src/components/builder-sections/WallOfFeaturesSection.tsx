@@ -38,7 +38,7 @@ function transformFeatures(schemaFeatures: WallOfFeaturesConfig['data']['feature
     icon: feature.icon,
     faIcon: feature.faIcon,
     kind: feature.size === 'large' ? 'primary' : 'secondary',
-    previewImage: feature.size === 'large' ? feature.image : undefined,
+    previewImage: feature.image, // Both small and large can have preview images
     col: feature.position.column,
     row: feature.position.row,
     w: feature.position.columnSpan,
@@ -201,9 +201,13 @@ export function WallOfFeaturesSection({
 
   const primaryFeatures = allFeatures.filter((f: FeatureItem) => f.kind === 'primary');
   const visibleFeatures = allFeatures.filter((f: FeatureItem) => f.kind === 'secondary');
+  
+  // Add small features with images to primary features for preview
+  const featuresWithImages = allFeatures.filter((f: FeatureItem) => f.previewImage && f.kind === 'secondary');
+  const allPrimaryFeatures = [...primaryFeatures, ...featuresWithImages];
 
-  const [active, setActive] = React.useState(primaryFeatures[0]?.id);
-  const activeFeature = primaryFeatures.find((f: FeatureItem) => f.id === active);
+  const [active, setActive] = React.useState(allPrimaryFeatures[0]?.id);
+  const activeFeature = allPrimaryFeatures.find((f: FeatureItem) => f.id === active);
 
   /* ---------- Auto Demo ---------- */
   const pauseRef = React.useRef(false);
@@ -215,13 +219,13 @@ export function WallOfFeaturesSection({
       if (pauseRef.current) return;
 
       setActive((prev: string) => {
-        const idx = primaryFeatures.findIndex((f: FeatureItem) => f.id === prev);
-        return primaryFeatures[(idx + 1) % primaryFeatures.length].id;
+        const idx = allPrimaryFeatures.findIndex((f: FeatureItem) => f.id === prev);
+        return allPrimaryFeatures[(idx + 1) % allPrimaryFeatures.length].id;
       });
     }, 4000);
 
     return () => clearInterval(id);
-  }, [primaryFeatures, isBuilder]);
+  }, [allPrimaryFeatures, isBuilder]);
 
   return (
     <section
@@ -279,17 +283,21 @@ export function WallOfFeaturesSection({
                     backgroundColor: 'transparent',
                   }}
                   className={`relative z-30 flex flex-col items-center justify-center text-center
-                    transition-all duration-200 border border-gray-300 dark:border-slate-600
+                    transition-all duration-200 ${
+                      feature.kind === 'primary' && feature.w && feature.w > 1 
+                        ? 'border-0' // No border for large features
+                        : 'border border-gray-300 dark:border-slate-600'
+                    }
                     hover:bg-gray-100 dark:hover:bg-slate-800 hover:border-gray-400 dark:hover:border-slate-500
                     hover:shadow-sm dark:hover:shadow-slate-900/20`}
                   onClick={e => {
                     e.stopPropagation();
-                    if (!isBuilder && primaryFeatures.length > 0) {
+                    if (!isBuilder && allPrimaryFeatures.length > 0) {
                       pauseRef.current = true;
                       // Cycle through primary features when clicking any tile
-                      const currentIdx = primaryFeatures.findIndex((f: FeatureItem) => f.id === active);
-                      const nextIdx = (currentIdx + 1) % primaryFeatures.length;
-                      setActive(primaryFeatures[nextIdx].id);
+                      const currentIdx = allPrimaryFeatures.findIndex((f: FeatureItem) => f.id === active);
+                      const nextIdx = (currentIdx + 1) % allPrimaryFeatures.length;
+                      setActive(allPrimaryFeatures[nextIdx].id);
                     }
                   }}
                 >
