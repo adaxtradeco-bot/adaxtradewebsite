@@ -207,6 +207,8 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
           'Dedicated portals per org.',
         ],
         imagePlaceholder: 'Drop architecture diagram here',
+        videoSrc: '',
+        mediaType: 'image',
       },
       style: {
         backgroundColor: 'bg-slate-950',

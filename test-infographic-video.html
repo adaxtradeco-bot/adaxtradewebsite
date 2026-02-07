@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست ویدیو در سکشن Infographic</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8fafc;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .video-container {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.1), rgba(139, 92, 246, 0.1));
+            margin: 20px 0;
+        }
+        video {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .placeholder {
+            color: #64748b;
+            font-size: 14px;
+            padding: 40px;
+        }
+        h1 {
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .description {
+            color: #475569;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .feature-list {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .feature-list h3 {
+            color: #1e293b;
+            margin-top: 0;
+        }
+        .feature-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+            color: #475569;
+        }
+        .feature-list li:before {
+            content: "•";
+            color: #06b6d4;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>تست پشتیبانی از ویدیو MP4 در سکشن Infographic</h1>
+        <p class="description">این صفحه برای تست قابلیت جدید پشتیبانی از فایل‌های MP4 در سکشن infographic-nwm طراحی شده است.</p>
+        
+        <div class="video-container">
+            <h3>نمونه ویدیو (شبیه‌سازی)</h3>
+            <!-- شبیه‌سازی ویدیو -->
+            <video controls preload="metadata" poster="/placeholder-image.jpg">
+                <source src="/sample-video.mp4" type="video/mp4">
+                <p class="placeholder">مرورگر شما از پخش ویدیو پشتیبانی نمی‌کند.</p>
+            </video>
+        </div>
+
+        <div class="feature-list">
+            <h3>ویژگی‌های اضافه شده:</h3>
+            <ul>
+                <li>پشتیبانی از فایل‌های MP4 در سکشن infographic-nwm</li>
+                <li>انتخاب نوع رسانه (تصویر یا ویدیو) از طریق فیلد mediaType</li>
+                <li>کنترل‌های پخش ویدیو با preload="metadata"</li>
+                <li>پشتیبانی از poster image برای ویدیو</li>
+                <li>پیام خطای فارسی برای مرورگرهای غیرسازگار</li>
+                <li>طراحی ریسپانسیو برای ویدیو</li>
+            </ul>
+        </div>
+
+        <div class="feature-list">
+            <h3>نحوه استفاده:</h3>
+            <ul>
+                <li>فیلد videoSrc: مسیر فایل MP4</li>
+                <li>فیلد mediaType: 'video' برای نمایش ویدیو، 'image' برای تصویر</li>
+                <li>فیلد imagePlaceholder: متن جایگزین یا poster image</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -19,6 +19,8 @@ interface InfographicNWMSectionProps {
   notesDescription?: string;
   notesList: string[];
   imagePlaceholder?: string;
+  videoSrc?: string;
+  mediaType?: 'image' | 'video';
 }
 
 export default function InfographicNWMSection({
@@ -33,7 +35,9 @@ export default function InfographicNWMSection({
   notesTitle = 'Use this block for a visual or diagram.',
   notesDescription,
   notesList = [],
-  imagePlaceholder = 'Drop your architecture diagram / infographic here'
+  imagePlaceholder = 'Drop your architecture diagram / infographic here',
+  videoSrc,
+  mediaType = 'image'
 }: InfographicNWMSectionProps) {
   const positionClasses = {
     'top-left': 'top-[8%] left-[8%]',
@@ -99,9 +103,23 @@ export default function InfographicNWMSection({
               <p className="text-sm md:text-base text-slate-700 dark:text-slate-300 mb-3 md:mb-4">{notesDescription}</p>
             )}
 
-            {/* Image Placeholder */}
+            {/* Media Content */}
             <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 dark:from-cyan-500/10 dark:to-violet-500/10 p-4 md:p-6 text-center mb-3 md:mb-4 hover:border-solid transition-all duration-300">
-              <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400">{imagePlaceholder}</span>
+              {mediaType === 'video' && videoSrc ? (
+                <video 
+                  className="w-full h-auto rounded-lg shadow-lg"
+                  controls
+                  preload="metadata"
+                  poster={imagePlaceholder}
+                >
+                  <source src={videoSrc} type="video/mp4" />
+                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
+                    مرورگر شما از پخش ویدیو پشتیبانی نمیکند.
+                  </p>
+                </video>
+              ) : (
+                <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400">{imagePlaceholder}</span>
+              )}
             </div>
 
             {/* List */}
