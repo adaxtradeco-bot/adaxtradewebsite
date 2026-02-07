@@ -15,6 +15,8 @@ export default function MediaPage() {
   const [files, setFiles] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string>('');
+  const [uploadSuccess, setUploadSuccess] = useState<string>('');
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const router = useRouter();
@@ -46,10 +48,20 @@ export default function MediaPage() {
     if (!fileList) return;
 
     setUploading(true);
+    setUploadError('');
+    setUploadSuccess('');
     const token = localStorage.getItem('adminToken');
 
     for (const file of Array.from(fileList)) {
       try {
+        // Client-side validation
+        const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+        if (file.size > maxSize) {
+          const maxSizeText = file.type.startsWith('video/') ? '50MB' : '10MB';
+          setUploadError(`File "${file.name}" is too large (max ${maxSizeText})`);
+          continue;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
 
@@ -59,16 +71,28 @@ export default function MediaPage() {
           body: formData,
         });
 
+        const data = await response.json();
+
         if (response.ok) {
+          setUploadSuccess(`File "${file.name}" uploaded successfully!`);
           await loadMediaFiles();
+        } else {
+          setUploadError(data.error || `Failed to upload "${file.name}"`);
         }
       } catch (error) {
         console.error('Upload failed:', error);
+        setUploadError(`Failed to upload "${file.name}": ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
     
     setUploading(false);
     e.target.value = '';
+    
+    // Clear messages after 5 seconds
+    setTimeout(() => {
+      setUploadError('');
+      setUploadSuccess('');
+    }, 5000);
   };
 
   const handleDelete = async (filename: string) => {
@@ -160,7 +184,7 @@ export default function MediaPage() {
             <input
               type="file"
               multiple
-              accept="image/*,video/*,.pdf,.doc,.docx"
+              accept="image/*,video/*,.gif,.mp4,.webm,.ogg,.mov,.avi,.pdf,.doc,.docx"
               onChange={handleUpload}
               className="hidden"
               disabled={uploading}
@@ -168,6 +192,25 @@ export default function MediaPage() {
           </label>
         </div>
       </div>
+
+      {/* Error/Success Messages */}
+      {uploadError && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="text-red-500 mr-3">❌</div>
+            <p className="text-red-700 dark:text-red-300">{uploadError}</p>
+          </div>
+        </div>
+      )}
+      
+      {uploadSuccess && (
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+          <div className="flex items-center">
+            <div className="text-green-500 mr-3">✅</div>
+            <p className="text-green-700 dark:text-green-300">{uploadSuccess}</p>
+          </div>
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -217,7 +260,7 @@ export default function MediaPage() {
             <input
               type="file"
               multiple
-              accept="image/*,video/*,.pdf,.doc,.docx"
+              accept="image/*,video/*,.gif,.mp4,.webm,.ogg,.mov,.avi,.pdf,.doc,.docx"
               onChange={handleUpload}
               className="hidden"
             />

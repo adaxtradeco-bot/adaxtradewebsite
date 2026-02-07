@@ -49,6 +49,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
+    // Validate file size (max 50MB for videos, 10MB for images)
+    const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+      const maxSizeText = file.type.startsWith('video/') ? '50MB' : '10MB';
+      return NextResponse.json(
+        { error: `File size too large (max ${maxSizeText})` },
+        { status: 400 }
+      );
+    }
+
+    // Validate file type
+    const allowedTypes = [
+      'image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/svg+xml', 'image/webp',
+      'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-msvideo',
+      'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json(
+        { error: `Invalid file type. Allowed: ${allowedTypes.join(', ')}` },
+        { status: 400 }
+      );
+    }
+
     const filename = `media/${Date.now()}-${file.name.replace(/\s/g, '-')}`;
     
     const blob = await put(filename, file, {
@@ -63,7 +87,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Upload error:', error);
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    return NextResponse.json({ 
+      error: error instanceof Error ? error.message : 'Upload failed' 
+    }, { status: 500 });
   }
 }
 
