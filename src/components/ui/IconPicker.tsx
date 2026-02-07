@@ -129,6 +129,7 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
         </h3>
         <div className="flex items-center gap-2">
           <button
+            type="button"
             onClick={handleClear}
             className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
@@ -136,6 +137,7 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
           </button>
           {onClose && (
             <button
+              type="button"
               onClick={onClose}
               className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
@@ -170,6 +172,7 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
             {Object.keys(ICON_CATEGORIES).map((category) => (
               <button
                 key={category}
+                type="button"
                 onClick={() => setSelectedCategory(category)}
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
                   selectedCategory === category
@@ -192,6 +195,7 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
             {ICON_TYPES.map((type) => (
               <button
                 key={type.value}
+                type="button"
                 onClick={() => setSelectedType(type.value)}
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
                   selectedType === type.value
@@ -233,6 +237,7 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
               {DEFAULT_COLORS.map((color) => (
                 <button
                   key={color}
+                  type="button"
                   onClick={() => setSelectedColor(color)}
                   className={`w-8 h-8 rounded-md border-2 transition-all ${
                     selectedColor === color
@@ -276,6 +281,7 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
           {filteredIcons.map((iconName) => (
             <button
               key={iconName}
+              type="button"
               onClick={() => handleIconSelect(iconName)}
               className="p-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center group"
               title={iconName}

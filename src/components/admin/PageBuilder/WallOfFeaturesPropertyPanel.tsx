@@ -288,7 +288,9 @@ export function WallOfFeaturesPropertyPanel({
                   {!showDefaultFeatures && (
                     <>
                       <button
+                        type="button"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
                           duplicateFeature(feature.id);
                         }}
@@ -298,7 +300,9 @@ export function WallOfFeaturesPropertyPanel({
                         <Copy className="w-4 h-4" />
                       </button>
                       <button
+                        type="button"
                         onClick={(e) => {
+                          e.preventDefault();
                           e.stopPropagation();
                           deleteFeature(feature.id);
                         }}
@@ -311,7 +315,9 @@ export function WallOfFeaturesPropertyPanel({
                   )}
                   {showDefaultFeatures && (
                     <button
+                      type="button"
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                         // Copy default feature to custom features
                         const newFeature = { ...feature, id: `feature-${Date.now()}` };
