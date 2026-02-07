@@ -279,6 +279,17 @@ export default function MediaPage() {
                         alt={file.filename}
                         className="w-full h-full object-cover"
                       />
+                    ) : file.type?.startsWith('video/') ? (
+                      <div className="relative w-full h-full">
+                        <video
+                          src={file.url}
+                          className="w-full h-full object-cover"
+                          preload="metadata"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                          <div className="text-white text-4xl">▶️</div>
+                        </div>
+                      </div>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-4xl">
                         {getFileIcon(file.filename)}

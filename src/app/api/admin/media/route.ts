@@ -14,7 +14,10 @@ export async function GET(request: NextRequest) {
 
     const { blobs } = await list();
     
-    const fileDetails = blobs.map((blob) => ({
+    // Filter only media files (exclude settings files)
+    const mediaBlobs = blobs.filter(blob => blob.pathname.startsWith('media/'));
+    
+    const fileDetails = mediaBlobs.map((blob) => ({
       filename: blob.pathname.split('/').pop() || blob.pathname,
       url: blob.url,
       size: blob.size,
@@ -126,9 +129,9 @@ function getFileType(pathname: string): string {
   if (!ext) return 'application/octet-stream';
   
   if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext)) {
-    return 'image/' + ext;
+    return 'image/' + (ext === 'jpg' ? 'jpeg' : ext);
   }
-  if (['mp4', 'avi', 'mov', 'wmv'].includes(ext)) {
+  if (['mp4', 'webm', 'ogg', 'mov', 'avi', 'wmv'].includes(ext)) {
     return 'video/' + ext;
   }
   if (ext === 'pdf') {
