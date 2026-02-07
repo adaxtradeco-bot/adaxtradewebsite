@@ -98,7 +98,7 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
   };
 
   useEffect(() => {
-    if (value) {
+    if (value && value.name && (value.type !== selectedType || value.size !== selectedSize || value.color !== selectedColor)) {
       onChange({ ...value, type: selectedType, size: selectedSize, color: selectedColor });
     }
   }, [selectedType, selectedSize, selectedColor]);
