@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, X, Palette, Maximize2 } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 export interface IconConfig {
   name: string;
@@ -24,36 +24,7 @@ interface IconPickerProps {
   className?: string;
 }
 
-// FontAwesome Pro icon categories and popular icons
-const ICON_CATEGORIES = {
-  popular: [
-    'home', 'user', 'users', 'cog', 'bell', 'envelope', 'calendar', 'clock', 'heart', 'star',
-    'search', 'plus', 'minus', 'edit', 'trash', 'download', 'upload', 'share', 'link', 'lock',
-    'unlock', 'eye', 'eye-slash', 'check', 'times', 'arrow-right', 'arrow-left', 'arrow-up', 'arrow-down',
-    'chevron-right', 'chevron-left', 'chevron-up', 'chevron-down', 'bars', 'ellipsis-h', 'ellipsis-v'
-  ],
-  business: [
-    'briefcase', 'building', 'chart-bar', 'chart-line', 'chart-pie', 'clipboard', 'file', 'folder',
-    'handshake', 'money-bill', 'percent', 'presentation', 'project-diagram', 'tasks', 'trophy',
-    'balance-scale', 'calculator', 'credit-card', 'dollar-sign', 'euro-sign', 'pound-sign'
-  ],
-  communication: [
-    'comment', 'comments', 'phone', 'mobile', 'fax', 'at', 'hashtag', 'microphone', 'video',
-    'camera', 'bullhorn', 'rss', 'wifi', 'signal', 'broadcast-tower', 'satellite'
-  ],
-  technology: [
-    'laptop', 'desktop', 'tablet', 'mobile-alt', 'keyboard', 'mouse', 'headphones', 'microchip',
-    'server', 'database', 'cloud', 'code', 'terminal', 'bug', 'cogs', 'wrench', 'screwdriver'
-  ],
-  media: [
-    'image', 'images', 'film', 'music', 'volume-up', 'volume-down', 'volume-mute', 'play',
-    'pause', 'stop', 'forward', 'backward', 'step-forward', 'step-backward', 'random', 'repeat'
-  ],
-  social: [
-    'facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'github', 'google', 'apple',
-    'microsoft', 'amazon', 'slack', 'discord', 'telegram', 'whatsapp', 'skype', 'zoom'
-  ]
-};
+let ICON_CATEGORIES: Record<string, string[]> = {};
 
 const ICON_TYPES = [
   { value: 'solid', label: 'Solid', prefix: 'fas' },
@@ -90,29 +61,33 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
   const [selectedSize, setSelectedSize] = useState<IconConfig['size']>(value?.size || 'lg');
   const [selectedColor, setSelectedColor] = useState(value?.color || '#374151');
   const [customColor, setCustomColor] = useState('');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (Object.keys(ICON_CATEGORIES).length === 0) {
+      fetch('/data/fontawesome-icons.json')
+        .then(res => res.json())
+        .then(data => {
+          ICON_CATEGORIES = data;
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Failed to load icons:', err);
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   const filteredIcons = useMemo(() => {
-    const categoryIcons = ICON_CATEGORIES[selectedCategory as keyof typeof ICON_CATEGORIES] || [];
-    
+    const categoryIcons = ICON_CATEGORIES[selectedCategory] || [];
     if (!searchTerm) return categoryIcons;
-    
-    return categoryIcons.filter(icon => 
-      icon.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    return categoryIcons.filter(icon => icon.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [searchTerm, selectedCategory]);
 
   const handleIconSelect = (iconName: string) => {
-    const iconConfig: IconConfig = {
-      name: iconName,
-      type: selectedType,
-      size: selectedSize,
-      color: selectedColor
-    };
-    onChange(iconConfig);
-  };
-
-  const handleClear = () => {
-    onChange(null);
+    onChange({ name: iconName, type: selectedType, size: selectedSize, color: selectedColor });
   };
 
   const getIconClass = (iconName: string) => {
@@ -122,230 +97,87 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
 
   return (
     <div className={`bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 ${className}`}>
-      {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Select Icon
-        </h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Select Icon</h3>
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handleClear();
-            }}
-            className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-          >
-            Clear
-          </button>
-          {onClose && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onClose?.();
-              }}
-              className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
+          <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onChange(null); }} className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Clear</button>
+          {onClose && <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); onClose(); }} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"><X className="w-5 h-5" /></button>}
         </div>
       </div>
 
-      {/* Search */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search icons..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
+          <input type="text" placeholder="Search icons..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
         </div>
       </div>
 
-      {/* Controls */}
       <div className="p-4 space-y-4 border-b border-gray-200 dark:border-gray-700">
-        {/* Categories */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Category
-          </label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
           <div className="flex flex-wrap gap-2">
             {Object.keys(ICON_CATEGORIES).map((category) => (
-              <button
-                key={category}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setSelectedCategory(category);
-                }}
-                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  selectedCategory === category
-                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                }`}
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </button>
+              <button key={category} type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedCategory(category); }} className={`px-3 py-1.5 text-sm rounded-md transition-colors ${selectedCategory === category ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>{category.charAt(0).toUpperCase() + category.slice(1)}</button>
             ))}
           </div>
         </div>
 
-        {/* Type */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Type
-          </label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Type</label>
           <div className="flex flex-wrap gap-2">
             {ICON_TYPES.map((type) => (
-              <button
-                key={type.value}
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setSelectedType(type.value);
-                }}
-                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
-                  selectedType === type.value
-                    ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
-                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                }`}
-              >
-                {type.label}
-              </button>
+              <button key={type.value} type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedType(type.value); }} className={`px-3 py-1.5 text-sm rounded-md transition-colors ${selectedType === type.value ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>{type.label}</button>
             ))}
           </div>
         </div>
 
-        {/* Size */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Size
-          </label>
-          <select
-            value={selectedSize}
-            onChange={(e) => setSelectedSize(e.target.value as IconConfig['size'])}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          >
-            {ICON_SIZES.map((size) => (
-              <option key={size.value} value={size.value}>
-                {size.label}
-              </option>
-            ))}
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Size</label>
+          <select value={selectedSize} onChange={(e) => setSelectedSize(e.target.value as IconConfig['size'])} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            {ICON_SIZES.map((size) => (<option key={size.value} value={size.value}>{size.label}</option>))}
           </select>
         </div>
 
-        {/* Color */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Color
-          </label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Color</label>
           <div className="space-y-3">
             <div className="flex flex-wrap gap-2">
               {DEFAULT_COLORS.map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setSelectedColor(color);
-                  }}
-                  className={`w-8 h-8 rounded-md border-2 transition-all ${
-                    selectedColor === color
-                      ? 'border-blue-500 scale-110'
-                      : 'border-gray-300 dark:border-gray-600 hover:scale-105'
-                  }`}
-                  style={{ backgroundColor: color }}
-                />
+                <button key={color} type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedColor(color); }} className={`w-8 h-8 rounded-md border-2 transition-all ${selectedColor === color ? 'border-blue-500 scale-110' : 'border-gray-300 dark:border-gray-600 hover:scale-105'}`} style={{ backgroundColor: color }} />
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <input
-                type="color"
-                value={customColor || selectedColor}
-                onChange={(e) => {
-                  e.stopPropagation();
-                  setCustomColor(e.target.value);
-                  setSelectedColor(e.target.value);
-                }}
-                onClick={(e) => e.stopPropagation()}
-                className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600"
-              />
-              <input
-                type="text"
-                placeholder="#000000"
-                value={customColor}
-                onChange={(e) => {
-                  e.stopPropagation();
-                  setCustomColor(e.target.value);
-                  if (e.target.value.match(/^#[0-9A-Fa-f]{6}$/)) {
-                    setSelectedColor(e.target.value);
-                  }
-                }}
-                onClick={(e) => e.stopPropagation()}
-                className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
+              <input type="color" value={customColor || selectedColor} onChange={(e) => { e.stopPropagation(); setCustomColor(e.target.value); setSelectedColor(e.target.value); }} onClick={(e) => e.stopPropagation()} className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600" />
+              <input type="text" placeholder="#000000" value={customColor} onChange={(e) => { e.stopPropagation(); setCustomColor(e.target.value); if (e.target.value.match(/^#[0-9A-Fa-f]{6}$/)) setSelectedColor(e.target.value); }} onClick={(e) => e.stopPropagation()} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Icons Grid */}
       <div className="p-4 max-h-96 overflow-y-auto">
-        <div className="grid grid-cols-8 gap-2">
-          {filteredIcons.map((iconName) => (
-            <button
-              key={iconName}
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                handleIconSelect(iconName);
-              }}
-              className="p-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center group"
-              title={iconName}
-            >
-              <i
-                className={`${getIconClass(iconName)} fa-${selectedSize}`}
-                style={{ color: selectedColor }}
-              />
-            </button>
-          ))}
-        </div>
-        
-        {filteredIcons.length === 0 && (
-          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-            No icons found matching "{searchTerm}"
-          </div>
+        {loading ? (
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">Loading icons...</div>
+        ) : (
+          <>
+            <div className="grid grid-cols-8 gap-2">
+              {filteredIcons.map((iconName) => (
+                <button key={iconName} type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleIconSelect(iconName); }} className="p-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center group" title={iconName}>
+                  <i className={`${getIconClass(iconName)} fa-${selectedSize}`} style={{ color: selectedColor }} />
+                </button>
+              ))}
+            </div>
+            {filteredIcons.length === 0 && <div className="text-center py-8 text-gray-500 dark:text-gray-400">No icons found matching "{searchTerm}"</div>}
+          </>
         )}
       </div>
 
-      {/* Preview */}
       {value && (
         <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <i
-                className={`${getIconClass(value.name)} fa-${value.size}`}
-                style={{ color: value.color }}
-              />
-              <div className="text-sm">
-                <div className="font-medium text-gray-900 dark:text-white">
-                  {value.name}
-                </div>
-                <div className="text-gray-500 dark:text-gray-400">
-                  {value.type} • {value.size} • {value.color}
-                </div>
-              </div>
+          <div className="flex items-center gap-3">
+            <i className={`${getIconClass(value.name)} fa-${value.size}`} style={{ color: value.color }} />
+            <div className="text-sm">
+              <div className="font-medium text-gray-900 dark:text-white">{value.name}</div>
+              <div className="text-gray-500 dark:text-gray-400">{value.type} • {value.size} • {value.color}</div>
             </div>
           </div>
         </div>
@@ -354,95 +186,24 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
   );
 }
 
-// Icon Display Component
-interface IconDisplayProps {
-  icon: IconConfig;
-  className?: string;
-  enableHover?: boolean;
+export function IconDisplay({ icon, className = '', enableHover = false }: { icon: IconConfig; className?: string; enableHover?: boolean }) {
+  const typeMap = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
+  const sizeMap = { xs: 'fa-xs', sm: 'fa-sm', lg: 'fa-lg', xl: 'fa-xl', '2xl': 'fa-2xl', '3xl': 'fa-3xl', '4xl': 'fa-4xl', '5xl': 'fa-5xl' };
+  return <i className={`${typeMap[icon.type]} fa-${icon.name} ${sizeMap[icon.size]} ${className}`} style={{ color: icon.color }} />;
 }
 
-export function IconDisplay({ icon, className = '', enableHover = false }: IconDisplayProps) {
-  const getIconClass = () => {
-    const typeMap = {
-      solid: 'fas',
-      regular: 'far',
-      light: 'fal',
-      thin: 'fat',
-      duotone: 'fad',
-      brands: 'fab'
-    };
-    
-    const sizeMap = {
-      xs: 'fa-xs',
-      sm: 'fa-sm',
-      lg: 'fa-lg',
-      xl: 'fa-xl',
-      '2xl': 'fa-2xl',
-      '3xl': 'fa-3xl',
-      '4xl': 'fa-4xl',
-      '5xl': 'fa-5xl'
-    };
-    
-    return `${typeMap[icon.type]} fa-${icon.name} ${sizeMap[icon.size] || ''}`;
-  };
-
-  const baseStyle = { color: icon.color };
-  const hoverStyle = enableHover && icon.hoverColor ? {
-    '--hover-color': icon.hoverColor
-  } : {};
-
-  return (
-    <i 
-      className={`${getIconClass()} ${className} ${enableHover ? 'transition-colors duration-200 hover-icon' : ''}`}
-      style={{ ...baseStyle, ...hoverStyle }}
-    />
-  );
-}
-
-// Icon Button Component for forms
-interface IconButtonProps {
-  value?: IconConfig;
-  onChange: (icon: IconConfig | null) => void;
-  placeholder?: string;
-  className?: string;
-}
-
-export function IconButton({ value, onChange, placeholder = "Select icon", className = '' }: IconButtonProps) {
+export function IconButton({ value, onChange, placeholder = "Select icon", className = '' }: { value?: IconConfig; onChange: (icon: IconConfig | null) => void; placeholder?: string; className?: string }) {
   const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className={`relative ${className}`}>
-      <button
-        type="button"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsOpen(!isOpen);
-        }}
-        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-left focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-      >
+      <button type="button" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsOpen(!isOpen); }} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-left focus:ring-2 focus:ring-blue-500 focus:border-transparent">
         <div className="flex items-center gap-2">
-          {value ? (
-            <>
-              <IconDisplay icon={value} />
-              <span className="text-gray-900 dark:text-white">{value.name}</span>
-            </>
-          ) : (
-            <span className="text-gray-500 dark:text-gray-400">{placeholder}</span>
-          )}
+          {value ? (<><IconDisplay icon={value} /><span className="text-gray-900 dark:text-white">{value.name}</span></>) : (<span className="text-gray-500 dark:text-gray-400">{placeholder}</span>)}
         </div>
       </button>
-
       {isOpen && (
         <div className="absolute top-full left-0 right-0 z-50 mt-1">
-          <IconPicker
-            value={value}
-            onChange={(icon) => {
-              onChange(icon);
-              setIsOpen(false);
-            }}
-            onClose={() => setIsOpen(false)}
-          />
+          <IconPicker value={value} onChange={(icon) => { onChange(icon); setIsOpen(false); }} onClose={() => setIsOpen(false)} />
         </div>
       )}
     </div>
