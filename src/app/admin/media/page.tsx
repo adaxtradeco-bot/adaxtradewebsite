@@ -74,13 +74,18 @@ export default function MediaPage() {
         const data = await response.json();
 
         if (response.ok) {
+          console.log('✅ Upload successful:', data);
+          alert(`✅ File "${file.name}" uploaded successfully!\nURL: ${data.url}`);
           setUploadSuccess(`File "${file.name}" uploaded successfully!`);
           await loadMediaFiles();
         } else {
+          console.error('❌ Upload failed:', data);
+          alert(`❌ Upload failed: ${data.error}`);
           setUploadError(data.error || `Failed to upload "${file.name}"`);
         }
       } catch (error) {
-        console.error('Upload failed:', error);
+        console.error('❌ Upload exception:', error);
+        alert(`❌ Upload exception: ${error instanceof Error ? error.message : 'Unknown error'}`);
         setUploadError(`Failed to upload "${file.name}": ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
