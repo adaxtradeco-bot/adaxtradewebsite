@@ -130,7 +130,11 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={handleClear}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleClear();
+            }}
             className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           >
             Clear
@@ -138,7 +142,11 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
           {onClose && (
             <button
               type="button"
-              onClick={onClose}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onClose?.();
+              }}
               className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
               <X className="w-5 h-5" />
@@ -173,7 +181,11 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
               <button
                 key={category}
                 type="button"
-                onClick={() => setSelectedCategory(category)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSelectedCategory(category);
+                }}
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
                   selectedCategory === category
                     ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
@@ -196,7 +208,11 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
               <button
                 key={type.value}
                 type="button"
-                onClick={() => setSelectedType(type.value)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSelectedType(type.value);
+                }}
                 className={`px-3 py-1.5 text-sm rounded-md transition-colors ${
                   selectedType === type.value
                     ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300'
@@ -238,7 +254,11 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
                 <button
                   key={color}
                   type="button"
-                  onClick={() => setSelectedColor(color)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSelectedColor(color);
+                  }}
                   className={`w-8 h-8 rounded-md border-2 transition-all ${
                     selectedColor === color
                       ? 'border-blue-500 scale-110'
@@ -253,9 +273,11 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
                 type="color"
                 value={customColor || selectedColor}
                 onChange={(e) => {
+                  e.stopPropagation();
                   setCustomColor(e.target.value);
                   setSelectedColor(e.target.value);
                 }}
+                onClick={(e) => e.stopPropagation()}
                 className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600"
               />
               <input
@@ -263,11 +285,13 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
                 placeholder="#000000"
                 value={customColor}
                 onChange={(e) => {
+                  e.stopPropagation();
                   setCustomColor(e.target.value);
                   if (e.target.value.match(/^#[0-9A-Fa-f]{6}$/)) {
                     setSelectedColor(e.target.value);
                   }
                 }}
+                onClick={(e) => e.stopPropagation()}
                 className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
@@ -282,7 +306,11 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
             <button
               key={iconName}
               type="button"
-              onClick={() => handleIconSelect(iconName)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleIconSelect(iconName);
+              }}
               className="p-3 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center group"
               title={iconName}
             >
@@ -386,7 +414,11 @@ export function IconButton({ value, onChange, placeholder = "Select icon", class
     <div className={`relative ${className}`}>
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-left focus:ring-2 focus:ring-blue-500 focus:border-transparent"
       >
         <div className="flex items-center gap-2">
