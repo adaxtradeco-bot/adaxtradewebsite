@@ -144,17 +144,26 @@ export default function FeatureVideoTabsSection({
                 {openAccordion === index && (
                   <div className="px-4 pb-4">
                     <div className="relative aspect-video rounded-lg overflow-hidden bg-black">
-                      <video
-                        ref={(el) => { if (el) videoRefs.current[index] = el; }}
-                        className="w-full h-full"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        src={tab.videoSrcMobile || tab.videoSrc}
-                      >
-                        Your browser does not support the video tag.
-                      </video>
+                      {(() => {
+                        const videoSrc = tab.videoSrcMobile || tab.videoSrc;
+                        const videoSrcString = typeof videoSrc === 'string' ? videoSrc : (videoSrc as any)?.src || '';
+                        const videoObjectFit = typeof videoSrc === 'object' && videoSrc !== null ? (videoSrc as any)?.objectFit || 'cover' : 'cover';
+                        
+                        return videoSrcString ? (
+                          <video
+                            ref={(el) => { if (el) videoRefs.current[index] = el; }}
+                            className="w-full h-full"
+                            style={{ objectFit: videoObjectFit }}
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            src={videoSrcString}
+                          >
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : null;
+                      })()}
                       {showFullscreenButton && (
                         <button
                           onClick={handleFullscreen}
@@ -180,17 +189,26 @@ export default function FeatureVideoTabsSection({
                 className={`${activeTab === index ? 'block' : 'hidden'}`}
               >
                 <div className="relative aspect-video bg-black">
-                  <video
-                    ref={(el) => { if (el) videoRefs.current[index] = el; }}
-                    className="w-full h-full object-cover"
-                    autoPlay={autoplay}
-                    muted
-                    loop
-                    playsInline
-                    src={tab.videoSrc}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
+                  {(() => {
+                    const videoSrc = tab.videoSrc;
+                    const videoSrcString = typeof videoSrc === 'string' ? videoSrc : (videoSrc as any)?.src || '';
+                    const videoObjectFit = typeof videoSrc === 'object' && videoSrc !== null ? (videoSrc as any)?.objectFit || 'cover' : 'cover';
+                    
+                    return videoSrcString ? (
+                      <video
+                        ref={(el) => { if (el) videoRefs.current[index] = el; }}
+                        className="w-full h-full"
+                        style={{ objectFit: videoObjectFit }}
+                        autoPlay={autoplay}
+                        muted
+                        loop
+                        playsInline
+                        src={videoSrcString}
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                    ) : null;
+                  })()}
                   {showFullscreenButton && (
                     <button
                       onClick={handleFullscreen}
