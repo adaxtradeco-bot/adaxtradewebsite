@@ -239,7 +239,24 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
           'Keep it under 90 seconds.',
         ],
         modules: [
-          { emoji: '📝', title: 'Form Builder', description: 'Multi-step forms.' },
+          { 
+            emoji: '📝', 
+            title: 'Form Builder', 
+            description: 'Multi-step forms.',
+            videoSrc: ''
+          },
+          { 
+            emoji: '⚡', 
+            title: 'Workflow Engine', 
+            description: 'Automate processes.',
+            videoSrc: ''
+          },
+          { 
+            emoji: '📊', 
+            title: 'Dashboard Builder', 
+            description: 'Real-time insights.',
+            videoSrc: ''
+          },
         ],
         ctaText: 'Watch full product tour',
       },

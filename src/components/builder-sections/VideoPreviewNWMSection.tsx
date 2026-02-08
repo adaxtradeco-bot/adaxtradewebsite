@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 interface VideoModule {
   emoji: string;
   title: string;
   description: string;
+  videoSrc?: string;
 }
 
 interface VideoPreviewNWMSectionProps {
@@ -28,6 +29,27 @@ export default function VideoPreviewNWMSection({
   ctaText = '▶ Watch full product tour'
 }: VideoPreviewNWMSectionProps) {
   const [activeModule, setActiveModule] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const currentVideoSrc = modules[activeModule]?.videoSrc;
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !currentVideoSrc?.toLowerCase().includes('.mp4')) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [currentVideoSrc]);
 
   return (
     <section className="py-12 md:py-20 px-4 md:px-6 bg-white dark:bg-slate-950 relative overflow-hidden">
@@ -56,8 +78,33 @@ export default function VideoPreviewNWMSection({
           <div className="flex flex-col lg:grid lg:grid-cols-[1.15fr_0.9fr] gap-4 md:gap-6">
             {/* Left: Video */}
             <div>
-              <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center mb-3 md:mb-4 md:group-hover:border-solid transition-all duration-300">
-                <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4">{videoPlaceholder}</span>
+              <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center mb-3 md:mb-4 md:group-hover:border-solid transition-all duration-300 overflow-hidden">
+                {currentVideoSrc ? (
+                  currentVideoSrc.toLowerCase().includes('.mp4') ? (
+                    <video 
+                      ref={videoRef}
+                      key={currentVideoSrc}
+                      className="w-full h-full object-cover"
+                      controls
+                      muted
+                      loop
+                      preload="metadata"
+                      src={currentVideoSrc}
+                    >
+                      Browser does not support video playback.
+                    </video>
+                  ) : (currentVideoSrc.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/)) ? (
+                    <img 
+                      src={currentVideoSrc} 
+                      alt={modules[activeModule]?.title || 'Preview'}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4 break-all">{currentVideoSrc}</span>
+                  )
+                ) : (
+                  <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4">{videoPlaceholder}</span>
+                )}
               </div>
 
               <ul className="space-y-2 text-xs md:text-sm text-slate-700 dark:text-slate-300">
