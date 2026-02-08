@@ -235,14 +235,12 @@ export default function HeroSliderNWMSection({
                         </div>
 
                         <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-600 bg-gradient-to-br from-cyan-500/20 to-violet-500/20 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center relative z-10 md:group-hover:border-solid transition-all duration-300 overflow-hidden">
-                          {card.preview ? (
+                          {card.preview && (
                             <SmartImage 
                               src={card.preview} 
                               alt="Dashboard preview" 
                               className="w-full h-full rounded-lg"
                             />
-                          ) : (
-                            <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-2">{card.placeholderText || 'Product screenshot placeholder'}</span>
                           )}
                         </div>
                       </div>

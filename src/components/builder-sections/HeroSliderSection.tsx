@@ -139,6 +139,7 @@ export default function HeroSliderSection({ data, style }: HeroSliderSectionProp
             backgroundImage: slide.backgroundImage ? `url(${slide.backgroundImage})` : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            backgroundColor: slide.backgroundImage ? undefined : '#1e293b',
             minHeight: getSlideHeight(slide),
           }}
         >
