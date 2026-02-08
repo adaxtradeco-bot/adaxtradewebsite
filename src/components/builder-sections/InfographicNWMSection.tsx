@@ -65,24 +65,29 @@ export default function InfographicNWMSection({
           {/* Media Content */}
           <div className="w-full">
             <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 dark:from-cyan-500/10 dark:to-violet-500/10 p-4 md:p-6 text-center hover:border-solid transition-all duration-300">
-              {mediaType === 'video' && videoSrc ? (
-                <video 
-                  className="w-full h-auto rounded-lg shadow-lg max-h-96"
-                  controls
-                  preload="metadata"
-                  poster={imagePlaceholder}
-                >
-                  <source src={videoSrc} type="video/mp4" />
-                  <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
-                    مرورگر شما از پخش ویدیو پشتیبانی نمیکند.
-                  </p>
-                </video>
-              ) : videoSrc && (videoSrc.includes('.jpg') || videoSrc.includes('.png') || videoSrc.includes('.gif') || videoSrc.includes('.webp')) ? (
+              {videoSrc && videoSrc.includes('.mp4') ? (
+                <div className="space-y-2">
+                  <video 
+                    className="w-full h-auto rounded-lg shadow-lg max-h-96"
+                    controls
+                    preload="metadata"
+                    crossOrigin="anonymous"
+                  >
+                    <source src={videoSrc} type="video/mp4" />
+                    <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400">
+                      مرورگر شما از پخش ویدیو پشتیبانی نمیکند.
+                    </p>
+                  </video>
+                  <p className="text-xs text-gray-500">Video URL: {videoSrc}</p>
+                </div>
+              ) : videoSrc && (videoSrc.includes('.jpg') || videoSrc.includes('.png') || videoSrc.includes('.gif') || videoSrc.includes('.webp') || videoSrc.includes('.jpeg')) ? (
                 <img 
                   src={videoSrc} 
                   alt="Architecture diagram" 
                   className="w-full h-auto rounded-lg shadow-lg max-h-96 object-contain"
                 />
+              ) : videoSrc ? (
+                <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 break-all">{videoSrc}</span>
               ) : (
                 <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400">{imagePlaceholder}</span>
               )}
