@@ -38,7 +38,7 @@ export default function FeatureVideoTabsSection({
 }: FeatureVideoTabsSectionProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [openAccordion, setOpenAccordion] = useState<number | null>(null);
+  const [openAccordion, setOpenAccordion] = useState<number | null>(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
 
   useEffect(() => {
@@ -97,16 +97,18 @@ export default function FeatureVideoTabsSection({
       style={{
         paddingTop: paddingY,
         paddingBottom: paddingY,
-        paddingLeft: paddingX,
-        paddingRight: paddingX,
       }}
     >
       <div 
         className="container-fluid mx-auto"
-        style={{ maxWidth }}
+        style={{ 
+          maxWidth,
+          paddingLeft: paddingX,
+          paddingRight: paddingX,
+        }}
       >
         <div 
-          className="relative rounded-none md:rounded-3xl overflow-hidden"
+          className="relative rounded-none md:rounded-3xl overflow-hidden -mx-4 md:mx-0"
           style={{
             backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
             backgroundPosition: 'center',
