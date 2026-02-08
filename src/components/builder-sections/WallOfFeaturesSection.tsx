@@ -264,7 +264,7 @@ export function WallOfFeaturesSection({
 
   return (
     <section
-      className="relative overflow-hidden py-24 bg-white dark:bg-slate-900"
+      className="relative overflow-hidden py-24 md:py-24 sm:py-16 py-12 bg-white dark:bg-slate-900"
       onClick={isBuilder ? onEdit : undefined}
     >
       <div className="max-w-7xl mx-auto px-6">
