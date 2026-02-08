@@ -1,5 +1,7 @@
 'use client';
 
+import { useRef, useEffect } from 'react';
+
 interface OrgNode {
   title: string;
   description: string;
@@ -39,6 +41,26 @@ export default function InfographicNWMSection({
   videoSrc,
   mediaType = 'image'
 }: InfographicNWMSectionProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !videoSrc?.toLowerCase().includes('.mp4')) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [videoSrc]);
   const positionClasses = {
     'top-left': 'top-[8%] left-[8%]',
     'top-right': 'top-[8%] right-[8%]',
@@ -68,8 +90,11 @@ export default function InfographicNWMSection({
               {videoSrc ? (
                 videoSrc.toLowerCase().includes('.mp4') ? (
                   <video 
+                    ref={videoRef}
                     className="w-full h-auto rounded-lg shadow-lg max-h-96"
                     controls
+                    muted
+                    loop
                     preload="metadata"
                     crossOrigin="anonymous"
                     src={videoSrc}
