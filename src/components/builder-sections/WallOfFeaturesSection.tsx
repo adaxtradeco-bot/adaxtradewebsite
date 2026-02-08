@@ -361,7 +361,7 @@ export function WallOfFeaturesSection({
                     }
                   }}
                 >
-                  <div className={`mb-1 transition-all duration-200 ${
+                  <div className={`mb-1 transition-all duration-200 feature-icon ${
                     isLargeFeature ? 'text-4xl' : 'text-2xl'
                   } ${
                     isActiveFeature && feature.previewImage ? 'font-bold scale-110' : ''
@@ -382,7 +382,7 @@ export function WallOfFeaturesSection({
                       feature.icon || '📋'
                     )}
                   </div>
-                  <div className={`font-medium transition-all duration-200 ${
+                  <div className={`font-medium transition-all duration-200 feature-title ${
                     isLargeFeature ? 'text-sm' : 'text-xs'
                   } ${
                     isActiveFeature && feature.previewImage ? 'font-bold' : 'text-gray-700 dark:text-gray-300'
@@ -423,31 +423,62 @@ export function WallOfFeaturesSection({
           width: 552px;
           height: 508px;
         }
+        /* Counter-scale icons and text to keep them readable */
+        .feature-icon {
+          transform: scale(2.857); /* 1/0.35 */
+        }
+        .feature-title {
+          transform: scale(2.857);
+        }
         
-        /* Tablet: Scale to 60% */
+        /* Tablet: Scale to 50% */
         @media (min-width: 640px) {
           .responsive-grid-wrapper {
             transform: scale(0.5);
           }
+          .feature-icon {
+            transform: scale(2); /* 1/0.5 */
+          }
+          .feature-title {
+            transform: scale(2);
+          }
         }
         
-        /* Medium Tablet: Scale to 75% */
+        /* Medium Tablet: Scale to 65% */
         @media (min-width: 768px) {
           .responsive-grid-wrapper {
             transform: scale(0.65);
           }
+          .feature-icon {
+            transform: scale(1.538); /* 1/0.65 */
+          }
+          .feature-title {
+            transform: scale(1.538);
+          }
         }
         
-        /* Large Tablet: Scale to 85% */
+        /* Large Tablet: Scale to 80% */
         @media (min-width: 900px) {
           .responsive-grid-wrapper {
             transform: scale(0.8);
+          }
+          .feature-icon {
+            transform: scale(1.25); /* 1/0.8 */
+          }
+          .feature-title {
+            transform: scale(1.25);
           }
         }
         
         /* Desktop: Full size (100%) */
         @media (min-width: 1024px) {
           .responsive-grid-wrapper {
+            transform: scale(1);
+          }
+          .feature-icon {
+            transform: scale(1);
+          }
+          .feature-title {
             transform: scale(1);
           }
         }
