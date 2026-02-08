@@ -84,7 +84,8 @@ export default function VideoPreviewNWMSection({
                     <video 
                       ref={videoRef}
                       key={currentVideoSrc}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
+                      style={{ objectFit: 'cover' }}
                       controls
                       muted
                       loop
@@ -97,7 +98,8 @@ export default function VideoPreviewNWMSection({
                     <img 
                       src={currentVideoSrc} 
                       alt={modules[activeModule]?.title || 'Preview'}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
+                      style={{ objectFit: 'cover' }}
                     />
                   ) : (
                     <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4 break-all">{currentVideoSrc}</span>
