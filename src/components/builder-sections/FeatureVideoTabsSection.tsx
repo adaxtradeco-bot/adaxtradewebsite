@@ -100,21 +100,26 @@ export default function FeatureVideoTabsSection({
       }}
     >
       <div 
-        className="container-fluid mx-auto"
-        style={{ 
-          maxWidth,
-          paddingLeft: paddingX,
-          paddingRight: paddingX,
-        }}
+        className="container-fluid mx-auto px-0"
+        style={{ maxWidth }}
       >
         <div 
-          className="relative rounded-none md:rounded-3xl overflow-hidden -mx-4 md:mx-0"
+          className="relative rounded-none md:rounded-3xl overflow-hidden"
           style={{
             backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
             backgroundPosition: 'center',
             backgroundSize: 'cover',
           }}
         >
+          <style jsx>{`
+            @media (min-width: 768px) {
+              .video-container-inner {
+                padding-left: ${paddingX};
+                padding-right: ${paddingX};
+              }
+            }
+          `}</style>
+          <div className="video-container-inner">
           {/* Desktop Tabs */}
           <div className="hidden md:flex items-center justify-center gap-2 lg:gap-4 px-4 lg:px-8 py-6 lg:py-8 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700">
             {tabs.map((tab, index) => (
@@ -242,6 +247,7 @@ export default function FeatureVideoTabsSection({
                 </div>
               </div>
             ))}
+          </div>
           </div>
         </div>
       </div>
