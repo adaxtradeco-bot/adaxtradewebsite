@@ -422,9 +422,9 @@ export function WallOfFeaturesSection({
 
       {/* Consolidated Styles */}
       <style jsx>{`
-        /* Mobile (< 640px): 6 cols (3-8), scale 70% */
+        /* Mobile (< 640px): 6 cols (3-8), scale 60% */
         .responsive-grid-wrapper {
-          transform: scale(0.7);
+          transform: scale(0.6);
           transform-origin: center;
         }
         .responsive-feature-grid {
