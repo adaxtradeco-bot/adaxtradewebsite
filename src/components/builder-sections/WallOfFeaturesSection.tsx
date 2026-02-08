@@ -336,6 +336,11 @@ export function WallOfFeaturesSection({
                 return null;
               }
               
+              // Responsive column visibility
+              const isMobileVisible = feature.col >= 2 && feature.col <= 9; // 8 cols
+              const isTabletVisible = feature.col >= 3 && feature.col <= 8; // 6 cols
+              const visibilityClass = !isMobileVisible ? 'hidden' : !isTabletVisible ? 'sm:hidden md:block' : '';
+              
               return (
                 <button
                   key={feature.id}
@@ -345,7 +350,7 @@ export function WallOfFeaturesSection({
                     backgroundColor: 'transparent',
                   }}
                   className={`relative z-30 flex flex-col items-center justify-center text-center
-                    transition-all duration-200 ${
+                    transition-all duration-200 ${visibilityClass} ${
                       isLargeFeature
                         ? 'border-2 border-gray-400 dark:border-slate-500 rounded-lg'
                         : 'border border-gray-300 dark:border-slate-600'
@@ -408,9 +413,9 @@ export function WallOfFeaturesSection({
 
       {/* Consolidated Styles */}
       <style jsx>{`
-        /* Mobile: Scale down entire grid to fit screen */
+        /* Mobile: 8 cols (2-9), scale 50% */
         .responsive-grid-wrapper {
-          transform: scale(0.35);
+          transform: scale(0.5);
           transform-origin: center;
         }
         .responsive-feature-grid {
@@ -423,62 +428,24 @@ export function WallOfFeaturesSection({
           width: 552px;
           height: 508px;
         }
-        /* Counter-scale icons and text to keep them readable */
-        .feature-icon {
-          transform: scale(2.857); /* 1/0.35 */
-        }
-        .feature-title {
-          transform: scale(2.857);
-        }
         
-        /* Tablet: Scale to 50% */
+        /* Small Tablet: 6 cols (3-8), scale 70% */
         @media (min-width: 640px) {
           .responsive-grid-wrapper {
-            transform: scale(0.5);
-          }
-          .feature-icon {
-            transform: scale(2); /* 1/0.5 */
-          }
-          .feature-title {
-            transform: scale(2);
+            transform: scale(0.7);
           }
         }
         
-        /* Medium Tablet: Scale to 65% */
+        /* Medium Tablet: 10 cols, scale 85% */
         @media (min-width: 768px) {
           .responsive-grid-wrapper {
-            transform: scale(0.65);
-          }
-          .feature-icon {
-            transform: scale(1.538); /* 1/0.65 */
-          }
-          .feature-title {
-            transform: scale(1.538);
+            transform: scale(0.85);
           }
         }
         
-        /* Large Tablet: Scale to 80% */
-        @media (min-width: 900px) {
-          .responsive-grid-wrapper {
-            transform: scale(0.8);
-          }
-          .feature-icon {
-            transform: scale(1.25); /* 1/0.8 */
-          }
-          .feature-title {
-            transform: scale(1.25);
-          }
-        }
-        
-        /* Desktop: Full size (100%) */
+        /* Desktop: 10 cols, scale 100% */
         @media (min-width: 1024px) {
           .responsive-grid-wrapper {
-            transform: scale(1);
-          }
-          .feature-icon {
-            transform: scale(1);
-          }
-          .feature-title {
             transform: scale(1);
           }
         }
