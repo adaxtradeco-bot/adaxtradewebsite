@@ -22,6 +22,9 @@ interface FeatureVideoTabsSectionProps {
   tabs: VideoTab[];
   showFullscreenButton?: boolean;
   autoplay?: boolean;
+  maxWidth?: string;
+  paddingY?: string;
+  paddingX?: string;
 }
 
 export default function FeatureVideoTabsSection({
@@ -29,6 +32,9 @@ export default function FeatureVideoTabsSection({
   tabs = [],
   showFullscreenButton = true,
   autoplay = true,
+  maxWidth = '1920px',
+  paddingY = '0',
+  paddingX = '0',
 }: FeatureVideoTabsSectionProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -86,8 +92,19 @@ export default function FeatureVideoTabsSection({
   };
 
   return (
-    <section className="relative w-full bg-slate-50 dark:bg-slate-950 overflow-hidden">
-      <div className="container-fluid max-w-[1920px] mx-auto px-0">
+    <section 
+      className="relative w-full bg-slate-50 dark:bg-slate-950 overflow-hidden"
+      style={{
+        paddingTop: paddingY,
+        paddingBottom: paddingY,
+        paddingLeft: paddingX,
+        paddingRight: paddingX,
+      }}
+    >
+      <div 
+        className="container-fluid mx-auto"
+        style={{ maxWidth }}
+      >
         <div 
           className="relative rounded-none md:rounded-3xl overflow-hidden"
           style={{

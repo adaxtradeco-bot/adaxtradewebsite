@@ -420,6 +420,9 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
       order: 0,
       data: {
         backgroundImage: '',
+        maxWidth: '1920px',
+        paddingY: '0',
+        paddingX: '0',
         showFullscreenButton: true,
         autoplay: true,
         tabs: [
