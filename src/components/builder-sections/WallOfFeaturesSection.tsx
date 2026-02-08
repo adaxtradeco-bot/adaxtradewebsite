@@ -337,12 +337,18 @@ export function WallOfFeaturesSection({
               }
               
               // Responsive column visibility
-              // Mobile (< 640px): 6 cols (3-8)
-              // Tablet (640-768px): 8 cols (2-9)
+              // Mobile (< 640px): 6 cols (3-8) - hide cols 1,2,9,10
+              // Tablet (640-768px): 8 cols (2-9) - hide cols 1,10
               // Desktop (>= 768px): 10 cols (all)
-              const isMobileVisible = feature.col >= 3 && feature.col <= 8; // 6 cols
-              const isTabletVisible = feature.col >= 2 && feature.col <= 9; // 8 cols
-              const visibilityClass = !isMobileVisible ? 'hidden sm:block' : !isTabletVisible ? 'hidden md:block' : '';
+              const isCol1or10 = feature.col === 1 || feature.col === 10;
+              const isCol2or9 = feature.col === 2 || feature.col === 9;
+              
+              let visibilityClass = '';
+              if (isCol1or10) {
+                visibilityClass = 'hidden sm:block'; // Hide on mobile, show on tablet+
+              } else if (isCol2or9) {
+                visibilityClass = 'hidden md:block'; // Hide on mobile+tablet, show on desktop
+              }
               
               return (
                 <button
