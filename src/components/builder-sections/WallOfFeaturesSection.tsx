@@ -426,8 +426,8 @@ export function WallOfFeaturesSection({
         .responsive-grid-wrapper {
           transform: scale(0.6);
           transform-origin: center;
-          margin-top: -20%;
-          margin-bottom: -20%;
+          margin-top: -30%;
+          margin-bottom: -30%;
         }
         .responsive-feature-grid {
           grid-template-columns: repeat(10, 138px);
@@ -463,8 +463,8 @@ export function WallOfFeaturesSection({
         @media (min-width: 640px) {
           .responsive-grid-wrapper {
             transform: scale(0.8);
-            margin-top: -10%;
-            margin-bottom: -10%;
+            margin-top: -15%;
+            margin-bottom: -15%;
           }
         }
         
@@ -472,8 +472,8 @@ export function WallOfFeaturesSection({
         @media (min-width: 768px) {
           .responsive-grid-wrapper {
             transform: scale(0.9);
-            margin-top: -5%;
-            margin-bottom: -5%;
+            margin-top: -8%;
+            margin-bottom: -8%;
           }
         }
         
