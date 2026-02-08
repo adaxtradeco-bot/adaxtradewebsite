@@ -32,6 +32,7 @@ export default function VideoPreviewNWMSection({
   const videoRef = useRef<HTMLVideoElement>(null);
   const currentVideoSrc = modules[activeModule]?.videoSrc;
   const videoSrcString = typeof currentVideoSrc === 'string' ? currentVideoSrc : (currentVideoSrc as any)?.src || '';
+  const videoObjectFit = typeof currentVideoSrc === 'object' && currentVideoSrc !== null ? (currentVideoSrc as any)?.objectFit || 'cover' : 'cover';
 
   useEffect(() => {
     const video = videoRef.current;
@@ -86,7 +87,7 @@ export default function VideoPreviewNWMSection({
                       ref={videoRef}
                       key={videoSrcString}
                       className="w-full h-full"
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: videoObjectFit }}
                       controls
                       muted
                       loop
@@ -100,7 +101,7 @@ export default function VideoPreviewNWMSection({
                       src={videoSrcString} 
                       alt={modules[activeModule]?.title || 'Preview'}
                       className="w-full h-full"
-                      style={{ objectFit: 'cover' }}
+                      style={{ objectFit: videoObjectFit }}
                     />
                   ) : (
                     <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4 break-all">{videoSrcString}</span>
