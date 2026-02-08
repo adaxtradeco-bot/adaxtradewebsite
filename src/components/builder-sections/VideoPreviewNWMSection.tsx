@@ -31,10 +31,11 @@ export default function VideoPreviewNWMSection({
   const [activeModule, setActiveModule] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const currentVideoSrc = modules[activeModule]?.videoSrc;
+  const videoSrcString = typeof currentVideoSrc === 'string' ? currentVideoSrc : (currentVideoSrc as any)?.src || '';
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !currentVideoSrc?.toLowerCase().includes('.mp4')) return;
+    if (!video || !videoSrcString || !videoSrcString.toLowerCase().includes('.mp4')) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -49,7 +50,7 @@ export default function VideoPreviewNWMSection({
 
     observer.observe(video);
     return () => observer.disconnect();
-  }, [currentVideoSrc]);
+  }, [videoSrcString]);
 
   return (
     <section className="py-12 md:py-20 px-4 md:px-6 bg-white dark:bg-slate-950 relative overflow-hidden">
@@ -79,30 +80,30 @@ export default function VideoPreviewNWMSection({
             {/* Left: Video */}
             <div>
               <div className="rounded-xl md:rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-gradient-to-br from-cyan-500/10 to-violet-500/10 dark:from-cyan-500/10 dark:to-violet-500/10 aspect-video flex items-center justify-center mb-3 md:mb-4 md:group-hover:border-solid transition-all duration-300 overflow-hidden">
-                {currentVideoSrc ? (
-                  currentVideoSrc.toLowerCase().includes('.mp4') ? (
+                {videoSrcString ? (
+                  videoSrcString.toLowerCase().includes('.mp4') ? (
                     <video 
                       ref={videoRef}
-                      key={currentVideoSrc}
+                      key={videoSrcString}
                       className="w-full h-full"
                       style={{ objectFit: 'cover' }}
                       controls
                       muted
                       loop
                       preload="metadata"
-                      src={currentVideoSrc}
+                      src={videoSrcString}
                     >
                       Browser does not support video playback.
                     </video>
-                  ) : (currentVideoSrc.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/)) ? (
+                  ) : (videoSrcString.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/)) ? (
                     <img 
-                      src={currentVideoSrc} 
+                      src={videoSrcString} 
                       alt={modules[activeModule]?.title || 'Preview'}
                       className="w-full h-full"
                       style={{ objectFit: 'cover' }}
                     />
                   ) : (
-                    <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4 break-all">{currentVideoSrc}</span>
+                    <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4 break-all">{videoSrcString}</span>
                   )
                 ) : (
                   <span className="text-xs md:text-sm text-slate-600 dark:text-slate-400 text-center px-4">{videoPlaceholder}</span>
