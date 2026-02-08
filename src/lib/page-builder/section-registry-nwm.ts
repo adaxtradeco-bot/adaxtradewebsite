@@ -407,4 +407,64 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+  {
+    id: 'feature-video-tabs',
+    name: 'Feature Video Tabs',
+    type: 'feature-video-tabs',
+    category: 'Content',
+    description: 'Full-width video showcase with tabbed navigation',
+    icon: '🎬',
+    defaultData: {
+      id: '',
+      type: 'feature-video-tabs',
+      order: 0,
+      data: {
+        backgroundImage: '',
+        showFullscreenButton: true,
+        autoplay: true,
+        tabs: [
+          {
+            id: 'workflows',
+            title: 'Workflows',
+            icon: '',
+            videoSrc: '',
+            videoSrcMobile: ''
+          },
+          {
+            id: 'integrations',
+            title: 'Integrations',
+            icon: '',
+            videoSrc: '',
+            videoSrcMobile: ''
+          },
+          {
+            id: 'apps',
+            title: 'Apps',
+            icon: '',
+            videoSrc: '',
+            videoSrcMobile: ''
+          },
+          {
+            id: 'forms',
+            title: 'Forms',
+            icon: '',
+            videoSrc: '',
+            videoSrcMobile: ''
+          },
+          {
+            id: 'reports',
+            title: 'Reports',
+            icon: '',
+            videoSrc: '',
+            videoSrcMobile: ''
+          },
+        ],
+      },
+      style: {
+        backgroundColor: 'bg-slate-50 dark:bg-slate-950',
+        padding: 'py-0',
+      },
+    },
+    configSchema: {},
+  },
 ];
