@@ -383,7 +383,8 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
             const isImageUrl = value.match(/\.(jpg|jpeg|png|gif|webp|svg|ico|mp4|webm|mov)/i) || 
                               value.startsWith('/uploads/') ||
                               value.startsWith('/api/media/') ||
-                              value.startsWith('http');
+                              value.startsWith('http') ||
+                              value === '';
             
             if (isImageKey || (key.toLowerCase().includes('url') && isImageUrl) || (key.toLowerCase().includes('src') && isImageUrl)) {
               fields.push({ path, value });
