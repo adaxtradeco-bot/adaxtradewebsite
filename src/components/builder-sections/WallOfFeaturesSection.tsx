@@ -279,7 +279,8 @@ export function WallOfFeaturesSection({
         </div>
 
         {/* Responsive Grid */}
-        <div className="relative mx-auto w-fit hidden sm:block">
+        <div className="relative mx-auto w-full flex items-center justify-center px-4 sm:px-6 lg:px-8">
+          <div className="relative w-fit responsive-grid-wrapper">
           {/* Preview - Center Area (4x4 tiles) - Responsive positioning */}
           <div className="absolute z-20 flex items-center justify-center pointer-events-none preview-container">
             <div className="w-full h-full rounded-2xl bg-white dark:bg-slate-800 shadow-2xl dark:shadow-slate-900/50 overflow-hidden border border-gray-200 dark:border-slate-700">
@@ -335,11 +336,6 @@ export function WallOfFeaturesSection({
                 return null;
               }
               
-              // Responsive visibility
-              const isVisibleMobile = feature.col >= 1 && feature.col <= 6 && feature.row >= 2 && feature.row <= 7;
-              const isVisibleTablet = feature.col >= 2 && feature.col <= 9 && feature.row >= 2 && feature.row <= 7;
-              const visibilityClass = !isVisibleMobile ? 'hidden sm:block' : !isVisibleTablet ? 'hidden md:block' : '';
-              
               return (
                 <button
                   key={feature.id}
@@ -349,7 +345,7 @@ export function WallOfFeaturesSection({
                     backgroundColor: 'transparent',
                   }}
                   className={`relative z-30 flex flex-col items-center justify-center text-center
-                    transition-all duration-200 ${visibilityClass} ${
+                    transition-all duration-200 ${
                       isLargeFeature
                         ? 'border-2 border-gray-400 dark:border-slate-500 rounded-lg'
                         : 'border border-gray-300 dark:border-slate-600'
@@ -406,39 +402,53 @@ export function WallOfFeaturesSection({
             className="pointer-events-none absolute inset-0 z-40"
             data-theme-fade="true"
           />
+          </div>
         </div>
       </div>
 
       {/* Consolidated Styles */}
       <style jsx>{`
+        /* Mobile: Scale down entire grid to fit screen */
+        .responsive-grid-wrapper {
+          transform: scale(0.35);
+          transform-origin: center;
+        }
         .responsive-feature-grid {
-          grid-template-columns: repeat(6, 138px);
-          grid-template-rows: repeat(6, 127px);
+          grid-template-columns: repeat(10, 138px);
+          grid-template-rows: repeat(8, 127px);
         }
         .preview-container {
-          left: 138px;
-          top: 127px;
+          left: 414px;
+          top: 254px;
           width: 552px;
           height: 508px;
         }
-        @media (min-width: 768px) {
-          .responsive-feature-grid {
-            grid-template-columns: repeat(8, 138px);
-            grid-template-rows: repeat(6, 127px);
-          }
-          .preview-container {
-            left: 138px;
-            top: 127px;
+        
+        /* Tablet: Scale to 60% */
+        @media (min-width: 640px) {
+          .responsive-grid-wrapper {
+            transform: scale(0.5);
           }
         }
-        @media (min-width: 1024px) {
-          .responsive-feature-grid {
-            grid-template-columns: repeat(10, 138px);
-            grid-template-rows: repeat(8, 127px);
+        
+        /* Medium Tablet: Scale to 75% */
+        @media (min-width: 768px) {
+          .responsive-grid-wrapper {
+            transform: scale(0.65);
           }
-          .preview-container {
-            left: 414px;
-            top: 254px;
+        }
+        
+        /* Large Tablet: Scale to 85% */
+        @media (min-width: 900px) {
+          .responsive-grid-wrapper {
+            transform: scale(0.8);
+          }
+        }
+        
+        /* Desktop: Full size (100%) */
+        @media (min-width: 1024px) {
+          .responsive-grid-wrapper {
+            transform: scale(1);
           }
         }
         
