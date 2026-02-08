@@ -17,7 +17,7 @@ interface MediaBrowserProps {
   acceptTypes?: string[];
 }
 
-export function MediaBrowser({ isOpen, onClose, onSelect, acceptTypes = ['image/*'] }: MediaBrowserProps) {
+export function MediaBrowser({ isOpen, onClose, onSelect, acceptTypes = ['image/*', 'video/*'] }: MediaBrowserProps) {
   const [files, setFiles] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -206,6 +206,17 @@ export function MediaBrowser({ isOpen, onClose, onSelect, acceptTypes = ['image/
                         alt={file.filename}
                         className="w-full h-full object-cover"
                       />
+                    ) : file.type?.startsWith('video/') ? (
+                      <div className="relative w-full h-full">
+                        <video
+                          src={file.url}
+                          className="w-full h-full object-cover"
+                          preload="metadata"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                          <div className="text-white text-4xl">▶️</div>
+                        </div>
+                      </div>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-4xl">
                         {file.type?.startsWith('video/') ? '🎥' : '📄'}

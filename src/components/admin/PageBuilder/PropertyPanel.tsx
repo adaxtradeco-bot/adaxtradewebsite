@@ -250,7 +250,7 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
           onChange(url);
           setShowMediaBrowser(false);
         }}
-        acceptTypes={['image/*']}
+        acceptTypes={['image/*', 'video/*']}
       />
     </>
   );
