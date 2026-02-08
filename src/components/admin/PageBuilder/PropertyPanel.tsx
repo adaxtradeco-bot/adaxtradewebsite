@@ -376,9 +376,11 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
                               key.toLowerCase().includes('background') ||
                               key.toLowerCase().includes('preview') ||
                               key.toLowerCase().includes('poster') ||
+                              key.toLowerCase().includes('video') ||
                               key === 'mediaSrc' ||
-                              key === 'mediaPoster';
-            const isImageUrl = value.match(/\.(jpg|jpeg|png|gif|webp|svg|ico)/i) || 
+                              key === 'mediaPoster' ||
+                              key === 'videoSrc';
+            const isImageUrl = value.match(/\.(jpg|jpeg|png|gif|webp|svg|ico|mp4|webm|mov)/i) || 
                               value.startsWith('/uploads/') ||
                               value.startsWith('/api/media/') ||
                               value.startsWith('http');
@@ -396,8 +398,10 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
                               key.toLowerCase().includes('background') ||
                               key.toLowerCase().includes('preview') ||
                               key.toLowerCase().includes('poster') ||
+                              key.toLowerCase().includes('video') ||
                               key === 'mediaSrc' ||
-                              key === 'mediaPoster';
+                              key === 'mediaPoster' ||
+                              key === 'videoSrc';
             
             if (isImageKey) {
               fields.push({ path, value });
