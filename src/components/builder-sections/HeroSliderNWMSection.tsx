@@ -96,23 +96,30 @@ export default function HeroSliderNWMSection({
             >
               {/* Background Media */}
               <div className="hero-slide-media absolute inset-0 z-0 overflow-hidden">
-                {slide.mediaType === 'video' ? (
-                  <video
-                    className="hidden md:block w-full h-full object-cover scale-105 saturate-110 contrast-105"
-                    src={typeof slide.mediaSrc === 'string' ? slide.mediaSrc : slide.mediaSrc.src}
-                    poster={slide.mediaPoster}
-                    autoPlay={slide.id === activeSlide}
-                    muted
-                    loop
-                    playsInline
-                  />
-                ) : (
-                  <SmartImage
-                    src={slide.mediaSrc}
-                    alt={slide.label}
-                    className="w-full h-full scale-105 saturate-110 contrast-105"
-                  />
-                )}
+                {(() => {
+                  const mediaSrc = typeof slide.mediaSrc === 'string' ? slide.mediaSrc : slide.mediaSrc.src;
+                  const isPlaceholder = mediaSrc.includes('placeholder');
+                  
+                  if (isPlaceholder) return null;
+                  
+                  return slide.mediaType === 'video' ? (
+                    <video
+                      className="hidden md:block w-full h-full object-cover scale-105 saturate-110 contrast-105"
+                      src={mediaSrc}
+                      poster={slide.mediaPoster}
+                      autoPlay={slide.id === activeSlide}
+                      muted
+                      loop
+                      playsInline
+                    />
+                  ) : (
+                    <SmartImage
+                      src={slide.mediaSrc}
+                      alt={slide.label}
+                      className="w-full h-full scale-105 saturate-110 contrast-105"
+                    />
+                  );
+                })()}
                 <div className="absolute inset-0 bg-slate-50/50 dark:bg-slate-950/40 md:backdrop-blur-sm z-10" />
               </div>
 
