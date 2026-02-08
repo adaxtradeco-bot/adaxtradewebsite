@@ -278,16 +278,10 @@ export function WallOfFeaturesSection({
           </p>
         </div>
 
-        {/* Desktop Grid */}
-        <div className="relative mx-auto w-fit hidden lg:block">
-          {/* Preview - Center Area (4x4 tiles = 552px × 508px) */}
-          <div className="absolute z-20 flex items-center justify-center pointer-events-none"
-               style={{
-                 left: '414px', // 3 tiles * 138px = 414px
-                 top: '254px',  // 2 tiles * 127px = 254px
-                 width: '552px', // 4 tiles * 138px = 552px
-                 height: '508px' // 4 tiles * 127px = 508px
-               }}>
+        {/* Responsive Grid */}
+        <div className="relative mx-auto w-fit hidden sm:block">
+          {/* Preview - Center Area (4x4 tiles) - Responsive positioning */}
+          <div className="absolute z-20 flex items-center justify-center pointer-events-none preview-container">
             <div className="w-full h-full rounded-2xl bg-white dark:bg-slate-800 shadow-2xl dark:shadow-slate-900/50 overflow-hidden border border-gray-200 dark:border-slate-700">
               {activeFeature?.previewImage && (
                 (() => {
@@ -323,12 +317,10 @@ export function WallOfFeaturesSection({
             </div>
           </div>
 
-          {/* Grid */}
+          {/* Grid - Responsive columns/rows */}
           <div
-            className="grid relative"
+            className="grid relative responsive-feature-grid"
             style={{
-              gridTemplateColumns: 'repeat(10, 138px)',
-              gridTemplateRows: 'repeat(8, 127px)',
               backgroundSize: '138px 127px',
             }}
             data-theme-grid="true"
@@ -343,6 +335,11 @@ export function WallOfFeaturesSection({
                 return null;
               }
               
+              // Responsive visibility
+              const isVisibleMobile = feature.col >= 1 && feature.col <= 6 && feature.row >= 2 && feature.row <= 7;
+              const isVisibleTablet = feature.col >= 2 && feature.col <= 9 && feature.row >= 2 && feature.row <= 7;
+              const visibilityClass = !isVisibleMobile ? 'hidden sm:block' : !isVisibleTablet ? 'hidden md:block' : '';
+              
               return (
                 <button
                   key={feature.id}
@@ -352,7 +349,7 @@ export function WallOfFeaturesSection({
                     backgroundColor: 'transparent',
                   }}
                   className={`relative z-30 flex flex-col items-center justify-center text-center
-                    transition-all duration-200 ${
+                    transition-all duration-200 ${visibilityClass} ${
                       isLargeFeature
                         ? 'border-2 border-gray-400 dark:border-slate-500 rounded-lg'
                         : 'border border-gray-300 dark:border-slate-600'
@@ -414,6 +411,37 @@ export function WallOfFeaturesSection({
 
       {/* Consolidated Styles */}
       <style jsx>{`
+        .responsive-feature-grid {
+          grid-template-columns: repeat(6, 138px);
+          grid-template-rows: repeat(6, 127px);
+        }
+        .preview-container {
+          left: 138px;
+          top: 127px;
+          width: 552px;
+          height: 508px;
+        }
+        @media (min-width: 768px) {
+          .responsive-feature-grid {
+            grid-template-columns: repeat(8, 138px);
+            grid-template-rows: repeat(6, 127px);
+          }
+          .preview-container {
+            left: 138px;
+            top: 127px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .responsive-feature-grid {
+            grid-template-columns: repeat(10, 138px);
+            grid-template-rows: repeat(8, 127px);
+          }
+          .preview-container {
+            left: 414px;
+            top: 254px;
+          }
+        }
+        
         [data-theme-grid="true"] {
           background-image: 
             linear-gradient(to right, rgb(209 213 219) 1px, transparent 1px),
