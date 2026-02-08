@@ -337,9 +337,12 @@ export function WallOfFeaturesSection({
               }
               
               // Responsive column visibility
-              const isMobileVisible = feature.col >= 2 && feature.col <= 9; // 8 cols
-              const isTabletVisible = feature.col >= 3 && feature.col <= 8; // 6 cols
-              const visibilityClass = !isMobileVisible ? 'hidden' : !isTabletVisible ? 'sm:hidden md:block' : '';
+              // Mobile (< 640px): 6 cols (3-8)
+              // Tablet (640-768px): 8 cols (2-9)
+              // Desktop (>= 768px): 10 cols (all)
+              const isMobileVisible = feature.col >= 3 && feature.col <= 8; // 6 cols
+              const isTabletVisible = feature.col >= 2 && feature.col <= 9; // 8 cols
+              const visibilityClass = !isMobileVisible ? 'hidden sm:block' : !isTabletVisible ? 'hidden md:block' : '';
               
               return (
                 <button
@@ -413,9 +416,9 @@ export function WallOfFeaturesSection({
 
       {/* Consolidated Styles */}
       <style jsx>{`
-        /* Mobile: 8 cols (2-9), scale 50% */
+        /* Mobile (< 640px): 6 cols (3-8), scale 70% */
         .responsive-grid-wrapper {
-          transform: scale(0.5);
+          transform: scale(0.7);
           transform-origin: center;
         }
         .responsive-feature-grid {
@@ -429,21 +432,21 @@ export function WallOfFeaturesSection({
           height: 508px;
         }
         
-        /* Small Tablet: 6 cols (3-8), scale 70% */
+        /* Tablet (640-768px): 8 cols (2-9), scale 80% */
         @media (min-width: 640px) {
           .responsive-grid-wrapper {
-            transform: scale(0.7);
+            transform: scale(0.8);
           }
         }
         
-        /* Medium Tablet: 10 cols, scale 85% */
+        /* Medium Desktop (768-1024px): 10 cols, scale 90% */
         @media (min-width: 768px) {
           .responsive-grid-wrapper {
-            transform: scale(0.85);
+            transform: scale(0.9);
           }
         }
         
-        /* Desktop: 10 cols, scale 100% */
+        /* Large Desktop (>= 1024px): 10 cols, scale 100% */
         @media (min-width: 1024px) {
           .responsive-grid-wrapper {
             transform: scale(1);
