@@ -345,9 +345,9 @@ export function WallOfFeaturesSection({
               
               let visibilityClass = '';
               if (isCol1or10) {
-                visibilityClass = 'hidden sm:block'; // Hide on mobile, show on tablet+
+                visibilityClass = 'sm:hidden md:block'; // Hide on mobile+tablet, show on desktop
               } else if (isCol2or9) {
-                visibilityClass = 'hidden md:block'; // Hide on mobile+tablet, show on desktop
+                visibilityClass = 'hidden sm:block'; // Hide on mobile, show on tablet+
               }
               
               return (
