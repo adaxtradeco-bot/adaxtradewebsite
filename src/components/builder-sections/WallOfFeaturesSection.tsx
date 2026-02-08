@@ -422,10 +422,12 @@ export function WallOfFeaturesSection({
 
       {/* Consolidated Styles */}
       <style jsx>{`
-        /* Mobile (< 640px): 6 cols (3-8), scale 60% */
+        /* Mobile (< 640px): 6 cols (3-8), scale 60%, negative margin to compensate */
         .responsive-grid-wrapper {
           transform: scale(0.6);
           transform-origin: center;
+          margin-top: -20%;
+          margin-bottom: -20%;
         }
         .responsive-feature-grid {
           grid-template-columns: repeat(10, 138px);
@@ -457,24 +459,30 @@ export function WallOfFeaturesSection({
           }
         }
         
-        /* Tablet (640-768px): 8 cols (2-9), scale 80% */
+        /* Tablet (640-768px): 8 cols (2-9), scale 80%, negative margin */
         @media (min-width: 640px) {
           .responsive-grid-wrapper {
             transform: scale(0.8);
+            margin-top: -10%;
+            margin-bottom: -10%;
           }
         }
         
-        /* Medium Desktop (768-1024px): 10 cols, scale 90% */
+        /* Medium Desktop (768-1024px): 10 cols, scale 90%, negative margin */
         @media (min-width: 768px) {
           .responsive-grid-wrapper {
             transform: scale(0.9);
+            margin-top: -5%;
+            margin-bottom: -5%;
           }
         }
         
-        /* Large Desktop (>= 1024px): 10 cols, scale 100% */
+        /* Large Desktop (>= 1024px): 10 cols, scale 100%, no margin */
         @media (min-width: 1024px) {
           .responsive-grid-wrapper {
             transform: scale(1);
+            margin-top: 0;
+            margin-bottom: 0;
           }
         }
         
