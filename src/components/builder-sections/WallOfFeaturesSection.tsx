@@ -438,6 +438,25 @@ export function WallOfFeaturesSection({
           height: 508px;
         }
         
+        /* Hide columns properly - use display none to remove from layout */
+        @media (max-width: 639px) {
+          /* Mobile: hide cols 1,2,9,10 */
+          .responsive-feature-grid button[style*="grid-column: 1"],
+          .responsive-feature-grid button[style*="grid-column: 2"],
+          .responsive-feature-grid button[style*="grid-column: 9"],
+          .responsive-feature-grid button[style*="grid-column: 10"] {
+            display: none !important;
+          }
+        }
+        
+        @media (min-width: 640px) and (max-width: 767px) {
+          /* Tablet: hide cols 1,10 only */
+          .responsive-feature-grid button[style*="grid-column: 1"],
+          .responsive-feature-grid button[style*="grid-column: 10"] {
+            display: none !important;
+          }
+        }
+        
         /* Tablet (640-768px): 8 cols (2-9), scale 80% */
         @media (min-width: 640px) {
           .responsive-grid-wrapper {
