@@ -82,6 +82,11 @@ update-db-prisma.ts
 # Scripts folder (exclude all from git)
 scripts/
 
+# Test and conversion files
+public/test-*.html
+public/convert-*.html
+src/app/api/admin/convert-*/
+
 # Only exclude scripts
 # API files are needed for runtime
 
