@@ -33,10 +33,35 @@ export async function GET(
     let builderData = [];
     if (page.builderData) {
       try {
-        const parsed = JSON.parse(page.builderData);
-        builderData = parsed.sections || parsed || [];
+        const parsed = typeof page.builderData === 'string' 
+          ? JSON.parse(page.builderData) 
+          : page.builderData;
+        
+        // Handle different data structures
+        if (Array.isArray(parsed)) {
+          builderData = parsed;
+        } else if (parsed.sections && Array.isArray(parsed.sections)) {
+          builderData = parsed.sections;
+        } else if (typeof parsed === 'object') {
+          builderData = [parsed];
+        }
       } catch (error) {
         console.error('Failed to parse builder data:', error);
+      }
+    }
+    
+    // If no builder data but has legacy sections, try to use them
+    if (builderData.length === 0 && page.sections) {
+      try {
+        const sections = typeof page.sections === 'string'
+          ? JSON.parse(page.sections)
+          : page.sections;
+        
+        if (Array.isArray(sections)) {
+          builderData = sections;
+        }
+      } catch (error) {
+        console.error('Failed to parse legacy sections:', error);
       }
     }
 

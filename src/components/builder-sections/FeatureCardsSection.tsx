@@ -12,7 +12,8 @@ interface FeatureCard {
   icon: string;
   title: string;
   description?: string;
-  details: string[];
+  details?: string[];
+  badge?: string;
 }
 
 interface FeatureCardsSectionProps {
@@ -80,16 +81,24 @@ export default function FeatureCardsSection({ data, style = { columns: 3, showBu
                   </p>
                 )}
 
-                <ul className="space-y-2">
-                  {card.details.map((detail, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
-                      {style?.showBullets && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-amber-500 to-blue-600 mt-1.5 flex-shrink-0" />
-                      )}
-                      <span>{detail}</span>
-                    </li>
-                  ))}
-                </ul>
+                {card.details && card.details.length > 0 && (
+                  <ul className="space-y-2">
+                    {card.details.map((detail, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-400">
+                        {style?.showBullets && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-amber-500 to-blue-600 mt-1.5 flex-shrink-0" />
+                        )}
+                        <span>{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                
+                {card.badge && (
+                  <span className="inline-block mt-3 text-xs px-3 py-1 rounded-full bg-gradient-to-r from-violet-600 to-cyan-500 text-white">
+                    Value: {card.badge}
+                  </span>
+                )}
               </div>
             );
           })}

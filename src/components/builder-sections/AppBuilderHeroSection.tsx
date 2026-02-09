@@ -1,5 +1,7 @@
 /**
  * App Builder Hero Section - Dynamic version matching static AppBuilderHero
+ * @deprecated Use ProductHeroSection instead
+ * This component is kept for backward compatibility only
  */
 
 'use client';
@@ -10,38 +12,64 @@ interface HeroFeature {
 }
 
 interface AppBuilderHeroSectionProps {
+  section?: {
+    data: {
+      badge?: string;
+      title: string;
+      titleGradient?: string;
+      description: string;
+      primaryButton: {
+        text: string;
+        href: string;
+      };
+      secondaryButton: {
+        text: string;
+        href: string;
+      };
+      badges: string[];
+      canvasIcon?: string;
+      canvasLabel?: string;
+      features: HeroFeature[];
+    };
+  };
+  // Direct props (for backward compatibility)
   badge?: string;
-  title: string;
+  title?: string;
   titleGradient?: string;
-  description: string;
-  primaryButton: {
+  description?: string;
+  primaryButton?: {
     text: string;
     href: string;
   };
-  secondaryButton: {
+  secondaryButton?: {
     text: string;
     href: string;
   };
-  badges: string[];
+  badges?: string[];
   canvasIcon?: string;
   canvasLabel?: string;
-  features: HeroFeature[];
+  features?: HeroFeature[];
   backgroundColor?: string;
 }
 
-export default function AppBuilderHeroSection({
-  badge = 'Build in days, not months',
-  title,
-  titleGradient = 'from-fuchsia-400 to-violet-400',
-  description,
-  primaryButton,
-  secondaryButton,
-  badges,
-  canvasIcon = '🏗️',
-  canvasLabel = 'Drag-and-drop canvas',
-  features,
-  backgroundColor = 'bg-gradient-to-br from-violet-50 via-slate-50 to-cyan-50 dark:from-violet-950 dark:via-slate-900 dark:to-cyan-950'
-}: AppBuilderHeroSectionProps) {
+export default function AppBuilderHeroSection(props: AppBuilderHeroSectionProps) {
+  // Extract data from section or use direct props
+  const data = props.section?.data || props;
+  
+  const {
+    badge = 'Build in days, not months',
+    title = 'Custom Apps. Zero Heavy Code.',
+    titleGradient = 'from-fuchsia-400 to-violet-400',
+    description = '',
+    primaryButton = { text: 'Get Started', href: '#' },
+    secondaryButton = { text: 'Learn More', href: '#' },
+    badges = [],
+    canvasIcon = '🏗️',
+    canvasLabel = 'Drag-and-drop canvas',
+    features = []
+  } = data;
+  
+  const backgroundColor = props.backgroundColor || 'bg-gradient-to-br from-violet-50 via-slate-50 to-cyan-50 dark:from-violet-950 dark:via-slate-900 dark:to-cyan-950';
   return (
     <section className={`relative ${backgroundColor} text-slate-900 dark:text-white overflow-hidden`}>
       <div className="absolute inset-0 bg-gradient-to-r from-violet-200/30 via-transparent to-cyan-200/30 dark:from-violet-600/20 dark:via-transparent dark:to-cyan-500/20" />

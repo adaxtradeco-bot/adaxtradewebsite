@@ -1,5 +1,7 @@
 /**
  * Workflow Hero Section - Dynamic version
+ * @deprecated Use ProductHeroSection instead
+ * This component is kept for backward compatibility only
  */
 
 'use client';

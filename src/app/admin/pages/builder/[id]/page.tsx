@@ -25,6 +25,7 @@ export default function BuilderPage() {
       try {
         const data = await loadBuilderPage(params.id as string);
         if (data) {
+          console.log('📊 Page Data:', data);
           setPageData(data);
         } else {
           setError('Failed to load page data');

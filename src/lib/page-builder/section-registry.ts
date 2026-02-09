@@ -1109,39 +1109,67 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     configSchema: {},
   },
   {
-    id: 'workflow-hero',
-    name: 'Workflow Hero',
-    type: 'workflow-hero',
+    id: 'product-hero',
+    name: 'Product Hero',
+    type: 'product-hero',
     category: SECTION_CATEGORIES.HEADERS,
-    description: 'Hero section for workflow/orchestration pages with feature cards',
-    icon: '🔄',
+    description: 'Unified hero section with theme support, Font Awesome icons, and flexible media',
+    icon: '🚀',
     defaultData: {
       id: '',
-      type: 'workflow-hero',
+      type: 'product-hero',
       order: 0,
       data: {
         badge: 'Live orchestration for modern teams',
         title: 'Orchestrate Processes. Reduce Errors.',
         titleHighlight: 'Move Faster.',
         description: 'Model, automate, and optimize end-to-end workflows without code.',
-        primaryButton: {
-          text: 'Explore Features',
-          href: '#features'
-        },
-        secondaryButton: {
-          text: 'See Business Impact',
-          href: '#impact'
-        },
+        primaryButton: { text: 'Explore Features', href: '#features' },
+        secondaryButton: { text: 'See Business Impact', href: '#impact' },
         footerText: 'Secure • Extensible • Real-time visibility',
+        badges: [],
+        themeId: 'indigo-cyan',
+        customBackground: '',
+        customTitleGradientFrom: '',
+        customTitleGradientTo: '',
+        rightContentType: 'cards',
         cards: [
-          { icon: '⚙️', title: 'Visual Builder', description: 'Drag & drop stages, forms, and rules.' },
-          { icon: '🔗', title: 'Integrations', description: 'Connect CRM, ERP, data, and email.' },
-          { icon: '✅', title: 'Approvals', description: 'Parallel & sequential with audit trails.' },
-          { icon: '📊', title: 'Reporting', description: 'Real-time visibility and KPIs.' }
-        ]
+          { 
+            icon: '⚙️',
+            iconConfig: null,
+            title: 'Visual Builder', 
+            description: 'Drag & drop stages, forms, and rules.' 
+          },
+          { 
+            icon: '🔗',
+            iconConfig: null,
+            title: 'Integrations', 
+            description: 'Connect CRM, ERP, data, and email.' 
+          },
+          { 
+            icon: '✅',
+            iconConfig: null,
+            title: 'Approvals', 
+            description: 'Parallel & sequential with audit trails.' 
+          },
+          { 
+            icon: '📊',
+            iconConfig: null,
+            title: 'Reporting', 
+            description: 'Real-time visibility and KPIs.' 
+          }
+        ],
+        mediaUrl: '',
+        mediaAlt: 'Product showcase',
+        mediaFit: 'cover',
+        mediaAspectRatio: '4/3',
+        placeholderIcon: '🎨',
+        placeholderIconConfig: null,
+        placeholderText: 'Product Preview',
+        features: []
       },
       style: {
-        backgroundColor: 'bg-gradient-to-br from-indigo-50 via-slate-50 to-cyan-50 dark:from-indigo-950 dark:via-slate-900 dark:to-cyan-950',
+        backgroundColor: '',
         textColor: 'text-slate-900 dark:text-white',
         padding: 'py-20 lg:py-32',
       },
@@ -1210,48 +1238,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
-  {
-    id: 'form-builder-hero',
-    name: 'Form Builder Hero',
-    type: 'form-builder-hero',
-    category: SECTION_CATEGORIES.HEADERS,
-    description: 'Hero section for form builder with media support and custom gradient',
-    icon: '📝',
-    defaultData: {
-      id: '',
-      type: 'form-builder-hero',
-      order: 0,
-      data: {
-        badge: 'Collect form data seamlessly. Gain real-time visibility.',
-        title: 'Design Forms that',
-        titleHighlight: 'Run Your Processes',
-        description: 'Build multi-step, responsive forms with AI assistance, dynamic logic, and deep integrations. Validate at the source, automate downstream, and keep a complete audit trail.',
-        primaryButton: {
-          text: 'Open the Designer',
-          href: '#demo'
-        },
-        secondaryButton: {
-          text: 'Browse Templates',
-          href: '#templates'
-        },
-        badges: ['No-Code', 'AI-Assisted', 'Enterprise'],
-        mediaType: 'placeholder',
-        canvasIcon: '🎨',
-        canvasLabel: 'Form Canvas | Fields | Rules | Preview',
-        features: [
-          { icon: '🧩', label: 'Drag & Drop' },
-          { icon: '✅', label: 'Validations' },
-          { icon: '🔗', label: 'Integrations' }
-        ]
-      },
-      style: {
-        backgroundColor: 'bg-gradient-to-br from-fuchsia-50 via-rose-50 to-pink-50 dark:from-fuchsia-950 dark:via-rose-950 dark:to-pink-950',
-        textColor: 'text-slate-900 dark:text-white',
-        padding: 'py-20 lg:py-32',
-      },
-    },
-    configSchema: {},
-  },
+
   {
     id: 'simple-cards',
     name: 'Simple Cards',

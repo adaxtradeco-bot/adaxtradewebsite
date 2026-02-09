@@ -39,8 +39,9 @@ import ExperienceTabsSection from '@/components/builder-sections/ExperienceTabsS
 import VideoSection from '@/components/builder-sections/VideoSection';
 import { ComplianceBadgesSection } from '@/components/builder-sections/ComplianceBadgesSection';
 import { MediaContentSection } from '@/components/builder-sections/MediaContentSection';
+import { ProductHeroSection } from '@/components/builder-sections/ProductHeroSection';
 import SidebarContentSection from '@/components/builder-sections/SidebarContentSection';
-import WorkflowHeroSection from '@/components/builder-sections/WorkflowHeroSection';
+import AppBuilderHeroSection from '@/components/builder-sections/AppBuilderHeroSection';
 import MetricsSection from '@/components/builder-sections/MetricsSection';
 import TwoColumnMediaSection from '@/components/builder-sections/TwoColumnMediaSection';
 import SimpleCardsSection from '@/components/builder-sections/SimpleCardsSection';
@@ -114,8 +115,28 @@ export function SectionRenderer({
   const wrapperProps = isBuilder ? { isSelected, onSelect } : {};
 
   const renderSection = () => {
+    // Debug: Log section type
+    console.log('Rendering section:', section.type, section);
+    
+    // Normalize section type to lowercase for matching
+    const normalizedType = section.type.toLowerCase();
+    
     const sectionContent = (() => {
       switch (section.type) {
+      // Handle PascalCase types from database
+      case 'AppBuilderHero':
+        return <AppBuilderHeroSection {...(section as any).data} />;
+      case 'MediaContent':
+        return <MediaContentSection data={(section as any).data} isBuilder={isBuilder} />;
+      case 'FeatureCards':
+        return <FeatureCardsSection data={(section as any).data} style={(section as any).style} />;
+      case 'SidebarContent':
+        return <SidebarContentSection key={section.id} {...(section as any).data} />;
+      case 'Testimonials':
+        return <TestimonialsSection data={(section as any).data} style={(section as any).style} />;
+      case 'CTA':
+      case 'CTASection':
+        return <CTASection data={(section as any).data} style={(section as any).style} />;
       case 'hero':
       case 'HeroSection':
         return <HeroSection section={section as any} isBuilder={isBuilder} />;
@@ -193,8 +214,8 @@ export function SectionRenderer({
         return <MediaContentSection data={(section as any).data} isBuilder={isBuilder} />;
       case 'sidebar-content':
         return <SidebarContentSection key={section.id} {...(section as any).data} />;
-      case 'workflow-hero':
-        return <WorkflowHeroSection key={section.id} {...(section as any).data} />;
+      case 'product-hero':
+        return <ProductHeroSection section={section} />;
       case 'metrics':
         return <MetricsSection key={section.id} {...(section as any).data} />;
       case 'two-column-media':
@@ -223,8 +244,7 @@ export function SectionRenderer({
         return <FormBuilderFAQSection key={section.id} data={(section as any).data} style={(section as any).style} />;
       case 'form-builder-final-cta':
         return <FormBuilderFinalCTASection key={section.id} data={(section as any).data} style={(section as any).style} />;
-      case 'form-builder-hero':
-        return <FormBuilderHeroSection section={section} />;
+
       case 'form-builder-features':
         return <FormBuilderFeaturesSection data={(section as any).data} style={(section as any).style} />;
       case 'hero-slider':
@@ -391,10 +411,15 @@ export function SectionRenderer({
           </section>
         );
       default:
+        console.error('❌ Unknown section type:', section.type);
+        console.log('📦 Section data:', JSON.stringify(section, null, 2));
         return (
-          <div className="p-8 bg-gray-100 dark:bg-gray-800 text-center">
-            <p className="text-gray-600 dark:text-gray-400">
-              Unknown section type: {section.type}
+          <div className="p-8 bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700 text-center rounded-lg">
+            <p className="text-red-600 dark:text-red-400 font-bold mb-2">
+              ❌ Unknown section type: {section.type}
+            </p>
+            <p className="text-sm text-red-500 dark:text-red-300">
+              Section ID: {section.id}
             </p>
           </div>
         );

@@ -13,6 +13,7 @@ import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { MediaBrowser } from './MediaBrowser';
 import InteractiveFeatureWallPropertyPanel from './InteractiveFeatureWallPropertyPanel';
 import { WallOfFeaturesPropertyPanel } from './WallOfFeaturesPropertyPanel';
+import { ProductHeroPropertyPanel } from './ProductHeroPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -519,6 +520,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
 
   const renderSectionSpecificFields = () => {
     switch (section.type) {
+      case 'product-hero':
+        return <ProductHeroPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'interactive-feature-wall':
         return <InteractiveFeatureWallPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'wall-of-features':
