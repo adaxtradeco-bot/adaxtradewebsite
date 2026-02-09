@@ -419,6 +419,9 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
       type: 'feature-video-tabs',
       order: 0,
       data: {
+        eyebrow: 'Platform preview',
+        title: 'See the platform in action',
+        description: 'Modern UI designed for speed',
         backgroundImage: '',
         maxWidth: '1920px',
         paddingY: '0',

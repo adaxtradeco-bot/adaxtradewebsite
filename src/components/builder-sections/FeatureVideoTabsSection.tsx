@@ -18,6 +18,9 @@ interface VideoTab {
 }
 
 interface FeatureVideoTabsSectionProps {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
   backgroundImage?: string;
   tabs: VideoTab[];
   showFullscreenButton?: boolean;
@@ -28,6 +31,9 @@ interface FeatureVideoTabsSectionProps {
 }
 
 export default function FeatureVideoTabsSection({
+  eyebrow,
+  title,
+  description,
   backgroundImage,
   tabs = [],
   showFullscreenButton = true,
@@ -120,8 +126,29 @@ export default function FeatureVideoTabsSection({
             }
           `}</style>
           <div className="video-container-inner">
+          {/* Header */}
+          {(eyebrow || title || description) && (
+            <div className="text-center py-8 md:py-12 px-4">
+              {eyebrow && (
+                <span className="text-xs md:text-sm uppercase tracking-widest text-slate-600 dark:text-slate-400 block mb-3">
+                  {eyebrow}
+                </span>
+              )}
+              {title && (
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white mb-4">
+                  {title}
+                </h2>
+              )}
+              {description && (
+                <p className="text-base md:text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                  {description}
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Desktop Tabs */}
-          <div className="hidden md:flex items-center justify-center gap-2 lg:gap-4 px-4 lg:px-8 py-6 lg:py-8 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700">
+          <div className="hidden md:flex items-center justify-center gap-2 lg:gap-4 px-4 lg:px-8 py-6 lg:py-8 bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200 dark:border-slate-700 shadow-lg shadow-slate-900/10 dark:shadow-slate-950/30">
             {tabs.map((tab, index) => (
               <button
                 key={tab.id}
@@ -212,7 +239,7 @@ export default function FeatureVideoTabsSection({
                 key={tab.id}
                 className={`${activeTab === index ? 'block' : 'hidden'}`}
               >
-                <div className="relative aspect-video bg-black">
+                <div className="relative aspect-video bg-black rounded-xl md:rounded-2xl overflow-hidden">
                   {(() => {
                     const videoSrc = tab.videoSrc;
                     const videoSrcString = typeof videoSrc === 'string' ? videoSrc : (videoSrc as any)?.src || '';
