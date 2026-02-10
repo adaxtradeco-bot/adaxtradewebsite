@@ -2,18 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { IconSelector } from '@/components/ui/IconSelector';
+import { IconDisplay, IconConfig } from '@/components/ui/IconPicker';
 
 interface DropdownItem {
   title: string;
   description?: string;
   href: string;
   icon?: string;
+  iconConfig?: IconConfig;
   badge?: string;
 }
 
 interface DropdownColumn {
   title: string;
   icon?: string;
+  iconConfig?: IconConfig;
   items: DropdownItem[];
 }
 
@@ -22,6 +26,7 @@ interface MenuItem {
   label: string;
   href?: string;
   icon?: string;
+  iconConfig?: IconConfig;
   displayType?: string;
   backgroundColor?: string;
   dropdown?: {
@@ -414,7 +419,11 @@ export default function MenuEditor() {
                         </button>
                       </div>
                       <div className="flex items-center gap-2">
-                        {item.icon && <span className="text-xl">{item.icon}</span>}
+                        {item.iconConfig ? (
+                          <IconDisplay icon={item.iconConfig} />
+                        ) : item.icon ? (
+                          <span className="text-xl">{item.icon}</span>
+                        ) : null}
                         <span className="font-semibold text-gray-900 dark:text-white">{item.label}</span>
                       </div>
                     </div>
@@ -515,15 +524,17 @@ export default function MenuEditor() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Icon (emoji)
-                  </label>
-                  <input
-                    type="text"
-                    value={selectedItem.icon || ''}
-                    onChange={(e) => updateMenuItem(selectedItem.id, { icon: e.target.value })}
-                    placeholder="🚀"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  <IconSelector
+                    value={selectedItem.iconConfig || null}
+                    emojiValue={selectedItem.icon || ''}
+                    onChange={(iconConfig, emoji) => {
+                      updateMenuItem(selectedItem.id, {
+                        iconConfig: iconConfig || undefined,
+                        icon: emoji || undefined
+                      });
+                    }}
+                    label="Icon"
+                    allowEmoji={true}
                   />
                 </div>
 
@@ -633,15 +644,17 @@ export default function MenuEditor() {
                         </div>
 
                         <div>
-                          <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-                            Column Icon
-                          </label>
-                          <input
-                            type="text"
-                            value={column.icon || ''}
-                            onChange={(e) => updateColumn(selectedItem.id, colIdx, { icon: e.target.value })}
-                            placeholder="⭐"
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                          <IconSelector
+                            value={column.iconConfig || null}
+                            emojiValue={column.icon || ''}
+                            onChange={(iconConfig, emoji) => {
+                              updateColumn(selectedItem.id, colIdx, {
+                                iconConfig: iconConfig || undefined,
+                                icon: emoji || undefined
+                              });
+                            }}
+                            label="Column Icon"
+                            allowEmoji={true}
                           />
                         </div>
                       </div>
@@ -739,22 +752,25 @@ export default function MenuEditor() {
                                 />
                               </div>
 
-                              <div className="grid grid-cols-2 gap-2">
-                                <input
-                                  type="text"
-                                  value={dropItem.icon || ''}
-                                  onChange={(e) => updateDropdownItem(selectedItem.id, colIdx, itemIdx, { icon: e.target.value })}
-                                  placeholder="Icon 📝"
-                                  className="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs"
-                                />
-                                <input
-                                  type="text"
-                                  value={dropItem.badge || ''}
-                                  onChange={(e) => updateDropdownItem(selectedItem.id, colIdx, itemIdx, { badge: e.target.value })}
-                                  placeholder="Badge"
-                                  className="px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs"
-                                />
-                              </div>
+                              <IconSelector
+                                value={dropItem.iconConfig || null}
+                                emojiValue={dropItem.icon || ''}
+                                onChange={(iconConfig, emoji) => {
+                                  updateDropdownItem(selectedItem.id, colIdx, itemIdx, {
+                                    iconConfig: iconConfig || undefined,
+                                    icon: emoji || undefined
+                                  });
+                                }}
+                                label="Icon"
+                                allowEmoji={true}
+                              />
+                              <input
+                                type="text"
+                                value={dropItem.badge || ''}
+                                onChange={(e) => updateDropdownItem(selectedItem.id, colIdx, itemIdx, { badge: e.target.value })}
+                                placeholder="Badge"
+                                className="w-full px-2 py-1.5 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs"
+                              />
                             </div>
                           </div>
                         ))}
