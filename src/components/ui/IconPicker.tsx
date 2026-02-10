@@ -82,26 +82,42 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
   }, []);
 
   const filteredIcons = useMemo(() => {
+    if (loading || Object.keys(ICON_CATEGORIES).length === 0) return [];
+    
     let allIcons: string[] = [];
     if (selectedCategory === 'all') {
       allIcons = Object.values(ICON_CATEGORIES).flat();
     } else {
       allIcons = ICON_CATEGORIES[selectedCategory] || [];
     }
+    
     if (!searchTerm) return allIcons;
     return allIcons.filter(icon => icon.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, loading]);
 
   const handleIconSelect = (iconName: string) => {
     setManualIconName(iconName);
     onChange({ name: iconName, type: selectedType, size: selectedSize, color: selectedColor });
   };
 
-  useEffect(() => {
-    if (value && value.name && (value.type !== selectedType || value.size !== selectedSize || value.color !== selectedColor)) {
-      onChange({ ...value, type: selectedType, size: selectedSize, color: selectedColor });
+  const handleManualInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setManualIconName(newValue);
+    if (newValue.trim()) {
+      onChange({ name: newValue.trim(), type: selectedType, size: selectedSize, color: selectedColor });
+    } else {
+      onChange(null);
     }
-  }, [selectedType, selectedSize, selectedColor]);
+  };
+
+  useEffect(() => {
+    if (value?.name && manualIconName === value.name) {
+      const needsUpdate = value.type !== selectedType || value.size !== selectedSize || value.color !== selectedColor;
+      if (needsUpdate) {
+        onChange({ ...value, type: selectedType, size: selectedSize, color: selectedColor });
+      }
+    }
+  }, [selectedType, selectedSize, selectedColor, value?.name, manualIconName]);
 
   const getIconClass = (iconName: string) => {
     const typePrefix = ICON_TYPES.find(t => t.value === selectedType)?.prefix || 'fas';
@@ -121,7 +137,7 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
       <div className="p-4 space-y-3 border-b border-gray-200 dark:border-gray-700">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Icon Name (Manual)</label>
-          <input type="text" placeholder="e.g. home, user, star..." value={manualIconName} onChange={(e) => { setManualIconName(e.target.value); if (e.target.value) handleIconSelect(e.target.value); }} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          <input type="text" placeholder="e.g. home, user, star..." value={manualIconName} onChange={handleManualInputChange} className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -165,8 +181,8 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <input type="color" value={customColor || selectedColor} onChange={(e) => { e.stopPropagation(); setCustomColor(e.target.value); setSelectedColor(e.target.value); }} onClick={(e) => e.stopPropagation()} className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600" />
-              <input type="text" placeholder="#000000" value={customColor} onChange={(e) => { e.stopPropagation(); setCustomColor(e.target.value); if (e.target.value.match(/^#[0-9A-Fa-f]{6}$/)) setSelectedColor(e.target.value); }} onClick={(e) => e.stopPropagation()} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+              <input type="color" value={selectedColor} onChange={(e) => { e.stopPropagation(); const newColor = e.target.value; setCustomColor(newColor); setSelectedColor(newColor); }} onClick={(e) => e.stopPropagation()} className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600" />
+              <input type="text" placeholder="#000000" value={customColor || selectedColor} onChange={(e) => { e.stopPropagation(); const newColor = e.target.value; setCustomColor(newColor); if (newColor.match(/^#[0-9A-Fa-f]{6}$/)) setSelectedColor(newColor); }} onClick={(e) => e.stopPropagation()} className="flex-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
             </div>
           </div>
         </div>
