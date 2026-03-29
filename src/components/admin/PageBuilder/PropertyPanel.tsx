@@ -14,6 +14,7 @@ import { MediaBrowser } from './MediaBrowser';
 import InteractiveFeatureWallPropertyPanel from './InteractiveFeatureWallPropertyPanel';
 import { WallOfFeaturesPropertyPanel } from './WallOfFeaturesPropertyPanel';
 import { ProductHeroPropertyPanel } from './ProductHeroPropertyPanel';
+import { ProcessStepsPropertyPanel } from './ProcessStepsPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -522,6 +523,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     switch (section.type) {
       case 'product-hero':
         return <ProductHeroPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'process-steps':
+        return <ProcessStepsPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'interactive-feature-wall':
         return <InteractiveFeatureWallPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'wall-of-features':

@@ -86,6 +86,7 @@ import InteractiveFeatureWall from '@/components/builder-sections/InteractiveFea
 import WallOfFeaturesSection from '@/components/builder-sections/WallOfFeaturesSection';
 import WhyIvaFlowNewVersion from '@/components/builder-sections/WhyIvaFlowNewVersion';
 import FeatureVideoTabsSection from '@/components/builder-sections/FeatureVideoTabsSection';
+import ProcessStepsSection from '@/components/builder-sections/ProcessStepsSection';
 
 
 interface SectionRendererProps {
@@ -289,6 +290,8 @@ export function SectionRenderer({
         return <InteractiveFeatureWall {...(section as any).data} />;
       case 'wall-of-features':
         return <WallOfFeaturesSection data={(section as any).data} isBuilder={isBuilder} onEdit={onSelect} />;
+      case 'process-steps':
+        return <ProcessStepsSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
       case 'feature-video-tabs':
         return <FeatureVideoTabsSection {...(section as any).data} />;
       case 'showcase':
