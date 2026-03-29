@@ -50,6 +50,12 @@ interface SiteSettings {
     companyName: string;
     tagline: string;
     description: string;
+    contactInfo: {
+      show: boolean;
+      email: string;
+      phone: string;
+      address: string;
+    };
     columns: FooterColumn[];
     bottomBar: {
       show: boolean;
@@ -116,6 +122,12 @@ const defaultSettings: SiteSettings = {
     companyName: 'English Website',
     tagline: 'Modern English Learning Platform',
     description: 'A comprehensive platform for English learning and business automation solutions.',
+    contactInfo: {
+      show: true,
+      email: '',
+      phone: '',
+      address: ''
+    },
     columns: [
       {
         id: 'product',
@@ -885,6 +897,61 @@ export default function SettingsPage() {
                     rows={3}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     placeholder="Brief description shown in footer"
+                  />
+                </div>
+              </div>
+            </Card>
+
+            {/* Contact Info */}
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Contact Information</h2>
+                <Switch
+                  checked={settings.footer?.contactInfo?.show ?? true}
+                  onCheckedChange={(checked) => setSettings(prev => ({
+                    ...prev,
+                    footer: { ...prev.footer, contactInfo: { ...prev.footer?.contactInfo, show: checked } }
+                  }))}
+                />
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="footer-phone">Phone Number</Label>
+                  <Input
+                    id="footer-phone"
+                    value={settings.footer?.contactInfo?.phone || ''}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, contactInfo: { ...prev.footer?.contactInfo, phone: e.target.value } }
+                    }))}
+                    placeholder="+1 (555) 123-4567"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="footer-email">Email Address</Label>
+                  <Input
+                    id="footer-email"
+                    type="email"
+                    value={settings.footer?.contactInfo?.email || ''}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, contactInfo: { ...prev.footer?.contactInfo, email: e.target.value } }
+                    }))}
+                    placeholder="hello@company.com"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="footer-address">Address</Label>
+                  <textarea
+                    id="footer-address"
+                    value={settings.footer?.contactInfo?.address || ''}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, contactInfo: { ...prev.footer?.contactInfo, address: e.target.value } }
+                    }))}
+                    rows={2}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    placeholder="123 Main St, City, Country"
                   />
                 </div>
               </div>

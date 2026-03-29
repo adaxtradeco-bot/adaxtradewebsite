@@ -9,7 +9,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
-import { Twitter, Linkedin, Facebook, Instagram, Youtube, Github } from 'lucide-react';
+import { Twitter, Linkedin, Facebook, Instagram, Youtube, Github, Mail, Phone, MapPin } from 'lucide-react';
 
 const SOCIAL_ICONS = {
   twitter: Twitter,
@@ -62,6 +62,35 @@ export function Footer() {
             )}
             {footer?.description && (
               <p className="text-sm leading-relaxed">{footer.description}</p>
+            )}
+            {/* Contact Info */}
+            {footer?.contactInfo?.show && (
+              <div className="mt-4 space-y-2">
+                {footer.contactInfo.phone && (
+                  <a
+                    href={`tel:${footer.contactInfo.phone}`}
+                    className="flex items-center gap-2 text-sm hover:text-slate-900 dark:hover:text-white transition-colors"
+                  >
+                    <Phone className="h-3.5 w-3.5 shrink-0" />
+                    {footer.contactInfo.phone}
+                  </a>
+                )}
+                {footer.contactInfo.email && (
+                  <a
+                    href={`mailto:${footer.contactInfo.email}`}
+                    className="flex items-center gap-2 text-sm hover:text-slate-900 dark:hover:text-white transition-colors"
+                  >
+                    <Mail className="h-3.5 w-3.5 shrink-0" />
+                    {footer.contactInfo.email}
+                  </a>
+                )}
+                {footer.contactInfo.address && (
+                  <p className="flex items-start gap-2 text-sm">
+                    <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5" />
+                    {footer.contactInfo.address}
+                  </p>
+                )}
+              </div>
             )}
           </div>
 

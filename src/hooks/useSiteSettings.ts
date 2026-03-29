@@ -42,6 +42,12 @@ interface SiteSettings {
     companyName: string;
     tagline: string;
     description: string;
+    contactInfo: {
+      show: boolean;
+      email: string;
+      phone: string;
+      address: string;
+    };
     columns: FooterColumn[];
     bottomBar: {
       show: boolean;
@@ -108,6 +114,12 @@ const defaultSettings: SiteSettings = {
     companyName: 'English Website',
     tagline: 'Modern English Learning Platform',
     description: 'A comprehensive platform for English learning and business automation solutions.',
+    contactInfo: {
+      show: true,
+      email: '',
+      phone: '',
+      address: ''
+    },
     columns: [
       {
         id: 'product',
