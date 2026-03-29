@@ -356,10 +356,19 @@ export function WallOfFeaturesSection({
                   style={{
                     gridColumn: `${feature.col} / span ${feature.w ?? 1}`,
                     gridRow: `${feature.row} / span ${feature.h ?? 1}`,
-                    backgroundColor: 'transparent',
+                    backgroundColor: isActiveFeature && feature.previewImage
+                      ? `${activeColor}15`
+                      : 'transparent',
+                    borderColor: isActiveFeature && feature.previewImage
+                      ? `${activeColor}60`
+                      : undefined,
                   }}
                   className={`relative z-30 flex flex-col items-center justify-center text-center
-                    transition-all duration-200 ${visibilityClass} ${
+                    transition-all duration-300 ${visibilityClass} ${
+                      isActiveFeature && feature.previewImage
+                        ? 'z-40 shadow-lg scale-105'
+                        : ''
+                    } ${
                       isLargeFeature
                         ? 'border-2 border-gray-400 dark:border-slate-500 rounded-lg'
                         : 'border border-gray-300 dark:border-slate-600'
@@ -375,10 +384,10 @@ export function WallOfFeaturesSection({
                     }
                   }}
                 >
-                  <div className={`mb-1 transition-all duration-200 feature-icon ${
+                  <div className={`mb-1 transition-all duration-300 feature-icon ${
                     isLargeFeature ? 'text-4xl' : 'text-2xl'
                   } ${
-                    isActiveFeature && feature.previewImage ? 'font-bold scale-110' : ''
+                    isActiveFeature && feature.previewImage ? 'scale-125' : ''
                   }`}
                   style={{
                     color: isActiveFeature && feature.previewImage ? activeColor : undefined
