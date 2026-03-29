@@ -126,19 +126,23 @@ export default function FusionTeamsTabsSection({ data, style }: FusionTeamsTabsS
                     </div>
                   </div>
 
-                  {/* Trusted By Section */}
-                  <div className="mt-12">
-                    <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6">
-                      <p className="text-lg font-semibold mb-4 text-slate-700 dark:text-slate-300">
-                        {data.trustedByText}
-                      </p>
-                      <SmartImage
-                        src={tab.trustedByImage}
-                        alt={tab.trustedByAlt}
-                        className="w-full h-auto max-h-32"
-                      />
+                  {/* Trusted By Section - only render if trustedByImage exists */}
+                  {tab.trustedByImage && (
+                    <div className="mt-12">
+                      <div className="bg-slate-50 dark:bg-slate-800/50 rounded-lg p-6">
+                        {data.trustedByText && (
+                          <p className="text-lg font-semibold mb-4 text-slate-700 dark:text-slate-300">
+                            {data.trustedByText}
+                          </p>
+                        )}
+                        <SmartImage
+                          src={tab.trustedByImage}
+                          alt={tab.trustedByAlt}
+                          className="w-full h-auto max-h-32"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
