@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/Label';
 import { Switch } from '@/components/ui/Switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { Upload, Save, RotateCcw, Settings, Image, Globe, Phone, Palette, Star } from 'lucide-react';
+import { Upload, Save, RotateCcw, Settings, Image, Globe, Phone, Palette, Star, Layout, Plus, Trash2, GripVertical, ExternalLink } from 'lucide-react';
 import { useImageUpload } from '@/hooks/useImageUpload';
 
 interface SiteSettings {
@@ -46,6 +46,41 @@ interface SiteSettings {
     appleTouchIcon: string;
     manifest: string;
   };
+  footer: {
+    companyName: string;
+    tagline: string;
+    description: string;
+    columns: FooterColumn[];
+    bottomBar: {
+      show: boolean;
+      copyrightText: string;
+      showSocialLinks: boolean;
+      socialLinks: SocialLink[];
+    };
+    style: {
+      backgroundColor: string;
+      textColor: string;
+      linkColor: string;
+      borderColor: string;
+      padding: string;
+    };
+  };
+}
+
+interface FooterLink {
+  label: string;
+  url: string;
+}
+
+interface FooterColumn {
+  id: string;
+  title: string;
+  links: FooterLink[];
+}
+
+interface SocialLink {
+  platform: 'twitter' | 'linkedin' | 'facebook' | 'instagram' | 'youtube' | 'github';
+  url: string;
 }
 
 const defaultSettings: SiteSettings = {
@@ -76,6 +111,45 @@ const defaultSettings: SiteSettings = {
     url: '/favicon.ico',
     appleTouchIcon: '/apple-touch-icon.png',
     manifest: '/site.webmanifest'
+  },
+  footer: {
+    companyName: 'English Website',
+    tagline: 'Modern English Learning Platform',
+    description: 'A comprehensive platform for English learning and business automation solutions.',
+    columns: [
+      {
+        id: 'product',
+        title: 'Product',
+        links: [
+          { label: 'Home', url: '/' },
+          { label: 'Features', url: '/features' },
+          { label: 'Pricing', url: '/pricing' },
+          { label: 'Contact', url: '/contact' }
+        ]
+      },
+      {
+        id: 'company',
+        title: 'Company',
+        links: [
+          { label: 'About Us', url: '/about' },
+          { label: 'Blog', url: '/blog' },
+          { label: 'Careers', url: '/careers' }
+        ]
+      }
+    ],
+    bottomBar: {
+      show: true,
+      copyrightText: '© {year} English Website. All rights reserved.',
+      showSocialLinks: true,
+      socialLinks: []
+    },
+    style: {
+      backgroundColor: '',
+      textColor: '',
+      linkColor: '',
+      borderColor: '',
+      padding: 'py-12'
+    }
   }
 };
 
@@ -266,7 +340,7 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="logo" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="logo" className="flex items-center gap-2">
             <Image className="h-4 w-4" />
             Logo
@@ -286,6 +360,10 @@ export default function SettingsPage() {
           <TabsTrigger value="favicon" className="flex items-center gap-2">
             <Star className="h-4 w-4" />
             Favicon
+          </TabsTrigger>
+          <TabsTrigger value="footer" className="flex items-center gap-2">
+            <Layout className="h-4 w-4" />
+            Footer
           </TabsTrigger>
         </TabsList>
 
@@ -763,6 +841,398 @@ export default function SettingsPage() {
               </div>
             </div>
           </Card>
+        </TabsContent>
+        {/* Footer Settings */}
+        <TabsContent value="footer">
+          <div className="space-y-6">
+            {/* Brand Info */}
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Brand Information</h2>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="footer-company">Company Name</Label>
+                  <Input
+                    id="footer-company"
+                    value={settings.footer?.companyName || ''}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, companyName: e.target.value }
+                    }))}
+                    placeholder="Your Company Name"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="footer-tagline">Tagline</Label>
+                  <Input
+                    id="footer-tagline"
+                    value={settings.footer?.tagline || ''}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, tagline: e.target.value }
+                    }))}
+                    placeholder="Short tagline under company name"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="footer-desc">Description</Label>
+                  <textarea
+                    id="footer-desc"
+                    value={settings.footer?.description || ''}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, description: e.target.value }
+                    }))}
+                    rows={3}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    placeholder="Brief description shown in footer"
+                  />
+                </div>
+              </div>
+            </Card>
+
+            {/* Link Columns */}
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold">Link Columns</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    const newCol: FooterColumn = {
+                      id: `col-${Date.now()}`,
+                      title: 'New Column',
+                      links: []
+                    };
+                    setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, columns: [...(prev.footer?.columns || []), newCol] }
+                    }));
+                  }}
+                >
+                  <Plus className="h-4 w-4 mr-1" /> Add Column
+                </Button>
+              </div>
+              <div className="space-y-6">
+                {(settings.footer?.columns || []).map((col, colIdx) => (
+                  <div key={col.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <GripVertical className="h-4 w-4 text-gray-400" />
+                      <Input
+                        value={col.title}
+                        onChange={(e) => {
+                          const cols = [...settings.footer.columns];
+                          cols[colIdx] = { ...cols[colIdx], title: e.target.value };
+                          setSettings(prev => ({ ...prev, footer: { ...prev.footer, columns: cols } }));
+                        }}
+                        className="font-medium"
+                        placeholder="Column Title"
+                      />
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const cols = settings.footer.columns.filter((_, i) => i !== colIdx);
+                          setSettings(prev => ({ ...prev, footer: { ...prev.footer, columns: cols } }));
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </Button>
+                    </div>
+                    <div className="space-y-2 ml-6">
+                      {col.links.map((link, linkIdx) => (
+                        <div key={linkIdx} className="flex items-center gap-2">
+                          <Input
+                            value={link.label}
+                            onChange={(e) => {
+                              const cols = [...settings.footer.columns];
+                              cols[colIdx].links[linkIdx] = { ...link, label: e.target.value };
+                              setSettings(prev => ({ ...prev, footer: { ...prev.footer, columns: cols } }));
+                            }}
+                            placeholder="Link Label"
+                            className="flex-1"
+                          />
+                          <Input
+                            value={link.url}
+                            onChange={(e) => {
+                              const cols = [...settings.footer.columns];
+                              cols[colIdx].links[linkIdx] = { ...link, url: e.target.value };
+                              setSettings(prev => ({ ...prev, footer: { ...prev.footer, columns: cols } }));
+                            }}
+                            placeholder="/url or https://..."
+                            className="flex-1"
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const cols = [...settings.footer.columns];
+                              cols[colIdx].links = cols[colIdx].links.filter((_, i) => i !== linkIdx);
+                              setSettings(prev => ({ ...prev, footer: { ...prev.footer, columns: cols } }));
+                            }}
+                          >
+                            <Trash2 className="h-3 w-3 text-red-400" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-full mt-1"
+                        onClick={() => {
+                          const cols = [...settings.footer.columns];
+                          cols[colIdx].links = [...cols[colIdx].links, { label: '', url: '' }];
+                          setSettings(prev => ({ ...prev, footer: { ...prev.footer, columns: cols } }));
+                        }}
+                      >
+                        <Plus className="h-3 w-3 mr-1" /> Add Link
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* Bottom Bar */}
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Bottom Bar</h2>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Show Bottom Bar</Label>
+                    <p className="text-sm text-gray-500">Display copyright bar at the bottom of footer</p>
+                  </div>
+                  <Switch
+                    checked={settings.footer?.bottomBar?.show ?? true}
+                    onCheckedChange={(checked) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, bottomBar: { ...prev.footer.bottomBar, show: checked } }
+                    }))}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="copyright-text">Copyright Text</Label>
+                  <Input
+                    id="copyright-text"
+                    value={settings.footer?.bottomBar?.copyrightText || ''}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, bottomBar: { ...prev.footer.bottomBar, copyrightText: e.target.value } }
+                    }))}
+                    placeholder="© {year} Company. All rights reserved."
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Use <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">{'{year}'}</code> for dynamic year</p>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <Label>Show Social Links</Label>
+                    <p className="text-sm text-gray-500">Display social media icons in bottom bar</p>
+                  </div>
+                  <Switch
+                    checked={settings.footer?.bottomBar?.showSocialLinks ?? true}
+                    onCheckedChange={(checked) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, bottomBar: { ...prev.footer.bottomBar, showSocialLinks: checked } }
+                    }))}
+                  />
+                </div>
+                {settings.footer?.bottomBar?.showSocialLinks && (
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <Label>Social Links</Label>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const newLink: SocialLink = { platform: 'linkedin', url: '' };
+                          setSettings(prev => ({
+                            ...prev,
+                            footer: {
+                              ...prev.footer,
+                              bottomBar: {
+                                ...prev.footer.bottomBar,
+                                socialLinks: [...(prev.footer.bottomBar.socialLinks || []), newLink]
+                              }
+                            }
+                          }));
+                        }}
+                      >
+                        <Plus className="h-3 w-3 mr-1" /> Add
+                      </Button>
+                    </div>
+                    <div className="space-y-2">
+                      {(settings.footer?.bottomBar?.socialLinks || []).map((social, idx) => (
+                        <div key={idx} className="flex items-center gap-2">
+                          <select
+                            value={social.platform}
+                            onChange={(e) => {
+                              const links = [...settings.footer.bottomBar.socialLinks];
+                              links[idx] = { ...social, platform: e.target.value as SocialLink['platform'] };
+                              setSettings(prev => ({
+                                ...prev,
+                                footer: { ...prev.footer, bottomBar: { ...prev.footer.bottomBar, socialLinks: links } }
+                              }));
+                            }}
+                            className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          >
+                            {['twitter', 'linkedin', 'facebook', 'instagram', 'youtube', 'github'].map(p => (
+                              <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>
+                            ))}
+                          </select>
+                          <Input
+                            value={social.url}
+                            onChange={(e) => {
+                              const links = [...settings.footer.bottomBar.socialLinks];
+                              links[idx] = { ...social, url: e.target.value };
+                              setSettings(prev => ({
+                                ...prev,
+                                footer: { ...prev.footer, bottomBar: { ...prev.footer.bottomBar, socialLinks: links } }
+                              }));
+                            }}
+                            placeholder="https://..."
+                            className="flex-1"
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              const links = settings.footer.bottomBar.socialLinks.filter((_, i) => i !== idx);
+                              setSettings(prev => ({
+                                ...prev,
+                                footer: { ...prev.footer, bottomBar: { ...prev.footer.bottomBar, socialLinks: links } }
+                              }));
+                            }}
+                          >
+                            <Trash2 className="h-3 w-3 text-red-400" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </Card>
+
+            {/* Style Customization */}
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Style Customization</h2>
+              <p className="text-sm text-gray-500 mb-4">Leave empty to use default theme colors</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="footer-bg">Background Color</Label>
+                  <div className="flex gap-2 mt-1">
+                    <input
+                      type="color"
+                      value={settings.footer?.style?.backgroundColor || '#f1f5f9'}
+                      onChange={(e) => setSettings(prev => ({
+                        ...prev,
+                        footer: { ...prev.footer, style: { ...prev.footer.style, backgroundColor: e.target.value } }
+                      }))}
+                      className="h-9 w-12 rounded border border-input cursor-pointer"
+                    />
+                    <Input
+                      id="footer-bg"
+                      value={settings.footer?.style?.backgroundColor || ''}
+                      onChange={(e) => setSettings(prev => ({
+                        ...prev,
+                        footer: { ...prev.footer, style: { ...prev.footer.style, backgroundColor: e.target.value } }
+                      }))}
+                      placeholder="#f1f5f9 or transparent"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="footer-text">Text Color</Label>
+                  <div className="flex gap-2 mt-1">
+                    <input
+                      type="color"
+                      value={settings.footer?.style?.textColor || '#475569'}
+                      onChange={(e) => setSettings(prev => ({
+                        ...prev,
+                        footer: { ...prev.footer, style: { ...prev.footer.style, textColor: e.target.value } }
+                      }))}
+                      className="h-9 w-12 rounded border border-input cursor-pointer"
+                    />
+                    <Input
+                      id="footer-text"
+                      value={settings.footer?.style?.textColor || ''}
+                      onChange={(e) => setSettings(prev => ({
+                        ...prev,
+                        footer: { ...prev.footer, style: { ...prev.footer.style, textColor: e.target.value } }
+                      }))}
+                      placeholder="#475569"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="footer-link">Link Color</Label>
+                  <div className="flex gap-2 mt-1">
+                    <input
+                      type="color"
+                      value={settings.footer?.style?.linkColor || '#0f172a'}
+                      onChange={(e) => setSettings(prev => ({
+                        ...prev,
+                        footer: { ...prev.footer, style: { ...prev.footer.style, linkColor: e.target.value } }
+                      }))}
+                      className="h-9 w-12 rounded border border-input cursor-pointer"
+                    />
+                    <Input
+                      id="footer-link"
+                      value={settings.footer?.style?.linkColor || ''}
+                      onChange={(e) => setSettings(prev => ({
+                        ...prev,
+                        footer: { ...prev.footer, style: { ...prev.footer.style, linkColor: e.target.value } }
+                      }))}
+                      placeholder="#0f172a"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="footer-border">Border Color</Label>
+                  <div className="flex gap-2 mt-1">
+                    <input
+                      type="color"
+                      value={settings.footer?.style?.borderColor || '#e2e8f0'}
+                      onChange={(e) => setSettings(prev => ({
+                        ...prev,
+                        footer: { ...prev.footer, style: { ...prev.footer.style, borderColor: e.target.value } }
+                      }))}
+                      className="h-9 w-12 rounded border border-input cursor-pointer"
+                    />
+                    <Input
+                      id="footer-border"
+                      value={settings.footer?.style?.borderColor || ''}
+                      onChange={(e) => setSettings(prev => ({
+                        ...prev,
+                        footer: { ...prev.footer, style: { ...prev.footer.style, borderColor: e.target.value } }
+                      }))}
+                      placeholder="#e2e8f0"
+                    />
+                  </div>
+                </div>
+                <div className="md:col-span-2">
+                  <Label htmlFor="footer-padding">Vertical Padding</Label>
+                  <Select
+                    value={settings.footer?.style?.padding || 'py-12'}
+                    onValueChange={(value) => setSettings(prev => ({
+                      ...prev,
+                      footer: { ...prev.footer, style: { ...prev.footer.style, padding: value } }
+                    }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="py-6">Small (py-6)</SelectItem>
+                      <SelectItem value="py-8">Medium (py-8)</SelectItem>
+                      <SelectItem value="py-12">Large (py-12) — Default</SelectItem>
+                      <SelectItem value="py-16">Extra Large (py-16)</SelectItem>
+                      <SelectItem value="py-20">2XL (py-20)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

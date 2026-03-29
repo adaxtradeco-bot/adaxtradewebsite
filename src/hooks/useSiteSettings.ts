@@ -38,6 +38,41 @@ interface SiteSettings {
     appleTouchIcon: string;
     manifest: string;
   };
+  footer: {
+    companyName: string;
+    tagline: string;
+    description: string;
+    columns: FooterColumn[];
+    bottomBar: {
+      show: boolean;
+      copyrightText: string;
+      showSocialLinks: boolean;
+      socialLinks: SocialLink[];
+    };
+    style: {
+      backgroundColor: string;
+      textColor: string;
+      linkColor: string;
+      borderColor: string;
+      padding: string;
+    };
+  };
+}
+
+export interface FooterLink {
+  label: string;
+  url: string;
+}
+
+export interface FooterColumn {
+  id: string;
+  title: string;
+  links: FooterLink[];
+}
+
+export interface SocialLink {
+  platform: 'twitter' | 'linkedin' | 'facebook' | 'instagram' | 'youtube' | 'github';
+  url: string;
 }
 
 const defaultSettings: SiteSettings = {
@@ -68,6 +103,45 @@ const defaultSettings: SiteSettings = {
     url: '/favicon.ico',
     appleTouchIcon: '/apple-touch-icon.png',
     manifest: '/site.webmanifest'
+  },
+  footer: {
+    companyName: 'English Website',
+    tagline: 'Modern English Learning Platform',
+    description: 'A comprehensive platform for English learning and business automation solutions.',
+    columns: [
+      {
+        id: 'product',
+        title: 'Product',
+        links: [
+          { label: 'Home', url: '/' },
+          { label: 'Features', url: '/features' },
+          { label: 'Pricing', url: '/pricing' },
+          { label: 'Contact', url: '/contact' }
+        ]
+      },
+      {
+        id: 'company',
+        title: 'Company',
+        links: [
+          { label: 'About Us', url: '/about' },
+          { label: 'Blog', url: '/blog' },
+          { label: 'Careers', url: '/careers' }
+        ]
+      }
+    ],
+    bottomBar: {
+      show: true,
+      copyrightText: '© {year} English Website. All rights reserved.',
+      showSocialLinks: true,
+      socialLinks: []
+    },
+    style: {
+      backgroundColor: '',
+      textColor: '',
+      linkColor: '',
+      borderColor: '',
+      padding: 'py-12'
+    }
   }
 };
 

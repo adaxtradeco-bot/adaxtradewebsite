@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
     const settingsData = await request.json();
 
     // Validate required fields
-    if (!settingsData.logo || !settingsData.languages || !settingsData.contactSales || !settingsData.theme || !settingsData.favicon) {
+    if (!settingsData.logo || !settingsData.languages || !settingsData.contactSales || !settingsData.theme) {
       return NextResponse.json(
         { error: 'Missing required settings data' },
         { status: 400 }
