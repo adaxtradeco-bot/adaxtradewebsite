@@ -422,12 +422,12 @@ export function WallOfFeaturesSection({
 
       {/* Consolidated Styles */}
       <style jsx>{`
-        /* Mobile (< 640px): 6 cols (3-8), scale 60%, negative margin to compensate */
+        /* Mobile (< 640px): 6 cols (3-8), scale 65%, negative margin to compensate */
         .responsive-grid-wrapper {
-          transform: scale(0.6);
+          transform: scale(0.65);
           transform-origin: center;
-          margin-top: -30%;
-          margin-bottom: -30%;
+          margin-top: -27%;
+          margin-bottom: -27%;
         }
         .responsive-feature-grid {
           grid-template-columns: repeat(10, 138px);
@@ -438,6 +438,17 @@ export function WallOfFeaturesSection({
           top: 254px;
           width: 552px;
           height: 508px;
+        }
+        
+        /* Mobile: larger icons and titles */
+        @media (max-width: 639px) {
+          .feature-icon {
+            font-size: 2rem !important;
+            margin-bottom: 4px;
+          }
+          .feature-title {
+            font-size: 0.75rem !important;
+          }
         }
         
         /* Hide columns properly - use display none to remove from layout */
@@ -509,7 +520,7 @@ export function WallOfFeaturesSection({
         @keyframes fade {
           from {
             opacity: 0;
-            transform: scale(0.98);
+            transform: scale(0.92);
           }
           to {
             opacity: 1;
@@ -517,7 +528,7 @@ export function WallOfFeaturesSection({
           }
         }
         .animate-fade {
-          animation: fade 0.35s ease-out;
+          animation: fade 0.55s cubic-bezier(0.22, 1, 0.36, 1);
         }
         :global(.hover-icon:hover) {
           color: var(--hover-color) !important;
