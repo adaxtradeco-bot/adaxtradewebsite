@@ -46,7 +46,29 @@ export async function GET() {
       return NextResponse.json(defaultSettings);
     }
 
-    return NextResponse.json(JSON.parse(settings.data));
+    const saved = JSON.parse(settings.data);
+
+    const merged = {
+      ...saved,
+      footer: {
+        companyName: 'English Website',
+        tagline: '',
+        description: '',
+        columns: [],
+        bottomBar: { show: true, copyrightText: '© {year} English Website. All rights reserved.', showSocialLinks: true, socialLinks: [] },
+        style: { backgroundColor: '', textColor: '', linkColor: '', borderColor: '', padding: 'py-12' },
+        ...saved.footer,
+        contactInfo: {
+          show: true,
+          email: '',
+          phone: '',
+          address: '',
+          ...(saved.footer?.contactInfo || {})
+        }
+      }
+    };
+
+    return NextResponse.json(merged);
   } catch (error) {
     console.error('Failed to fetch settings:', error);
     return NextResponse.json(
