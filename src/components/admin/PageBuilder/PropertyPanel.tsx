@@ -15,6 +15,7 @@ import InteractiveFeatureWallPropertyPanel from './InteractiveFeatureWallPropert
 import { WallOfFeaturesPropertyPanel } from './WallOfFeaturesPropertyPanel';
 import { ProductHeroPropertyPanel } from './ProductHeroPropertyPanel';
 import { ProcessStepsPropertyPanel } from './ProcessStepsPropertyPanel';
+import { WhyAutomateWithUsPropertyPanel } from './WhyAutomateWithUsPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -525,6 +526,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <ProductHeroPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'process-steps':
         return <ProcessStepsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'why-automate-with-us':
+        return <WhyAutomateWithUsPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'interactive-feature-wall':
         return <InteractiveFeatureWallPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'wall-of-features':

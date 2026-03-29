@@ -1903,6 +1903,52 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
     configSchema: {},
   },
 
+  {
+    id: 'why-automate-with-us',
+    name: 'Why Automate With Us',
+    type: 'why-automate-with-us',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Bento-style benefit cards with media slots, team avatars, stats, and ticker marquee',
+    icon: '🚀',
+    defaultData: {
+      id: '',
+      type: 'why-automate-with-us',
+      order: 0,
+      data: {
+        eyebrow: 'Why automate with us',
+        title: 'Your processes,',
+        titleHighlight: 'finally',
+        subtitle: "We don't just hand you a platform. We bring the expertise, the team, and the methodology to turn your operations into a competitive advantage.",
+        accentColor: '#4F7FFF',
+        accentColor2: '#7B5CFF',
+        accentColor3: '#00D4A8',
+        sectionPaddingY: 'py-32',
+        tickerSpeed: 30,
+        row1Cards: [],
+        row2Cards: [],
+        row3Cards: [],
+        tickerItems: [
+          { text: 'Visual workflow designer' },
+          { text: 'No-code form builder' },
+          { text: 'Role-based access control' },
+          { text: 'Live KPI dashboards' },
+          { text: 'API integration — no code' },
+          { text: 'Single sign-on (SSO)' },
+          { text: 'SLA monitoring' },
+          { text: 'Multi-department workflows' },
+          { text: 'Dedicated expert team' },
+          { text: '24/7 post-launch support' },
+        ],
+      },
+      style: {
+        backgroundColor: 'bg-white dark:bg-[#07080A]',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-32',
+      },
+    },
+    configSchema: {},
+  },
+
   // Why IvaFlow New Version Section
   {
     id: 'why-ivaflow-new-version',
