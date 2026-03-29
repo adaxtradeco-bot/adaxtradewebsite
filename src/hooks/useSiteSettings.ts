@@ -182,7 +182,28 @@ export function SiteSettingsProvider(props: SiteSettingsProviderProps) {
       const response = await fetch('/api/admin/settings');
       if (response.ok) {
         const data = await response.json();
-        setSettings({ ...defaultSettings, ...data });
+        // Deep merge to preserve nested defaults (e.g. contactInfo added after initial save)
+        const merged: SiteSettings = {
+          ...defaultSettings,
+          ...data,
+          footer: {
+            ...defaultSettings.footer,
+            ...data.footer,
+            contactInfo: {
+              ...defaultSettings.footer.contactInfo,
+              ...(data.footer?.contactInfo || {})
+            },
+            bottomBar: {
+              ...defaultSettings.footer.bottomBar,
+              ...(data.footer?.bottomBar || {})
+            },
+            style: {
+              ...defaultSettings.footer.style,
+              ...(data.footer?.style || {})
+            }
+          }
+        };
+        setSettings(merged);
       } else {
         console.warn('Failed to load settings, using defaults');
       }
