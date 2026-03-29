@@ -256,13 +256,13 @@ export default function ProcessStepsSection({
                 <div
                   className="w-[68px] h-[68px] rounded-full flex items-center justify-center relative z-10 flex-shrink-0 transition-all duration-300
                     bg-slate-100 dark:bg-[#1A1D24]
-                    border border-slate-200 dark:border-white/7
+                    border border-slate-200 dark:border-white/[0.07]
                     group-hover:border-[var(--ps-accent)] group-hover:bg-[rgba(79,127,255,0.1)]
                     group-hover:shadow-[0_0_0_6px_rgba(79,127,255,0.08)]"
                   style={{ '--ps-accent': accent } as React.CSSProperties}
                 >
                   <span
-                    className="font-extrabold text-[17px] transition-colors duration-300 text-slate-400 dark:text-[#4A4F65] group-hover:text-[var(--ps-accent)]"
+                    className="font-extrabold text-[17px] transition-colors duration-300 text-slate-400 dark:text-[#6B7280] group-hover:text-[var(--ps-accent)]"
                     style={{ '--ps-accent': accent } as React.CSSProperties}
                   >
                     {String(idx + 1).padStart(2, '0')}
@@ -270,7 +270,7 @@ export default function ProcessStepsSection({
                 </div>
                 {/* Line */}
                 {idx < steps.length - 1 && (
-                  <div className="w-[1.5px] flex-1 min-h-[40px] bg-gradient-to-b from-slate-300 dark:from-white/15 to-slate-200 dark:to-white/7" />
+                  <div className="w-[1.5px] flex-1 min-h-[40px] bg-gradient-to-b from-slate-300 dark:from-white/[0.08] to-slate-200 dark:to-white/[0.03]" />
                 )}
               </div>
 
@@ -278,8 +278,8 @@ export default function ProcessStepsSection({
               <div
                 className="relative overflow-hidden rounded-[20px] mb-5 transition-all duration-300
                   bg-slate-50 dark:bg-[#1A1D24]
-                  border border-slate-200 dark:border-white/7
-                  group-hover:border-slate-300 dark:group-hover:border-white/15
+                  border border-slate-200 dark:border-white/[0.07]
+                  group-hover:border-slate-300 dark:group-hover:border-white/[0.15]
                   group-hover:bg-white dark:group-hover:bg-[#20242D]
                   group-hover:translate-x-1.5
                   group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.08),0_0_0_1px_rgba(79,127,255,0.08)]
@@ -308,9 +308,9 @@ export default function ProcessStepsSection({
                     </span>
                     <span
                       className="inline-flex items-center gap-1.5 text-[11px] font-medium rounded-full px-3 py-1.5 whitespace-nowrap transition-all duration-300
-                        text-slate-500 dark:text-[#8A8FA8]
-                        bg-white dark:bg-[#13151A]
-                        border border-slate-200 dark:border-white/7
+                        text-slate-500 dark:text-[#9CA3AF]
+                        bg-white dark:bg-[#0E1014]
+                        border border-slate-200 dark:border-white/[0.07]
                         group-hover:border-slate-300 dark:group-hover:border-[rgba(79,127,255,0.3)]
                         group-hover:text-slate-700 dark:group-hover:text-[#F0F2F8]"
                     >
@@ -339,10 +339,10 @@ export default function ProcessStepsSection({
                     <span
                       key={ti}
                       className="text-[11.5px] rounded-md px-3 py-1 transition-all duration-200
-                        text-slate-400 dark:text-[#4A4F65]
-                        border border-slate-200 dark:border-white/7
+                        text-slate-500 dark:text-[#8A8FA8]
+                        border border-slate-200 dark:border-white/[0.07]
                         group-hover:border-[rgba(79,127,255,0.25)]
-                        group-hover:text-slate-500 dark:group-hover:text-[#8A8FA8]
+                        group-hover:text-slate-600 dark:group-hover:text-[#C4C9D9]
                         group-hover:bg-[rgba(79,127,255,0.04)]"
                     >
                       {tag}
@@ -358,7 +358,7 @@ export default function ProcessStepsSection({
         <div
           className="relative overflow-hidden mt-16 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-7 px-8 md:px-12 py-10
             bg-slate-50 dark:bg-[#1A1D24]
-            border border-slate-200 dark:border-white/7"
+            border border-slate-200 dark:border-white/[0.07]"
         >
           <div
             className="pointer-events-none absolute inset-0"
