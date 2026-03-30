@@ -17,20 +17,32 @@ import { ConditionalLanguageSwitch } from './ConditionalLanguageSwitch';
 import { ConditionalContactSales } from './ConditionalContactSales';
 import { useParams } from 'next/navigation';
 
+interface IconConfig {
+  name: string;
+  type: string;
+  size: string;
+  color?: string;
+}
+
 interface DropdownItem {
   title: string;
   description?: string;
   href: string;
   icon?: string;
+  iconConfig?: IconConfig;
   badge?: string;
 }
 
 interface NavigationItem {
   label: string;
   href?: string;
+  icon?: string;
+  iconConfig?: IconConfig;
   dropdown?: {
     columns: {
       title: string;
+      icon?: string;
+      iconConfig?: IconConfig;
       items: DropdownItem[];
     }[];
   };
@@ -120,6 +132,26 @@ export function ModernNavbar() {
     href: `/${currentLang}/partnership`
   }
 ];
+
+  // Renders either emoji or Font Awesome icon
+  const renderIcon = (icon?: string, iconConfig?: IconConfig) => {
+    if (iconConfig?.name) {
+      const prefixMap: Record<string, string> = {
+        solid: 'fas', regular: 'far', light: 'fal',
+        thin: 'fat', duotone: 'fad', brands: 'fab',
+      };
+      const prefix = prefixMap[iconConfig.type] || 'fas';
+      return (
+        <i
+          className={`${prefix} fa-${iconConfig.name}`}
+          style={{ color: iconConfig.color || 'currentColor', fontSize: '20px' }}
+          aria-hidden="true"
+        />
+      );
+    }
+    if (icon) return <span className="text-2xl">{icon}</span>;
+    return null;
+  };
 
   const ChevronIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -286,9 +318,9 @@ const CloseIcon = () => (
                           href={item.href}
                           className="flex gap-3 items-center p-1.5 rounded-lg text-decoration-none transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11"
                         >
-                          {item.icon && (
+                          {(item.icon || item.iconConfig) && (
                             <div className="flex flex-shrink-0 justify-center items-center w-10 h-10 rounded-lg bg-white dark:bg-neutral-800 shadow-sm">
-                              <span className="text-2xl">{item.icon}</span>
+                              {renderIcon(item.icon, item.iconConfig)}
                             </div>
                           )}
                           <div className="flex-1">
@@ -391,9 +423,9 @@ const CloseIcon = () => (
                                       className="flex gap-3 items-center p-1.5 rounded-md text-decoration-none transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11"
                                       onClick={() => setIsMobileMenuOpen(false)}
                                     >
-                                      {subItem.icon && (
+                                      {(subItem.icon || subItem.iconConfig) && (
                                         <div className="flex flex-shrink-0 justify-center items-center w-10 h-10 rounded-lg bg-white dark:bg-neutral-800 shadow-sm">
-                                          <span className="text-2xl">{subItem.icon}</span>
+                                          {renderIcon(subItem.icon, subItem.iconConfig)}
                                         </div>
                                       )}
                                       <div className="flex-1">
