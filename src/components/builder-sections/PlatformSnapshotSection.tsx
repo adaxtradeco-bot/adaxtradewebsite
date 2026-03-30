@@ -10,9 +10,10 @@
 
 import React from 'react';
 
-/* ─── Types ─── */
 interface SnapCard {
   iconSvg?: string;
+  iconFa?: string;
+  iconEmoji?: string;
   iconColor?: string;
   iconBg?: string;
   title: string;
@@ -27,6 +28,8 @@ interface PlatformSnapshotData {
   cards?: SnapCard[];
   accentColor?: string;
   accentColor2?: string;
+  darkBg?: string;
+  lightBg?: string;
 }
 
 interface PlatformSnapshotSectionProps {
@@ -59,6 +62,19 @@ const DEFAULT_CARDS: SnapCard[] = [
   },
 ];
 
+function CardIcon({ card }: { card: SnapCard }) {
+  if (card.iconFa) {
+    return <i className={card.iconFa} style={{ color: card.iconColor, fontSize: '20px' }} />;
+  }
+  if (card.iconEmoji) {
+    return <span className="text-xl">{card.iconEmoji}</span>;
+  }
+  if (card.iconSvg) {
+    return <span className="w-[22px] h-[22px] block" dangerouslySetInnerHTML={{ __html: card.iconSvg }} />;
+  }
+  return <span className="text-xl">⚡</span>;
+}
+
 export default function PlatformSnapshotSection({
   data,
   style,
@@ -72,39 +88,31 @@ export default function PlatformSnapshotSection({
     cards = DEFAULT_CARDS,
     accentColor = '#4F7FFF',
     accentColor2 = '#7B5CFF',
+    darkBg = 'rgb(15 23 42)',
+    lightBg = '#ffffff',
   } = data;
 
   const gradientBg = `linear-gradient(90deg, ${accentColor}, ${accentColor2})`;
 
   return (
-    <section className="py-[110px] bg-white dark:bg-[#07080A]">
+    <section className="py-[110px] bg-white dark:bg-[rgb(15,23,42)]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
 
         {/* Header */}
         <div className="text-center mb-[60px]">
-          {/* Eyebrow pill */}
           <div
             className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 border"
-            style={{
-              background: `rgba(79,127,255,0.08)`,
-              borderColor: `rgba(79,127,255,0.20)`,
-            }}
+            style={{ background: `rgba(79,127,255,0.08)`, borderColor: `rgba(79,127,255,0.20)` }}
           >
-            <span
-              className="w-1.5 h-1.5 rounded-full animate-pulse"
-              style={{ background: accentColor }}
-            />
-            <span
-              className="text-[11px] font-semibold tracking-[0.16em] uppercase"
-              style={{ color: accentColor }}
-            >
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: accentColor }} />
+            <span className="text-[12px] font-semibold tracking-[0.16em] uppercase" style={{ color: accentColor }}>
               {eyebrow}
             </span>
           </div>
 
           <h2
             className="font-extrabold leading-[1.15] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-4"
-            style={{ fontSize: 'clamp(28px, 4vw, 44px)' }}
+            style={{ fontSize: 'clamp(30px, 4vw, 46px)' }}
           >
             {title}{' '}
             <em
@@ -120,13 +128,13 @@ export default function PlatformSnapshotSection({
             </em>
           </h2>
 
-          <p className="text-[16px] font-light text-[#8A8FA8] leading-[1.7] max-w-[560px] mx-auto">
+          <p className="text-[16px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.7] max-w-[560px] mx-auto">
             {description}
           </p>
         </div>
 
         {/* Cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 border border-white/[0.07] rounded-[22px] overflow-hidden">
+        <div className="grid grid-cols-1 md:grid-cols-3 border border-slate-200 dark:border-white/[0.07] rounded-[22px] overflow-hidden">
           {cards.map((card, i) => (
             <div
               key={i}
@@ -140,23 +148,16 @@ export default function PlatformSnapshotSection({
 
               {/* Icon */}
               <div
-                className="w-12 h-12 rounded-[14px] flex items-center justify-center mb-5 border border-white/[0.07]"
+                className="w-12 h-12 rounded-[14px] flex items-center justify-center mb-5 border border-slate-200 dark:border-white/[0.07]"
                 style={{ background: card.iconBg || 'rgba(79,127,255,0.08)' }}
               >
-                {card.iconSvg ? (
-                  <span
-                    className="w-[22px] h-[22px] block"
-                    dangerouslySetInnerHTML={{ __html: card.iconSvg }}
-                  />
-                ) : (
-                  <span className="text-lg">⚡</span>
-                )}
+                <CardIcon card={card} />
               </div>
 
               <h3 className="font-bold text-[18px] text-slate-900 dark:text-[#F0F2F8] mb-2.5">
                 {card.title}
               </h3>
-              <p className="text-[14px] font-light text-[#8A8FA8] leading-[1.7]">
+              <p className="text-[14px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.7]">
                 {card.description}
               </p>
             </div>

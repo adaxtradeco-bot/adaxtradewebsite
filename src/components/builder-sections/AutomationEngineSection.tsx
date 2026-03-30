@@ -195,7 +195,7 @@ export default function AutomationEngineSection({
               for your team.
             </h2>
 
-            <p className="text-[15px] font-light text-[#8A8FA8] leading-[1.75] mb-9">
+            <p className="text-[15px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.75] mb-9">
               {body}
             </p>
 
@@ -214,7 +214,7 @@ export default function AutomationEngineSection({
                   >
                     {s.value}
                   </div>
-                  <div className="text-[12px] text-[#4A4F65]">{s.label}</div>
+                  <div className="text-[13px] text-slate-400 dark:text-[#8A8FA8]">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -224,7 +224,7 @@ export default function AutomationEngineSection({
               {triggers.map((t, i) => (
                 <span
                   key={i}
-                  className="text-[11px] text-[#8A8FA8] bg-[#1A1D24] border border-white/[0.07] rounded-full px-3.5 py-1.5 transition-all duration-200 hover:border-[rgba(79,127,255,0.30)] hover:text-[#F0F2F8]"
+                  className="text-[12px] text-slate-500 dark:text-[#C4C9D9] bg-slate-100 dark:bg-[#1A1D24] border border-slate-200 dark:border-white/[0.07] rounded-full px-3.5 py-1.5 transition-all duration-200 hover:border-slate-300 dark:hover:border-[rgba(79,127,255,0.30)] hover:text-slate-700 dark:hover:text-[#F0F2F8]"
                 >
                   {t.text}
                 </span>

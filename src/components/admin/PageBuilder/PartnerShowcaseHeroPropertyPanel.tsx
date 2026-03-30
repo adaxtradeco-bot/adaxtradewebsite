@@ -179,6 +179,25 @@ export function PartnerShowcaseHeroPropertyPanel({ section, onUpdate }: PartnerS
         </button>
       </Collapsible>
 
+      <Collapsible title="Background Colors">
+        <div className="grid grid-cols-2 gap-2">
+          <Field label="Dark Mode BG">
+            <div className="flex gap-1 items-center">
+              <input type="color" value={data.darkBg ?? '#0f172a'} onChange={e => update({ darkBg: e.target.value })}
+                className="w-9 h-9 rounded border border-gray-300 dark:border-gray-600 cursor-pointer p-0.5 bg-white dark:bg-gray-700" />
+              <input className={inputCls} value={data.darkBg ?? ''} onChange={e => update({ darkBg: e.target.value })} placeholder="rgb(15 23 42)" />
+            </div>
+          </Field>
+          <Field label="Light Mode BG">
+            <div className="flex gap-1 items-center">
+              <input type="color" value={data.lightBg ?? '#ffffff'} onChange={e => update({ lightBg: e.target.value })}
+                className="w-9 h-9 rounded border border-gray-300 dark:border-gray-600 cursor-pointer p-0.5 bg-white dark:bg-gray-700" />
+              <input className={inputCls} value={data.lightBg ?? ''} onChange={e => update({ lightBg: e.target.value })} placeholder="#ffffff" />
+            </div>
+          </Field>
+        </div>
+      </Collapsible>
+
       <Collapsible title="Accent Colors">
         <div className="grid grid-cols-3 gap-2">
           {(['accentColor', 'accentColor2', 'accentColor3'] as const).map((key, i) => (

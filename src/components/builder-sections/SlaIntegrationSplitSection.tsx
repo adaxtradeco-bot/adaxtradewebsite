@@ -96,13 +96,13 @@ function Card({
         {card.title}
       </h3>
 
-      <p className="text-[14px] font-light text-[#8A8FA8] leading-[1.75] mb-7">
+      <p className="text-[14px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.75] mb-7">
         {card.body}
       </p>
 
       <ul className="flex flex-col gap-2.5">
         {card.features.map((feat, i) => (
-          <li key={i} className="flex items-center gap-2.5 text-[13.5px] font-light text-[#8A8FA8]">
+          <li key={i} className="flex items-center gap-2.5 text-[13.5px] font-light text-slate-500 dark:text-[#C4C9D9]">
             <span
               className="w-1.5 h-1.5 rounded-full flex-shrink-0"
               style={{ background: accentColor }}
@@ -128,7 +128,7 @@ export default function SlaIntegrationSplitSection({
   } = data;
 
   return (
-    <section className="pb-[110px] bg-white dark:bg-[#07080A]">
+    <section className="pb-[110px] bg-white dark:bg-[rgb(15,23,42)]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card card={leftCard} accentColor={accentColor} accentColor2={accentColor2} variant="dark" />

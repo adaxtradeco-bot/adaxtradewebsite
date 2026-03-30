@@ -177,7 +177,7 @@ export default function HowItWorksStepsSection({
   }, [isBuilder, steps]);
 
   return (
-    <section className="pb-[110px] bg-white dark:bg-[#07080A]">
+    <section className="py-[110px] bg-white dark:bg-[rgb(15,23,42)]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
 
         {/* Header */}
@@ -222,14 +222,14 @@ export default function HowItWorksStepsSection({
                 <h3 className="font-bold text-[28px] leading-[1.25] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-4">
                   {step.title}
                 </h3>
-                <p className="text-[15px] font-light text-[#8A8FA8] leading-[1.75] mb-6">
+                <p className="text-[15px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.75] mb-6">
                   {step.body}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {step.chips.map((chip, ci) => (
                     <span
                       key={ci}
-                      className="text-[11.5px] text-[#4A4F65] border border-white/[0.07] rounded-[7px] px-3 py-1.5 transition-all duration-200 hover:border-[rgba(79,127,255,0.25)] hover:text-[#8A8FA8]"
+                      className="text-[12px] text-slate-400 dark:text-[#8A8FA8] border border-slate-200 dark:border-white/[0.07] rounded-[7px] px-3 py-1.5 transition-all duration-200 hover:border-slate-300 dark:hover:border-[rgba(79,127,255,0.25)] hover:text-slate-600 dark:hover:text-[#C4C9D9]"
                     >
                       {chip}
                     </span>

@@ -29,6 +29,8 @@ interface PlatformModulesBentoData {
   modules?: Module[];
   accentColor?: string;
   accentColor2?: string;
+  darkBg?: string;
+  lightBg?: string;
 }
 
 interface PlatformModulesBentoSectionProps {
@@ -153,7 +155,7 @@ function ModuleCard({
 
       {/* Description */}
       <p
-        className={`font-light text-[#8A8FA8] leading-[1.7] mb-auto pb-6
+        className={`font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.7] mb-auto pb-6
           ${isLarge ? 'text-[13.5px]' : 'text-[12.5px]'}`}
       >
         {mod.description}
@@ -185,13 +187,15 @@ export default function PlatformModulesBentoSection({
     modules = DEFAULT_MODULES,
     accentColor = '#4F7FFF',
     accentColor2 = '#7B5CFF',
+    darkBg = 'rgb(15 23 42)',
+    lightBg = '#ffffff',
   } = data;
 
   const largeModules = modules.filter(m => m.size === 'large');
   const smallModules = modules.filter(m => m.size === 'small');
 
   return (
-    <section className="pb-[110px] bg-white dark:bg-[#07080A]">
+    <section className="pb-[110px] bg-white dark:bg-[rgb(15,23,42)]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
 
         {/* Header */}
@@ -226,7 +230,7 @@ export default function PlatformModulesBentoSection({
             ways to use them.
           </h2>
 
-          <p className="text-[16px] font-light text-[#8A8FA8] leading-[1.7] max-w-[560px] mx-auto mt-3">
+          <p className="text-[16px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.7] max-w-[560px] mx-auto mt-3">
             {description}
           </p>
         </div>

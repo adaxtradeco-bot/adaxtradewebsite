@@ -115,7 +115,7 @@ export default function IndustriesGridSection({
   const gradientLine = `linear-gradient(90deg, transparent, ${accentColor}, ${accentColor2}, transparent)`;
 
   return (
-    <section className="py-[110px] bg-white dark:bg-[#07080A]">
+    <section className="py-[110px] bg-white dark:bg-[rgb(15,23,42)]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
 
         {/* Header */}
@@ -149,7 +149,7 @@ export default function IndustriesGridSection({
             — on day one
           </h2>
 
-          <p className="text-[16px] font-light text-[#8A8FA8] leading-[1.7] max-w-[560px] mx-auto mt-3">
+          <p className="text-[16px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.7] max-w-[560px] mx-auto mt-3">
             {description}
           </p>
         </div>
@@ -176,7 +176,7 @@ export default function IndustriesGridSection({
               <h3 className="font-bold text-[17px] text-slate-900 dark:text-[#F0F2F8] mb-2">
                 {ind.name}
               </h3>
-              <p className="text-[13px] font-light text-[#8A8FA8] leading-[1.6] mb-auto pb-5">
+              <p className="text-[13px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.6] mb-auto pb-5">
                 {ind.description}
               </p>
               <a

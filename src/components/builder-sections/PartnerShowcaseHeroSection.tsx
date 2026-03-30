@@ -33,15 +33,13 @@ interface PartnerShowcaseHeroData {
   accentColor?: string;
   accentColor2?: string;
   accentColor3?: string;
+  darkBg?: string;
+  lightBg?: string;
 }
 
 interface PartnerShowcaseHeroSectionProps {
   data: PartnerShowcaseHeroData;
-  style?: {
-    backgroundColor?: string;
-    textColor?: string;
-    padding?: string;
-  };
+  style?: { backgroundColor?: string; textColor?: string; padding?: string };
   isBuilder?: boolean;
 }
 
@@ -74,16 +72,25 @@ export default function PartnerShowcaseHeroSection({
     accentColor = '#4F7FFF',
     accentColor2 = '#7B5CFF',
     accentColor3 = '#00D4A8',
+    darkBg = 'rgb(15 23 42)',
+    lightBg = '#ffffff',
   } = data;
 
   const gradientText = `linear-gradient(120deg, ${accentColor} 0%, ${accentColor2} 50%, ${accentColor3} 100%)`;
   const gradientBg = `linear-gradient(135deg, ${accentColor}, ${accentColor2})`;
 
   return (
-    <section className="relative overflow-hidden text-center bg-white dark:bg-[#07080A]">
-      {/* Grid background */}
+    <section
+      className="relative overflow-hidden text-center"
+      style={{ '--dark-bg': darkBg, '--light-bg': lightBg } as React.CSSProperties}
+    >
+      {/* Background */}
+      <div className="absolute inset-0 bg-white dark:bg-[rgb(15,23,42)]" style={{ backgroundColor: `var(--light-bg)` }} />
+      <div className="absolute inset-0 hidden dark:block" style={{ backgroundColor: darkBg }} />
+
+      {/* Grid overlay */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 z-[1]"
         style={{
           backgroundImage: `linear-gradient(rgba(79,127,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(79,127,255,0.04) 1px, transparent 1px)`,
           backgroundSize: '56px 56px',
@@ -91,22 +98,22 @@ export default function PartnerShowcaseHeroSection({
       />
       {/* Top glow */}
       <div
-        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full"
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[600px] rounded-full z-[1]"
         style={{ background: `radial-gradient(ellipse, rgba(79,127,255,0.10) 0%, transparent 65%)` }}
       />
 
       <div className="relative z-10 max-w-[1180px] mx-auto px-5 md:px-10 pt-[150px] pb-[120px]">
 
         {/* Label pill */}
-        <div className="inline-flex items-center gap-2.5 border border-white/[0.14] rounded-full px-5 py-2 mb-9 text-xs font-[family-name:var(--font-outfit,sans-serif)]">
-          <span className="text-[#8A8FA8]">{label}</span>
-          <span className="text-[#8A8FA8]">·</span>
-          <span className="font-semibold" style={{ color: accentColor }}>{labelHighlight}</span>
+        <div className="inline-flex items-center gap-2.5 border border-slate-200 dark:border-white/[0.14] rounded-full px-5 py-2 mb-9">
+          <span className="text-sm text-slate-500 dark:text-[#C4C9D9]">{label}</span>
+          <span className="text-slate-300 dark:text-[#4A4F65]">·</span>
+          <span className="text-sm font-semibold" style={{ color: accentColor }}>{labelHighlight}</span>
         </div>
 
         {/* Headline */}
         <h1
-          className="font-extrabold leading-[1.06] tracking-[-0.03em] text-[#F0F2F8] mb-6 max-w-[820px] mx-auto"
+          className="font-extrabold leading-[1.06] tracking-[-0.03em] text-slate-900 dark:text-[#F0F2F8] mb-6 max-w-[820px] mx-auto"
           style={{ fontSize: 'clamp(40px, 6vw, 72px)' }}
         >
           {title}
@@ -126,7 +133,7 @@ export default function PartnerShowcaseHeroSection({
         </h1>
 
         {/* Description */}
-        <p className="text-[17px] font-light text-[#8A8FA8] leading-[1.7] max-w-[580px] mx-auto mb-11">
+        <p className="text-[17px] font-light text-slate-500 dark:text-[#C4C9D9] leading-[1.7] max-w-[580px] mx-auto mb-11">
           {description}
         </p>
 
@@ -138,10 +145,7 @@ export default function PartnerShowcaseHeroSection({
                 key={i}
                 href={btn.href}
                 className="inline-flex items-center gap-2 font-semibold text-sm text-white rounded-xl px-[30px] py-[15px] transition-all duration-200 hover:-translate-y-0.5"
-                style={{
-                  background: gradientBg,
-                  boxShadow: `0 8px 28px rgba(79,127,255,0.30)`,
-                }}
+                style={{ background: gradientBg, boxShadow: `0 8px 28px rgba(79,127,255,0.30)` }}
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = `0 14px 36px rgba(79,127,255,0.40)`; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 28px rgba(79,127,255,0.30)`; }}
               >
@@ -151,8 +155,7 @@ export default function PartnerShowcaseHeroSection({
               <a
                 key={i}
                 href={btn.href}
-                className="inline-flex items-center gap-2 font-medium text-sm text-[#F0F2F8] rounded-xl px-7 py-[14px] border border-white/[0.14] transition-all duration-200 hover:border-[var(--accent)] hover:bg-[rgba(79,127,255,0.06)]"
-                style={{ '--accent': accentColor } as React.CSSProperties}
+                className="inline-flex items-center gap-2 font-medium text-sm text-slate-700 dark:text-[#F0F2F8] rounded-xl px-7 py-[14px] border border-slate-200 dark:border-white/[0.14] transition-all duration-200 hover:bg-slate-50 dark:hover:bg-[rgba(79,127,255,0.06)]"
               >
                 {btn.text}
               </a>
@@ -161,13 +164,13 @@ export default function PartnerShowcaseHeroSection({
         </div>
 
         {/* Trust strip */}
-        <div className="flex flex-wrap border border-white/[0.07] rounded-[22px] bg-[#1A1D24] overflow-hidden max-w-[800px] mx-auto">
+        <div className="flex flex-wrap border border-slate-200 dark:border-white/[0.07] rounded-[22px] bg-slate-50 dark:bg-[#1A1D24] overflow-hidden max-w-[800px] mx-auto">
           {trustItems.map((item, i) => (
             <div
               key={i}
-              className="flex-1 min-w-[140px] px-5 py-[18px] text-center border-r border-white/[0.07] last:border-r-0 transition-colors duration-200 hover:bg-[#20242D]"
+              className="flex-1 min-w-[140px] px-5 py-[18px] text-center border-r border-slate-200 dark:border-white/[0.07] last:border-r-0 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-[#20242D]"
             >
-              <div className="font-extrabold text-[22px] text-[#F0F2F8] mb-1 leading-none">
+              <div className="font-extrabold text-[22px] mb-1 leading-none">
                 <span
                   style={{
                     background: `linear-gradient(120deg, ${accentColor}, ${accentColor2})`,
@@ -179,7 +182,7 @@ export default function PartnerShowcaseHeroSection({
                   {item.value}
                 </span>
               </div>
-              <div className="text-[11px] text-[#4A4F65] tracking-[0.04em]">{item.label}</div>
+              <div className="text-[12px] text-slate-500 dark:text-[#8A8FA8] tracking-[0.04em]">{item.label}</div>
             </div>
           ))}
         </div>

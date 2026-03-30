@@ -93,8 +93,17 @@ export function PlatformSnapshotPropertyPanel({ section, onUpdate }: PlatformSna
             <Field label="Icon Background (rgba)">
               <input className={inputCls} value={card.iconBg ?? ''} onChange={e => updateCard(i, 'iconBg', e.target.value)} placeholder="rgba(79,127,255,0.08)" />
             </Field>
-            <Field label="Icon SVG (inline)">
-              <textarea className={textareaCls} rows={3} value={card.iconSvg ?? ''} onChange={e => updateCard(i, 'iconSvg', e.target.value)} placeholder="<svg ...>...</svg>" />
+            <Field label="Icon (emoji or FA class)">
+              <input className={inputCls} value={card.iconEmoji ?? card.iconFa ?? ''} onChange={e => {
+                const val = e.target.value;
+                if (val.startsWith('fa') || val.startsWith('fas ') || val.startsWith('far ')) {
+                  updateCard(i, 'iconFa', val);
+                  updateCard(i, 'iconEmoji', '');
+                } else {
+                  updateCard(i, 'iconEmoji', val);
+                  updateCard(i, 'iconFa', '');
+                }
+              }} placeholder="⚡ or fas fa-bolt" />
             </Field>
           </Collapsible>
         ))}
