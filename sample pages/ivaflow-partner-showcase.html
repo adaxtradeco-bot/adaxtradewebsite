@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IVAFLOW — Platform for Partners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #07080A;
+  --bg2:      #0E1014;
+  --bg3:      #13151A;
+  --surface:  #1A1D24;
+  --surface2: #20242D;
+  --border:   rgba(255,255,255,0.07);
+  --border-h: rgba(255,255,255,0.14);
+  --accent:   #4F7FFF;
+  --accent2:  #7B5CFF;
+  --accent3:  #00D4A8;
+  --amber:    #F59E0B;
+  --text:     #F0F2F8;
+  --text2:    #8A8FA8;
+  --text3:    #4A4F65;
+  --fd: 'Outfit', sans-serif;
+  --fb: 'DM Sans', sans-serif;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: var(--fb); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+
+/* ─── SHARED ─── */
+.container { max-width: 1180px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 1; }
+.eyebrow-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(79,127,255,0.08); border: 1px solid rgba(79,127,255,0.2);
+  border-radius: 100px; padding: 6px 16px; margin-bottom: 24px;
+}
+.eyebrow-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); animation: blink 2.2s infinite; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+.eyebrow-text { font-family:var(--fd); font-size:11px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+
+.sec-tag { font-family:var(--fd); font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; }
+
+/* ─── FADE-IN ON SCROLL ─── */
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease, transform .65s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+.reveal-d1 { transition-delay:.1s; }
+.reveal-d2 { transition-delay:.2s; }
+.reveal-d3 { transition-delay:.3s; }
+.reveal-d4 { transition-delay:.4s; }
+.reveal-d5 { transition-delay:.5s; }
+
+/* ══════════════════════════════════════
+   S1 — HERO
+══════════════════════════════════════ */
+.hero {
+  position: relative; padding: 150px 0 120px; overflow: hidden; text-align: center;
+}
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(79,127,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79,127,255,.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+.hero-glow {
+  position: absolute; top: -160px; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 600px; pointer-events: none;
+  background: radial-gradient(ellipse, rgba(79,127,255,.1) 0%, transparent 65%);
+}
+.hero-label {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1px solid var(--border-h); border-radius: 100px;
+  padding: 8px 20px; margin-bottom: 36px;
+  font-size: 12px; color: var(--text2); font-family: var(--fd);
+}
+.hero-label span { color: var(--accent); font-weight: 600; }
+.hero h1 {
+  font-family: var(--fd); font-size: clamp(40px,6vw,72px);
+  font-weight: 800; line-height: 1.06; letter-spacing: -.03em;
+  color: var(--text); margin-bottom: 24px; max-width: 820px; margin-inline: auto;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(120deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.hero-sub {
+  font-size: 17px; font-weight: 300; color: var(--text2); line-height: 1.7;
+  max-width: 580px; margin: 0 auto 44px;
+}
+.hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 72px; }
+.btn-prim {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; font-family: var(--fd); font-size: 14px; font-weight: 600;
+  padding: 15px 30px; border-radius: 12px; border: none; cursor: pointer;
+  box-shadow: 0 8px 28px rgba(79,127,255,.3); transition: transform .2s, box-shadow .2s;
+}
+.btn-prim:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(79,127,255,.4); }
+.btn-sec {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--text); font-family: var(--fd); font-size: 14px; font-weight: 500;
+  padding: 14px 28px; border-radius: 12px; border: 1.5px solid var(--border-h); cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.btn-sec:hover { border-color: var(--accent); background: rgba(79,127,255,.06); }
+
+/* trust strip */
+.trust-strip {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+  gap: 0; border: 1.5px solid var(--border); border-radius: var(--r-lg);
+  background: var(--surface); overflow: hidden; max-width: 800px; margin: 0 auto;
+}
+.trust-item {
+  flex: 1; min-width: 140px; padding: 18px 20px; text-align: center;
+  border-right: 1px solid var(--border); transition: background .2s;
+}
+.trust-item:last-child { border-right: none; }
+.trust-item:hover { background: var(--surface2); }
+.trust-num { font-family: var(--fd); font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+.trust-num span { background: linear-gradient(120deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.trust-label { font-size: 11px; color: var(--text3); letter-spacing: .04em; }
+
+/* ══════════════════════════════════════
+   S2 — PLATFORM SNAPSHOT
+══════════════════════════════════════ */
+.snapshot { padding: 110px 0; }
+.snapshot-header { text-align: center; margin-bottom: 60px; }
+.sec-title { font-family: var(--fd); font-size: clamp(28px,4vw,44px); font-weight: 800; color: var(--text); line-height: 1.15; letter-spacing: -.02em; margin-bottom: 16px; }
+.sec-title em { font-style:normal; background:linear-gradient(120deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.sec-sub { font-size: 16px; font-weight: 300; color: var(--text2); line-height: 1.7; max-width: 560px; margin: 0 auto; }
+
+.snapshot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; border-radius: var(--r-lg); overflow: hidden; border: 1.5px solid var(--border); }
+.snap-card {
+  background: var(--surface); padding: 40px 36px;
+  border-right: 1.5px solid var(--border); transition: background .25s;
+  position: relative; overflow: hidden;
+}
+.snap-card:last-child { border-right: none; }
+.snap-card:hover { background: var(--surface2); }
+.snap-card::before {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity:0; transition: opacity .3s;
+}
+.snap-card:hover::before { opacity:1; }
+.snap-icon {
+  width: 48px; height: 48px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px; border: 1.5px solid var(--border);
+}
+.snap-icon svg { width: 22px; height: 22px; }
+.snap-title { font-family: var(--fd); font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.snap-desc { font-size: 14px; font-weight: 300; color: var(--text2); line-height: 1.7; }
+
+/* ══════════════════════════════════════
+   S3 — CORE MODULES BENTO
+══════════════════════════════════════ */
+.modules { padding: 0 0 110px; }
+.modules-header { text-align: center; margin-bottom: 56px; }
+
+.bento { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 16px; }
+.bento-lg { grid-column: span 1; }
+.bento-sm-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; grid-column: span 2; }
+
+.mod-card {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r-xl); padding: 36px; position: relative; overflow: hidden;
+  transition: border-color .3s, transform .3s, box-shadow .3s; cursor: pointer;
+  display: flex; flex-direction: column;
+}
+.mod-card:hover {
+  border-color: var(--border-h); transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,.4);
+}
+.mod-card::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+  opacity:0; transition: opacity .3s;
+}
+.mod-card:hover::after { opacity:1; }
+
+.mod-card-glow {
+  position:absolute; top:-80px; right:-80px; width:240px; height:240px;
+  border-radius:50%; background:radial-gradient(circle, rgba(79,127,255,.1) 0%, transparent 70%);
+  opacity:0; transition:opacity .4s; pointer-events:none;
+}
+.mod-card:hover .mod-card-glow { opacity:1; }
+
+.mod-icon-wrap {
+  width:52px; height:52px; border-radius:15px; font-size:22px;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:20px; border:1.5px solid var(--border);
+  background: var(--bg3);
+}
+.mod-tag { font-family:var(--fd); font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin-bottom:10px; }
+.mod-title { font-family:var(--fd); font-size:20px; font-weight:700; color:var(--text); line-height:1.25; margin-bottom:10px; letter-spacing:-.01em; }
+.mod-desc { font-size:13.5px; font-weight:300; color:var(--text2); line-height:1.7; margin-bottom:auto; padding-bottom:24px; }
+.mod-link {
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--fd); font-size:12px; font-weight:600;
+  color:var(--accent); letter-spacing:.04em;
+  transition: gap .2s;
+}
+.mod-card:hover .mod-link { gap:10px; }
+
+/* small cards */
+.mod-card.sm { padding:28px 24px; }
+.mod-card.sm .mod-icon-wrap { width:42px; height:42px; border-radius:12px; font-size:18px; margin-bottom:14px; }
+.mod-card.sm .mod-title { font-size:15px; margin-bottom:8px; }
+.mod-card.sm .mod-desc { font-size:12.5px; padding-bottom:16px; }
+
+/* ══════════════════════════════════════
+   S4 — HOW IT WORKS (alternating)
+══════════════════════════════════════ */
+.how { padding: 0 0 110px; }
+.how-header { text-align:center; margin-bottom:80px; }
+.how-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+  align-items: center; margin-bottom: 100px;
+}
+.how-row:last-child { margin-bottom:0; }
+.how-row.flip { direction: rtl; }
+.how-row.flip > * { direction: ltr; }
+.how-step-num {
+  font-family:var(--fd); font-size:11px; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:14px;
+}
+.how-title { font-family:var(--fd); font-size:28px; font-weight:700; color:var(--text); line-height:1.25; letter-spacing:-.015em; margin-bottom:16px; }
+.how-body { font-size:15px; font-weight:300; color:var(--text2); line-height:1.75; margin-bottom:24px; }
+.how-chips { display:flex; flex-wrap:wrap; gap:8px; }
+.chip {
+  font-size:11.5px; color:var(--text3); border:1px solid var(--border);
+  border-radius:7px; padding:5px 12px; background:transparent;
+  transition: border-color .2s, color .2s;
+}
+.how-row:hover .chip { border-color:rgba(79,127,255,.25); color:var(--text2); }
+
+.how-visual {
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--r-xl); overflow: hidden; aspect-ratio: 16/10;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; position: relative;
+}
+.how-visual::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(79,127,255,.04), rgba(123,92,255,.04));
+}
+.how-vis-badge {
+  position:absolute; top:14px; right:14px; font-size:10px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--accent);
+  background:rgba(79,127,255,.1); border:1px solid rgba(79,127,255,.2);
+  border-radius:100px; padding:4px 12px;
+}
+.how-vis-icon {
+  width:52px; height:52px; border-radius:15px; background:rgba(79,127,255,.1);
+  border:1.5px solid rgba(79,127,255,.2); display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:1;
+}
+.how-vis-icon svg { width:24px; height:24px; }
+.how-vis-label { font-size:12px; color:var(--text3); position:relative; z-index:1; }
+
+/* ══════════════════════════════════════
+   S5 — AUTOMATION ENGINE
+══════════════════════════════════════ */
+.engine {
+  margin: 0 0 0; padding: 100px 0; position:relative; overflow:hidden;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg2) 40%, var(--bg) 100%);
+  border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+}
+.engine-glow {
+  position:absolute; right:-200px; top:50%; transform:translateY(-50%);
+  width:700px; height:700px; border-radius:50%; pointer-events:none;
+  background:radial-gradient(circle, rgba(123,92,255,.07) 0%, transparent 65%);
+}
+.engine-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.engine-tag { font-family:var(--fd); font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--accent2); margin-bottom:16px; }
+.engine-title { font-family:var(--fd); font-size:clamp(30px,4vw,46px); font-weight:800; color:var(--text); line-height:1.1; letter-spacing:-.025em; margin-bottom:20px; }
+.engine-title em { font-style:normal; background:linear-gradient(120deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.engine-body { font-size:15px; font-weight:300; color:var(--text2); line-height:1.75; margin-bottom:36px; }
+.engine-stats { display:flex; gap:36px; margin-bottom:36px; }
+.engine-stat {}
+.engine-stat-num { font-family:var(--fd); font-size:36px; font-weight:800; line-height:1; margin-bottom:5px; background:linear-gradient(120deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.engine-stat-label { font-size:12px; color:var(--text3); }
+.engine-triggers { display:flex; flex-wrap:wrap; gap:8px; }
+.trigger-chip {
+  font-size:11px; color:var(--text2); background:var(--surface);
+  border:1px solid var(--border); border-radius:100px; padding:6px 14px;
+  transition: border-color .2s, color .2s;
+}
+.trigger-chip:hover { border-color:rgba(79,127,255,.3); color:var(--text); }
+
+/* node visual */
+.engine-visual {
+  background: var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--r-xl); padding:36px; min-height:340px;
+  display:flex; flex-direction:column; justify-content:center; gap:14px;
+  position:relative; overflow:hidden;
+}
+.engine-visual::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(circle at 70% 30%, rgba(123,92,255,.06), transparent 60%);
+  pointer-events:none;
+}
+.node-row { display:flex; align-items:center; gap:10px; position:relative; z-index:1; }
+.node-row.indent { padding-left:48px; }
+.node-row.indent2 { padding-left:96px; }
+.node {
+  display:flex; align-items:center; gap:8px;
+  background:var(--bg3); border:1px solid var(--border);
+  border-radius:10px; padding:10px 16px; font-size:12px; font-weight:500; color:var(--text2);
+  white-space:nowrap;
+}
+.node.accent { border-color:rgba(79,127,255,.4); background:rgba(79,127,255,.08); color:var(--accent); }
+.node.green { border-color:rgba(0,212,168,.3); background:rgba(0,212,168,.07); color:var(--accent3); }
+.node.purple { border-color:rgba(123,92,255,.3); background:rgba(123,92,255,.08); color:var(--accent2); }
+.node-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.node-dot.a { background:var(--accent); }
+.node-dot.g { background:var(--accent3); }
+.node-dot.p { background:var(--accent2); }
+.node-dot.m { background:var(--text3); }
+.node-arrow { color:var(--text3); font-size:14px; }
+
+/* ══════════════════════════════════════
+   S6 — INDUSTRIES
+══════════════════════════════════════ */
+.industries { padding: 110px 0; }
+.industries-header { text-align:center; margin-bottom:56px; }
+.ind-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:32px; }
+.ind-card {
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--r-lg); padding:32px 28px;
+  transition:border-color .3s, transform .3s, box-shadow .3s;
+  cursor:pointer; position:relative; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.ind-card:hover {
+  border-color:var(--border-h); transform:translateY(-4px);
+  box-shadow:0 16px 44px rgba(0,0,0,.35);
+}
+.ind-card::after {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--accent),var(--accent2),transparent);
+  opacity:0; transition:opacity .3s;
+}
+.ind-card:hover::after { opacity:1; }
+.ind-emoji { font-size:32px; margin-bottom:16px; display:block; }
+.ind-name { font-family:var(--fd); font-size:17px; font-weight:700; color:var(--text); margin-bottom:8px; }
+.ind-desc { font-size:13px; color:var(--text2); font-weight:300; line-height:1.6; margin-bottom:auto; padding-bottom:20px; }
+.ind-link { font-family:var(--fd); font-size:11.5px; font-weight:600; color:var(--accent); display:flex; align-items:center; gap:5px; transition:gap .2s; }
+.ind-card:hover .ind-link { gap:9px; }
+.ind-more { text-align:center; }
+.ind-more-text { font-size:13px; color:var(--text3); }
+.ind-more-text a { color:var(--accent); font-weight:500; transition:opacity .2s; }
+.ind-more-text a:hover { opacity:.7; }
+
+/* ══════════════════════════════════════
+   S7 — SLA + INTEGRATION SPLIT
+══════════════════════════════════════ */
+.split { padding: 0 0 110px; }
+.split-inner { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.split-card {
+  border-radius:var(--r-xl); padding:48px; position:relative; overflow:hidden;
+  border:1.5px solid var(--border);
+}
+.split-card.dark { background:var(--surface); }
+.split-card.light { background:var(--surface2); }
+.split-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2)); opacity:.6;
+}
+.split-tag { font-family:var(--fd); font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; }
+.split-title { font-family:var(--fd); font-size:24px; font-weight:700; color:var(--text); line-height:1.25; margin-bottom:14px; letter-spacing:-.015em; }
+.split-body { font-size:14px; font-weight:300; color:var(--text2); line-height:1.75; margin-bottom:28px; }
+.split-features { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.split-features li { display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--text2); font-weight:300; }
+.feat-dot { width:6px; height:6px; border-radius:50%; background:var(--accent); flex-shrink:0; }
+
+/* ══════════════════════════════════════
+   S8 — FINAL CTA STRIP
+══════════════════════════════════════ */
+.cta-strip {
+  margin: 0 40px 80px; border-radius:var(--r-xl); overflow:hidden;
+  background:linear-gradient(135deg, rgba(79,127,255,.1) 0%, rgba(123,92,255,.08) 100%);
+  border:1.5px solid rgba(79,127,255,.2); padding:64px 72px;
+  display:flex; align-items:center; justify-content:space-between; gap:40px;
+  position:relative;
+}
+.cta-strip::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(79,127,255,.04), transparent 60%);
+  pointer-events:none;
+}
+.cta-text { position:relative; }
+.cta-title { font-family:var(--fd); font-size:clamp(22px,3vw,34px); font-weight:800; color:var(--text); line-height:1.2; letter-spacing:-.02em; margin-bottom:10px; }
+.cta-sub { font-size:15px; font-weight:300; color:var(--text2); line-height:1.6; }
+.cta-btns { display:flex; gap:12px; flex-shrink:0; position:relative; }
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .container{padding:0 20px;}
+  .snapshot-grid{grid-template-columns:1fr;}
+  .snap-card{border-right:none;border-bottom:1.5px solid var(--border);}
+  .snap-card:last-child{border-bottom:none;}
+  .bento{grid-template-columns:1fr;}
+  .bento-sm-row{grid-template-columns:1fr 1fr;}
+  .how-row,.how-row.flip{grid-template-columns:1fr;direction:ltr;gap:32px;}
+  .engine-inner{grid-template-columns:1fr;}
+  .ind-grid{grid-template-columns:1fr 1fr;}
+  .split-inner{grid-template-columns:1fr;}
+  .cta-strip{flex-direction:column;align-items:flex-start;padding:40px 28px;margin:0 0 60px;}
+  .trust-strip{flex-direction:column;}
+  .trust-item{border-right:none;border-bottom:1px solid var(--border);}
+  .trust-item:last-child{border-bottom:none;}
+  .engine-stats{flex-wrap:wrap;gap:24px;}
+}
+@media(max-width:600px){
+  .bento-sm-row{grid-template-columns:1fr;}
+  .ind-grid{grid-template-columns:1fr;}
+  .hero{padding:110px 0 90px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ S1 HERO ══ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-label reveal">
+      For Technology Partners &amp; Resellers &nbsp;·&nbsp; <span>White-label ready</span>
+    </div>
+    <h1 class="reveal reveal-d1">
+      A platform your clients<br>will rely on — <em>forever</em>
+    </h1>
+    <p class="hero-sub reveal reveal-d2">
+      IVAFLOW is a complete no-code Business Process Management Suite. Visual, modular, and built for any industry. Give your clients the power to automate their operations — and give your practice a product that closes deals.
+    </p>
+    <div class="hero-ctas reveal reveal-d3">
+      <a href="#" class="btn-prim">See the platform in action <span>→</span></a>
+      <a href="#" class="btn-sec">Become a partner</a>
+    </div>
+    <div class="trust-strip reveal reveal-d4">
+      <div class="trust-item">
+        <div class="trust-num"><span>5–8×</span></div>
+        <div class="trust-label">Faster delivery</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num"><span>0</span></div>
+        <div class="trust-label">Lines of code needed</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num"><span>6</span></div>
+        <div class="trust-label">Core modules</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num"><span>∞</span></div>
+        <div class="trust-label">Industry fit</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num"><span>100%</span></div>
+        <div class="trust-label">White-label ready</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S2 SNAPSHOT ══ -->
+<section class="snapshot">
+  <div class="container">
+    <div class="snapshot-header reveal">
+      <div class="eyebrow-pill"><div class="eyebrow-dot"></div><span class="eyebrow-text">The platform at a glance</span></div>
+      <h2 class="sec-title">One platform. Every process. <em>Every client.</em></h2>
+      <p class="sec-sub">IVAFLOW is a fully modular BPMS — built so your team can configure, launch, and hand over complete automation systems without writing a single line of code.</p>
+    </div>
+    <div class="snapshot-grid">
+      <div class="snap-card reveal reveal-d1">
+        <div class="snap-icon" style="background:rgba(79,127,255,.08);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7FFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="snap-title">Designed to move fast</div>
+        <p class="snap-desc">From first session to live system in days. Every module is built to configure quickly so your team focuses on the client's business, not the technology.</p>
+      </div>
+      <div class="snap-card reveal reveal-d2">
+        <div class="snap-icon" style="background:rgba(123,92,255,.08);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7B5CFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="snap-title">Modular by nature</div>
+        <p class="snap-desc">Start with one process, scale to the entire organization. Every module works independently or together — add what your clients need, when they need it.</p>
+      </div>
+      <div class="snap-card reveal reveal-d3">
+        <div class="snap-icon" style="background:rgba(0,212,168,.08);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#00D4A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="snap-title">Built to sell</div>
+        <p class="snap-desc">White-label ready, multi-tenant capable, and flexible enough to fit any vertical. IVAFLOW is the product behind your automation practice — invisible to your clients.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S3 MODULES ══ -->
+<section class="modules">
+  <div class="container">
+    <div class="modules-header reveal">
+      <div class="eyebrow-pill"><div class="eyebrow-dot"></div><span class="eyebrow-text">Platform modules</span></div>
+      <h2 class="sec-title">Six powerful modules.<br><em>Infinite</em> ways to use them.</h2>
+      <p class="sec-sub" style="margin-top:12px;">Each module solves a real business problem on its own. Together, they give your clients a complete operational platform — and give you more to sell on every project.</p>
+    </div>
+    <div class="bento">
+      <!-- Large 1 -->
+      <div class="mod-card bento-lg reveal reveal-d1">
+        <div class="mod-card-glow"></div>
+        <div class="mod-icon-wrap">⚡</div>
+        <div class="mod-tag">Workflow Orchestrator</div>
+        <div class="mod-title">Automate any business process — visually</div>
+        <p class="mod-desc">Map workflows, assign roles, set conditions, and launch automated processes through a drag-and-drop designer. From simple approvals to complex multi-department flows — if your client can describe it, IVAFLOW can run it.</p>
+        <a href="#" class="mod-link">Explore Workflows <span>→</span></a>
+      </div>
+      <!-- Large 2 -->
+      <div class="mod-card bento-lg reveal reveal-d2">
+        <div class="mod-card-glow"></div>
+        <div class="mod-icon-wrap">📝</div>
+        <div class="mod-tag">Form Builder</div>
+        <div class="mod-title">Every form your clients will ever need</div>
+        <p class="mod-desc">Design dynamic, multi-step forms with conditional logic, calculated fields, external data connections, and role-based visibility — all from a visual builder. No technical skills required, no limitations on what you can build.</p>
+        <a href="#" class="mod-link">Explore Form Builder <span>→</span></a>
+      </div>
+      <!-- Small row -->
+      <div class="bento-sm-row">
+        <div class="mod-card sm reveal reveal-d1">
+          <div class="mod-card-glow"></div>
+          <div class="mod-icon-wrap">🎉</div>
+          <div class="mod-tag">App Builder</div>
+          <div class="mod-title">Custom workspaces for every audience</div>
+          <p class="mod-desc">Build dedicated environments for internal teams, external partners, or citizens — each with its own layout, forms, and workflows.</p>
+          <a href="#" class="mod-link">Explore <span>→</span></a>
+        </div>
+        <div class="mod-card sm reveal reveal-d2">
+          <div class="mod-card-glow"></div>
+          <div class="mod-icon-wrap">📊</div>
+          <div class="mod-tag">Reports & Analytics</div>
+          <div class="mod-title">Real-time visibility for every stakeholder</div>
+          <p class="mod-desc">Live dashboards, KPI tracking, SLA monitoring, and custom reports — built in minutes through a visual designer. No BI specialist needed.</p>
+          <a href="#" class="mod-link">Explore <span>→</span></a>
+        </div>
+        <div class="mod-card sm reveal reveal-d3">
+          <div class="mod-card-glow"></div>
+          <div class="mod-icon-wrap">🤖</div>
+          <div class="mod-tag">AI Agent</div>
+          <div class="mod-title">Intelligent automation, built in</div>
+          <p class="mod-desc">Connect workflows to AI models for auto-classification, smart responses, and decision support — configured visually, no setup complexity.</p>
+          <a href="#" class="mod-link">Explore <span>→</span></a>
+        </div>
+        <div class="mod-card sm reveal reveal-d4">
+          <div class="mod-card-glow"></div>
+          <div class="mod-icon-wrap">🌐</div>
+          <div class="mod-tag">External Portal</div>
+          <div class="mod-title">Give the outside world a front door</div>
+          <p class="mod-desc">Citizens, customers, and suppliers get their own branded portal to submit requests, track progress, and interact with your processes in real time.</p>
+          <a href="#" class="mod-link">Explore <span>→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S4 HOW IT WORKS ══ -->
+<section class="how">
+  <div class="container">
+    <div class="how-header reveal">
+      <div class="eyebrow-pill"><div class="eyebrow-dot"></div><span class="eyebrow-text">Platform in action</span></div>
+      <h2 class="sec-title">From blank canvas to running system —<br>here's what your team actually does</h2>
+    </div>
+
+    <div class="how-row reveal">
+      <div>
+        <div class="how-step-num">Step 01 — Design</div>
+        <h3 class="how-title">Design the process with your client — in the room</h3>
+        <p class="how-body">Open the visual workflow designer and map the process together. Define every stage, assign roles, and set the logic for every scenario. Clients see their operations taking shape in real time — which builds confidence and accelerates sign-off.</p>
+        <div class="how-chips">
+          <span class="chip">Visual drag & drop</span>
+          <span class="chip">Role assignment</span>
+          <span class="chip">Conditional logic</span>
+          <span class="chip">Parallel flows</span>
+        </div>
+      </div>
+      <div class="how-visual">
+        <div class="how-vis-badge">Workflow designer</div>
+        <div class="how-vis-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7FFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <span class="how-vis-label">Replace with workflow designer screenshot</span>
+      </div>
+    </div>
+
+    <div class="how-row flip reveal">
+      <div>
+        <div class="how-step-num">Step 02 — Build</div>
+        <h3 class="how-title">Build the forms and connect the data</h3>
+        <p class="how-body">Attach the right form to every stage of the process. Fields can pull data from external systems, calculate values automatically, and show or hide based on what the user entered. Everything your client needs — nothing they don't.</p>
+        <div class="how-chips">
+          <span class="chip">Dynamic fields</span>
+          <span class="chip">External data binding</span>
+          <span class="chip">Multi-step forms</span>
+          <span class="chip">File management</span>
+        </div>
+      </div>
+      <div class="how-visual">
+        <div class="how-vis-badge">Form builder</div>
+        <div class="how-vis-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7FFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <span class="how-vis-label">Replace with form builder screenshot</span>
+      </div>
+    </div>
+
+    <div class="how-row reveal">
+      <div>
+        <div class="how-step-num">Step 03 — Launch</div>
+        <h3 class="how-title">Go live, monitor, and keep improving</h3>
+        <p class="how-body">Launch the system and watch live dashboards fill with real operational data. Track SLAs, spot bottlenecks, and make changes — all while the system keeps running. Every update takes effect immediately, with zero downtime.</p>
+        <div class="how-chips">
+          <span class="chip">Live KPI dashboard</span>
+          <span class="chip">SLA monitoring</span>
+          <span class="chip">Bottleneck detection</span>
+          <span class="chip">Instant updates</span>
+        </div>
+      </div>
+      <div class="how-visual">
+        <div class="how-vis-badge">Live dashboard</div>
+        <div class="how-vis-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7FFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <span class="how-vis-label">Replace with dashboard screenshot</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S5 AUTOMATION ENGINE ══ -->
+<section class="engine">
+  <div class="engine-glow"></div>
+  <div class="container">
+    <div class="engine-inner">
+      <div class="reveal">
+        <div class="engine-tag">Automation Engine</div>
+        <h2 class="engine-title">Complex logic.<br><em>Zero complexity</em><br>for your team.</h2>
+        <p class="engine-body">IVAFLOW's automation engine runs silently in the background — moving data between systems, sending alerts, enforcing deadlines, and triggering actions based on real events. Build flows through a visual node builder. No formulas. No scripts. No developers.</p>
+        <div class="engine-stats">
+          <div class="engine-stat">
+            <div class="engine-stat-num">5–8×</div>
+            <div class="engine-stat-label">Faster than traditional delivery</div>
+          </div>
+          <div class="engine-stat">
+            <div class="engine-stat-num">0</div>
+            <div class="engine-stat-label">Lines of code required</div>
+          </div>
+          <div class="engine-stat">
+            <div class="engine-stat-num">∞</div>
+            <div class="engine-stat-label">Automation flows, no limits</div>
+          </div>
+        </div>
+        <div class="engine-triggers">
+          <span class="trigger-chip">Record created</span>
+          <span class="trigger-chip">Status changed</span>
+          <span class="trigger-chip">SLA breached</span>
+          <span class="trigger-chip">Form submitted</span>
+          <span class="trigger-chip">Scheduled</span>
+          <span class="trigger-chip">Webhook received</span>
+          <span class="trigger-chip">AI response</span>
+          <span class="trigger-chip">External API event</span>
+        </div>
+      </div>
+      <div class="engine-visual reveal reveal-d2">
+        <div class="node-row">
+          <div class="node accent"><span class="node-dot a"></span> Trigger: SLA breached</div>
+        </div>
+        <div class="node-row indent">
+          <div class="node-arrow">↳</div>
+          <div class="node purple"><span class="node-dot p"></span> Notify: Line manager</div>
+        </div>
+        <div class="node-row indent">
+          <div class="node-arrow">↳</div>
+          <div class="node purple"><span class="node-dot p"></span> Escalate: Senior team</div>
+        </div>
+        <div class="node-row indent2">
+          <div class="node-arrow">↳</div>
+          <div class="node"><span class="node-dot m"></span> Condition: Still unresolved?</div>
+        </div>
+        <div class="node-row indent2" style="padding-left:128px;">
+          <div class="node-arrow">↳</div>
+          <div class="node green"><span class="node-dot g"></span> Activate: Backup workflow</div>
+        </div>
+        <div class="node-row indent">
+          <div class="node-arrow">↳</div>
+          <div class="node green"><span class="node-dot g"></span> Log: Compliance record</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S6 INDUSTRIES ══ -->
+<section class="industries">
+  <div class="container">
+    <div class="industries-header reveal">
+      <div class="eyebrow-pill"><div class="eyebrow-dot"></div><span class="eyebrow-text">Industries</span></div>
+      <h2 class="sec-title">Walk into any sector and <em>deliver</em> — on day one</h2>
+      <p class="sec-sub" style="margin-top:12px;">IVAFLOW's modular architecture adapts to the way any industry operates. One platform covers them all — so your team doesn't need industry-specific software for every client.</p>
+    </div>
+    <div class="ind-grid">
+      <div class="ind-card reveal reveal-d1">
+        <span class="ind-emoji">⚡</span>
+        <div class="ind-name">Oil & Gas</div>
+        <p class="ind-desc">Production operations, maintenance workflows, HSE compliance, and permit-to-work automation for energy sector clients.</p>
+        <a href="#" class="ind-link">See solutions <span>→</span></a>
+      </div>
+      <div class="ind-card reveal reveal-d2">
+        <span class="ind-emoji">🔗</span>
+        <div class="ind-name">IoT Integration</div>
+        <p class="ind-desc">Connect physical devices and sensors directly to automated workflows. Turn real-world events into process triggers and dashboard data.</p>
+        <a href="#" class="ind-link">See solutions <span>→</span></a>
+      </div>
+      <div class="ind-card reveal reveal-d3">
+        <span class="ind-emoji">🏢</span>
+        <div class="ind-name">Real Estate</div>
+        <p class="ind-desc">Lease management, property inspection workflows, tenant communication portals, and document management — all in one platform.</p>
+        <a href="#" class="ind-link">See solutions <span>→</span></a>
+      </div>
+      <div class="ind-card reveal reveal-d1">
+        <span class="ind-emoji">🏗️</span>
+        <div class="ind-name">Construction</div>
+        <p class="ind-desc">Project management, field reporting, subcontractor coordination, and safety compliance workflows for construction operations.</p>
+        <a href="#" class="ind-link">See solutions <span>→</span></a>
+      </div>
+      <div class="ind-card reveal reveal-d2">
+        <span class="ind-emoji">🏥</span>
+        <div class="ind-name">Healthcare</div>
+        <p class="ind-desc">Patient intake, referral management, care coordination, and administrative workflow automation for healthcare providers.</p>
+        <a href="#" class="ind-link">See solutions <span>→</span></a>
+      </div>
+      <div class="ind-card reveal reveal-d3">
+        <span class="ind-emoji">🚛</span>
+        <div class="ind-name">Fleet Management</div>
+        <p class="ind-desc">Dispatch management, real-time vehicle tracking, maintenance scheduling, and route optimization for fleet-dependent businesses.</p>
+        <a href="#" class="ind-link">See solutions <span>→</span></a>
+      </div>
+    </div>
+    <div class="ind-more reveal">
+      <p class="ind-more-text">Also serving: <a href="#">Government</a> · <a href="#">Banking & Finance</a> · <a href="#">Telecom</a> · <a href="#">Education</a> · <a href="#">Manufacturing</a> · <a href="#">View all industries →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S7 SLA + INTEGRATION ══ -->
+<section class="split">
+  <div class="container">
+    <div class="split-inner">
+      <div class="split-card dark reveal reveal-d1">
+        <div class="split-tag">SLA Management</div>
+        <h3 class="split-title">No task gets lost.<br>No deadline goes unnoticed.</h3>
+        <p class="split-body">IVAFLOW tracks every activity against its deadline and acts automatically when something falls behind — alerting the right people, routing to backup teams, and logging every event for compliance and review.</p>
+        <ul class="split-features">
+          <li><span class="feat-dot"></span>Per-task SLA definition with smart deadlines</li>
+          <li><span class="feat-dot"></span>Multi-level escalation alerts (manager, team, director)</li>
+          <li><span class="feat-dot"></span>Automatic corrective workflow activation</li>
+          <li><span class="feat-dot"></span>SLA success rate & failure analytics</li>
+          <li><span class="feat-dot"></span>Average handling time (AHT) tracking</li>
+        </ul>
+      </div>
+      <div class="split-card light reveal reveal-d2">
+        <div class="split-tag">Integration Hub</div>
+        <h3 class="split-title">Your clients' existing systems<br>don't have to change.</h3>
+        <p class="split-body">IVAFLOW connects to any external platform through a visual API integration layer. SSO, ERP, CRM, SMS, call centers, IoT sensors — configured without a developer, running without maintenance.</p>
+        <ul class="split-features">
+          <li><span class="feat-dot"></span>Visual API connector — zero code required</li>
+          <li><span class="feat-dot"></span>SSO & organizational directory sync</li>
+          <li><span class="feat-dot"></span>SMS, email & fax built into every workflow</li>
+          <li><span class="feat-dot"></span>Webhook & REST API consumption</li>
+          <li><span class="feat-dot"></span>AI engine & IoT sensor connectivity</li>
+          <li><span class="feat-dot"></span>GIS & location data integration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S8 CTA STRIP ══ -->
+<div class="cta-strip reveal">
+  <div class="cta-text">
+    <h2 class="cta-title">Ready to see what IVAFLOW<br>can do for your clients?</h2>
+    <p class="cta-sub">Book a platform walkthrough. We'll walk through a real use case in your target industry — no commitment needed.</p>
+  </div>
+  <div class="cta-btns">
+    <a href="#" class="btn-prim">Book a platform demo <span>→</span></a>
+    <a href="#" class="btn-sec">Explore partner programs</a>
+  </div>
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

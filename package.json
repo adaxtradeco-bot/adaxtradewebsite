@@ -19,6 +19,8 @@
     "db:studio": "prisma studio",
     "db:reset": "prisma db push --force-reset && npm run db:seed",
     "db:seed-admin": "tsx scripts/seed-admin.ts",
+    "db:use-sqlite": "node scripts/db-switch.js sqlite && prisma generate",
+    "db:use-postgres": "node scripts/db-switch.js postgres && prisma generate",
     "translations:import": "tsx scripts/import-translations.ts"
   },
   "dependencies": {
@@ -26,6 +28,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@prisma/client": "^5.22.0",
+    "@prisma/extension-accelerate": "^3.0.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^20",

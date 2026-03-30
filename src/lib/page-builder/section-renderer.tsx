@@ -88,7 +88,14 @@ import WhyIvaFlowNewVersion from '@/components/builder-sections/WhyIvaFlowNewVer
 import FeatureVideoTabsSection from '@/components/builder-sections/FeatureVideoTabsSection';
 import ProcessStepsSection from '@/components/builder-sections/ProcessStepsSection';
 import WhyAutomateWithUsSection from '@/components/builder-sections/WhyAutomateWithUsSection';
-
+import PartnerShowcaseHeroSection from '@/components/builder-sections/PartnerShowcaseHeroSection';
+import PlatformSnapshotSection from '@/components/builder-sections/PlatformSnapshotSection';
+import PlatformModulesBentoSection from '@/components/builder-sections/PlatformModulesBentoSection';
+import HowItWorksStepsSection from '@/components/builder-sections/HowItWorksStepsSection';
+import AutomationEngineSection from '@/components/builder-sections/AutomationEngineSection';
+import IndustriesGridSection from '@/components/builder-sections/IndustriesGridSection';
+import SlaIntegrationSplitSection from '@/components/builder-sections/SlaIntegrationSplitSection';
+import PartnerCtaStripSection from '@/components/builder-sections/PartnerCtaStripSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -295,6 +302,22 @@ export function SectionRenderer({
         return <ProcessStepsSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
       case 'why-automate-with-us':
         return <WhyAutomateWithUsSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'partner-showcase-hero':
+        return <PartnerShowcaseHeroSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'platform-snapshot':
+        return <PlatformSnapshotSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'platform-modules-bento':
+        return <PlatformModulesBentoSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'how-it-works-steps':
+        return <HowItWorksStepsSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'automation-engine':
+        return <AutomationEngineSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'industries-grid':
+        return <IndustriesGridSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'sla-integration-split':
+        return <SlaIntegrationSplitSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'partner-cta-strip':
+        return <PartnerCtaStripSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
       case 'feature-video-tabs':
         return <FeatureVideoTabsSection {...(section as any).data} />;
       case 'showcase':

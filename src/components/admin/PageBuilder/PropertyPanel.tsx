@@ -16,6 +16,14 @@ import { WallOfFeaturesPropertyPanel } from './WallOfFeaturesPropertyPanel';
 import { ProductHeroPropertyPanel } from './ProductHeroPropertyPanel';
 import { ProcessStepsPropertyPanel } from './ProcessStepsPropertyPanel';
 import { WhyAutomateWithUsPropertyPanel } from './WhyAutomateWithUsPropertyPanel';
+import { PartnerShowcaseHeroPropertyPanel } from './PartnerShowcaseHeroPropertyPanel';
+import { PlatformSnapshotPropertyPanel } from './PlatformSnapshotPropertyPanel';
+import { PlatformModulesBentoPropertyPanel } from './PlatformModulesBentoPropertyPanel';
+import { HowItWorksStepsPropertyPanel } from './HowItWorksStepsPropertyPanel';
+import { AutomationEnginePropertyPanel } from './AutomationEnginePropertyPanel';
+import { IndustriesGridPropertyPanel } from './IndustriesGridPropertyPanel';
+import { SlaIntegrationSplitPropertyPanel } from './SlaIntegrationSplitPropertyPanel';
+import { PartnerCtaStripPropertyPanel } from './PartnerCtaStripPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -528,6 +536,22 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <ProcessStepsPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'why-automate-with-us':
         return <WhyAutomateWithUsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'partner-showcase-hero':
+        return <PartnerShowcaseHeroPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'platform-snapshot':
+        return <PlatformSnapshotPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'platform-modules-bento':
+        return <PlatformModulesBentoPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'how-it-works-steps':
+        return <HowItWorksStepsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'automation-engine':
+        return <AutomationEnginePropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'industries-grid':
+        return <IndustriesGridPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'sla-integration-split':
+        return <SlaIntegrationSplitPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'partner-cta-strip':
+        return <PartnerCtaStripPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'interactive-feature-wall':
         return <InteractiveFeatureWallPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'wall-of-features':

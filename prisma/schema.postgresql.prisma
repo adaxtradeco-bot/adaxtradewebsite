@@ -1,0 +1,92 @@
+// PostgreSQL schema - used for Vercel/production
+// To activate: run `npm run db:use-postgres`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Page {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  metaTitle       String?
+  metaDescription String?
+  status          String   @default("draft")
+  language        String   @default("en")
+  sections        String?
+  builderData     String?
+  isBuilderPage   Boolean  @default(false)
+  builderVersion  String?
+  isHomepage      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Translation {
+  id        String   @id @default(cuid())
+  key       String
+  language  String
+  value     String
+  namespace String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([key, language, namespace])
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  filename  String
+  path      String
+  altText   String?
+  fileSize  Int
+  mimeType  String
+  createdAt DateTime @default(now())
+}
+
+model SectionTemplate {
+  id          String   @id @default(cuid())
+  name        String
+  type        String
+  category    String
+  description String
+  defaultData String
+  usageCount  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Menu {
+  id        String   @id @default(cuid())
+  name      String
+  location  String
+  language  String   @default("en")
+  items     String
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([location, language])
+}
+
+model SiteSettings {
+  id        String   @id @default(cuid())
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
