@@ -110,8 +110,8 @@ function ModuleCard({
   return (
     <div
       className={`group relative flex flex-col overflow-hidden rounded-[28px] cursor-pointer transition-all duration-300
-        bg-[#1A1D24] dark:bg-[#1A1D24] light:bg-slate-50
-        border border-white/[0.07] dark:border-white/[0.07] light:border-slate-200
+        bg-slate-50 dark:bg-[#1A1D24]
+        border border-slate-200 dark:border-white/[0.07]
         hover:border-white/[0.14] hover:-translate-y-1
         hover:shadow-[0_20px_50px_rgba(0,0,0,0.40)]
         ${isLarge ? 'p-9' : 'p-7'}`}
@@ -145,7 +145,7 @@ function ModuleCard({
 
       {/* Title */}
       <h3
-        className={`font-bold leading-[1.25] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-2.5
+        className={`font-bold leading-[1.25] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-2.5
           ${isLarge ? 'text-[20px]' : 'text-[15px]'}`}
       >
         {mod.title}
@@ -191,7 +191,7 @@ export default function PlatformModulesBentoSection({
   const smallModules = modules.filter(m => m.size === 'small');
 
   return (
-    <section className="pb-[110px] bg-[#07080A] dark:bg-[#07080A] light:bg-white">
+    <section className="pb-[110px] bg-white dark:bg-[#07080A]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
 
         {/* Header */}
@@ -207,7 +207,7 @@ export default function PlatformModulesBentoSection({
           </div>
 
           <h2
-            className="font-extrabold leading-[1.15] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-3"
+            className="font-extrabold leading-[1.15] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-3"
             style={{ fontSize: 'clamp(28px, 4vw, 44px)' }}
           >
             {title}

@@ -80,7 +80,7 @@ export default function PartnerShowcaseHeroSection({
   const gradientBg = `linear-gradient(135deg, ${accentColor}, ${accentColor2})`;
 
   return (
-    <section className="relative overflow-hidden text-center bg-[#07080A] dark:bg-[#07080A] light:bg-white">
+    <section className="relative overflow-hidden text-center bg-white dark:bg-[#07080A]">
       {/* Grid background */}
       <div
         className="pointer-events-none absolute inset-0"

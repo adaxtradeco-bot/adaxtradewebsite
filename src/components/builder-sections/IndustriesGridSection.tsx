@@ -115,7 +115,7 @@ export default function IndustriesGridSection({
   const gradientLine = `linear-gradient(90deg, transparent, ${accentColor}, ${accentColor2}, transparent)`;
 
   return (
-    <section className="py-[110px] bg-[#07080A] dark:bg-[#07080A] light:bg-white">
+    <section className="py-[110px] bg-white dark:bg-[#07080A]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
 
         {/* Header */}
@@ -131,7 +131,7 @@ export default function IndustriesGridSection({
           </div>
 
           <h2
-            className="font-extrabold leading-[1.15] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-3"
+            className="font-extrabold leading-[1.15] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-3"
             style={{ fontSize: 'clamp(28px, 4vw, 44px)' }}
           >
             {title}{' '}
@@ -160,8 +160,8 @@ export default function IndustriesGridSection({
             <div
               key={i}
               className="group relative flex flex-col overflow-hidden rounded-[22px] cursor-pointer transition-all duration-300
-                bg-[#1A1D24] dark:bg-[#1A1D24] light:bg-slate-50
-                border border-white/[0.07] dark:border-white/[0.07] light:border-slate-200
+                bg-slate-50 dark:bg-[#1A1D24]
+                border border-slate-200 dark:border-white/[0.07]
                 hover:border-white/[0.14] hover:-translate-y-1
                 hover:shadow-[0_16px_44px_rgba(0,0,0,0.35)]
                 px-7 py-8"
@@ -173,7 +173,7 @@ export default function IndustriesGridSection({
               />
 
               <span className="text-[32px] mb-4 block">{ind.emoji}</span>
-              <h3 className="font-bold text-[17px] text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-2">
+              <h3 className="font-bold text-[17px] text-slate-900 dark:text-[#F0F2F8] mb-2">
                 {ind.name}
               </h3>
               <p className="text-[13px] font-light text-[#8A8FA8] leading-[1.6] mb-auto pb-5">

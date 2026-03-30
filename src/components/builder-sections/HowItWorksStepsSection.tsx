@@ -82,8 +82,8 @@ function StepVisual({
   return (
     <div
       className="relative flex flex-col items-center justify-center rounded-[28px] overflow-hidden aspect-[16/10]
-        bg-[#1A1D24] dark:bg-[#1A1D24] light:bg-slate-100
-        border border-white/[0.07] dark:border-white/[0.07] light:border-slate-200"
+        bg-slate-100 dark:bg-[#1A1D24]
+        border border-slate-200 dark:border-white/[0.07]"
     >
       {/* Subtle gradient overlay */}
       <div
@@ -177,7 +177,7 @@ export default function HowItWorksStepsSection({
   }, [isBuilder, steps]);
 
   return (
-    <section className="pb-[110px] bg-[#07080A] dark:bg-[#07080A] light:bg-white">
+    <section className="pb-[110px] bg-white dark:bg-[#07080A]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
 
         {/* Header */}
@@ -192,7 +192,7 @@ export default function HowItWorksStepsSection({
             </span>
           </div>
           <h2
-            className="font-extrabold leading-[1.15] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 max-w-[700px] mx-auto"
+            className="font-extrabold leading-[1.15] tracking-tight text-slate-900 dark:text-[#F0F2F8] max-w-[700px] mx-auto"
             style={{ fontSize: 'clamp(28px, 4vw, 44px)' }}
           >
             {title}
@@ -219,7 +219,7 @@ export default function HowItWorksStepsSection({
                 >
                   {step.stepNumber}
                 </div>
-                <h3 className="font-bold text-[28px] leading-[1.25] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-4">
+                <h3 className="font-bold text-[28px] leading-[1.25] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-4">
                   {step.title}
                 </h3>
                 <p className="text-[15px] font-light text-[#8A8FA8] leading-[1.75] mb-6">

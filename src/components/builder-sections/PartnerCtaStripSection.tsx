@@ -52,7 +52,7 @@ export default function PartnerCtaStripSection({
   const gradientBg = `linear-gradient(135deg, ${accentColor}, ${accentColor2})`;
 
   return (
-    <section className="pb-20 bg-[#07080A] dark:bg-[#07080A] light:bg-white">
+    <section className="pb-20 bg-white dark:bg-[#07080A]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
         <div
           className="relative overflow-hidden rounded-[28px] flex flex-col md:flex-row items-center justify-between gap-10 px-[72px] py-16 border"
@@ -70,7 +70,7 @@ export default function PartnerCtaStripSection({
           {/* Text */}
           <div className="relative">
             <h2
-              className="font-extrabold leading-[1.2] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-2.5 whitespace-pre-line"
+              className="font-extrabold leading-[1.2] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-2.5 whitespace-pre-line"
               style={{ fontSize: 'clamp(22px, 3vw, 34px)' }}
             >
               {title}

@@ -73,10 +73,10 @@ function Card({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[28px] px-12 py-12 border border-white/[0.07] dark:border-white/[0.07] light:border-slate-200
+      className={`relative overflow-hidden rounded-[28px] px-12 py-12 border border-slate-200 dark:border-white/[0.07]
         ${variant === 'dark'
-          ? 'bg-[#1A1D24] dark:bg-[#1A1D24] light:bg-slate-50'
-          : 'bg-[#20242D] dark:bg-[#20242D] light:bg-slate-100'
+          ? 'bg-slate-50 dark:bg-[#1A1D24]'
+          : 'bg-slate-100 dark:bg-[#20242D]'
         }`}
     >
       {/* Top gradient line */}
@@ -92,7 +92,7 @@ function Card({
         {card.tag}
       </div>
 
-      <h3 className="font-bold text-[24px] leading-[1.25] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-3.5 whitespace-pre-line">
+      <h3 className="font-bold text-[24px] leading-[1.25] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-3.5 whitespace-pre-line">
         {card.title}
       </h3>
 
@@ -128,7 +128,7 @@ export default function SlaIntegrationSplitSection({
   } = data;
 
   return (
-    <section className="pb-[110px] bg-[#07080A] dark:bg-[#07080A] light:bg-white">
+    <section className="pb-[110px] bg-white dark:bg-[#07080A]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card card={leftCard} accentColor={accentColor} accentColor2={accentColor2} variant="dark" />

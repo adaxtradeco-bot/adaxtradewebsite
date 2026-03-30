@@ -153,8 +153,8 @@ export default function AutomationEngineSection({
   return (
     <section
       className="relative py-[100px] overflow-hidden
-        bg-[#0E1014] dark:bg-[#0E1014] light:bg-slate-50
-        border-t border-b border-white/[0.07] dark:border-white/[0.07] light:border-slate-200"
+        bg-slate-50 dark:bg-[#0E1014]
+        border-t border-b border-slate-200 dark:border-white/[0.07]"
     >
       {/* Right ambient glow */}
       <div
@@ -175,7 +175,7 @@ export default function AutomationEngineSection({
             </div>
 
             <h2
-              className="font-extrabold leading-[1.10] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-5"
+              className="font-extrabold leading-[1.10] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-5"
               style={{ fontSize: 'clamp(30px, 4vw, 46px)' }}
             >
               {title}
@@ -235,8 +235,8 @@ export default function AutomationEngineSection({
           {/* Right — node visual */}
           <div
             className="relative flex flex-col justify-center gap-3.5 rounded-[28px] p-9 min-h-[340px] overflow-hidden
-              bg-[#1A1D24] dark:bg-[#1A1D24] light:bg-white
-              border border-white/[0.07] dark:border-white/[0.07] light:border-slate-200"
+              bg-white dark:bg-[#1A1D24]
+              border border-slate-200 dark:border-white/[0.07]"
           >
             {/* Inner glow */}
             <div

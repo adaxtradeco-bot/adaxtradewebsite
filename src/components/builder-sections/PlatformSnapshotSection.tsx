@@ -77,7 +77,7 @@ export default function PlatformSnapshotSection({
   const gradientBg = `linear-gradient(90deg, ${accentColor}, ${accentColor2})`;
 
   return (
-    <section className="py-[110px] bg-[#07080A] dark:bg-[#07080A] light:bg-white">
+    <section className="py-[110px] bg-white dark:bg-[#07080A]">
       <div className="max-w-[1180px] mx-auto px-5 md:px-10">
 
         {/* Header */}
@@ -103,7 +103,7 @@ export default function PlatformSnapshotSection({
           </div>
 
           <h2
-            className="font-extrabold leading-[1.15] tracking-tight text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-4"
+            className="font-extrabold leading-[1.15] tracking-tight text-slate-900 dark:text-[#F0F2F8] mb-4"
             style={{ fontSize: 'clamp(28px, 4vw, 44px)' }}
           >
             {title}{' '}
@@ -130,7 +130,7 @@ export default function PlatformSnapshotSection({
           {cards.map((card, i) => (
             <div
               key={i}
-              className="group relative bg-[#1A1D24] dark:bg-[#1A1D24] light:bg-slate-50 px-9 py-10 border-r border-white/[0.07] last:border-r-0 transition-colors duration-250 hover:bg-[#20242D] dark:hover:bg-[#20242D] light:hover:bg-white overflow-hidden"
+              className="group relative bg-slate-50 dark:bg-[#1A1D24] px-9 py-10 border-r border-slate-200 dark:border-white/[0.07] last:border-r-0 transition-colors duration-250 hover:bg-white dark:hover:bg-[#20242D] overflow-hidden"
             >
               {/* Bottom gradient line on hover */}
               <div
@@ -153,7 +153,7 @@ export default function PlatformSnapshotSection({
                 )}
               </div>
 
-              <h3 className="font-bold text-[18px] text-[#F0F2F8] dark:text-[#F0F2F8] light:text-slate-900 mb-2.5">
+              <h3 className="font-bold text-[18px] text-slate-900 dark:text-[#F0F2F8] mb-2.5">
                 {card.title}
               </h3>
               <p className="text-[14px] font-light text-[#8A8FA8] leading-[1.7]">
