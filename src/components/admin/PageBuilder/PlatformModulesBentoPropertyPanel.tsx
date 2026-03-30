@@ -9,6 +9,7 @@
 
 import React, { useState } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
+import { IconFieldEditor } from './IconFieldEditor';
 
 interface PlatformModulesBentoPropertyPanelProps {
   section: SectionConfig;
@@ -100,9 +101,17 @@ export function PlatformModulesBentoPropertyPanel({ section, onUpdate }: Platfor
                   <option value="small">Small (quarter width)</option>
                 </select>
               </Field>
-              <Field label="Icon (emoji)">
-                <input className={inputCls} value={mod.icon ?? ''} onChange={e => updateModule(idx, 'icon', e.target.value)} placeholder="⚡" />
-              </Field>
+              <IconFieldEditor
+              label="Icon"
+              emoji={mod.icon ?? ''}
+              faConfig={mod.iconFaConfig ?? undefined}
+              onChange={(emoji, faConfig) => {
+                const next = modules.map((m: any, mi: number) => mi === idx
+                  ? { ...m, icon: emoji, iconFaConfig: faConfig ?? undefined }
+                  : m);
+                update({ modules: next });
+              }}
+            />
               <Field label="Tag (category label)">
                 <input className={inputCls} value={mod.tag ?? ''} onChange={e => updateModule(idx, 'tag', e.target.value)} />
               </Field>

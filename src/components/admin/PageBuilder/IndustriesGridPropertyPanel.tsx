@@ -9,6 +9,7 @@
 
 import React, { useState } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
+import { IconFieldEditor } from './IconFieldEditor';
 
 interface Props {
   section: SectionConfig;
@@ -88,9 +89,17 @@ export function IndustriesGridPropertyPanel({ section, onUpdate }: Props) {
               <button type="button" onClick={() => update({ industries: industries.filter((_: any, ii: number) => ii !== i) })}
                 className="text-xs text-red-500 hover:text-red-700">✕ Remove</button>
             </div>
-            <Field label="Emoji">
-              <input className={inputCls} value={ind.emoji ?? ''} onChange={e => updateIndustry(i, 'emoji', e.target.value)} placeholder="⚡" />
-            </Field>
+            <IconFieldEditor
+              label="Icon"
+              emoji={ind.emoji ?? ''}
+              faConfig={ind.iconFaConfig ?? undefined}
+              onChange={(emoji, faConfig) => {
+                const next = industries.map((item: any, ii: number) => ii === i
+                  ? { ...item, emoji, iconFaConfig: faConfig ?? undefined }
+                  : item);
+                update({ industries: next });
+              }}
+            />
             <Field label="Name">
               <input className={inputCls} value={ind.name ?? ''} onChange={e => updateIndustry(i, 'name', e.target.value)} />
             </Field>

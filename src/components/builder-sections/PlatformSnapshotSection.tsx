@@ -13,6 +13,7 @@ import React from 'react';
 interface SnapCard {
   iconSvg?: string;
   iconFa?: string;
+  iconFaConfig?: { name: string; type: string; size: string; color?: string };
   iconEmoji?: string;
   iconColor?: string;
   iconBg?: string;
@@ -63,8 +64,13 @@ const DEFAULT_CARDS: SnapCard[] = [
 ];
 
 function CardIcon({ card }: { card: SnapCard }) {
+  if (card.iconFaConfig?.name) {
+    const prefixMap: Record<string, string> = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
+    const prefix = prefixMap[card.iconFaConfig.type] || 'fas';
+    return <i className={`${prefix} fa-${card.iconFaConfig.name}`} style={{ color: card.iconFaConfig.color || card.iconColor, fontSize: '20px' }} aria-hidden="true" />;
+  }
   if (card.iconFa) {
-    return <i className={card.iconFa} style={{ color: card.iconColor, fontSize: '20px' }} />;
+    return <i className={card.iconFa} style={{ color: card.iconColor, fontSize: '20px' }} aria-hidden="true" />;
   }
   if (card.iconEmoji) {
     return <span className="text-xl">{card.iconEmoji}</span>;

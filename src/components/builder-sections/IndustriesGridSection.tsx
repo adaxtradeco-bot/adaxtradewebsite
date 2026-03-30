@@ -13,6 +13,7 @@ import React from 'react';
 /* ─── Types ─── */
 interface IndustryCard {
   emoji: string;
+  iconFaConfig?: { name: string; type: string; size: string; color?: string };
   name: string;
   description: string;
   linkText: string;
@@ -172,7 +173,15 @@ export default function IndustriesGridSection({
                 style={{ background: gradientLine }}
               />
 
-              <span className="text-[32px] mb-4 block">{ind.emoji}</span>
+              <span className="text-[32px] mb-4 block">
+                {ind.iconFaConfig?.name ? (
+                  <i
+                    className={`${({ solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' }[ind.iconFaConfig.type] || 'fas')} fa-${ind.iconFaConfig.name}`}
+                    style={{ color: ind.iconFaConfig.color, fontSize: '28px' }}
+                    aria-hidden="true"
+                  />
+                ) : ind.emoji}
+              </span>
               <h3 className="font-bold text-[17px] text-slate-900 dark:text-[#F0F2F8] mb-2">
                 {ind.name}
               </h3>

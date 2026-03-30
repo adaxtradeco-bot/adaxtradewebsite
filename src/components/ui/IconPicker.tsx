@@ -221,9 +221,18 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
 }
 
 export function IconDisplay({ icon, className = '', enableHover = false }: { icon: IconConfig; className?: string; enableHover?: boolean }) {
-  const typeMap = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
-  const sizeMap = { xs: 'fa-xs', sm: 'fa-sm', lg: 'fa-lg', xl: 'fa-xl', '2xl': 'fa-2xl', '3xl': 'fa-3xl', '4xl': 'fa-4xl', '5xl': 'fa-5xl' };
-  return <i className={`${typeMap[icon.type]} fa-${icon.name} ${sizeMap[icon.size]} ${className}`} style={{ color: icon.color }} />;
+  const typeMap: Record<string, string> = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
+  const sizeMap: Record<string, string> = { xs: 'fa-xs', sm: 'fa-sm', lg: 'fa-lg', xl: 'fa-xl', '2xl': 'fa-2xl', '3xl': 'fa-3xl', '4xl': 'fa-4xl', '5xl': 'fa-5xl' };
+  const prefix = typeMap[icon.type] || 'fas';
+  const sizeClass = sizeMap[icon.size] || 'fa-lg';
+  // Use both class formats for compatibility
+  return (
+    <i
+      className={`${prefix} fa-${icon.name} ${sizeClass} ${className}`}
+      style={{ color: icon.color, fontStyle: 'normal' }}
+      aria-hidden="true"
+    />
+  );
 }
 
 export function IconButton({ value, onChange, placeholder = "Select icon", className = '' }: { value?: IconConfig; onChange: (icon: IconConfig | null) => void; placeholder?: string; className?: string }) {

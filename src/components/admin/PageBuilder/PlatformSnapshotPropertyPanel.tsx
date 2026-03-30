@@ -9,6 +9,7 @@
 
 import React, { useState } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
+import { IconFieldEditor } from './IconFieldEditor';
 
 interface PlatformSnapshotPropertyPanelProps {
   section: SectionConfig;
@@ -93,18 +94,17 @@ export function PlatformSnapshotPropertyPanel({ section, onUpdate }: PlatformSna
             <Field label="Icon Background (rgba)">
               <input className={inputCls} value={card.iconBg ?? ''} onChange={e => updateCard(i, 'iconBg', e.target.value)} placeholder="rgba(79,127,255,0.08)" />
             </Field>
-            <Field label="Icon (emoji or FA class)">
-              <input className={inputCls} value={card.iconEmoji ?? card.iconFa ?? ''} onChange={e => {
-                const val = e.target.value;
-                if (val.startsWith('fa') || val.startsWith('fas ') || val.startsWith('far ')) {
-                  updateCard(i, 'iconFa', val);
-                  updateCard(i, 'iconEmoji', '');
-                } else {
-                  updateCard(i, 'iconEmoji', val);
-                  updateCard(i, 'iconFa', '');
-                }
-              }} placeholder="⚡ or fas fa-bolt" />
-            </Field>
+            <IconFieldEditor
+              label="Icon"
+              emoji={card.iconEmoji ?? ''}
+              faConfig={card.iconFaConfig ?? undefined}
+              onChange={(emoji, faConfig) => {
+                const next = cards.map((c: any, ci: number) => ci === i
+                  ? { ...c, iconEmoji: emoji, iconFaConfig: faConfig ?? undefined, iconFa: faConfig ? `${faConfig.type === 'solid' ? 'fas' : faConfig.type === 'regular' ? 'far' : faConfig.type === 'brands' ? 'fab' : 'fas'} fa-${faConfig.name}` : '' }
+                  : c);
+                update({ cards: next });
+              }}
+            />
           </Collapsible>
         ))}
         <button type="button"

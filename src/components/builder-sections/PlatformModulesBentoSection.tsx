@@ -13,6 +13,7 @@ import React from 'react';
 /* ─── Types ─── */
 interface Module {
   icon: string;
+  iconFaConfig?: { name: string; type: string; size: string; color?: string };
   tag: string;
   title: string;
   description: string;
@@ -131,10 +132,18 @@ function ModuleCard({
 
       {/* Icon */}
       <div
-        className={`flex items-center justify-center rounded-[15px] bg-[#13151A] border border-white/[0.07] mb-5 flex-shrink-0
+        className={`flex items-center justify-center rounded-[15px] bg-[#13151A] dark:bg-[#13151A] bg-slate-100 border border-slate-200 dark:border-white/[0.07] mb-5 flex-shrink-0
           ${isLarge ? 'w-[52px] h-[52px] text-[22px]' : 'w-[42px] h-[42px] text-[18px]'}`}
       >
-        {mod.icon}
+        {mod.iconFaConfig?.name ? (
+          <i
+            className={`${({ solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' }[mod.iconFaConfig.type] || 'fas')} fa-${mod.iconFaConfig.name}`}
+            style={{ color: mod.iconFaConfig.color, fontSize: isLarge ? '22px' : '18px' }}
+            aria-hidden="true"
+          />
+        ) : (
+          mod.icon
+        )}
       </div>
 
       {/* Tag */}
