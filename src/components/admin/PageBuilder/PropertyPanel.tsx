@@ -24,6 +24,7 @@ import { AutomationEnginePropertyPanel } from './AutomationEnginePropertyPanel';
 import { IndustriesGridPropertyPanel } from './IndustriesGridPropertyPanel';
 import { SlaIntegrationSplitPropertyPanel } from './SlaIntegrationSplitPropertyPanel';
 import { PartnerCtaStripPropertyPanel } from './PartnerCtaStripPropertyPanel';
+import { PlatformCapabilitiesPropertyPanel } from './PlatformCapabilitiesPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -552,6 +553,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <SlaIntegrationSplitPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'partner-cta-strip':
         return <PartnerCtaStripPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'platform-capabilities':
+        return <PlatformCapabilitiesPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'interactive-feature-wall':
         return <InteractiveFeatureWallPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'wall-of-features':

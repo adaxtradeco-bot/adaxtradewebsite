@@ -96,6 +96,7 @@ import AutomationEngineSection from '@/components/builder-sections/AutomationEng
 import IndustriesGridSection from '@/components/builder-sections/IndustriesGridSection';
 import SlaIntegrationSplitSection from '@/components/builder-sections/SlaIntegrationSplitSection';
 import PartnerCtaStripSection from '@/components/builder-sections/PartnerCtaStripSection';
+import PlatformCapabilitiesSection from '@/components/builder-sections/PlatformCapabilitiesSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -318,6 +319,8 @@ export function SectionRenderer({
         return <SlaIntegrationSplitSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
       case 'partner-cta-strip':
         return <PartnerCtaStripSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'platform-capabilities':
+        return <PlatformCapabilitiesSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
       case 'feature-video-tabs':
         return <FeatureVideoTabsSection {...(section as any).data} />;
       case 'showcase':
