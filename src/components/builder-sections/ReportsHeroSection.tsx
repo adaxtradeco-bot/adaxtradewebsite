@@ -136,7 +136,7 @@ export default function ReportsHeroSection({ data, isBuilder = false }: ReportsH
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden bg-slate-50 dark:bg-[#020617]">
+    <section className="relative overflow-hidden bg-slate-50 dark:bg-[#020617]">
       {/* Orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute w-[400px] h-[400px] md:w-[500px] md:h-[500px] rounded-full -top-24 -left-24 animate-[drift_8s_ease-in-out_infinite_alternate]"
@@ -157,7 +157,7 @@ export default function ReportsHeroSection({ data, isBuilder = false }: ReportsH
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-5 pt-12 pb-6 flex-1">
+      <div className="relative z-10 flex flex-col items-center text-center px-5 pt-14 pb-0">
         {/* Badge */}
         <div
           className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.1em] uppercase rounded-full px-3.5 py-1.5 mb-5"
