@@ -79,9 +79,6 @@ HERO_SLIDES_DATA.ts
 middleware.ts
 update-db-prisma.ts
 
-# Scripts folder (exclude all from git)
-scripts/
-
 # Test and conversion files
 public/test-*.html
 public/convert-*.html
