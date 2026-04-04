@@ -79,6 +79,7 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
     const flags: Record<string, string> = {
       en: '🇺🇸',
       ar: '🇸🇦',
+      tr: '🇹🇷',
       fr: '🇫🇷',
       de: '🇩🇪',
       es: '🇪🇸'
@@ -187,13 +188,22 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
                       <div>{getStatusBadge(page.status)}</div>
                     </div>
                     
-                    <Link
-                      href={`/admin/pages/${page.id}/edit`}
-                      className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
-                    >
-                      <Edit size={16} />
-                      Edit
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        href={`/admin/pages/builder/${page.id}`}
+                        className="px-3 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors flex items-center gap-1"
+                      >
+                        <Edit size={16} />
+                        Builder
+                      </Link>
+                      <Link
+                        href={`/admin/pages/${page.id}/edit`}
+                        className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
+                      >
+                        <Edit size={16} />
+                        Settings
+                      </Link>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -233,13 +243,22 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
                   <div>{getStatusBadge(page.status)}</div>
                 </div>
                 
-                <Link
-                  href={`/admin/pages/${page.id}/edit`}
-                  className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
-                >
-                  <Edit size={16} />
-                  Edit
-                </Link>
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/admin/pages/builder/${page.id}`}
+                    className="px-3 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors flex items-center gap-1"
+                  >
+                    <Edit size={16} />
+                    Builder
+                  </Link>
+                  <Link
+                    href={`/admin/pages/${page.id}/edit`}
+                    className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
+                  >
+                    <Edit size={16} />
+                    Settings
+                  </Link>
+                </div>
               </div>
             ))}
           </div>

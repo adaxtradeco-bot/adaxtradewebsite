@@ -74,11 +74,14 @@ export function AddTranslationModal({
   };
 
   useEffect(() => {
-    // تولید خودکار slug
-    if (language) {
-      setSlug(`/${language}/`);
+    // تولید خودکار slug از صفحه مبدا
+    if (language && sourcePageData) {
+      // حذف زبان قبلی از slug و اضافه کردن زبان جدید
+      const sourceSlug = sourcePageData.slug || '';
+      const slugWithoutLang = sourceSlug.replace(/^\/(en|ar|tr|fr|de|es)\//, '');
+      setSlug(`/${language}/${slugWithoutLang}`);
     }
-  }, [language]);
+  }, [language, sourcePageData]);
 
   const copyPageContent = () => {
     if (!sourcePageData?.builderData) return;
@@ -144,8 +147,9 @@ export function AddTranslationModal({
       } else {
         setError(result.error || 'Failed to create translation');
       }
-    } catch (err) {
-      setError('Network error. Please try again.');
+    } catch (err: any) {
+      setError(err.message || 'Network error. Please try again.');
+      console.error('Translation error:', err);
     } finally {
       setLoading(false);
     }

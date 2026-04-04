@@ -55,7 +55,7 @@ export async function POST(
     let pageGroupId = sourcePage.pageGroupId;
     
     if (!pageGroupId) {
-      const slugWithoutLang = sourcePage.slug.replace(/^\/(en|ar|fr|de|es)\//, '');
+      const slugWithoutLang = sourcePage.slug.replace(/^\/(en|ar|tr|fr|de|es)\//, '');
       const newGroup = await prisma.pageGroup.create({
         data: {
           name: sourcePage.title,
@@ -75,6 +75,8 @@ export async function POST(
       
       pageGroupId = newGroup.id;
     }
+
+    console.log('Creating translation:', { language, slug, sourcePageId: id });
 
     // آماده کردن داده صفحه جدید
     const newPageData: any = {
@@ -115,9 +117,11 @@ export async function POST(
     }
 
     // ایجاد صفحه جدید
+    console.log('Creating new page with data:', newPageData);
     const newPage = await prisma.page.create({
       data: newPageData
     });
+    console.log('New page created:', newPage.id);
 
     return NextResponse.json({
       success: true,
