@@ -88,6 +88,16 @@ import WhyIvaFlowNewVersion from '@/components/builder-sections/WhyIvaFlowNewVer
 import FeatureVideoTabsSection from '@/components/builder-sections/FeatureVideoTabsSection';
 import ProcessStepsSection from '@/components/builder-sections/ProcessStepsSection';
 import WhyAutomateWithUsSection from '@/components/builder-sections/WhyAutomateWithUsSection';
+import ReportsHeroSection from '@/components/builder-sections/ReportsHeroSection';
+import ReportsWhatYouCanBuildSection from '@/components/builder-sections/ReportsWhatYouCanBuildSection';
+import ReportsChartBuilderSection from '@/components/builder-sections/ReportsChartBuilderSection';
+import ReportsTableSection from '@/components/builder-sections/ReportsTableSection';
+import ReportsKanbanSection from '@/components/builder-sections/ReportsKanbanSection';
+import ReportsAIInsightsSection from '@/components/builder-sections/ReportsAIInsightsSection';
+import ReportsDataSourcesSection from '@/components/builder-sections/ReportsDataSourcesSection';
+import ReportsScaleSection from '@/components/builder-sections/ReportsScaleSection';
+import ReportsIntegrationSection from '@/components/builder-sections/ReportsIntegrationSection';
+import ReportsRolesSection from '@/components/builder-sections/ReportsRolesSection';
 import PartnerShowcaseHeroSection from '@/components/builder-sections/PartnerShowcaseHeroSection';
 import PlatformSnapshotSection from '@/components/builder-sections/PlatformSnapshotSection';
 import PlatformModulesBentoSection from '@/components/builder-sections/PlatformModulesBentoSection';
@@ -303,6 +313,26 @@ export function SectionRenderer({
         return <ProcessStepsSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
       case 'why-automate-with-us':
         return <WhyAutomateWithUsSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-hero':
+        return <ReportsHeroSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-what-you-can-build':
+        return <ReportsWhatYouCanBuildSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-chart-builder':
+        return <ReportsChartBuilderSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-table':
+        return <ReportsTableSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-kanban':
+        return <ReportsKanbanSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-ai-insights':
+        return <ReportsAIInsightsSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-data-sources':
+        return <ReportsDataSourcesSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-scale':
+        return <ReportsScaleSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-integration':
+        return <ReportsIntegrationSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
+      case 'reports-roles':
+        return <ReportsRolesSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
       case 'partner-showcase-hero':
         return <PartnerShowcaseHeroSection data={(section as any).data} style={(section as any).style} isBuilder={isBuilder} />;
       case 'platform-snapshot':

@@ -16,6 +16,11 @@ import { WallOfFeaturesPropertyPanel } from './WallOfFeaturesPropertyPanel';
 import { ProductHeroPropertyPanel } from './ProductHeroPropertyPanel';
 import { ProcessStepsPropertyPanel } from './ProcessStepsPropertyPanel';
 import { WhyAutomateWithUsPropertyPanel } from './WhyAutomateWithUsPropertyPanel';
+import {
+  ReportsHeroPanelPanel, ReportsWhatYouCanBuildPanel, ReportsChartBuilderPanel,
+  ReportsTablePanel, ReportsKanbanPanel, ReportsAIInsightsPanel,
+  ReportsDataSourcesPanel, ReportsScalePanel, ReportsIntegrationPanel, ReportsRolesPanel,
+} from './ReportsPropertyPanels';
 import { PartnerShowcaseHeroPropertyPanel } from './PartnerShowcaseHeroPropertyPanel';
 import { PlatformSnapshotPropertyPanel } from './PlatformSnapshotPropertyPanel';
 import { PlatformModulesBentoPropertyPanel } from './PlatformModulesBentoPropertyPanel';
@@ -537,6 +542,26 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <ProcessStepsPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'why-automate-with-us':
         return <WhyAutomateWithUsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'reports-hero':
+        return <ReportsHeroPanelPanel section={section} onUpdate={onUpdate} />;
+      case 'reports-what-you-can-build':
+        return <ReportsWhatYouCanBuildPanel section={section} onUpdate={onUpdate} />;
+      case 'reports-chart-builder':
+        return <ReportsChartBuilderPanel section={section} onUpdate={onUpdate} />;
+      case 'reports-table':
+        return <ReportsTablePanel section={section} onUpdate={onUpdate} />;
+      case 'reports-kanban':
+        return <ReportsKanbanPanel section={section} onUpdate={onUpdate} />;
+      case 'reports-ai-insights':
+        return <ReportsAIInsightsPanel section={section} onUpdate={onUpdate} />;
+      case 'reports-data-sources':
+        return <ReportsDataSourcesPanel section={section} onUpdate={onUpdate} />;
+      case 'reports-scale':
+        return <ReportsScalePanel section={section} onUpdate={onUpdate} />;
+      case 'reports-integration':
+        return <ReportsIntegrationPanel section={section} onUpdate={onUpdate} />;
+      case 'reports-roles':
+        return <ReportsRolesPanel section={section} onUpdate={onUpdate} />;
       case 'partner-showcase-hero':
         return <PartnerShowcaseHeroPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'platform-snapshot':
