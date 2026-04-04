@@ -115,3 +115,55 @@ src/app/api/admin/convert-*/
 # Backup files
 prisma/*.backup_*.db
 database-backup.json
+database-export-vercel.json
+database-full-export.json
+
+# Documentation and notes (keep only README.md)
+*.md
+!README.md
+!docs/**/*.md
+!.amazonq/**/*.md
+
+# Test and debug files in root
+*.html
+!sample pages/**/*.html
+test-*.js
+test-*.ts
+check-*.js
+check-*.bat
+debug-*.js
+fix-*.js
+fix-*.bat
+fix-*.ps1
+analyze-*.js
+clean-*.js
+seed-*.js
+update-*.js
+update-*.ts
+import-*.js
+import-*.ts
+sync-*.js
+add-*.js
+
+# Deployment scripts in root
+*.bat
+*.sh
+!scripts/**/*.sh
+
+# SQL files
+*.sql
+
+# JSON data files (keep package files)
+*-page.json
+*-example.json
+*HERO*.json
+*SLIDER*.json
+*demo.html
+
+# TypeScript build files
+*.tsbuildinfo
+next-env.d.ts
+prisma.config.ts
+
+# Middleware (if not used)
+middleware.ts
