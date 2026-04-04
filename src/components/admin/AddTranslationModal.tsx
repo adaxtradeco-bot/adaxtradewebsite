@@ -7,7 +7,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { X, Globe, Copy, Palette } from 'lucide-react';
+import { X, Globe, Copy, Palette, FileText } from 'lucide-react';
 
 interface AddTranslationModalProps {
   isOpen: boolean;
@@ -28,26 +28,50 @@ export function AddTranslationModal({
   const [slug, setSlug] = useState('');
   const [copyStructure, setCopyStructure] = useState(true);
   const [copyStyles, setCopyStyles] = useState(true);
+  const [copyContent, setCopyContent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [sourcePageData, setSourcePageData] = useState<any>(null);
+  const [copied, setCopied] = useState(false);
 
   const availableLanguages = [
     { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'ar', name: 'Arabic', flag: '🇸🇦' },
+    { code: 'tr', name: 'Turkish', flag: '🇹🇷' },
     { code: 'fr', name: 'French', flag: '🇫🇷' },
     { code: 'de', name: 'German', flag: '🇩🇪' },
     { code: 'es', name: 'Spanish', flag: '🇪🇸' }
   ].filter(lang => !existingLanguages.includes(lang.code));
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && sourcePageId) {
+      fetchSourcePage();
       setLanguage('');
       setSlug('');
       setError('');
       setCopyStructure(true);
       setCopyStyles(true);
+      setCopyContent(false);
+      setCopied(false);
     }
-  }, [isOpen]);
+  }, [isOpen, sourcePageId]);
+
+  const fetchSourcePage = async () => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`/api/admin/pages/${sourcePageId}/builder`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const result = await res.json();
+      if (result.success) {
+        setSourcePageData(result.data);
+      }
+    } catch (err) {
+      console.error('Failed to load source page:', err);
+    }
+  };
 
   useEffect(() => {
     // تولید خودکار slug
@@ -55,6 +79,44 @@ export function AddTranslationModal({
       setSlug(`/${language}/`);
     }
   }, [language]);
+
+  const copyPageContent = () => {
+    if (!sourcePageData?.builderData) return;
+
+    const textContent: string[] = [];
+    
+    sourcePageData.builderData.forEach((section: any) => {
+      const data = section.data || {};
+      
+      if (data.title) textContent.push(`Title: ${data.title}`);
+      if (data.subtitle) textContent.push(`Subtitle: ${data.subtitle}`);
+      if (data.description) textContent.push(`Description: ${data.description}`);
+      if (data.content) textContent.push(`Content: ${data.content}`);
+      if (data.text) textContent.push(`Text: ${data.text}`);
+      
+      if (data.primaryButton?.text) textContent.push(`Button: ${data.primaryButton.text}`);
+      if (data.secondaryButton?.text) textContent.push(`Button: ${data.secondaryButton.text}`);
+      if (data.ctaButton?.text) textContent.push(`Button: ${data.ctaButton.text}`);
+      
+      ['features', 'items', 'steps', 'benefits', 'cards', 'tabs'].forEach(key => {
+        if (Array.isArray(data[key])) {
+          data[key].forEach((item: any, idx: number) => {
+            if (item.title) textContent.push(`${key}[${idx}].title: ${item.title}`);
+            if (item.description) textContent.push(`${key}[${idx}].description: ${item.description}`);
+            if (item.text) textContent.push(`${key}[${idx}].text: ${item.text}`);
+            if (item.label) textContent.push(`${key}[${idx}].label: ${item.label}`);
+          });
+        }
+      });
+      
+      textContent.push('---');
+    });
+
+    const contentText = textContent.join('\n');
+    navigator.clipboard.writeText(contentText);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +131,8 @@ export function AddTranslationModal({
           language,
           slug,
           copyStructure,
-          copyStyles
+          copyStyles,
+          copyContent
         })
       });
 
@@ -111,6 +174,29 @@ export function AddTranslationModal({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          {/* Copy Page Content Button */}
+          {sourcePageData && (
+            <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-300">
+                  <FileText size={16} />
+                  <span>Copy page content for translation</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={copyPageContent}
+                  className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex items-center gap-1.5"
+                >
+                  <Copy size={14} />
+                  {copied ? 'Copied!' : 'Copy Content'}
+                </button>
+              </div>
+              <p className="text-xs text-blue-600 dark:text-blue-400 mt-2">
+                This will copy all text content from the page so you can translate it easily.
+              </p>
+            </div>
+          )}
+
           {error && (
             <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-sm text-red-600 dark:text-red-400">
               {error}
@@ -212,6 +298,25 @@ export function AddTranslationModal({
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                     Copy colors, spacing, and layout settings
+                  </p>
+                </div>
+              </label>
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={copyContent}
+                  onChange={(e) => setCopyContent(e.target.checked)}
+                  className="mt-1 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                  disabled={!copyStructure}
+                />
+                <div>
+                  <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
+                    <FileText size={14} />
+                    Copy content (text will need translation)
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                    Copy all text content - you can edit and translate it later
                   </p>
                 </div>
               </label>

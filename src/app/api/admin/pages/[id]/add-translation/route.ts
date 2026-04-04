@@ -16,7 +16,7 @@ export async function POST(
   try {
     const { id } = params;
     const body = await request.json();
-    const { language, slug, copyStructure = true, copyStyles = true } = body;
+    const { language, slug, copyStructure = true, copyStyles = true, copyContent = false } = body;
 
     // Validation
     if (!language || !slug) {
@@ -95,18 +95,18 @@ export async function POST(
       try {
         const builderData = JSON.parse(sourcePage.builderData);
         
-        // کپی sections بدون محتوا (فقط type و order)
+        // کپی sections
         if (builderData.sections) {
-          const emptySections = builderData.sections.map((section: any) => ({
+          const newSections = builderData.sections.map((section: any) => ({
             id: section.id,
             type: section.type,
             order: section.order,
-            data: {}, // محتوا خالی
+            data: copyContent ? section.data : {}, // اگر copyContent فعال باشد، محتوا را هم کپی کن
             style: copyStyles ? section.style : {}
           }));
           
           newPageData.builderData = JSON.stringify({
-            sections: emptySections
+            sections: newSections
           });
         }
       } catch (error) {
