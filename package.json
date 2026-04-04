@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && prisma migrate deploy && next build",
+    "build": "prisma generate && node scripts/safe-migrate.js && next build",
     "postbuild": "node scripts/migrate-pages-to-groups.js || true",
     "postinstall": "prisma generate",
     "start": "node server.js",
@@ -17,6 +17,7 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate deploy",
+    "db:migrate:force": "prisma db push --accept-data-loss",
     "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma db push --force-reset && npm run db:seed",
