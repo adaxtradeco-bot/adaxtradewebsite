@@ -79,6 +79,14 @@ HERO_SLIDES_DATA.ts
 middleware.ts
 update-db-prisma.ts
 
+# Migration scripts (no longer needed in production)
+scripts/migrate-*.js
+scripts/migrate-*.ts
+scripts/safe-migrate.js
+DATABASE_MIGRATION_VERCEL.md
+MIGRATION_QUICK_GUIDE.md
+docs/PRODUCT-HERO-MIGRATION.md
+
 # Test and conversion files
 public/test-*.html
 public/convert-*.html

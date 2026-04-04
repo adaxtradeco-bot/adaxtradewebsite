@@ -7,8 +7,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, Plus, Edit, Globe, Clock } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Edit, Globe, Clock, FolderPlus } from 'lucide-react';
 import Link from 'next/link';
+import { GroupPagesModal } from './GroupPagesModal';
 
 interface Page {
   id: string;
@@ -38,6 +39,7 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
   const [ungroupedPages, setUngroupedPages] = useState<Page[]>([]);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
+  const [showGroupModal, setShowGroupModal] = useState(false);
 
   useEffect(() => {
     fetchPages();
@@ -203,11 +205,18 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
       {/* Ungrouped Pages */}
       {ungroupedPages.length > 0 && (
         <div className="border rounded-lg bg-white dark:bg-slate-800 shadow-sm">
-          <div className="p-4 border-b dark:border-slate-700">
+          <div className="p-4 border-b dark:border-slate-700 flex items-center justify-between">
             <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
               <Globe size={20} />
               Ungrouped Pages ({ungroupedPages.length})
             </h3>
+            <button
+              onClick={() => setShowGroupModal(true)}
+              className="px-3 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors flex items-center gap-1"
+            >
+              <FolderPlus size={16} />
+              Create Group
+            </button>
           </div>
           <div>
             {ungroupedPages.map(page => (
@@ -242,6 +251,17 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
           No pages found. Create your first page!
         </div>
       )}
+
+      {/* Group Pages Modal */}
+      <GroupPagesModal
+        isOpen={showGroupModal}
+        onClose={() => setShowGroupModal(false)}
+        onSuccess={() => {
+          setShowGroupModal(false);
+          fetchPages();
+        }}
+        ungroupedPages={ungroupedPages}
+      />
     </div>
   );
 }
