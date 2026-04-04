@@ -73,16 +73,33 @@ check-*.js
 debug-*.js
 fix-*.js
 test-*.js
+test-*.html
 update-db.js
 add_homepage_field.sql
 HERO_SLIDES_DATA.ts
 middleware.ts
 update-db-prisma.ts
+clean-test-settings.js
 
 # Migration scripts (no longer needed in production)
 scripts/migrate-*.js
 scripts/migrate-*.ts
 scripts/safe-migrate.js
+scripts/add-*.js
+scripts/add-*.ts
+scripts/update-*.js
+scripts/update-*.ts
+scripts/complete-*.js
+scripts/convert-*.js
+scripts/restore-*.js
+scripts/simple-*.js
+scripts/final-*.js
+scripts/copy-*.js
+scripts/postbuild.js
+scripts/list-pages.js
+scripts/extract-*.js
+scripts/import-to-vercel.ts
+scripts/vm-setup.sh
 DATABASE_MIGRATION_VERCEL.md
 MIGRATION_QUICK_GUIDE.md
 docs/PRODUCT-HERO-MIGRATION.md
