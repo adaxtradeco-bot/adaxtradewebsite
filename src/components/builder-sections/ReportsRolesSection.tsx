@@ -46,7 +46,7 @@ export default function ReportsRolesSection({ data, isBuilder = false }: Props) 
   const grad = `linear-gradient(135deg, ${accentColor}, #8b5cf6, #06b6d4)`;
 
   return (
-    <section className="py-20 md:py-24 bg-white dark:bg-[#080810] border-t border-slate-200 dark:border-white/[0.06]">
+    <section className="py-20 md:py-24 bg-white dark:bg-[#020617] border-t border-slate-200 dark:border-white/[0.06]">
       <div className="max-w-[1000px] mx-auto px-5 md:px-8">
         <p className="text-[11px] font-semibold tracking-[0.1em] uppercase mb-3" style={{ color: accentColor2 }}>{eyebrow}</p>
         <h2 className="font-extrabold leading-[1.12] tracking-tight mb-3 text-slate-900 dark:text-white" style={{ fontSize: 'clamp(1.7rem, 3.5vw, 2.5rem)' }}>

@@ -45,27 +45,25 @@ export default function ReportsAIInsightsSection({ data, isBuilder = false }: Pr
   const grad = `linear-gradient(135deg, ${accentColor}, #8b5cf6, #06b6d4)`;
 
   return (
-    <section className="py-20 md:py-24 border-t border-b border-slate-200 dark:border-white/[0.06]"
-      style={{ background: 'linear-gradient(135deg, #1e1b4b, #0f172a)' }}>
+    <section className="py-20 md:py-24 border-t border-b border-slate-200 dark:border-white/[0.06] bg-indigo-950 dark:bg-[#020617]">
       <div className="max-w-[1000px] mx-auto px-5 md:px-8">
         <p className="text-[11px] font-semibold tracking-[0.1em] uppercase mb-3" style={{ color: accentColor2 }}>{eyebrow}</p>
         <h2 className="font-extrabold leading-[1.12] tracking-tight mb-3 text-white" style={{ fontSize: 'clamp(1.7rem, 3.5vw, 2.5rem)' }}>
           {title}<br />
           <span style={{ background: grad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{titleGradient}</span>
         </h2>
-        <p className="text-[15px] leading-[1.7] mb-8 max-w-[520px]" style={{ color: 'rgba(255,255,255,0.45)' }}>{subtitle}</p>
+        <p className="text-[15px] leading-[1.7] mb-8 max-w-[520px] text-indigo-200/60">{subtitle}</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {cards.map((c, i) => (
             <div
               key={i}
-              className="relative rounded-2xl p-6 overflow-hidden"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+              className="relative rounded-2xl p-6 overflow-hidden bg-white/[0.05] border border-white/[0.09]"
             >
               <div className="absolute top-0 left-0 right-0 h-0.5" style={{ background: grad }} />
-              <div className="text-[28px] font-black mb-3" style={{ color: 'rgba(99,102,241,0.3)' }}>{c.num}</div>
+              <div className="text-[28px] font-black mb-3" style={{ color: `${accentColor}55` }}>{c.num}</div>
               <h3 className="text-[14px] font-semibold text-white mb-1.5">{c.title}</h3>
-              <p className="text-[13px] leading-[1.6]" style={{ color: 'rgba(255,255,255,0.5)' }}>{c.description}</p>
+              <p className="text-[13px] leading-[1.6] text-indigo-200/50">{c.description}</p>
             </div>
           ))}
         </div>

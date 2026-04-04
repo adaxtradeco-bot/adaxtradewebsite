@@ -105,7 +105,7 @@ export default function ReportsHeroSection({ data, isBuilder = false }: ReportsH
     /* Default animated dashboard mock */
     return (
       <div className="p-4 md:p-5">
-        <div className="rounded-xl p-4 bg-slate-100 dark:bg-[#0e0e1a]">
+        <div className="rounded-xl p-4 bg-slate-100 dark:bg-[#0e0e1a] border border-slate-200 dark:border-transparent">
           <div className="flex items-center justify-between mb-4">
             <span className="text-[13px] font-bold text-slate-800 dark:text-white">Analytics Overview</span>
             <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-emerald-100 dark:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">● Live</span>
@@ -136,7 +136,7 @@ export default function ReportsHeroSection({ data, isBuilder = false }: ReportsH
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden bg-[#080810] dark:bg-[#080810] light:bg-[#f5f5fc]">
+    <section className="relative min-h-screen flex flex-col overflow-hidden bg-slate-50 dark:bg-[#020617]">
       {/* Orbs */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute w-[400px] h-[400px] md:w-[500px] md:h-[500px] rounded-full -top-24 -left-24 animate-[drift_8s_ease-in-out_infinite_alternate]"
@@ -157,30 +157,30 @@ export default function ReportsHeroSection({ data, isBuilder = false }: ReportsH
       />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center px-5 pt-20 pb-8 flex-1">
+      <div className="relative z-10 flex flex-col items-center justify-center text-center px-5 pt-12 pb-6 flex-1">
         {/* Badge */}
         <div
-          className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.1em] uppercase rounded-full px-3.5 py-1.5 mb-8"
-          style={{ background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.25)', color: accentColor2 }}
+          className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.1em] uppercase rounded-full px-3.5 py-1.5 mb-5"
+          style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.25)', color: accentColor }}
         >
           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: accentColor2, animation: 'rh-pulse 2s infinite' }} />
           {badge}
         </div>
 
         {/* Headline */}
-        <h1 className="font-black leading-[1.06] tracking-[-0.04em] mb-5 text-white" style={{ fontSize: 'clamp(2rem, 6vw, 4.2rem)', maxWidth: 800 }}>
+        <h1 className="font-black leading-[1.06] tracking-[-0.04em] mb-4 text-slate-900 dark:text-white" style={{ fontSize: 'clamp(2rem, 6vw, 4.2rem)', maxWidth: 800 }}>
           {title}
           <span className="block" style={{ background: grad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
             {titleGradient}
           </span>
         </h1>
 
-        <p className="text-[15px] md:text-[16px] leading-[1.7] mb-9 max-w-[500px]" style={{ color: 'rgba(128,128,168,1)' }}>
+        <p className="text-[15px] md:text-[16px] leading-[1.7] mb-6 max-w-[500px] text-slate-500 dark:text-[#8080a8]">
           {subtitle}
         </p>
 
         {/* Buttons */}
-        <div className="flex flex-wrap gap-3 justify-center mb-12">
+        <div className="flex flex-wrap gap-3 justify-center mb-6">
           <a
             href={primaryButtonHref}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[14px] font-semibold text-white transition-all duration-200 hover:-translate-y-0.5"
@@ -192,7 +192,7 @@ export default function ReportsHeroSection({ data, isBuilder = false }: ReportsH
           <a
             href={secondaryButtonHref}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-[14px] font-medium transition-all duration-200
-              text-white bg-white/[0.04] border border-white/[0.12] hover:bg-white/[0.08]"
+              text-slate-700 dark:text-white bg-slate-200/60 dark:bg-white/[0.04] border border-slate-300 dark:border-white/[0.12] hover:bg-slate-200 dark:hover:bg-white/[0.08]"
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
             {secondaryButtonText}
@@ -201,22 +201,17 @@ export default function ReportsHeroSection({ data, isBuilder = false }: ReportsH
       </div>
 
       {/* Media Frame */}
-      <div className="relative z-10 w-full max-w-[860px] mx-auto px-4 md:px-8 pb-12">
+      <div className="relative z-10 w-full max-w-[860px] mx-auto px-4 md:px-8 pb-8">
         <div
-          className="rounded-[20px] overflow-hidden"
-          style={{
-            background: '#12121e',
-            border: '1px solid rgba(255,255,255,0.11)',
-            boxShadow: '0 40px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.1)',
-          }}
+          className="rounded-[20px] overflow-hidden bg-white dark:bg-[#12121e] border border-slate-200 dark:border-white/[0.11]"
+          style={{ boxShadow: '0 40px 100px rgba(0,0,0,0.12), 0 0 0 1px rgba(99,102,241,0.08)' }}
         >
           {/* Browser bar */}
-          <div className="flex items-center gap-2 px-4 py-2.5 border-b" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.06)' }}>
+          <div className="flex items-center gap-2 px-4 py-2.5 border-b border-slate-200 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.03]">
             <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
             <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-            <div className="flex-1 mx-3 h-5 rounded flex items-center px-2.5 text-[10px]"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', color: '#404060' }}>
+            <div className="flex-1 mx-3 h-5 rounded flex items-center px-2.5 text-[10px] bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06] text-slate-400 dark:text-[#404060]">
               ivaflow.com/dashboard/analytics
             </div>
           </div>

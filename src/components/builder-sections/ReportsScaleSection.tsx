@@ -95,7 +95,7 @@ export default function ReportsScaleSection({ data, isBuilder = false }: Props) 
   }, [isBuilder]);
 
   return (
-    <section ref={sectionRef} className="py-20 md:py-28 bg-white dark:bg-[#080810] border-t border-slate-200 dark:border-white/[0.06]">
+    <section ref={sectionRef} className="py-20 md:py-28 bg-white dark:bg-[#020617] border-t border-slate-200 dark:border-white/[0.06]">
       <div className="max-w-[1000px] mx-auto px-5 md:px-8">
         <div className="text-center mb-12">
           <p className="text-[11px] font-semibold tracking-[0.1em] uppercase mb-3" style={{ color: accentColor2 }}>{eyebrow}</p>
@@ -145,14 +145,14 @@ export default function ReportsScaleSection({ data, isBuilder = false }: Props) 
               style={{ background: 'rgba(99,102,241,0.25)', filter: 'blur(60px)' }} />
             <div className="absolute top-0 left-8 right-8 h-px" style={{ background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)` }} />
 
-            <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-              <div className="flex-1">
+            <div className="flex flex-col md:flex-row gap-8 items-start">
+              <div className="md:w-64 flex-shrink-0">
                 <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-4"
                   style={{ background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.2)' }}>🔗</div>
-                <div className="text-[16px] font-bold mb-1.5 text-slate-800 dark:text-white">{wideTitle}</div>
-                <div className="text-[13px] leading-[1.6] text-slate-500 dark:text-[#8080a8] max-w-[360px]">{wideDescription}</div>
+                <div className="text-[16px] font-bold mb-2 text-slate-800 dark:text-white">{wideTitle}</div>
+                <div className="text-[13px] leading-[1.6] text-slate-500 dark:text-[#8080a8]">{wideDescription}</div>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 flex-1">
                 {wideBadges.map((b, i) => (
                   <span key={i} className={`text-[11px] font-semibold px-3 py-1.5 rounded-full border ${BADGE_STYLES[b.colorClass] ?? BADGE_STYLES.indigo}`}>
                     {b.text}

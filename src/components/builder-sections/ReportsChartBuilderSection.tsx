@@ -104,7 +104,7 @@ export default function ReportsChartBuilderSection({ data, isBuilder = false }: 
   };
 
   return (
-    <section className="py-20 md:py-24 bg-slate-50 dark:bg-[#0e0e1a] border-t border-b border-slate-200 dark:border-white/[0.06]">
+    <section className="py-20 md:py-24 bg-slate-50 dark:bg-[#0f172a] border-t border-b border-slate-200 dark:border-white/[0.06]">
       <div className="max-w-[1000px] mx-auto px-5 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-12 items-center">
           {/* Left */}
