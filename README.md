@@ -2,6 +2,13 @@
 
 A modern, accessible English learning platform built with Next.js 14, TypeScript, and Tailwind CSS.
 
+## ✨ New: Multilingual System
+
+- 🌍 **Full multilingual support** with page grouping
+- 🔄 **Easy translation management** via admin panel
+- 📝 **Dictionary system** for shared content
+- 🚀 **Auto-migration** on deployment
+
 ## Features
 
 - 🎯 Interactive learning components
