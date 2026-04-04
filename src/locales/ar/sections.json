@@ -1,0 +1,76 @@
+{
+  "common": {
+    "cta": {
+      "getStarted": "ابدأ الآن",
+      "learnMore": "اعرف المزيد",
+      "contactUs": "اتصل بنا",
+      "bookDemo": "احجز عرضًا توضيحيًا",
+      "tryFree": "جرب مجانًا",
+      "signUp": "سجل الآن",
+      "readMore": "اقرأ المزيد",
+      "viewAll": "عرض الكل",
+      "download": "تحميل",
+      "watchVideo": "شاهد الفيديو",
+      "exploreMore": "استكشف المزيد"
+    },
+    "labels": {
+      "features": "الميزات",
+      "benefits": "الفوائد",
+      "whyUs": "لماذا نحن",
+      "howItWorks": "كيف يعمل",
+      "testimonials": "آراء العملاء",
+      "pricing": "الأسعار",
+      "faq": "الأسئلة الشائعة",
+      "resources": "الموارد",
+      "documentation": "التوثيق",
+      "support": "الدعم"
+    },
+    "status": {
+      "new": "جديد",
+      "popular": "شائع",
+      "comingSoon": "قريبًا",
+      "beta": "تجريبي",
+      "featured": "مميز"
+    }
+  },
+  "hero": {
+    "badges": {
+      "noCode": "بدون كود",
+      "aiPowered": "مدعوم بالذكاء الاصطناعي",
+      "secure": "آمن",
+      "compliant": "متوافق مع SOC2/GDPR",
+      "trusted": "موثوق به من قبل أكثر من 1000 شركة"
+    }
+  },
+  "features": {
+    "common": {
+      "dragDrop": "السحب والإفلات",
+      "integrations": "التكاملات",
+      "security": "الأمان",
+      "analytics": "التحليلات",
+      "automation": "الأتمتة",
+      "collaboration": "التعاون",
+      "customization": "التخصيص",
+      "scalability": "قابلية التوسع"
+    }
+  },
+  "cta": {
+    "ready": {
+      "title": "هل أنت مستعد للبدء؟",
+      "description": "انضم إلى آلاف الشركات التي تستخدم منصتنا بالفعل.",
+      "primary": "ابدأ تجربة مجانية",
+      "secondary": "جدولة عرض توضيحي"
+    },
+    "questions": {
+      "title": "هل لديك أسئلة؟",
+      "description": "فريقنا هنا لمساعدتك على النجاح.",
+      "primary": "اتصل بالمبيعات",
+      "secondary": "عرض التوثيق"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 جميع الحقوق محفوظة.",
+    "madeWith": "صنع بـ ❤️ بواسطة",
+    "followUs": "تابعنا على"
+  }
+}

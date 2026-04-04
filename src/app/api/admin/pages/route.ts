@@ -62,6 +62,27 @@ export async function POST(request: NextRequest) {
       }
     }
     
+    // ایجاد یا پیدا کردن PageGroup
+    let pageGroupId = null;
+    if (data.groupSlug) {
+      const existingGroup = await prisma.pageGroup.findUnique({
+        where: { slug: data.groupSlug }
+      });
+      
+      if (existingGroup) {
+        pageGroupId = existingGroup.id;
+      } else {
+        const newGroup = await prisma.pageGroup.create({
+          data: {
+            name: data.groupName || data.title,
+            slug: data.groupSlug,
+            defaultLanguage: data.language || 'en'
+          }
+        });
+        pageGroupId = newGroup.id;
+      }
+    }
+    
     const page = await prisma.page.create({
       data: {
         title: data.title,
@@ -71,15 +92,17 @@ export async function POST(request: NextRequest) {
         metaTitle: data.metaTitle,
         metaDescription: data.metaDescription,
         sections: data.sections ? JSON.stringify(data.sections) : null,
-        builderData: data.builderData ? JSON.stringify(data.builderData) : JSON.stringify([]),
-        isBuilderPage: true,
+        builderData: data.builderData ? JSON.stringify(data.builderData) : JSON.stringify({ sections: [] }),
+        isBuilderPage: data.isBuilderPage !== undefined ? data.isBuilderPage : true,
         builderVersion: '1.0',
+        pageGroupId,
+        isDefaultLang: data.isDefaultLang || false
       },
     });
 
-    return NextResponse.json({ page });
+    return NextResponse.json({ success: true, data: page });
   } catch (error) {
     console.error('Pages POST error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
   }
 }

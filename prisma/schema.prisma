@@ -33,8 +33,32 @@ model Page {
   isBuilderPage Boolean   @default(false) // Flag for builder-created pages
   builderVersion String?  // Track builder version for migrations
   isHomepage    Boolean   @default(false) // Flag for homepage
+  
+  // Multilingual grouping
+  pageGroupId   String?   // Link to PageGroup for multilingual pages
+  isDefaultLang Boolean   @default(false) // Is this the default language version?
+  lastSyncedAt  DateTime? // Last time structure was synced from default
+  
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  
+  pageGroup     PageGroup? @relation(fields: [pageGroupId], references: [id], onDelete: SetNull)
+  
+  @@index([pageGroupId])
+  @@index([language])
+  @@index([status])
+}
+
+model PageGroup {
+  id              String   @id @default(cuid())
+  name            String   // Display name (e.g., "Home Page")
+  slug            String   @unique // Common slug without language prefix (e.g., "home")
+  defaultLanguage String   @default("en") // Default language for this group
+  
+  pages           Page[]
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Translation {

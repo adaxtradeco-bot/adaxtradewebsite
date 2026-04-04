@@ -1,0 +1,76 @@
+{
+  "common": {
+    "cta": {
+      "getStarted": "Get Started",
+      "learnMore": "Learn More",
+      "contactUs": "Contact Us",
+      "bookDemo": "Book a Demo",
+      "tryFree": "Try for Free",
+      "signUp": "Sign Up",
+      "readMore": "Read More",
+      "viewAll": "View All",
+      "download": "Download",
+      "watchVideo": "Watch Video",
+      "exploreMore": "Explore More"
+    },
+    "labels": {
+      "features": "Features",
+      "benefits": "Benefits",
+      "whyUs": "Why Us",
+      "howItWorks": "How It Works",
+      "testimonials": "Testimonials",
+      "pricing": "Pricing",
+      "faq": "FAQ",
+      "resources": "Resources",
+      "documentation": "Documentation",
+      "support": "Support"
+    },
+    "status": {
+      "new": "New",
+      "popular": "Popular",
+      "comingSoon": "Coming Soon",
+      "beta": "Beta",
+      "featured": "Featured"
+    }
+  },
+  "hero": {
+    "badges": {
+      "noCode": "No-Code",
+      "aiPowered": "AI-Powered",
+      "secure": "Secure",
+      "compliant": "SOC2/GDPR Compliant",
+      "trusted": "Trusted by 1000+ Companies"
+    }
+  },
+  "features": {
+    "common": {
+      "dragDrop": "Drag & Drop",
+      "integrations": "Integrations",
+      "security": "Security",
+      "analytics": "Analytics",
+      "automation": "Automation",
+      "collaboration": "Collaboration",
+      "customization": "Customization",
+      "scalability": "Scalability"
+    }
+  },
+  "cta": {
+    "ready": {
+      "title": "Ready to Get Started?",
+      "description": "Join thousands of companies already using our platform.",
+      "primary": "Start Free Trial",
+      "secondary": "Schedule Demo"
+    },
+    "questions": {
+      "title": "Have Questions?",
+      "description": "Our team is here to help you succeed.",
+      "primary": "Contact Sales",
+      "secondary": "View Documentation"
+    }
+  },
+  "footer": {
+    "copyright": "© 2024 All rights reserved.",
+    "madeWith": "Made with ❤️ by",
+    "followUs": "Follow us on"
+  }
+}
