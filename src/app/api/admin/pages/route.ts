@@ -51,6 +51,17 @@ export async function POST(request: NextRequest) {
 
     const data = await request.json();
     
+    // Check if slug already exists
+    if (data.slug) {
+      const existingPage = await prisma.page.findUnique({
+        where: { slug: data.slug }
+      });
+      
+      if (existingPage) {
+        return NextResponse.json({ error: 'Slug already exists' }, { status: 400 });
+      }
+    }
+    
     const page = await prisma.page.create({
       data: {
         title: data.title,
@@ -60,6 +71,9 @@ export async function POST(request: NextRequest) {
         metaTitle: data.metaTitle,
         metaDescription: data.metaDescription,
         sections: data.sections ? JSON.stringify(data.sections) : null,
+        builderData: data.builderData ? JSON.stringify(data.builderData) : JSON.stringify([]),
+        isBuilderPage: true,
+        builderVersion: '1.0',
       },
     });
 
