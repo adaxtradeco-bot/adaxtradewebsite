@@ -16,6 +16,9 @@ interface ToolbarProps {
   onTogglePreview: () => void;
   previewMode: 'desktop' | 'tablet' | 'mobile';
   onPreviewModeChange: (mode: 'desktop' | 'tablet' | 'mobile') => void;
+  pageId?: string;
+  pageStatus?: string;
+  onPublish?: () => Promise<void>;
 }
 
 export function Toolbar({
@@ -25,7 +28,37 @@ export function Toolbar({
   onTogglePreview,
   previewMode,
   onPreviewModeChange,
+  pageId,
+  pageStatus,
+  onPublish,
 }: ToolbarProps) {
+  const [isPublishing, setIsPublishing] = React.useState(false);
+
+  const handlePublish = async () => {
+    if (!pageId) return;
+    
+    setIsPublishing(true);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`/api/admin/pages/${pageId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ status: 'published' })
+      });
+
+      if (res.ok) {
+        if (onPublish) await onPublish();
+        window.location.reload();
+      }
+    } catch (err) {
+      console.error('Publish error:', err);
+    } finally {
+      setIsPublishing(false);
+    }
+  };
   return (
     <div className="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
       {/* Left Section - Page Info */}
@@ -106,13 +139,28 @@ export function Toolbar({
           )}
         </button>
 
-        {/* Publish Button (Future) */}
+        {/* Publish Button */}
         <button
-          className="px-4 py-2 bg-violet-600 hover:bg-violet-700 text-white rounded-lg font-medium transition-colors"
-          title="Publish page (coming soon)"
+          onClick={handlePublish}
+          disabled={isPublishing || pageStatus === 'published'}
+          className="px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors flex items-center"
         >
-          <span className="mr-2">🚀</span>
-          Publish
+          {isPublishing ? (
+            <>
+              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
+              Publishing...
+            </>
+          ) : pageStatus === 'published' ? (
+            <>
+              <span className="mr-2">✅</span>
+              Published
+            </>
+          ) : (
+            <>
+              <span className="mr-2">🚀</span>
+              Publish
+            </>
+          )}
         </button>
       </div>
     </div>

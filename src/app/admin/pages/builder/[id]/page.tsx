@@ -170,6 +170,7 @@ export default function BuilderPage() {
         initialSections={pageData.builderData || []}
         onSave={handleSave}
         adminMode={customStylesMode}
+        pageStatus={pageData.status}
       />
     </div>
   );

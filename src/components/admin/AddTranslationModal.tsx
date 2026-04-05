@@ -76,10 +76,11 @@ export function AddTranslationModal({
   useEffect(() => {
     // تولید خودکار slug از صفحه مبدا
     if (language && sourcePageData) {
-      // حذف زبان قبلی از slug و اضافه کردن زبان جدید
       const sourceSlug = sourcePageData.slug || '';
       const slugWithoutLang = sourceSlug.replace(/^\/(en|ar|tr|fr|de|es)\//, '');
-      setSlug(`/${language}/${slugWithoutLang}`);
+      const newSlug = `/${language}/${slugWithoutLang}`;
+      setSlug(newSlug);
+      console.log('Auto-generated slug:', newSlug);
     }
   }, [language, sourcePageData]);
 
@@ -140,6 +141,7 @@ export function AddTranslationModal({
       });
 
       const result = await res.json();
+      console.log('Translation result:', result);
 
       if (result.success) {
         onSuccess?.();

@@ -23,9 +23,10 @@ interface PageBuilderProps {
   initialSections?: SectionConfig[];
   onSave?: (sections: SectionConfig[]) => Promise<void>;
   adminMode?: boolean;
+  pageStatus?: string;
 }
 
-export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false }: PageBuilderProps) {
+export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus }: PageBuilderProps) {
   const [sections, setSections] = useState<SectionConfig[]>(Array.isArray(initialSections) ? initialSections : []);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -181,6 +182,8 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
         onTogglePreview={() => setIsPreviewMode(!isPreviewMode)}
         previewMode={previewMode}
         onPreviewModeChange={setPreviewMode}
+        pageId={pageId}
+        pageStatus={pageStatus}
       />
 
       <div className="flex-1 flex overflow-hidden">

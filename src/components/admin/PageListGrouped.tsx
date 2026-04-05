@@ -197,7 +197,7 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
                         Builder
                       </Link>
                       <Link
-                        href={`/admin/pages/${page.id}/edit`}
+                        href={`/admin/pages/settings/${page.id}`}
                         className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
                       >
                         <Edit size={16} />
@@ -252,8 +252,8 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
                     Builder
                   </Link>
                   <Link
-                    href={`/admin/pages/${page.id}/edit`}
-                    className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
+                    href={`/admin/pages/settings/${page.id}`}
+                    className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-1"
                   >
                     <Edit size={16} />
                     Settings
