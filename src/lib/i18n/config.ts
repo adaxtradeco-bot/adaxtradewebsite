@@ -26,6 +26,34 @@ export const languages: Record<string, Language> = {
     nativeName: 'العربية',
     dir: 'rtl',
     flag: '🇸🇦'
+  },
+  tr: {
+    code: 'tr',
+    name: 'Turkish',
+    nativeName: 'Türkçe',
+    dir: 'ltr',
+    flag: '🇹🇷'
+  },
+  fr: {
+    code: 'fr',
+    name: 'French',
+    nativeName: 'Français',
+    dir: 'ltr',
+    flag: '🇫🇷'
+  },
+  de: {
+    code: 'de',
+    name: 'German',
+    nativeName: 'Deutsch',
+    dir: 'ltr',
+    flag: '🇩🇪'
+  },
+  es: {
+    code: 'es',
+    name: 'Spanish',
+    nativeName: 'Español',
+    dir: 'ltr',
+    flag: '🇪🇸'
   }
 } as const;
 

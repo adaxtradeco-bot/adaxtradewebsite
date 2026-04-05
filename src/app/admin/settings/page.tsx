@@ -100,7 +100,7 @@ const defaultSettings: SiteSettings = {
   languages: {
     showInHeader: true,
     defaultLanguage: 'en',
-    enabledLanguages: ['en', 'ar']
+    enabledLanguages: ['en', 'ar', 'tr', 'fr', 'de', 'es']
   },
   contactSales: {
     show: true,
@@ -581,21 +581,41 @@ export default function SettingsPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="ar">العربية</SelectItem>
+                    <SelectItem value="en">🇺🇸 English</SelectItem>
+                    <SelectItem value="ar">🇸🇦 العربية (Arabic)</SelectItem>
+                    <SelectItem value="tr">🇹🇷 Türkçe (Turkish)</SelectItem>
+                    <SelectItem value="fr">🇫🇷 Français (French)</SelectItem>
+                    <SelectItem value="de">🇩🇪 Deutsch (German)</SelectItem>
+                    <SelectItem value="es">🇪🇸 Español (Spanish)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
                 <Label>Enabled Languages</Label>
-                <div className="mt-2 space-y-2">
-                  {['en', 'ar'].map((lang) => (
-                    <div key={lang} className="flex items-center space-x-2">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-3">
+                  Select which languages should be available on your website. Disabled languages will not appear in the language switcher.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {[
+                    { code: 'en', name: 'English', flag: '🇺🇸' },
+                    { code: 'ar', name: 'العربية (Arabic)', flag: '🇸🇦' },
+                    { code: 'tr', name: 'Türkçe (Turkish)', flag: '🇹🇷' },
+                    { code: 'fr', name: 'Français (French)', flag: '🇫🇷' },
+                    { code: 'de', name: 'Deutsch (German)', flag: '🇩🇪' },
+                    { code: 'es', name: 'Español (Spanish)', flag: '🇪🇸' }
+                  ].map((lang) => (
+                    <label
+                      key={lang.code}
+                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-all ${
+                        settings.languages.enabledLanguages.includes(lang.code)
+                          ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
+                          : 'border-gray-300 dark:border-gray-600 hover:border-indigo-300 dark:hover:border-indigo-700'
+                      }`}
+                    >
                       <input
                         type="checkbox"
-                        id={`lang-${lang}`}
-                        checked={settings.languages.enabledLanguages.includes(lang)}
+                        checked={settings.languages.enabledLanguages.includes(lang.code)}
                         onChange={(e) => {
                           const enabled = settings.languages.enabledLanguages;
                           if (e.target.checked) {
@@ -603,25 +623,36 @@ export default function SettingsPage() {
                               ...prev,
                               languages: {
                                 ...prev.languages,
-                                enabledLanguages: [...enabled, lang]
+                                enabledLanguages: [...enabled, lang.code]
                               }
                             }));
                           } else {
+                            // جلوگیری از غیرفعال کردن زبان پیشفرض
+                            if (lang.code === settings.languages.defaultLanguage) {
+                              alert('Cannot disable the default language. Please change the default language first.');
+                              return;
+                            }
                             setSettings(prev => ({
                               ...prev,
                               languages: {
                                 ...prev.languages,
-                                enabledLanguages: enabled.filter(l => l !== lang)
+                                enabledLanguages: enabled.filter(l => l !== lang.code)
                               }
                             }));
                           }
                         }}
-                        className="rounded border-gray-300"
+                        className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                       />
-                      <Label htmlFor={`lang-${lang}`}>
-                        {lang === 'en' ? 'English' : 'العربية'}
-                      </Label>
-                    </div>
+                      <span className="text-2xl">{lang.flag}</span>
+                      <div className="flex-1">
+                        <div className="font-medium text-sm text-gray-900 dark:text-white">
+                          {lang.name}
+                        </div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                          {lang.code.toUpperCase()}
+                        </div>
+                      </div>
+                    </label>
                   ))}
                 </div>
               </div>

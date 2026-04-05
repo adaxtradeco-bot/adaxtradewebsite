@@ -10,6 +10,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n/context';
 import { languages, SupportedLanguage } from '@/lib/i18n/config';
 import { useRouter, usePathname } from 'next/navigation';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 const ChevronIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,10 +20,17 @@ const ChevronIcon = () => (
 
 export function LanguageSwitch() {
   const { language, setLanguage, isRTL } = useLanguage();
+  const { settings } = useSiteSettings();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
+
+  // فیلتر کردن زبانهای فعال شده در Settings
+  const enabledLanguages = settings.languages?.enabledLanguages || ['en', 'ar'];
+  const availableLanguages = Object.entries(languages).filter(([code]) => 
+    enabledLanguages.includes(code)
+  );
 
   const currentLang = languages[language];
 
@@ -37,16 +45,49 @@ export function LanguageSwitch() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLanguageChange = (langCode: SupportedLanguage) => {
+  const handleLanguageChange = async (langCode: SupportedLanguage) => {
     setLanguage(langCode);
     setIsOpen(false);
     
-    // Update URL with new language
+    // بررسی وجود صفحه در زبان جدید
     const segments = pathname.split('/');
-    segments[1] = langCode; // Replace language segment
-    const newPath = segments.join('/');
-    router.push(newPath);
+    const currentLangCode = segments[1];
+    
+    // اگر در صفحه با زبان هستیم
+    if (Object.keys(languages).includes(currentLangCode)) {
+      segments[1] = langCode;
+      const newPath = segments.join('/');
+      
+      try {
+        // چک کردن وجود صفحه
+        const response = await fetch(`/api/pages/check?path=${newPath}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.exists) {
+            router.push(newPath);
+          } else {
+            // صفحه وجود نداره، برو به صفحه اصلی
+            router.push(`/${langCode}`);
+          }
+        } else {
+          // در صورت خطا، برو به صفحه اصلی
+          router.push(`/${langCode}`);
+        }
+      } catch (error) {
+        // در صورت خطا، برو به صفحه اصلی
+        router.push(`/${langCode}`);
+      }
+    } else {
+      // اگر در صفحه بدون زبان هستیم
+      router.push(`/${langCode}`);
+    }
   };
+
+  // اگر فقط یک زبان فعال باشه، نمایش نده
+  if (availableLanguages.length <= 1) {
+    return null;
+  }
 
   return (
     <div className="relative" ref={dropdownRef}>
@@ -72,7 +113,7 @@ export function LanguageSwitch() {
           isRTL ? 'right-0' : 'left-0'
         }`}>
           <div className="py-1">
-            {Object.entries(languages).map(([code, lang]) => (
+            {availableLanguages.map(([code, lang]) => (
               <button
                 key={code}
                 className={`w-full flex items-center gap-3 px-3 py-2 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors duration-200 ${

@@ -48,7 +48,7 @@ const defaultSettings: SiteSettings = {
   languages: {
     showInHeader: true,
     defaultLanguage: 'en',
-    enabledLanguages: ['en', 'ar']
+    enabledLanguages: ['en', 'ar', 'tr', 'fr', 'de', 'es']
   },
   contactSales: {
     show: true,
