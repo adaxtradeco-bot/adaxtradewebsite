@@ -39,6 +39,9 @@ export async function POST(
       );
     }
 
+    console.log('Source page builderData type:', typeof sourcePage.builderData);
+    console.log('Source page builderData length:', sourcePage.builderData?.length);
+
     // بررسی اینکه slug تکراری نباشد
     const existingPage = await prisma.page.findUnique({
       where: { slug }
@@ -95,7 +98,11 @@ export async function POST(
     // کپی کردن ساختار (sections)
     if (copyStructure && sourcePage.builderData) {
       try {
-        const builderData = JSON.parse(sourcePage.builderData);
+        const builderData = typeof sourcePage.builderData === 'string' 
+          ? JSON.parse(sourcePage.builderData) 
+          : sourcePage.builderData;
+        
+        console.log('Parsed builderData:', JSON.stringify(builderData).substring(0, 200));
         
         // کپی sections
         if (builderData.sections) {
@@ -144,9 +151,13 @@ export async function POST(
           newPageData.builderData = JSON.stringify({
             sections: newSections
           });
+          
+          console.log('New page will have', newSections.length, 'sections');
+          console.log('First section sample:', JSON.stringify(newSections[0]).substring(0, 300));
         }
       } catch (error) {
         console.error('Error parsing builderData:', error);
+        console.error('builderData value:', sourcePage.builderData);
       }
     }
 
