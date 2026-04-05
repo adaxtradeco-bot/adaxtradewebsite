@@ -51,6 +51,8 @@ export default function MenuEditor() {
   const [selectedColumn, setSelectedColumn] = useState<{ itemId: string; columnIndex: number } | null>(null);
   const [pages, setPages] = useState<Page[]>([]);
   const [saving, setSaving] = useState(false);
+  const [showCopyModal, setShowCopyModal] = useState(false);
+  const [copyTargetLanguage, setCopyTargetLanguage] = useState('ar');
 
   useEffect(() => {
     fetchMenu();
@@ -350,6 +352,43 @@ export default function MenuEditor() {
     }
   };
 
+  const copyMenuForTranslation = async () => {
+    if (!copyTargetLanguage) {
+      alert('Please select a target language');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch('/api/admin/menus', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: `${menuName} (${copyTargetLanguage.toUpperCase()})`,
+          location: 'header',
+          language: copyTargetLanguage,
+          items: JSON.stringify(items),
+          status: 'active'
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(`✅ Menu copied successfully for ${copyTargetLanguage}!`);
+        setShowCopyModal(false);
+        router.push(`/admin/menus/edit/${data.menu.id}`);
+      } else {
+        alert('❌ Failed to copy menu');
+      }
+    } catch (error) {
+      console.error('Failed to copy menu:', error);
+      alert('❌ Failed to copy menu');
+    }
+  };
+
   return (
     <div className="h-[calc(100vh-100px)]">
       <div className="flex justify-between items-center mb-6">
@@ -362,6 +401,12 @@ export default function MenuEditor() {
           </p>
         </div>
         <div className="flex gap-3">
+          <button
+            onClick={() => setShowCopyModal(true)}
+            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 flex items-center gap-2"
+          >
+            📋 Copy for Translation
+          </button>
           <button
             onClick={() => router.push('/admin/menus')}
             className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600"
@@ -790,6 +835,51 @@ export default function MenuEditor() {
           )}
         </div>
       </div>
+
+      {/* Copy Modal */}
+      {showCopyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 p-6">
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+              📋 Copy Menu for Translation
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              This will create a copy of this menu with all items and structure for translation to another language.
+            </p>
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Target Language
+              </label>
+              <select
+                value={copyTargetLanguage}
+                onChange={(e) => setCopyTargetLanguage(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              >
+                <option value="en">🇺🇸 English</option>
+                <option value="ar">🇸🇦 العربية (Arabic)</option>
+                <option value="tr">🇹🇷 Türkçe (Turkish)</option>
+                <option value="fr">🇫🇷 Français (French)</option>
+                <option value="de">🇩🇪 Deutsch (German)</option>
+                <option value="es">🇪🇸 Español (Spanish)</option>
+              </select>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowCopyModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={copyMenuForTranslation}
+                className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+              >
+                Copy Menu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
