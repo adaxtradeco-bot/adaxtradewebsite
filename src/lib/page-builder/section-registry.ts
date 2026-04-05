@@ -1128,6 +1128,8 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
         secondaryButton: { text: 'See Business Impact', href: '#impact' },
         footerText: 'Secure • Extensible • Real-time visibility',
         badges: [],
+        titleFontSize: 'text-4xl md:text-5xl lg:text-6xl',
+        descriptionFontSize: 'text-lg',
         themeId: 'indigo-cyan',
         customBackground: '',
         customTitleGradientFrom: '',

@@ -34,6 +34,10 @@ interface ProductHeroData {
   footerText?: string;
   badges?: string[];
   
+  // Typography
+  titleFontSize?: string;
+  descriptionFontSize?: string;
+  
   // Theme
   themeId?: string;
   customBackground?: string;
@@ -71,6 +75,8 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
     secondaryButton,
     footerText,
     badges = [],
+    titleFontSize = 'text-4xl md:text-5xl lg:text-6xl',
+    descriptionFontSize = 'text-lg',
     customBackground,
     customTitleGradientFrom,
     customTitleGradientTo,
@@ -210,7 +216,7 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
               </div>
             )}
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
+            <h1 className={`${titleFontSize} font-extrabold leading-tight`}>
               {title}{titleHighlight && ' '}
               {titleHighlight && (
                 <span className={`bg-gradient-to-r ${gradientFrom} ${gradientTo} bg-clip-text text-transparent`}>
@@ -219,7 +225,7 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
               )}
             </h1>
             
-            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed">
+            <p className={`${descriptionFontSize} text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed`}>
               {description}
             </p>
             
