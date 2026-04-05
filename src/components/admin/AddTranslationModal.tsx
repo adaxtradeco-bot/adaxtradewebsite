@@ -142,6 +142,17 @@ export function AddTranslationModal({
 
       const result = await res.json();
       console.log('Translation result:', result);
+      
+      // نمایش debug logs
+      if (result.debugLogs) {
+        console.log('=== DEBUG LOGS ===');
+        result.debugLogs.forEach((log: string) => console.log(log));
+        console.log('==================');
+        
+        // نمایش لاگها در alert قبل از بستن modal
+        const logsText = result.debugLogs.join('\n');
+        alert('Debug Logs:\n\n' + logsText);
+      }
 
       if (result.success) {
         onSuccess?.();

@@ -13,15 +13,19 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const debugLogs: string[] = [];
+  
   try {
     const { id } = params;
     const body = await request.json();
     const { language, slug, copyStructure = true, copyStyles = true, copyContent = false } = body;
 
+    debugLogs.push(`Request: lang=${language}, slug=${slug}, copyStructure=${copyStructure}, copyStyles=${copyStyles}, copyContent=${copyContent}`);
+
     // Validation
     if (!language || !slug) {
       return NextResponse.json(
-        { success: false, error: 'Language and slug are required' },
+        { success: false, error: 'Language and slug are required', debugLogs },
         { status: 400 }
       );
     }
@@ -34,13 +38,17 @@ export async function POST(
 
     if (!sourcePage) {
       return NextResponse.json(
-        { success: false, error: 'Source page not found' },
+        { success: false, error: 'Source page not found', debugLogs },
         { status: 404 }
       );
     }
 
-    console.log('Source page builderData type:', typeof sourcePage.builderData);
-    console.log('Source page builderData length:', sourcePage.builderData?.length);
+    debugLogs.push(`Source page found: ${sourcePage.title}`);
+    debugLogs.push(`builderData type: ${typeof sourcePage.builderData}`);
+    debugLogs.push(`builderData exists: ${!!sourcePage.builderData}`);
+    if (sourcePage.builderData) {
+      debugLogs.push(`builderData length: ${sourcePage.builderData.length}`);
+    }
 
     // بررسی اینکه slug تکراری نباشد
     const existingPage = await prisma.page.findUnique({
@@ -49,7 +57,7 @@ export async function POST(
 
     if (existingPage) {
       return NextResponse.json(
-        { success: false, error: 'Slug already exists' },
+        { success: false, error: 'Slug already exists', debugLogs },
         { status: 400 }
       );
     }
@@ -79,8 +87,6 @@ export async function POST(
       pageGroupId = newGroup.id;
     }
 
-    console.log('Creating translation:', { language, slug, sourcePageId: id });
-
     // آماده کردن داده صفحه جدید
     const newPageData: any = {
       title: `${sourcePage.title} (${language.toUpperCase()})`,
@@ -102,10 +108,13 @@ export async function POST(
           ? JSON.parse(sourcePage.builderData) 
           : sourcePage.builderData;
         
-        console.log('Parsed builderData:', JSON.stringify(builderData).substring(0, 200));
+        debugLogs.push(`Parsed builderData successfully`);
+        debugLogs.push(`builderData has sections: ${!!builderData.sections}`);
         
         // کپی sections
         if (builderData.sections) {
+          debugLogs.push(`Source has ${builderData.sections.length} sections`);
+          
           const newSections = builderData.sections.map((section: any) => {
             const newSection: any = {
               id: section.id,
@@ -124,7 +133,7 @@ export async function POST(
                 }
               });
               
-              // خالی کردن آرایه‌های متنی
+              // خالی کردن آرایههای متنی
               if (Array.isArray(newSection.data.items)) {
                 newSection.data.items = newSection.data.items.map((item: any) => {
                   const newItem = { ...item };
@@ -152,37 +161,44 @@ export async function POST(
             sections: newSections
           });
           
-          console.log('New page will have', newSections.length, 'sections');
-          console.log('First section sample:', JSON.stringify(newSections[0]).substring(0, 300));
+          debugLogs.push(`Created ${newSections.length} sections for new page`);
+          debugLogs.push(`First section: type=${newSections[0]?.type}, hasData=${!!newSections[0]?.data}`);
+        } else {
+          debugLogs.push(`WARNING: builderData exists but has no sections array`);
         }
       } catch (error) {
+        debugLogs.push(`ERROR parsing builderData: ${error}`);
         console.error('Error parsing builderData:', error);
-        console.error('builderData value:', sourcePage.builderData);
       }
+    } else {
+      debugLogs.push(`Skipping structure copy: copyStructure=${copyStructure}, hasBuilderData=${!!sourcePage.builderData}`);
     }
 
     // ایجاد صفحه جدید
-    console.log('Creating new page with data:', newPageData);
+    debugLogs.push(`Creating new page with builderData length: ${newPageData.builderData?.length || 0}`);
     const newPage = await prisma.page.create({
       data: newPageData
     });
-    console.log('New page created:', newPage.id);
+    debugLogs.push(`New page created with ID: ${newPage.id}`);
 
     return NextResponse.json({
       success: true,
       data: {
         page: newPage,
         message: 'Translation created successfully'
-      }
+      },
+      debugLogs
     });
 
   } catch (error) {
     console.error('Error creating translation:', error);
+    debugLogs.push(`FATAL ERROR: ${error}`);
     return NextResponse.json(
       {
         success: false,
         error: 'Failed to create translation',
-        message: error instanceof Error ? error.message : 'Unknown error'
+        message: error instanceof Error ? error.message : 'Unknown error',
+        debugLogs
       },
       { status: 500 }
     );
