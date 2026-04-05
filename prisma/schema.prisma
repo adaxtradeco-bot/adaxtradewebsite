@@ -114,3 +114,22 @@ model SiteSettings {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Footer {
+  id              String   @id @default(cuid())
+  language        String   @default("en") // en, ar, tr, fr, de, es
+  companyName     String
+  tagline         String?
+  description     String?
+  contactInfo     String?  // JSON: { show, email, phone, address }
+  columns         String   // JSON array of footer columns with links
+  bottomBar       String?  // JSON: { show, copyrightText, showSocialLinks, socialLinks }
+  style           String?  // JSON: { backgroundColor, textColor, linkColor, borderColor, padding }
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@unique([language])
+  @@index([language])
+  @@index([isActive])
+}
