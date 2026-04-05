@@ -109,13 +109,17 @@ export async function POST(
           : sourcePage.builderData;
         
         debugLogs.push(`Parsed builderData successfully`);
+        debugLogs.push(`builderData is array: ${Array.isArray(builderData)}`);
         debugLogs.push(`builderData has sections: ${!!builderData.sections}`);
+        debugLogs.push(`builderData keys: ${Object.keys(builderData).join(', ')}`);
         
-        // کپی sections
-        if (builderData.sections) {
-          debugLogs.push(`Source has ${builderData.sections.length} sections`);
+        // اگر builderData خودش یک آرایه است (نه {sections: []})
+        let sections = Array.isArray(builderData) ? builderData : builderData.sections;
+        
+        if (sections && sections.length > 0) {
+          debugLogs.push(`Source has ${sections.length} sections`);
           
-          const newSections = builderData.sections.map((section: any) => {
+          const newSections = sections.map((section: any) => {
             const newSection: any = {
               id: section.id,
               type: section.type,
@@ -157,14 +161,15 @@ export async function POST(
             return newSection;
           });
           
-          newPageData.builderData = JSON.stringify({
-            sections: newSections
-          });
+          // ذخیره به همون فرمتی که در دیتابیس هست
+          newPageData.builderData = Array.isArray(builderData)
+            ? JSON.stringify(newSections)
+            : JSON.stringify({ sections: newSections });
           
           debugLogs.push(`Created ${newSections.length} sections for new page`);
           debugLogs.push(`First section: type=${newSections[0]?.type}, hasData=${!!newSections[0]?.data}`);
         } else {
-          debugLogs.push(`WARNING: builderData exists but has no sections array`);
+          debugLogs.push(`WARNING: No sections found in builderData`);
         }
       } catch (error) {
         debugLogs.push(`ERROR parsing builderData: ${error}`);
