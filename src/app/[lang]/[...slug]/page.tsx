@@ -25,15 +25,21 @@ export default function DynamicPage() {
   useEffect(() => {
     const fetchPage = async () => {
       try {
-        const response = await fetch(`/api/pages/by-slug?slug=${fullSlug}`);
+        // ساخت slug کامل با زبان
+        const completeSlug = `/${lang}/${fullSlug}`;
+        console.log('Fetching page with slug:', completeSlug);
+        
+        const response = await fetch(`/api/pages/by-slug?slug=${encodeURIComponent(completeSlug)}`);
         if (response.ok) {
           const data = await response.json();
+          console.log('Page data received:', data);
           if (data.page?.builderData) {
             setPageData(data.page.builderData);
           } else {
             setNotFound(true);
           }
         } else {
+          console.error('Page not found:', response.status);
           setNotFound(true);
         }
       } catch (error) {
@@ -45,7 +51,7 @@ export default function DynamicPage() {
     };
 
     fetchPage();
-  }, [fullSlug]);
+  }, [fullSlug, lang]);
 
   if (isLoading) {
     return (
