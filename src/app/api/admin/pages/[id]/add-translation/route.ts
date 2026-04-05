@@ -99,13 +99,47 @@ export async function POST(
         
         // کپی sections
         if (builderData.sections) {
-          const newSections = builderData.sections.map((section: any) => ({
-            id: section.id,
-            type: section.type,
-            order: section.order,
-            data: copyContent ? section.data : {}, // اگر copyContent فعال باشد، محتوا را هم کپی کن
-            style: copyStyles ? section.style : {}
-          }));
+          const newSections = builderData.sections.map((section: any) => {
+            const newSection: any = {
+              id: section.id,
+              type: section.type,
+              order: section.order,
+              data: copyContent ? section.data : { ...section.data },
+              style: copyStyles ? section.style : {}
+            };
+
+            // اگر copyContent فعال نیست، فقط فیلدهای متنی رو خالی کن
+            if (!copyContent && newSection.data) {
+              const textFields = ['title', 'subtitle', 'description', 'content', 'text', 'heading', 'subheading', 'label', 'buttonText', 'buttonLabel'];
+              textFields.forEach(field => {
+                if (newSection.data[field]) {
+                  newSection.data[field] = '';
+                }
+              });
+              
+              // خالی کردن آرایه‌های متنی
+              if (Array.isArray(newSection.data.items)) {
+                newSection.data.items = newSection.data.items.map((item: any) => {
+                  const newItem = { ...item };
+                  textFields.forEach(field => {
+                    if (newItem[field]) newItem[field] = '';
+                  });
+                  return newItem;
+                });
+              }
+              if (Array.isArray(newSection.data.features)) {
+                newSection.data.features = newSection.data.features.map((item: any) => {
+                  const newItem = { ...item };
+                  textFields.forEach(field => {
+                    if (newItem[field]) newItem[field] = '';
+                  });
+                  return newItem;
+                });
+              }
+            }
+
+            return newSection;
+          });
           
           newPageData.builderData = JSON.stringify({
             sections: newSections
