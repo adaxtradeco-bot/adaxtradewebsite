@@ -35,7 +35,7 @@ export async function GET(
       sections: page.sections ? JSON.parse(page.sections) : [],
     };
 
-    return NextResponse.json({ page: pageData });
+    return NextResponse.json({ success: true, page: pageData });
   } catch (error) {
     console.error('Page GET error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -85,7 +85,9 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json({ page });
+    console.log('Page updated:', { id: page.id, status: page.status });
+
+    return NextResponse.json({ success: true, page });
   } catch (error) {
     console.error('Page PUT error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

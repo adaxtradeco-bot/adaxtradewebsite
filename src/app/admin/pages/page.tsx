@@ -42,6 +42,10 @@ export default function AdminPages() {
   const handleTranslationSuccess = () => {
     setToast({ message: 'Translation created successfully!', type: 'success' });
     setRefreshKey(prev => prev + 1);
+    // Force immediate refresh
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
 
   return (
@@ -70,9 +74,9 @@ export default function AdminPages() {
       {/* Pages List */}
       <div key={refreshKey}>
         {viewMode === 'grouped' ? (
-          <PageListGrouped onAddTranslation={handleAddTranslation} />
+          <PageListGrouped onAddTranslation={handleAddTranslation} key={`grouped-${refreshKey}`} />
         ) : (
-          <PageListFlat onAddTranslation={handleAddTranslation} />
+          <PageListFlat onAddTranslation={handleAddTranslation} key={`flat-${refreshKey}`} />
         )}
       </div>
 

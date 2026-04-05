@@ -38,7 +38,13 @@ export function PageListFlat({ onAddTranslation }: PageListFlatProps) {
 
   const fetchPages = async () => {
     try {
-      const res = await fetch('/api/admin/pages/grouped');
+      const timestamp = Date.now();
+      const res = await fetch(`/api/admin/pages/grouped?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
       const result = await res.json();
       
       if (result.success) {
@@ -75,6 +81,7 @@ export function PageListFlat({ onAddTranslation }: PageListFlatProps) {
     const flags: Record<string, string> = {
       en: '🇺🇸',
       ar: '🇸🇦',
+      tr: '🇹🇷',
       fr: '🇫🇷',
       de: '🇩🇪',
       es: '🇪🇸'
@@ -246,13 +253,22 @@ export function PageListFlat({ onAddTranslation }: PageListFlatProps) {
                   {new Date(page.updatedAt).toLocaleDateString()}
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <Link
-                    href={`/admin/pages/${page.id}/edit`}
-                    className="inline-flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors"
-                  >
-                    <Edit size={14} />
-                    Edit
-                  </Link>
+                  <div className="flex items-center justify-end gap-2">
+                    <Link
+                      href={`/admin/pages/builder/${page.id}`}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors"
+                    >
+                      <Edit size={14} />
+                      Builder
+                    </Link>
+                    <Link
+                      href={`/admin/pages/settings/${page.id}`}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-600 transition-colors"
+                    >
+                      <Edit size={14} />
+                      Settings
+                    </Link>
+                  </div>
                 </td>
               </tr>
             ))}

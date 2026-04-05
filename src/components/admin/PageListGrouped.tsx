@@ -47,7 +47,13 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
 
   const fetchPages = async () => {
     try {
-      const res = await fetch('/api/admin/pages/grouped');
+      const timestamp = Date.now();
+      const res = await fetch(`/api/admin/pages/grouped?t=${timestamp}`, {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
       const result = await res.json();
       
       if (result.success) {

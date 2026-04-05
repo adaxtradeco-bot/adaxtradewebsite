@@ -49,12 +49,19 @@ export function Toolbar({
         body: JSON.stringify({ status: 'published' })
       });
 
-      if (res.ok) {
+      const result = await res.json();
+      console.log('Publish result:', result);
+
+      if (res.ok && result.success) {
         if (onPublish) await onPublish();
+        alert('Page published successfully!');
         window.location.reload();
+      } else {
+        alert('Failed to publish: ' + (result.error || 'Unknown error'));
       }
     } catch (err) {
       console.error('Publish error:', err);
+      alert('Failed to publish page');
     } finally {
       setIsPublishing(false);
     }

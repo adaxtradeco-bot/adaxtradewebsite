@@ -5,12 +5,15 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
-const prisma = new PrismaClient();
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('Fetching grouped pages...');
+    
     const groups = await prisma.pageGroup.findMany({
       include: {
         pages: {
@@ -47,6 +50,12 @@ export async function GET(request: NextRequest) {
         updatedAt: true,
         createdAt: true
       }
+    });
+
+    console.log('Fetched:', {
+      groups: groups.length,
+      totalPagesInGroups: groups.reduce((sum, g) => sum + g.pages.length, 0),
+      ungroupedPages: ungroupedPages.length
     });
 
     const stats = {
