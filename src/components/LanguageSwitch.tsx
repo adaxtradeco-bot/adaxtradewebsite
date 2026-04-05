@@ -22,6 +22,8 @@ export function LanguageSwitch() {
   const { language, setLanguage, isRTL } = useLanguage();
   const { settings } = useSiteSettings();
   const [isOpen, setIsOpen] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -49,6 +51,8 @@ export function LanguageSwitch() {
     setLanguage(langCode);
     setIsOpen(false);
     
+    const targetLang = languages[langCode];
+    
     // بررسی وجود صفحه در زبان جدید
     const segments = pathname.split('/');
     const currentLangCode = segments[1];
@@ -68,7 +72,12 @@ export function LanguageSwitch() {
             router.push(newPath);
           } else {
             // صفحه وجود نداره، برو به صفحه اصلی
-            router.push(`/${langCode}`);
+            setNotificationMessage(`This page is not available in ${targetLang.nativeName}. Redirecting to homepage...`);
+            setShowNotification(true);
+            setTimeout(() => {
+              router.push(`/${langCode}`);
+              setShowNotification(false);
+            }, 2000);
           }
         } else {
           // در صورت خطا، برو به صفحه اصلی
@@ -90,7 +99,21 @@ export function LanguageSwitch() {
   }
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <>
+      {/* Notification Toast */}
+      {showNotification && (
+        <div className="fixed top-4 right-4 z-[100] animate-slide-in">
+          <div className="bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px]">
+            <svg className="w-5 h-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span className="text-sm font-medium">{notificationMessage}</span>
+          </div>
+        </div>
+      )}
+      
+      <div className="relative" ref={dropdownRef}>
       <button
         className={`flex items-center gap-2 h-8 px-3 rounded-lg bg-transparent hover:bg-black/4 dark:hover:bg-white/11 transition-colors duration-200 ${
           isOpen ? 'bg-black/6 dark:bg-white/11' : ''
@@ -140,6 +163,7 @@ export function LanguageSwitch() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
