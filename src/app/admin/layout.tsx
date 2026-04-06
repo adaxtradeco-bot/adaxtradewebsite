@@ -13,6 +13,9 @@ import { useSidebar } from '@/hooks/useSidebar';
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: '📊' },
   { name: 'Pages', href: '/admin/pages', icon: '📄' },
+  { name: 'Menus', href: '/admin/menus', icon: '🍔' },
+  { name: 'Footers', href: '/admin/footers', icon: '🦶' },
+  { name: 'Contact Sales', href: '/admin/contact-sales', icon: '📞' },
   { name: 'Sections', href: '/admin/sections', icon: '🧩' },
   { name: 'Translations', href: '/admin/translations', icon: '🌐' },
   { name: 'Media', href: '/admin/media', icon: '🖼️' },
