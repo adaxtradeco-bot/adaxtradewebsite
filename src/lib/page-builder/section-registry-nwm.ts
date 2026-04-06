@@ -3,7 +3,7 @@
  * Sections inspired by nwmflow-site design
  */
 
-import { SectionTemplate } from './section-registry';
+import type { SectionTemplate } from './section-registry.types';
 
 export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
   {
@@ -11,7 +11,8 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
     name: 'Hero Slider (NWM Style)',
     type: 'hero-slider-nwm',
     category: 'Headers',
-    description: 'Full-width hero slider with video/image backgrounds and side card',
+    description:
+      'Full-width hero slider with video/image backgrounds and side card',
     icon: '🎬',
     defaultData: {
       id: '',
@@ -22,13 +23,14 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
         defaultSnapshotCard: {
           title: 'One OS, many live systems.',
           subtitle: 'NWMFlow snapshot',
-          description: 'Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.',
+          description:
+            'Use NWMFlow as the engine behind HR, citizen services, ticketing, CX and more.',
           stats: [
             { label: 'Designed for', value: 'Enterprise' },
             { label: 'Built-in', value: 'Forms · Workflows · Dashboards' },
-            { label: 'Architecture', value: 'Farm & Portals' }
+            { label: 'Architecture', value: 'Farm & Portals' },
           ],
-          placeholderText: 'Product screenshot placeholder'
+          placeholderText: 'Product screenshot placeholder',
         },
         slides: [
           {
@@ -42,14 +44,15 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
             snapshotCard: {
               title: 'Built for Government',
               subtitle: 'Citizen Services Solution',
-              description: 'Complete digital transformation for public sector operations.',
+              description:
+                'Complete digital transformation for public sector operations.',
               stats: [
                 { label: 'Sector', value: 'Government' },
                 { label: 'Features', value: 'Request Management · Workflows' },
-                { label: 'Compliance', value: 'GDPR · Accessibility' }
+                { label: 'Compliance', value: 'GDPR · Accessibility' },
               ],
-              placeholderText: 'Government Dashboard Preview'
-            }
+              placeholderText: 'Government Dashboard Preview',
+            },
           },
         ],
       },
@@ -79,7 +82,8 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
         cards: [
           {
             title: 'True no-code',
-            description: 'Design forms workflows dashboards through visual designer.',
+            description:
+              'Design forms workflows dashboards through visual designer.',
             features: [
               'Drag-and-drop forms',
               'Instant deployment',
@@ -198,7 +202,11 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
         farmLabel: 'Farm Multi-org Layer',
         portalLabel: 'Portals Workspaces',
         orgNodes: [
-          { title: 'Org A', description: 'Multiple portals.', position: 'top-left' },
+          {
+            title: 'Org A',
+            description: 'Multiple portals.',
+            position: 'top-left',
+          },
         ],
         notesTitle: 'Use this block for a diagram.',
         notesDescription: 'Replace with your own diagram.',
@@ -239,23 +247,23 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
           'Keep it under 90 seconds.',
         ],
         modules: [
-          { 
-            emoji: '📝', 
-            title: 'Form Builder', 
+          {
+            emoji: '📝',
+            title: 'Form Builder',
             description: 'Multi-step forms.',
-            videoSrc: ''
+            videoSrc: '',
           },
-          { 
-            emoji: '⚡', 
-            title: 'Workflow Engine', 
+          {
+            emoji: '⚡',
+            title: 'Workflow Engine',
             description: 'Automate processes.',
-            videoSrc: ''
+            videoSrc: '',
           },
-          { 
-            emoji: '📊', 
-            title: 'Dashboard Builder', 
+          {
+            emoji: '📊',
+            title: 'Dashboard Builder',
             description: 'Real-time insights.',
-            videoSrc: ''
+            videoSrc: '',
           },
         ],
         ctaText: 'Watch full product tour',
@@ -287,10 +295,7 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
           {
             title: 'Implementation support',
             description: 'Take ownership of rollout.',
-            features: [
-              'Enterprise platform',
-              'Training tracks',
-            ],
+            features: ['Enterprise platform', 'Training tracks'],
           },
         ],
         ctaButtons: {
@@ -373,7 +378,8 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
     name: 'Platform Tabs',
     type: 'platform-tabs',
     category: 'Content',
-    description: 'Tabbed platform ecosystem with cards (by feature, industry, use case)',
+    description:
+      'Tabbed platform ecosystem with cards (by feature, industry, use case)',
     icon: '📑',
     defaultData: {
       id: '',
@@ -434,35 +440,35 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
             title: 'Workflows',
             icon: '',
             videoSrc: '',
-            videoSrcMobile: ''
+            videoSrcMobile: '',
           },
           {
             id: 'integrations',
             title: 'Integrations',
             icon: '',
             videoSrc: '',
-            videoSrcMobile: ''
+            videoSrcMobile: '',
           },
           {
             id: 'apps',
             title: 'Apps',
             icon: '',
             videoSrc: '',
-            videoSrcMobile: ''
+            videoSrcMobile: '',
           },
           {
             id: 'forms',
             title: 'Forms',
             icon: '',
             videoSrc: '',
-            videoSrcMobile: ''
+            videoSrcMobile: '',
           },
           {
             id: 'reports',
             title: 'Reports',
             icon: '',
             videoSrc: '',
-            videoSrcMobile: ''
+            videoSrcMobile: '',
           },
         ],
       },

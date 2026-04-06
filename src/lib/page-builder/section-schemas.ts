@@ -9,24 +9,152 @@ import { z } from 'zod';
 // Base section configuration
 export const BaseSectionSchema = z.object({
   id: z.string(),
-  type: z.enum(['hero', 'HeroSection', 'AppBuilderHero', 'MediaContent', 'FeatureCards', 'SidebarContent', 'Testimonials', 'CTA', 'partnership-hero', 'partnership-hero-interactive', 'hero-video', 'hero-animated', 'features', 'features-compact', 'features-minimal', 'cta', 'CTASection', 'tabs', 'faq', 'timeline', 'pricing', 'stats', 'testimonial', 'testimonials', 'feature-grid', 'FeaturesGridSection', 'team', 'usecases', 'divider', 'industry-hero', 'benefit-grid', 'benefits-grid', 'case-study', 'industry-features', 'feature-cards', 'partner-cards', 'partner-benefits', 'partner-types', 'requirements', 'industry-cards', 'properties', 'location', 'workflow', 'integrations', 'process', 'compliance', 'media-content', 'sidebar-content', 'product-hero', 'metrics', 'two-column-media', 'simple-cards', 'hero-slider', 'home-slider-pro', 'stakeholder', 'platform-tabs', 'why', 'experience-tabs', 'video', 'hero-slider-nwm', 'HeroSliderNWMSection', 'why-nwm', 'stakeholders-nwm', 'ecosystem-nwm', 'infographic-nwm', 'video-preview-nwm', 'partners-nwm', 'features-grid-nwm', 'final-cta-nwm', 'fusion-teams-tabs', 'platform-features', 'ContentSection', 'CardsSection', 'TwoColumnSection', 'interactive-feature-wall', 'wall-of-features', 'why-ivaflow-new-version', 'showcase', 'logo-cloud', 'form-builder-features', 'field-types', 'dynamic-forms-content', 'form-builder-why', 'form-builder-templates', 'form-builder-integrations', 'form-builder-analytics', 'form-builder-mobile-voice', 'form-builder-governance', 'form-builder-bpms', 'form-builder-faq', 'form-builder-final-cta', 'feature-video-tabs', 'process-steps', 'why-automate-with-us', 'partner-showcase-hero', 'platform-snapshot', 'platform-modules-bento', 'how-it-works-steps', 'automation-engine', 'industries-grid', 'sla-integration-split', 'partner-cta-strip', 'platform-capabilities',
-  'reports-hero', 'reports-what-you-can-build', 'reports-chart-builder', 'reports-table', 'reports-kanban', 'reports-ai-insights', 'reports-data-sources', 'reports-scale', 'reports-integration', 'reports-roles']),
+  type: z.enum([
+    'hero',
+    'HeroSection',
+    'AppBuilderHero',
+    'MediaContent',
+    'FeatureCards',
+    'SidebarContent',
+    'Testimonials',
+    'CTA',
+    'partnership-hero',
+    'partnership-hero-interactive',
+    'hero-video',
+    'hero-animated',
+    'features',
+    'features-compact',
+    'features-minimal',
+    'cta',
+    'CTASection',
+    'tabs',
+    'faq',
+    'timeline',
+    'pricing',
+    'stats',
+    'testimonial',
+    'testimonials',
+    'feature-grid',
+    'FeaturesGridSection',
+    'team',
+    'usecases',
+    'divider',
+    'industry-hero',
+    'benefit-grid',
+    'benefits-grid',
+    'case-study',
+    'industry-features',
+    'feature-cards',
+    'partner-cards',
+    'partner-benefits',
+    'partner-types',
+    'requirements',
+    'industry-cards',
+    'properties',
+    'location',
+    'workflow',
+    'integrations',
+    'process',
+    'compliance',
+    'media-content',
+    'sidebar-content',
+    'product-hero',
+    'metrics',
+    'two-column-media',
+    'simple-cards',
+    'hero-slider',
+    'home-slider-pro',
+    'stakeholder',
+    'platform-tabs',
+    'why',
+    'experience-tabs',
+    'video',
+    'hero-slider-nwm',
+    'HeroSliderNWMSection',
+    'why-nwm',
+    'stakeholders-nwm',
+    'ecosystem-nwm',
+    'infographic-nwm',
+    'video-preview-nwm',
+    'partners-nwm',
+    'features-grid-nwm',
+    'final-cta-nwm',
+    'fusion-teams-tabs',
+    'platform-features',
+    'ContentSection',
+    'CardsSection',
+    'TwoColumnSection',
+    'interactive-feature-wall',
+    'wall-of-features',
+    'why-ivaflow-new-version',
+    'showcase',
+    'logo-cloud',
+    'form-builder-features',
+    'field-types',
+    'dynamic-forms-content',
+    'form-builder-why',
+    'form-builder-templates',
+    'form-builder-integrations',
+    'form-builder-analytics',
+    'form-builder-mobile-voice',
+    'form-builder-governance',
+    'form-builder-bpms',
+    'form-builder-faq',
+    'form-builder-final-cta',
+    'feature-video-tabs',
+    'process-steps',
+    'why-automate-with-us',
+    'partner-showcase-hero',
+    'platform-snapshot',
+    'platform-modules-bento',
+    'how-it-works-steps',
+    'automation-engine',
+    'industries-grid',
+    'sla-integration-split',
+    'partner-cta-strip',
+    'platform-capabilities',
+    'ai-agent-hero',
+    'trust-badges',
+    'metro-grid',
+    'rotating-tabs',
+    'ai-copilot-grid',
+    'integration-constellation',
+    'analytics-bento-grid',
+    'governance-grid',
+    'learning-grid',
+    'industry-badges',
+    'scale-cards',
+    'reports-hero',
+    'reports-what-you-can-build',
+    'reports-chart-builder',
+    'reports-table',
+    'reports-kanban',
+    'reports-ai-insights',
+    'reports-data-sources',
+    'reports-scale',
+    'reports-integration',
+    'reports-roles',
+  ]),
   order: z.number(),
   data: z.record(z.string(), z.any()),
-  style: z.object({
-    backgroundColor: z.string().optional(),
-    textColor: z.string().optional(),
-    padding: z.string().optional(),
-    margin: z.string().optional(),
-    alignment: z.enum(['left', 'center', 'right']).optional(),
-    layout: z.string().optional(),
-    columns: z.number().optional(),
-  }).optional(),
-  responsive: z.object({
-    mobile: z.record(z.string(), z.any()).optional(),
-    tablet: z.record(z.string(), z.any()).optional(),
-    desktop: z.record(z.string(), z.any()).optional(),
-  }).optional(),
+  style: z
+    .object({
+      backgroundColor: z.string().optional(),
+      textColor: z.string().optional(),
+      padding: z.string().optional(),
+      margin: z.string().optional(),
+      alignment: z.enum(['left', 'center', 'right']).optional(),
+      layout: z.string().optional(),
+      columns: z.number().optional(),
+    })
+    .optional(),
+  responsive: z
+    .object({
+      mobile: z.record(z.string(), z.any()).optional(),
+      tablet: z.record(z.string(), z.any()).optional(),
+      desktop: z.record(z.string(), z.any()).optional(),
+    })
+    .optional(),
 });
 
 // Button configuration
@@ -46,10 +174,14 @@ export const HeroSectionSchema = BaseSectionSchema.extend({
     description: z.string(),
     buttons: z.array(ButtonSchema).optional(),
     backgroundImage: z.string().optional(),
-    badges: z.array(z.object({
-      text: z.string(),
-      variant: z.string().optional(),
-    })).optional(),
+    badges: z
+      .array(
+        z.object({
+          text: z.string(),
+          variant: z.string().optional(),
+        })
+      )
+      .optional(),
   }),
 });
 
@@ -60,11 +192,13 @@ export const FeaturesSectionSchema = BaseSectionSchema.extend({
     title: z.string(),
     subtitle: z.string().optional(),
     description: z.string().optional(),
-    items: z.array(z.object({
-      title: z.string(),
-      description: z.string(),
-      icon: z.string().optional(),
-    })),
+    items: z.array(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        icon: z.string().optional(),
+      })
+    ),
   }),
 });
 
@@ -82,13 +216,15 @@ export const CTASectionSchema = BaseSectionSchema.extend({
 export const TabsSectionSchema = BaseSectionSchema.extend({
   type: z.literal('tabs'),
   data: z.object({
-    tabs: z.array(z.object({
-      id: z.string(),
-      label: z.string(),
-      title: z.string(),
-      description: z.string(),
-      features: z.array(z.string()).optional(),
-    })),
+    tabs: z.array(
+      z.object({
+        id: z.string(),
+        label: z.string(),
+        title: z.string(),
+        description: z.string(),
+        features: z.array(z.string()).optional(),
+      })
+    ),
   }),
 });
 
@@ -98,15 +234,21 @@ export const UseCasesSectionSchema = BaseSectionSchema.extend({
   data: z.object({
     title: z.string(),
     description: z.string(),
-    items: z.array(z.object({
-      title: z.string(),
-      description: z.string(),
-      icon: z.string().optional(),
-    })),
-    testimonials: z.array(z.object({
-      quote: z.string(),
-      author: z.string(),
-    })).optional(),
+    items: z.array(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        icon: z.string().optional(),
+      })
+    ),
+    testimonials: z
+      .array(
+        z.object({
+          quote: z.string(),
+          author: z.string(),
+        })
+      )
+      .optional(),
   }),
 });
 
@@ -116,13 +258,17 @@ export const FAQSectionSchema = BaseSectionSchema.extend({
   data: z.object({
     title: z.string(),
     subtitle: z.string().optional(),
-    categories: z.array(z.object({
-      title: z.string(),
-      items: z.array(z.object({
-        question: z.string(),
-        answer: z.string(),
-      })),
-    })),
+    categories: z.array(
+      z.object({
+        title: z.string(),
+        items: z.array(
+          z.object({
+            question: z.string(),
+            answer: z.string(),
+          })
+        ),
+      })
+    ),
   }),
 });
 
@@ -132,14 +278,29 @@ export const InteractiveFeatureWallSchema = BaseSectionSchema.extend({
   data: z.object({
     title: z.string().optional(),
     subtitle: z.string().optional(),
-    features: z.array(z.object({
-      id: z.string(),
-      key: z.string(),
-      title: z.string(),
-      icon: z.enum(['check', 'doc', 'calendar', 'users', 'chart', 'settings', 'zap', 'shield', 'globe', 'smartphone', 'database', 'cloud']),
-      previewImage: z.string(),
-      description: z.string().optional(),
-    })),
+    features: z.array(
+      z.object({
+        id: z.string(),
+        key: z.string(),
+        title: z.string(),
+        icon: z.enum([
+          'check',
+          'doc',
+          'calendar',
+          'users',
+          'chart',
+          'settings',
+          'zap',
+          'shield',
+          'globe',
+          'smartphone',
+          'database',
+          'cloud',
+        ]),
+        previewImage: z.string(),
+        description: z.string().optional(),
+      })
+    ),
     defaultActiveFeature: z.string().optional(),
     gridColumns: z.union([z.literal(2), z.literal(3), z.literal(4)]).optional(),
     previewAspectRatio: z.enum(['square', 'video', 'wide']).optional(),
@@ -152,32 +313,60 @@ export const InteractiveFeatureWallSchema = BaseSectionSchema.extend({
 export const WallOfFeaturesSchema = BaseSectionSchema.extend({
   type: z.literal('wall-of-features'),
   data: z.object({
-    title: z.string().default('Everything you need in one converged AI platform'),
-    subtitle: z.string().default('100+ features to maximize human and AI productivity.'),
-    features: z.array(z.object({
-      id: z.string(),
-      title: z.string(),
-      icon: z.string().optional(),
-      faIcon: z.object({
-        name: z.string(),
-        type: z.enum(['solid', 'regular', 'light', 'thin', 'duotone', 'brands']),
-        size: z.enum(['xs', 'sm', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl']),
-        color: z.string().optional(),
-      }).optional(),
-      iconSvg: z.string().optional(),
-      type: z.enum(['button', 'link', 'empty', 'parent']).default('button'),
-      href: z.string().optional(),
-      image: z.string().optional(),
-      imageObjectFit: z.enum(['cover', 'contain', 'fill', 'scale-down', 'none']).default('fill'),
-      activeColor: z.string().default('#3B82F6'),
-      size: z.enum(['small', 'large']).default('small'),
-      position: z.object({
-        row: z.number(),
-        column: z.number(),
-        rowSpan: z.number().default(1),
-        columnSpan: z.number().default(1),
-      }),
-    })).default([]),
+    title: z
+      .string()
+      .default('Everything you need in one converged AI platform'),
+    subtitle: z
+      .string()
+      .default('100+ features to maximize human and AI productivity.'),
+    features: z
+      .array(
+        z.object({
+          id: z.string(),
+          title: z.string(),
+          icon: z.string().optional(),
+          faIcon: z
+            .object({
+              name: z.string(),
+              type: z.enum([
+                'solid',
+                'regular',
+                'light',
+                'thin',
+                'duotone',
+                'brands',
+              ]),
+              size: z.enum([
+                'xs',
+                'sm',
+                'lg',
+                'xl',
+                '2xl',
+                '3xl',
+                '4xl',
+                '5xl',
+              ]),
+              color: z.string().optional(),
+            })
+            .optional(),
+          iconSvg: z.string().optional(),
+          type: z.enum(['button', 'link', 'empty', 'parent']).default('button'),
+          href: z.string().optional(),
+          image: z.string().optional(),
+          imageObjectFit: z
+            .enum(['cover', 'contain', 'fill', 'scale-down', 'none'])
+            .default('fill'),
+          activeColor: z.string().default('#3B82F6'),
+          size: z.enum(['small', 'large']).default('small'),
+          position: z.object({
+            row: z.number(),
+            column: z.number(),
+            rowSpan: z.number().default(1),
+            columnSpan: z.number().default(1),
+          }),
+        })
+      )
+      .default([]),
     backgroundColor: z.string().default('#e8e8e8'),
     tileBackgroundColor: z.string().default('#ffffff'),
     textColor: z.string().default('#838383'),
@@ -195,102 +384,187 @@ export const WhyIvaFlowNewVersionSchema = BaseSectionSchema.extend({
       badgeIconColor: z.string().default('bg-cyan-500'),
       title: z.string().default('What makes IvaFlow different?'),
       titleColor: z.string().default('text-slate-900 dark:text-white'),
-      description: z.string().default('A truly no-code operating system for serious organizations — designed to deliver outcomes, not just software.'),
-      descriptionColor: z.string().default('text-slate-700 dark:text-slate-300'),
+      description: z
+        .string()
+        .default(
+          'A truly no-code operating system for serious organizations — designed to deliver outcomes, not just software.'
+        ),
+      descriptionColor: z
+        .string()
+        .default('text-slate-700 dark:text-slate-300'),
     }),
     unifiedOS: z.object({
-      borderColor: z.string().default('border-slate-200/70 dark:border-slate-800/70'),
+      borderColor: z
+        .string()
+        .default('border-slate-200/70 dark:border-slate-800/70'),
       backgroundColor: z.string().default('bg-white/70 dark:bg-slate-900/40'),
-      shadowClass: z.string().default('shadow-[0_18px_55px_-25px_rgba(15,23,42,0.35)] dark:shadow-[0_18px_55px_-25px_rgba(0,0,0,0.75)]'),
-      edgeHighlight: z.string().default('bg-gradient-to-br from-white/60 to-transparent dark:from-white/10'),
+      shadowClass: z
+        .string()
+        .default(
+          'shadow-[0_18px_55px_-25px_rgba(15,23,42,0.35)] dark:shadow-[0_18px_55px_-25px_rgba(0,0,0,0.75)]'
+        ),
+      edgeHighlight: z
+        .string()
+        .default(
+          'bg-gradient-to-br from-white/60 to-transparent dark:from-white/10'
+        ),
       badge: z.object({
         text: z.string().default('One Unified OS'),
-        borderColor: z.string().default('border-slate-200/70 dark:border-slate-700/60'),
+        borderColor: z
+          .string()
+          .default('border-slate-200/70 dark:border-slate-700/60'),
         backgroundColor: z.string().default('bg-white/70 dark:bg-slate-950/40'),
         textColor: z.string().default('text-slate-700 dark:text-slate-300'),
         iconColor: z.string().default('bg-violet-500'),
       }),
-      description: z.string().default('Intake → Orchestration → Insights → Integrations — all inside one composable core.'),
-      descriptionColor: z.string().default('text-slate-700 dark:text-slate-300'),
-      systemItems: z.array(z.object({
-        icon: z.string(),
-        label: z.string(),
-        iconBg: z.string(),
-        iconColor: z.string(),
-      })).default([
-        { icon: '📝', label: 'Forms', iconBg: 'bg-cyan-500/12 dark:bg-cyan-400/10', iconColor: 'text-cyan-600 dark:text-cyan-300' },
-        { icon: '⚡', label: 'Workflows', iconBg: 'bg-violet-500/12 dark:bg-violet-400/10', iconColor: 'text-violet-600 dark:text-violet-300' },
-        { icon: '📊', label: 'Dashboards', iconBg: 'bg-slate-500/10 dark:bg-slate-400/10', iconColor: 'text-slate-700 dark:text-slate-200' }
-      ]),
-      itemBorderColor: z.string().default('border-slate-200/70 dark:border-slate-700/60'),
-      itemBackgroundColor: z.string().default('bg-white/70 dark:bg-slate-950/35'),
+      description: z
+        .string()
+        .default(
+          'Intake → Orchestration → Insights → Integrations — all inside one composable core.'
+        ),
+      descriptionColor: z
+        .string()
+        .default('text-slate-700 dark:text-slate-300'),
+      systemItems: z
+        .array(
+          z.object({
+            icon: z.string(),
+            label: z.string(),
+            iconBg: z.string(),
+            iconColor: z.string(),
+          })
+        )
+        .default([
+          {
+            icon: '📝',
+            label: 'Forms',
+            iconBg: 'bg-cyan-500/12 dark:bg-cyan-400/10',
+            iconColor: 'text-cyan-600 dark:text-cyan-300',
+          },
+          {
+            icon: '⚡',
+            label: 'Workflows',
+            iconBg: 'bg-violet-500/12 dark:bg-violet-400/10',
+            iconColor: 'text-violet-600 dark:text-violet-300',
+          },
+          {
+            icon: '📊',
+            label: 'Dashboards',
+            iconBg: 'bg-slate-500/10 dark:bg-slate-400/10',
+            iconColor: 'text-slate-700 dark:text-slate-200',
+          },
+        ]),
+      itemBorderColor: z
+        .string()
+        .default('border-slate-200/70 dark:border-slate-700/60'),
+      itemBackgroundColor: z
+        .string()
+        .default('bg-white/70 dark:bg-slate-950/35'),
       itemTextColor: z.string().default('text-slate-700 dark:text-slate-300'),
       integrationIcon: z.string().default('🔌'),
       integrationLabel: z.string().default('Integrations & Channels'),
-      integrationSubtext: z.string().default('API · Webhook · SMS · WhatsApp · Email'),
-      integrationGradient: z.string().default('bg-gradient-to-r from-cyan-500/0 via-cyan-500/8 to-violet-500/0 dark:via-cyan-400/10'),
-      integrationIconBg: z.string().default('bg-emerald-500/10 dark:bg-emerald-400/10'),
-      integrationIconColor: z.string().default('text-emerald-700 dark:text-emerald-300'),
-      integrationSubtextColor: z.string().default('text-slate-500 dark:text-slate-400'),
-      connectionLineGradient: z.string().default('bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-slate-800'),
-      valueChips: z.array(z.object({
-        text: z.string(),
-        iconColor: z.string(),
-      })).default([
-        { text: 'Faster go-live', iconColor: 'bg-cyan-500' },
-        { text: 'Lower change-cost', iconColor: 'bg-violet-500' },
-        { text: 'Full audit trail', iconColor: 'bg-emerald-500' }
-      ]),
-      chipBorderColor: z.string().default('border-slate-200/70 dark:border-slate-700/60'),
-      chipBackgroundColor: z.string().default('bg-white/70 dark:bg-slate-950/35'),
+      integrationSubtext: z
+        .string()
+        .default('API · Webhook · SMS · WhatsApp · Email'),
+      integrationGradient: z
+        .string()
+        .default(
+          'bg-gradient-to-r from-cyan-500/0 via-cyan-500/8 to-violet-500/0 dark:via-cyan-400/10'
+        ),
+      integrationIconBg: z
+        .string()
+        .default('bg-emerald-500/10 dark:bg-emerald-400/10'),
+      integrationIconColor: z
+        .string()
+        .default('text-emerald-700 dark:text-emerald-300'),
+      integrationSubtextColor: z
+        .string()
+        .default('text-slate-500 dark:text-slate-400'),
+      connectionLineGradient: z
+        .string()
+        .default(
+          'bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-slate-800'
+        ),
+      valueChips: z
+        .array(
+          z.object({
+            text: z.string(),
+            iconColor: z.string(),
+          })
+        )
+        .default([
+          { text: 'Faster go-live', iconColor: 'bg-cyan-500' },
+          { text: 'Lower change-cost', iconColor: 'bg-violet-500' },
+          { text: 'Full audit trail', iconColor: 'bg-emerald-500' },
+        ]),
+      chipBorderColor: z
+        .string()
+        .default('border-slate-200/70 dark:border-slate-700/60'),
+      chipBackgroundColor: z
+        .string()
+        .default('bg-white/70 dark:bg-slate-950/35'),
       chipTextColor: z.string().default('text-slate-700 dark:text-slate-300'),
     }),
-    cards: z.array(z.object({
-      icon: z.string(),
-      iconBackground: z.string(),
-      iconColor: z.string(),
-      title: z.string(),
-      titleColor: z.string(),
-      subtitle: z.string(),
-      subtitleColor: z.string(),
-      badge: z.object({
-        text: z.string(),
-        borderColor: z.string(),
-        backgroundColor: z.string(),
-        textColor: z.string(),
-      }).optional(),
-      description: z.string(),
-      descriptionColor: z.string(),
-      features: z.array(z.string()).optional(),
-      featuresTextColor: z.string(),
-      featureBulletColor: z.string(),
-      grid: z.array(z.object({
-        label: z.string(),
-        value: z.string(),
-      })).optional(),
-      gridItemBorderColor: z.string(),
-      gridItemBackgroundColor: z.string(),
-      gridItemLabelColor: z.string(),
-      gridItemValueColor: z.string(),
-      borderColor: z.string(),
-      backgroundColor: z.string(),
-      shadowClass: z.string(),
-      hoverShadowClass: z.string(),
-      glowColor: z.string(),
-      edgeShine: z.string(),
-      separatorGradient: z.string(),
-      outcomeLabel: z.object({
-        text: z.string(),
-        color: z.string(),
-      }),
-      outcomeValue: z.object({
-        text: z.string(),
-        color: z.string(),
-      }),
-    })).default([]),
+    cards: z
+      .array(
+        z.object({
+          icon: z.string(),
+          iconBackground: z.string(),
+          iconColor: z.string(),
+          title: z.string(),
+          titleColor: z.string(),
+          subtitle: z.string(),
+          subtitleColor: z.string(),
+          badge: z
+            .object({
+              text: z.string(),
+              borderColor: z.string(),
+              backgroundColor: z.string(),
+              textColor: z.string(),
+            })
+            .optional(),
+          description: z.string(),
+          descriptionColor: z.string(),
+          features: z.array(z.string()).optional(),
+          featuresTextColor: z.string(),
+          featureBulletColor: z.string(),
+          grid: z
+            .array(
+              z.object({
+                label: z.string(),
+                value: z.string(),
+              })
+            )
+            .optional(),
+          gridItemBorderColor: z.string(),
+          gridItemBackgroundColor: z.string(),
+          gridItemLabelColor: z.string(),
+          gridItemValueColor: z.string(),
+          borderColor: z.string(),
+          backgroundColor: z.string(),
+          shadowClass: z.string(),
+          hoverShadowClass: z.string(),
+          glowColor: z.string(),
+          edgeShine: z.string(),
+          separatorGradient: z.string(),
+          outcomeLabel: z.object({
+            text: z.string(),
+            color: z.string(),
+          }),
+          outcomeValue: z.object({
+            text: z.string(),
+            color: z.string(),
+          }),
+        })
+      )
+      .default([]),
     styling: z.object({
       backgroundColor: z.string().default('bg-white dark:bg-slate-950'),
-      gradientBackground: z.string().default('bg-gradient-to-b from-slate-50 via-white to-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-950'),
+      gradientBackground: z
+        .string()
+        .default(
+          'bg-gradient-to-b from-slate-50 via-white to-white dark:from-slate-950 dark:via-slate-950 dark:to-slate-950'
+        ),
       topGlow: z.string().default('bg-violet-500/15'),
       bottomGlow: z.string().default('bg-cyan-500/15'),
       gridOpacity: z.string().default('opacity-[0.06] dark:opacity-[0.09]'),
@@ -310,6 +584,10 @@ export type CTASectionConfig = z.infer<typeof CTASectionSchema>;
 export type TabsSectionConfig = z.infer<typeof TabsSectionSchema>;
 export type UseCasesSectionConfig = z.infer<typeof UseCasesSectionSchema>;
 export type FAQSectionConfig = z.infer<typeof FAQSectionSchema>;
-export type InteractiveFeatureWallConfig = z.infer<typeof InteractiveFeatureWallSchema>;
+export type InteractiveFeatureWallConfig = z.infer<
+  typeof InteractiveFeatureWallSchema
+>;
 export type WallOfFeaturesConfig = z.infer<typeof WallOfFeaturesSchema>;
-export type WhyIvaFlowNewVersionConfig = z.infer<typeof WhyIvaFlowNewVersionSchema>;
+export type WhyIvaFlowNewVersionConfig = z.infer<
+  typeof WhyIvaFlowNewVersionSchema
+>;

@@ -19,7 +19,7 @@ interface IndustryBadgesSectionProps {
     title?: string;
     highlightedTitle?: string;
     subtitle?: string;
-    badges: IndustryBadge[];
+    badges?: IndustryBadge[];
   };
   style?: {
     backgroundColor?: string;
@@ -28,12 +28,19 @@ interface IndustryBadgesSectionProps {
   };
 }
 
-export default function IndustryBadgesSection({ data, style }: IndustryBadgesSectionProps) {
+export default function IndustryBadgesSection({
+  data,
+  style,
+}: IndustryBadgesSectionProps) {
+  const badges = data.badges || [];
+
   return (
-    <section className={`py-16 border-t border-white/5 ${style?.backgroundColor || 'bg-slate-900'} ${style?.textColor || 'text-white'} ${style?.padding || ''}`}>
+    <section
+      className={`py-16 border-t border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-white dark:bg-slate-900'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
+    >
       <div className="max-w-6xl mx-auto px-8 text-center">
         {data.eyebrow && (
-          <div className="text-xs font-semibold tracking-widest uppercase text-indigo-300 mb-3">
+          <div className="text-xs font-semibold tracking-widest uppercase text-indigo-600 dark:text-indigo-300 mb-3">
             {data.eyebrow}
           </div>
         )}
@@ -51,16 +58,16 @@ export default function IndustryBadgesSection({ data, style }: IndustryBadgesSec
         </h2>
 
         {data.subtitle && (
-          <p className="text-base text-slate-300 leading-relaxed max-w-xl mx-auto mb-8">
+          <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl mx-auto mb-8">
             {data.subtitle}
           </p>
         )}
 
         <div className="flex gap-2.5 flex-wrap justify-center mt-8">
-          {data.badges.map((badge, idx) => (
+          {badges.map((badge, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-2 bg-slate-900/50 border border-white/20 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 hover:border-indigo-500/40 hover:bg-slate-800/50 cursor-default"
+              className="flex items-center gap-2 bg-white/80 dark:bg-slate-900/50 border border-slate-300/70 dark:border-white/20 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 hover:border-indigo-500/40 hover:bg-slate-100 dark:hover:bg-slate-800/50 cursor-default"
             >
               <div
                 className="w-2 h-2 rounded-full"

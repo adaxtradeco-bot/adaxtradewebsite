@@ -35,36 +35,46 @@ interface ScaleCardsSectionProps {
 
 const colorClasses = {
   indigo: {
-    border: 'before:bg-gradient-to-r before:from-transparent before:via-indigo-500/80 before:to-transparent',
+    border:
+      'before:bg-gradient-to-r before:from-transparent before:via-indigo-500/80 before:to-transparent',
     glow: 'after:bg-indigo-500/30',
     icon: 'bg-indigo-500/12 border-indigo-500/20',
-    number: 'text-indigo-300',
-    badge: 'bg-indigo-500/10 border-indigo-500/25 text-indigo-300',
+    number: 'text-indigo-600 dark:text-indigo-300',
+    badge:
+      'bg-indigo-500/10 border-indigo-500/25 text-indigo-600 dark:text-indigo-300',
   },
   cyan: {
-    border: 'before:bg-gradient-to-r before:from-transparent before:via-cyan-500/80 before:to-transparent',
+    border:
+      'before:bg-gradient-to-r before:from-transparent before:via-cyan-500/80 before:to-transparent',
     glow: 'after:bg-cyan-500/25',
     icon: 'bg-cyan-500/12 border-cyan-500/20',
-    number: 'text-cyan-400',
-    badge: 'bg-cyan-500/10 border-cyan-500/25 text-cyan-400',
+    number: 'text-cyan-700 dark:text-cyan-400',
+    badge: 'bg-cyan-500/10 border-cyan-500/25 text-cyan-700 dark:text-cyan-400',
   },
   violet: {
-    border: 'before:bg-gradient-to-r before:from-transparent before:via-violet-500/80 before:to-transparent',
+    border:
+      'before:bg-gradient-to-r before:from-transparent before:via-violet-500/80 before:to-transparent',
     glow: 'after:bg-violet-500/25',
     icon: 'bg-violet-500/12 border-violet-500/20',
-    number: 'text-violet-300',
-    badge: 'bg-violet-500/10 border-violet-500/25 text-violet-300',
+    number: 'text-violet-700 dark:text-violet-300',
+    badge:
+      'bg-violet-500/10 border-violet-500/25 text-violet-700 dark:text-violet-300',
   },
   green: {
-    border: 'before:bg-gradient-to-r before:from-transparent before:via-green-500/80 before:to-transparent',
+    border:
+      'before:bg-gradient-to-r before:from-transparent before:via-green-500/80 before:to-transparent',
     glow: 'after:bg-green-500/20',
     icon: 'bg-green-500/12 border-green-500/20',
-    number: 'text-green-400',
-    badge: 'bg-green-500/10 border-green-500/25 text-green-400',
+    number: 'text-green-700 dark:text-green-400',
+    badge:
+      'bg-green-500/10 border-green-500/25 text-green-700 dark:text-green-400',
   },
 };
 
-export default function ScaleCardsSection({ data, style }: ScaleCardsSectionProps) {
+export default function ScaleCardsSection({
+  data,
+  style,
+}: ScaleCardsSectionProps) {
   const [counters, setCounters] = useState<{ [key: number]: number }>({});
   const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -115,12 +125,12 @@ export default function ScaleCardsSection({ data, style }: ScaleCardsSectionProp
   return (
     <section
       ref={sectionRef}
-      className={`py-24 border-t border-white/5 ${style?.backgroundColor || 'bg-slate-950'} ${style?.textColor || 'text-white'} ${style?.padding || ''}`}
+      className={`py-24 border-t border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-slate-50 dark:bg-slate-950'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
     >
       <div className="max-w-6xl mx-auto px-8">
         <div className="text-center mb-16">
           {data.eyebrow && (
-            <div className="text-xs font-semibold tracking-widest uppercase text-indigo-300 mb-3">
+            <div className="text-xs font-semibold tracking-widest uppercase text-indigo-600 dark:text-indigo-300 mb-3">
               {data.eyebrow}
             </div>
           )}
@@ -140,7 +150,7 @@ export default function ScaleCardsSection({ data, style }: ScaleCardsSectionProp
             <div
               key={idx}
               className={`
-                relative bg-slate-900/50 border border-white/5 rounded-3xl p-8 overflow-hidden transition-all duration-300
+                relative bg-white/80 dark:bg-slate-900/50 border border-slate-200/70 dark:border-white/5 rounded-3xl p-8 overflow-hidden transition-all duration-300
                 hover:border-indigo-500/30 hover:-translate-y-1 cursor-default
                 ${card.span === 'wide' ? 'md:col-span-2' : ''}
                 before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-px
@@ -152,11 +162,15 @@ export default function ScaleCardsSection({ data, style }: ScaleCardsSectionProp
               {card.span === 'wide' ? (
                 <div className="flex gap-8 items-center flex-wrap">
                   <div className="flex-1 min-w-[200px]">
-                    <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-5 border ${colorClasses[card.color].icon}`}>
+                    <div
+                      className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-5 border ${colorClasses[card.color].icon}`}
+                    >
                       {card.icon}
                     </div>
-                    <h3 className="text-base font-extrabold mb-2">{card.label}</h3>
-                    <p className="text-sm text-slate-300 leading-relaxed max-w-sm">
+                    <h3 className="text-base font-extrabold mb-2">
+                      {card.label}
+                    </h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-sm">
                       {card.description}
                     </p>
                   </div>
@@ -166,10 +180,13 @@ export default function ScaleCardsSection({ data, style }: ScaleCardsSectionProp
                         <span
                           key={i}
                           className={`text-xs font-semibold px-3 py-1.5 rounded-full border ${
-                            i % 4 === 0 ? colorClasses.indigo.badge :
-                            i % 4 === 1 ? colorClasses.cyan.badge :
-                            i % 4 === 2 ? colorClasses.violet.badge :
-                            colorClasses.green.badge
+                            i % 4 === 0
+                              ? colorClasses.indigo.badge
+                              : i % 4 === 1
+                                ? colorClasses.cyan.badge
+                                : i % 4 === 2
+                                  ? colorClasses.violet.badge
+                                  : colorClasses.green.badge
                           }`}
                         >
                           {badge}
@@ -180,16 +197,20 @@ export default function ScaleCardsSection({ data, style }: ScaleCardsSectionProp
                 </div>
               ) : (
                 <>
-                  <div className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-5 border ${colorClasses[card.color].icon}`}>
+                  <div
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center text-xl mb-5 border ${colorClasses[card.color].icon}`}
+                  >
                     {card.icon}
                   </div>
-                  <div className={`text-5xl font-black leading-none tracking-tight mb-1 ${colorClasses[card.color].number}`}>
+                  <div
+                    className={`text-5xl font-black leading-none tracking-tight mb-1 ${colorClasses[card.color].number}`}
+                  >
                     {card.isCounter && card.counterTarget !== undefined
                       ? counters[idx] || 0
                       : card.number}
                   </div>
                   <h3 className="text-sm font-bold mb-1.5">{card.label}</h3>
-                  <p className="text-sm text-slate-300 leading-relaxed">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                     {card.description}
                   </p>
                 </>

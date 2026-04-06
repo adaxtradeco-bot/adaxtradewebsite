@@ -37,19 +37,28 @@ interface AnalyticsBentoGridSectionProps {
 }
 
 const colorClasses = {
-  indigo: 'after:bg-gradient-to-r after:from-transparent after:via-indigo-500/70 after:to-transparent',
+  indigo:
+    'after:bg-gradient-to-r after:from-transparent after:via-indigo-500/70 after:to-transparent',
   cyan: 'after:bg-gradient-to-r after:from-transparent after:via-cyan-500/70 after:to-transparent',
-  green: 'after:bg-gradient-to-r after:from-transparent after:via-green-500/70 after:to-transparent',
-  amber: 'after:bg-gradient-to-r after:from-transparent after:via-amber-500/70 after:to-transparent',
-  violet: 'after:bg-gradient-to-r after:from-transparent after:via-violet-500/70 after:to-transparent',
+  green:
+    'after:bg-gradient-to-r after:from-transparent after:via-green-500/70 after:to-transparent',
+  amber:
+    'after:bg-gradient-to-r after:from-transparent after:via-amber-500/70 after:to-transparent',
+  violet:
+    'after:bg-gradient-to-r after:from-transparent after:via-violet-500/70 after:to-transparent',
 };
 
-export default function AnalyticsBentoGridSection({ data, style }: AnalyticsBentoGridSectionProps) {
+export default function AnalyticsBentoGridSection({
+  data,
+  style,
+}: AnalyticsBentoGridSectionProps) {
   return (
-    <section className={`py-20 border-t border-white/5 ${style?.backgroundColor || 'bg-slate-950'} ${style?.textColor || 'text-white'} ${style?.padding || ''}`}>
+    <section
+      className={`py-20 border-t border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-slate-50 dark:bg-slate-950'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
+    >
       <div className="max-w-6xl mx-auto px-8">
         {data.eyebrow && (
-          <div className="text-xs font-semibold tracking-widest uppercase text-indigo-300 mb-3">
+          <div className="text-xs font-semibold tracking-widest uppercase text-indigo-600 dark:text-indigo-300 mb-3">
             {data.eyebrow}
           </div>
         )}
@@ -67,7 +76,7 @@ export default function AnalyticsBentoGridSection({ data, style }: AnalyticsBent
         </h2>
 
         {data.lead && (
-          <p className="text-base text-slate-300 leading-relaxed max-w-2xl mb-12">
+          <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mb-12">
             {data.lead}
           </p>
         )}
@@ -77,7 +86,7 @@ export default function AnalyticsBentoGridSection({ data, style }: AnalyticsBent
             <div
               key={idx}
               className={`
-                relative bg-slate-900/50 border border-white/5 rounded-2xl p-6 overflow-hidden transition-all duration-300
+                relative bg-white/80 dark:bg-slate-900/50 border border-slate-200/70 dark:border-white/5 rounded-2xl p-6 overflow-hidden transition-all duration-300
                 hover:border-indigo-500/25 hover:-translate-y-1 cursor-default
                 ${card.span === 'wide' ? 'md:col-span-2' : ''}
                 ${card.span === 'tall' ? 'md:row-span-2' : ''}
@@ -90,10 +99,12 @@ export default function AnalyticsBentoGridSection({ data, style }: AnalyticsBent
                 {card.tag}
               </div>
               <h3 className="text-base font-bold mb-1.5">{card.title}</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">{card.description}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                {card.description}
+              </p>
 
               {card.example && (
-                <div className="mt-3 text-xs text-slate-400 italic border-l-2 border-indigo-500/25 pl-2">
+                <div className="mt-3 text-xs text-slate-500 dark:text-slate-400 italic border-l-2 border-indigo-500/25 pl-2">
                   {card.example}
                 </div>
               )}
@@ -101,16 +112,26 @@ export default function AnalyticsBentoGridSection({ data, style }: AnalyticsBent
               {card.infographic?.type === 'kpi' && (
                 <div className="grid grid-cols-2 gap-1.5 mt-3">
                   {card.infographic.data?.kpis?.map((kpi: any, i: number) => (
-                    <div key={i} className="bg-white/5 border border-white/10 rounded-lg p-2.5 text-center">
-                      <div className={`text-xl font-extrabold ${
-                        kpi.color === 'indigo' ? 'text-indigo-300' :
-                        kpi.color === 'green' ? 'text-green-400' :
-                        kpi.color === 'amber' ? 'text-amber-400' :
-                        'text-cyan-400'
-                      }`}>
+                    <div
+                      key={i}
+                      className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg p-2.5 text-center"
+                    >
+                      <div
+                        className={`text-xl font-extrabold ${
+                          kpi.color === 'indigo'
+                            ? 'text-indigo-600 dark:text-indigo-300'
+                            : kpi.color === 'green'
+                              ? 'text-green-700 dark:text-green-400'
+                              : kpi.color === 'amber'
+                                ? 'text-amber-700 dark:text-amber-400'
+                                : 'text-cyan-700 dark:text-cyan-400'
+                        }`}
+                      >
                         {kpi.value}
                       </div>
-                      <div className="text-[10px] text-slate-500 mt-0.5">{kpi.label}</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">
+                        {kpi.label}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -118,52 +139,72 @@ export default function AnalyticsBentoGridSection({ data, style }: AnalyticsBent
 
               {card.infographic?.type === 'performance' && (
                 <div className="mt-3 flex flex-col gap-1.5">
-                  {card.infographic.data?.performers?.map((perf: any, i: number) => (
-                    <div key={i} className="flex items-center gap-2">
-                      <div className="text-xs text-slate-300 w-16 flex-shrink-0">{perf.name}</div>
-                      <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                  {card.infographic.data?.performers?.map(
+                    (perf: any, i: number) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <div className="text-xs text-slate-600 dark:text-slate-300 w-16 flex-shrink-0">
+                          {perf.name}
+                        </div>
+                        <div className="flex-1 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${
+                              perf.score >= 90
+                                ? 'bg-green-500'
+                                : perf.score >= 70
+                                  ? 'bg-cyan-500'
+                                  : 'bg-amber-500'
+                            }`}
+                            style={{ width: `${perf.score}%` }}
+                          />
+                        </div>
                         <div
-                          className={`h-full rounded-full ${
-                            perf.score >= 90 ? 'bg-green-500' :
-                            perf.score >= 70 ? 'bg-cyan-500' :
-                            'bg-amber-500'
+                          className={`text-xs font-bold ${
+                            perf.score >= 90
+                              ? 'text-green-700 dark:text-green-400'
+                              : perf.score >= 70
+                                ? 'text-cyan-700 dark:text-cyan-400'
+                                : 'text-amber-700 dark:text-amber-400'
                           }`}
-                          style={{ width: `${perf.score}%` }}
-                        />
+                        >
+                          {perf.score}
+                        </div>
                       </div>
-                      <div className={`text-xs font-bold ${
-                        perf.score >= 90 ? 'text-green-400' :
-                        perf.score >= 70 ? 'text-cyan-400' :
-                        'text-amber-400'
-                      }`}>
-                        {perf.score}
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               )}
 
               {card.infographic?.type === 'prediction' && (
                 <div className="mt-3 flex flex-col gap-1.5">
-                  {card.infographic.data?.predictions?.map((pred: any, i: number) => (
-                    <div
-                      key={i}
-                      className={`flex items-center gap-2 p-2 rounded-lg border ${
-                        pred.status === 'ok' ? 'bg-green-500/6 border-green-500/20' :
-                        pred.status === 'warn' ? 'bg-amber-500/6 border-amber-500/20' :
-                        'bg-red-500/6 border-red-500/20'
-                      }`}
-                    >
-                      <span className="text-xs font-medium flex-1">{pred.label}</span>
-                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                        pred.status === 'ok' ? 'bg-green-500/15 text-green-400' :
-                        pred.status === 'warn' ? 'bg-amber-500/15 text-amber-400' :
-                        'bg-red-500/15 text-red-400'
-                      }`}>
-                        {pred.badge}
-                      </span>
-                    </div>
-                  ))}
+                  {card.infographic.data?.predictions?.map(
+                    (pred: any, i: number) => (
+                      <div
+                        key={i}
+                        className={`flex items-center gap-2 p-2 rounded-lg border ${
+                          pred.status === 'ok'
+                            ? 'bg-green-500/6 border-green-500/20'
+                            : pred.status === 'warn'
+                              ? 'bg-amber-500/6 border-amber-500/20'
+                              : 'bg-red-500/6 border-red-500/20'
+                        }`}
+                      >
+                        <span className="text-xs font-medium flex-1">
+                          {pred.label}
+                        </span>
+                        <span
+                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                            pred.status === 'ok'
+                              ? 'bg-green-500/15 text-green-700 dark:text-green-400'
+                              : pred.status === 'warn'
+                                ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400'
+                                : 'bg-red-500/15 text-red-400'
+                          }`}
+                        >
+                          {pred.badge}
+                        </span>
+                      </div>
+                    )
+                  )}
                 </div>
               )}
 

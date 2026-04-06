@@ -30,12 +30,17 @@ interface LearningGridSectionProps {
   };
 }
 
-export default function LearningGridSection({ data, style }: LearningGridSectionProps) {
+export default function LearningGridSection({
+  data,
+  style,
+}: LearningGridSectionProps) {
   return (
-    <section className={`py-20 border-t border-white/5 ${style?.backgroundColor || 'bg-slate-900'} ${style?.textColor || 'text-white'} ${style?.padding || ''}`}>
+    <section
+      className={`py-20 border-t border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-white dark:bg-slate-900'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
+    >
       <div className="max-w-6xl mx-auto px-8">
         {data.eyebrow && (
-          <div className="text-xs font-semibold tracking-widest uppercase text-indigo-300 mb-3">
+          <div className="text-xs font-semibold tracking-widest uppercase text-indigo-600 dark:text-indigo-300 mb-3">
             {data.eyebrow}
           </div>
         )}
@@ -53,7 +58,7 @@ export default function LearningGridSection({ data, style }: LearningGridSection
         </h2>
 
         {data.lead && (
-          <p className="text-base text-slate-300 leading-relaxed max-w-2xl mb-12">
+          <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl mb-12">
             {data.lead}
           </p>
         )}
@@ -62,22 +67,22 @@ export default function LearningGridSection({ data, style }: LearningGridSection
           {data.cards.map((card, idx) => (
             <div
               key={idx}
-              className="bg-slate-900/50 border border-white/5 rounded-2xl p-6 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-1"
+              className="bg-white/80 dark:bg-slate-900/50 border border-slate-200/70 dark:border-white/5 rounded-2xl p-6 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-1"
             >
               <div className="text-4xl font-black leading-none bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 bg-clip-text text-transparent mb-2">
                 {card.number}
               </div>
-              
-              <div className="h-px bg-white/10 my-3" />
+
+              <div className="h-px bg-slate-200 dark:bg-white/10 my-3" />
 
               <div className="text-[10px] font-semibold tracking-widest uppercase text-slate-500 mb-1.5">
                 {card.tag}
               </div>
               <h3 className="text-sm font-bold mb-1.5">{card.title}</h3>
-              <p className="text-sm text-slate-300 leading-relaxed mb-3">
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
                 {card.description}
               </p>
-              <div className="text-xs text-slate-400 italic border-l-2 border-indigo-500/25 pl-2 mt-2">
+              <div className="text-xs text-slate-500 dark:text-slate-400 italic border-l-2 border-indigo-500/25 pl-2 mt-2">
                 {card.example}
               </div>
             </div>
