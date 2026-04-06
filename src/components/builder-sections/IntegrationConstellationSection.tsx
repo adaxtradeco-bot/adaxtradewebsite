@@ -24,7 +24,7 @@ interface IntegrationConstellationSectionProps {
     centerLabel?: string;
     innerNodes?: Array<{ label: string; angle: number }>;
     outerNodes?: Array<{ label: string; angle: number }>;
-    cards: IntegrationCard[];
+    cards?: IntegrationCard[];
   };
   style?: {
     backgroundColor?: string;
@@ -37,6 +37,8 @@ export default function IntegrationConstellationSection({
   data,
   style,
 }: IntegrationConstellationSectionProps) {
+  const cards = data.cards || [];
+
   return (
     <section
       className={`py-20 border-t border-b border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-white dark:bg-slate-900'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
@@ -255,7 +257,7 @@ export default function IntegrationConstellationSection({
 
           {/* Integration Cards */}
           <div className="flex flex-col gap-2.5">
-            {data.cards.map((card, idx) => (
+            {cards.map((card, idx) => (
               <div
                 key={idx}
                 className="bg-white/80 dark:bg-slate-900/50 border border-slate-200/70 dark:border-white/5 rounded-xl p-5 transition-all duration-300 hover:border-cyan-500/30"

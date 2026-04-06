@@ -24,7 +24,7 @@ interface ScaleCardsSectionProps {
     eyebrow?: string;
     title?: string;
     highlightedTitle?: string;
-    cards: ScaleCard[];
+    cards?: ScaleCard[];
   };
   style?: {
     backgroundColor?: string;
@@ -75,6 +75,7 @@ export default function ScaleCardsSection({
   data,
   style,
 }: ScaleCardsSectionProps) {
+  const cards = data.cards || [];
   const [counters, setCounters] = useState<{ [key: number]: number }>({});
   const [hasAnimated, setHasAnimated] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -85,7 +86,7 @@ export default function ScaleCardsSection({
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAnimated) {
             setHasAnimated(true);
-            data.cards.forEach((card, idx) => {
+            cards.forEach((card, idx) => {
               if (card.isCounter && card.counterTarget !== undefined) {
                 animateCounter(idx, card.counterTarget);
               }
@@ -101,7 +102,7 @@ export default function ScaleCardsSection({
     }
 
     return () => observer.disconnect();
-  }, [hasAnimated, data.cards]);
+  }, [hasAnimated, cards]);
 
   const animateCounter = (idx: number, target: number) => {
     const duration = 1200;
@@ -146,7 +147,7 @@ export default function ScaleCardsSection({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {data.cards.map((card, idx) => (
+          {cards.map((card, idx) => (
             <div
               key={idx}
               className={`

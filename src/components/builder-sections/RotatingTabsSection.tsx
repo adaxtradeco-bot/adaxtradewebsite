@@ -29,7 +29,7 @@ interface RotatingTabsSectionProps {
     title?: string;
     highlightedTitle?: string;
     lead?: string;
-    tabs: TabItem[];
+    tabs?: TabItem[];
     autoRotate?: boolean;
     rotateInterval?: number;
   };
@@ -44,16 +44,17 @@ export default function RotatingTabsSection({
   data,
   style,
 }: RotatingTabsSectionProps) {
+  const tabs = data.tabs || [];
   const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
-    if (data.autoRotate !== false) {
+    if (data.autoRotate !== false && tabs.length > 0) {
       const interval = setInterval(() => {
-        setActiveTab((prev) => (prev + 1) % data.tabs.length);
+        setActiveTab((prev) => (prev + 1) % tabs.length);
       }, data.rotateInterval || 4000);
       return () => clearInterval(interval);
     }
-  }, [data.autoRotate, data.rotateInterval, data.tabs.length]);
+  }, [data.autoRotate, data.rotateInterval, tabs.length]);
 
   return (
     <section
@@ -87,7 +88,7 @@ export default function RotatingTabsSection({
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-16 items-start">
           {/* Tab Pills */}
           <div className="flex flex-col gap-1.5">
-            {data.tabs.map((tab, idx) => (
+            {tabs.map((tab, idx) => (
               <button
                 key={idx}
                 onClick={() => setActiveTab(idx)}
@@ -115,7 +116,7 @@ export default function RotatingTabsSection({
 
           {/* Tab Content */}
           <div className="relative">
-            {data.tabs.map((tab, idx) => (
+            {tabs.map((tab, idx) => (
               <div
                 key={idx}
                 className={`

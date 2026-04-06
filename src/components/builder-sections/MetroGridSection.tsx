@@ -28,7 +28,7 @@ interface MetroGridSectionProps {
     title?: string;
     highlightedTitle?: string;
     lead?: string;
-    cards: MetroCard[];
+    cards?: MetroCard[];
   };
   style?: {
     backgroundColor?: string;
@@ -65,6 +65,8 @@ export default function MetroGridSection({
   data,
   style,
 }: MetroGridSectionProps) {
+  const cards = data.cards || [];
+
   return (
     <section
       className={`py-20 border-t border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-slate-50 dark:bg-slate-950'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
@@ -95,7 +97,7 @@ export default function MetroGridSection({
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
-          {data.cards.map((card, idx) => (
+          {cards.map((card, idx) => (
             <div
               key={idx}
               className={`

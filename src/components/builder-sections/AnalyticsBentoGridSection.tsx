@@ -27,7 +27,7 @@ interface AnalyticsBentoGridSectionProps {
     title?: string;
     highlightedTitle?: string;
     lead?: string;
-    cards: BentoCard[];
+    cards?: BentoCard[];
   };
   style?: {
     backgroundColor?: string;
@@ -52,6 +52,8 @@ export default function AnalyticsBentoGridSection({
   data,
   style,
 }: AnalyticsBentoGridSectionProps) {
+  const cards = data.cards || [];
+
   return (
     <section
       className={`py-20 border-t border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-slate-50 dark:bg-slate-950'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
@@ -82,7 +84,7 @@ export default function AnalyticsBentoGridSection({
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {data.cards.map((card, idx) => (
+          {cards.map((card, idx) => (
             <div
               key={idx}
               className={`

@@ -21,7 +21,7 @@ interface LearningGridSectionProps {
     title?: string;
     highlightedTitle?: string;
     lead?: string;
-    cards: LearningCard[];
+    cards?: LearningCard[];
   };
   style?: {
     backgroundColor?: string;
@@ -34,6 +34,8 @@ export default function LearningGridSection({
   data,
   style,
 }: LearningGridSectionProps) {
+  const cards = data.cards || [];
+
   return (
     <section
       className={`py-20 border-t border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-white dark:bg-slate-900'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
@@ -64,7 +66,7 @@ export default function LearningGridSection({
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {data.cards.map((card, idx) => (
+          {cards.map((card, idx) => (
             <div
               key={idx}
               className="bg-white/80 dark:bg-slate-900/50 border border-slate-200/70 dark:border-white/5 rounded-2xl p-6 transition-all duration-300 hover:border-indigo-500/30 hover:-translate-y-1"

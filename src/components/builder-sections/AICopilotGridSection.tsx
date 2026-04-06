@@ -29,10 +29,10 @@ interface AICopilotGridSectionProps {
     title?: string;
     highlightedTitle?: string;
     lead?: string;
-    cards: CopilotCard[];
+    cards?: CopilotCard[];
     chatMock?: {
       title?: string;
-      messages: ChatMessage[];
+      messages?: ChatMessage[];
     };
     mediaPlaceholder?: string;
   };
@@ -54,6 +54,9 @@ export default function AICopilotGridSection({
   data,
   style,
 }: AICopilotGridSectionProps) {
+  const cards = data.cards || [];
+  const messages = data.chatMock?.messages || [];
+
   return (
     <section
       className={`py-20 border-t border-slate-200/70 dark:border-white/5 ${style?.backgroundColor || 'bg-slate-50 dark:bg-slate-950'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
@@ -86,7 +89,7 @@ export default function AICopilotGridSection({
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Copilot Cards */}
           <div className="flex flex-col gap-3">
-            {data.cards.map((card, idx) => (
+            {cards.map((card, idx) => (
               <div
                 key={idx}
                 className="bg-white/80 dark:bg-slate-900/50 border border-slate-200/70 dark:border-white/5 rounded-2xl p-6 transition-all duration-300 hover:border-indigo-500/30 hover:translate-x-1 cursor-default"
@@ -123,7 +126,7 @@ export default function AICopilotGridSection({
             )}
 
             <div className="bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-white/10 rounded-2xl p-5 flex flex-col gap-2.5">
-              {data.chatMock?.messages.map((msg, idx) => (
+              {messages.map((msg, idx) => (
                 <div
                   key={idx}
                   className={`flex gap-2 items-start ${msg.type === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
