@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ success: true, data: page });
+    return NextResponse.json({ page });
   } catch (error) {
     console.error('Pages POST error:', error);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });

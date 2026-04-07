@@ -137,10 +137,12 @@ export default function PlatformCapabilitiesSection({ data }: PlatformCapabiliti
                 <div className="flex-1 h-px bg-slate-200 dark:bg-white/[0.07]" />
               </div>
 
-              {module.features.map((feature, featureIndex) => {
+              {(module.features || []).map((feature, featureIndex) => {
+                if (!feature) return null;
                 const theme = themeClass[feature.theme];
                 const shouldFlip = !!feature.flip;
                 const isLastInModule = featureIndex === module.features.length - 1;
+                const featureBadges = feature.badges || [];
                 return (
                   <div key={featureIndex} className="relative mb-16 md:mb-24 last:mb-0">
                     <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center ${shouldFlip ? 'md:[&>*:first-child]:order-2 md:[&>*:last-child]:order-1' : ''}`}>
@@ -155,7 +157,7 @@ export default function PlatformCapabilitiesSection({ data }: PlatformCapabiliti
                           {feature.body}
                         </p>
                         <div className="flex flex-wrap gap-2">
-                          {feature.badges.map((badge, badgeIndex) => (
+                          {featureBadges.map((badge, badgeIndex) => (
                             <span key={badgeIndex} className={`inline-flex items-center text-xs font-medium rounded-lg px-3.5 py-1.5 border ${badgeClass[badge.variant]}`}>
                               {badge.text}
                             </span>

@@ -53,7 +53,10 @@ export default function CreateNewPage() {
     try {
       const token = localStorage.getItem('adminToken');
       if (!token) {
-        setToast({ message: 'Authentication required', type: 'error' });
+        setToast({ message: 'Authentication required. Please login again.', type: 'error' });
+        setTimeout(() => {
+          router.push('/admin/login');
+        }, 2000);
         return;
       }
 
@@ -68,6 +71,15 @@ export default function CreateNewPage() {
           builderData: [], // Initialize with empty builder data
         }),
       });
+
+      if (response.status === 401) {
+        setToast({ message: 'Session expired. Please login again.', type: 'error' });
+        localStorage.removeItem('adminToken');
+        setTimeout(() => {
+          router.push('/admin/login');
+        }, 2000);
+        return;
+      }
 
       if (response.ok) {
         const { page } = await response.json();
