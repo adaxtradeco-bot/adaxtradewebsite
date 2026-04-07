@@ -39,7 +39,6 @@ function buildSlugCandidates(rawSlug: string): string[] {
 
   if (hasLangPrefix) {
     pushBoth(`/${rest.join('/')}`);
-    pushBoth(`/${parts[0]}`);
   }
 
   // Legacy fallback: some records were saved as flat hyphenated slugs.
@@ -72,12 +71,16 @@ export async function GET(request: NextRequest) {
 
     console.log('API: Looking for page with slug candidates:', slugCandidates);
 
-    const page = await prisma.page.findFirst({
-      where: {
-        slug: { in: slugCandidates },
-        status: 'published',
-      },
-    });
+    let page = null;
+    for (const candidate of slugCandidates) {
+      const found = await prisma.page.findUnique({
+        where: { slug: candidate },
+      });
+      if (found && found.status === 'published') {
+        page = found;
+        break;
+      }
+    }
 
     if (!page) {
       console.log('API: Page not found in database');

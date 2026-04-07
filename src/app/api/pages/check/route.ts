@@ -44,7 +44,6 @@ function buildPathCandidates(rawPath: string): string[] {
 
   if (hasLangPrefix) {
     pushBoth(`/${rest.join('/')}`);
-    pushBoth(`/${parts[0]}`);
   }
 
   if (rest.length > 1) {
@@ -80,17 +79,22 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const page = await prisma.page.findFirst({
-      where: {
-        slug: { in: pathCandidates },
-        status: 'published',
-      },
-      select: {
-        id: true,
-        slug: true,
-        language: true,
-      },
-    });
+    let page: { id: string; slug: string; language: string } | null = null;
+    for (const candidate of pathCandidates) {
+      const found = await prisma.page.findUnique({
+        where: { slug: candidate },
+        select: {
+          id: true,
+          slug: true,
+          language: true,
+          status: true,
+        },
+      });
+      if (found && found.status === 'published') {
+        page = { id: found.id, slug: found.slug, language: found.language };
+        break;
+      }
+    }
 
     return NextResponse.json({
       exists: !!page,
