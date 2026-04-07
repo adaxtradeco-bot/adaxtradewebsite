@@ -8,6 +8,57 @@ import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+const LANG_RE = /^(en|ar|tr|fr|de|es)$/i;
+
+function normalizePath(input: string): string {
+  const decoded = decodeURIComponent(input).trim();
+  if (!decoded) return '';
+
+  const withLeading = decoded.startsWith('/') ? decoded : `/${decoded}`;
+  const collapsed = withLeading.replace(/\/{2,}/g, '/');
+
+  if (collapsed.length > 1 && collapsed.endsWith('/')) {
+    return collapsed.slice(0, -1);
+  }
+
+  return collapsed;
+}
+
+function buildPathCandidates(rawPath: string): string[] {
+  const normalized = normalizePath(rawPath);
+  if (!normalized) return [];
+
+  const candidates = new Set<string>();
+
+  const pushBoth = (value: string) => {
+    if (!value) return;
+    candidates.add(value);
+    candidates.add(value.startsWith('/') ? value.slice(1) : `/${value}`);
+  };
+
+  pushBoth(normalized);
+
+  const parts = normalized.split('/').filter(Boolean);
+  const hasLangPrefix = parts.length > 1 && LANG_RE.test(parts[0]);
+  const rest = hasLangPrefix ? parts.slice(1) : parts;
+
+  if (hasLangPrefix) {
+    pushBoth(`/${rest.join('/')}`);
+    pushBoth(`/${parts[0]}`);
+  }
+
+  if (rest.length > 1) {
+    const hyphenPath = rest.join('-');
+    pushBoth(`/${hyphenPath}`);
+
+    if (hasLangPrefix) {
+      pushBoth(`/${parts[0]}/${hyphenPath}`);
+      pushBoth(`/${parts[0]}-${hyphenPath}`);
+    }
+  }
+
+  return Array.from(candidates).filter(Boolean);
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -21,24 +72,30 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // چک کردن وجود صفحه با این slug
+    const pathCandidates = buildPathCandidates(path);
+    if (!pathCandidates.length) {
+      return NextResponse.json(
+        { exists: false, error: 'Path parameter is required' },
+        { status: 400 }
+      );
+    }
+
     const page = await prisma.page.findFirst({
       where: {
-        slug: path,
-        status: 'published'
+        slug: { in: pathCandidates },
+        status: 'published',
       },
       select: {
         id: true,
         slug: true,
-        language: true
-      }
+        language: true,
+      },
     });
 
     return NextResponse.json({
       exists: !!page,
-      page: page || null
+      page: page || null,
     });
-
   } catch (error) {
     console.error('Error checking page existence:', error);
     return NextResponse.json(
