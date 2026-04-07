@@ -57,7 +57,7 @@ export default function AIAgentHeroSection({
 
   return (
     <section
-      className={`relative min-h-screen flex flex-col items-center justify-center text-center px-8 pt-32 pb-16 overflow-hidden ${style?.backgroundColor || 'bg-slate-50 dark:bg-slate-950'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
+      className={`relative min-h-[85vh] flex flex-col items-center justify-center text-center px-8 pt-24 pb-12 overflow-hidden ${style?.backgroundColor || 'bg-slate-50 dark:bg-slate-950'} ${style?.textColor || 'text-slate-900 dark:text-white'} ${style?.padding || ''}`}
     >
       {/* Background Effects */}
       <div className="absolute inset-0 pointer-events-none">
