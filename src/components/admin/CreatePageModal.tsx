@@ -60,12 +60,21 @@ export function CreatePageModal({ isOpen, onClose, onSuccess }: CreatePageModalP
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        setError('Authentication required. Please login again.');
+        return;
+      }
+
       // استخراج slug بدون prefix زبان برای PageGroup
       const groupSlug = slug.replace(/^\/(en|ar|fr|de|es)\//, '');
 
       const res = await fetch('/api/admin/pages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           title: pageName,
           slug,
@@ -79,10 +88,16 @@ export function CreatePageModal({ isOpen, onClose, onSuccess }: CreatePageModalP
         })
       });
 
+      if (res.status === 401) {
+        setError('Session expired. Please login again.');
+        localStorage.removeItem('adminToken');
+        return;
+      }
+
       const result = await res.json();
 
-      if (result.success) {
-        onSuccess?.(result.data.id);
+      if (res.ok && result?.page?.id) {
+        onSuccess?.(result.page.id);
         onClose();
       } else {
         setError(result.error || 'Failed to create page');
@@ -278,3 +293,4 @@ export function CreatePageModal({ isOpen, onClose, onSuccess }: CreatePageModalP
     </div>
   );
 }
+
