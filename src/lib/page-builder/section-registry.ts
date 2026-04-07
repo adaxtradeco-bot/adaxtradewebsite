@@ -21,6 +21,7 @@ import { PLATFORM_SHOWCASE_TEMPLATES } from './section-templates/platform-showca
 import { PLATFORM_CAPABILITIES_TEMPLATES } from './section-templates/platform-capabilities';
 import { REPORTS_SHOWCASE_CORE_TEMPLATES } from './section-templates/reports-showcase-core';
 import { REPORTS_SHOWCASE_ADVANCED_TEMPLATES } from './section-templates/reports-showcase-advanced';
+import { EXTERNAL_PORTALS_TEMPLATES } from './section-templates/external-portals';
 
 export { SECTION_CATEGORIES };
 export type { SectionTemplate };
@@ -29,6 +30,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
   ...FORM_BUILDER_SPECIAL_TEMPLATES,
   ...AI_AGENT_PAGE_CORE_TEMPLATES,
   ...AI_AGENT_PAGE_EXTENDED_TEMPLATES,
+  ...EXTERNAL_PORTALS_TEMPLATES,
   ...HERO_LAYOUTS_CORE_TEMPLATES,
   ...CARDS_INTERACTIVE_CORE_TEMPLATES,
   ...PROCESS_AND_NWM_TEMPLATES,

@@ -118,6 +118,10 @@ import GovernanceGridSection from '@/components/builder-sections/GovernanceGridS
 import LearningGridSection from '@/components/builder-sections/LearningGridSection';
 import IndustryBadgesSection from '@/components/builder-sections/IndustryBadgesSection';
 import ScaleCardsSection from '@/components/builder-sections/ScaleCardsSection';
+import ProcessPipelineSection from '@/components/builder-sections/ProcessPipelineSection';
+import AIPoweredAutomationSection from '@/components/builder-sections/AIPoweredAutomationSection';
+import OmnichannelHubSection from '@/components/builder-sections/OmnichannelHubSection';
+import CompetitiveComparisonSection from '@/components/builder-sections/CompetitiveComparisonSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -882,6 +886,38 @@ export function SectionRenderer({
         case 'scale-cards':
           return (
             <ScaleCardsSection
+              key={section.id}
+              data={(section as any).data}
+              style={(section as any).style}
+            />
+          );
+        case 'process-pipeline':
+          return (
+            <ProcessPipelineSection
+              key={section.id}
+              data={(section as any).data}
+              style={(section as any).style}
+            />
+          );
+        case 'ai-powered-automation':
+          return (
+            <AIPoweredAutomationSection
+              key={section.id}
+              data={(section as any).data}
+              style={(section as any).style}
+            />
+          );
+        case 'omnichannel-hub':
+          return (
+            <OmnichannelHubSection
+              key={section.id}
+              data={(section as any).data}
+              style={(section as any).style}
+            />
+          );
+        case 'competitive-comparison':
+          return (
+            <CompetitiveComparisonSection
               key={section.id}
               data={(section as any).data}
               style={(section as any).style}
