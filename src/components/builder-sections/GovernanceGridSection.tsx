@@ -109,7 +109,9 @@ export default function GovernanceGridSection({
                               ? 'bg-indigo-400'
                               : item.type === 'warning'
                                 ? 'bg-amber-500'
-                                : 'bg-cyan-500'
+                                : item.type === 'error'
+                                  ? 'bg-red-500'
+                                  : 'bg-cyan-500'
                         }`}
                       />
                       <span className="flex-1 text-slate-600 dark:text-slate-300">
