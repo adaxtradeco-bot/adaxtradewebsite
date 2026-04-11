@@ -522,6 +522,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
   });
 
   const watchedValues = watch();
+  const [editMode, setEditMode] = React.useState<'visual' | 'json'>('visual');
 
   // Update section when form values change (only for form-based sections)
   React.useEffect(() => {
@@ -533,6 +534,18 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
       });
     }
   }, [watchedValues, onUpdate, section.type]);
+
+  // Check if section has custom visual editor
+  const hasCustomEditor = [
+    'product-hero', 'process-steps', 'why-automate-with-us',
+    'reports-hero', 'reports-what-you-can-build', 'reports-chart-builder',
+    'reports-table', 'reports-kanban', 'reports-ai-insights',
+    'reports-data-sources', 'reports-scale', 'reports-integration', 'reports-roles',
+    'partner-showcase-hero', 'platform-snapshot', 'platform-modules-bento',
+    'how-it-works-steps', 'automation-engine', 'industries-grid',
+    'sla-integration-split', 'partner-cta-strip', 'platform-capabilities',
+    'interactive-feature-wall', 'wall-of-features'
+  ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
     switch (section.type) {
@@ -794,13 +807,55 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
             </p>
           </div>
 
+          {/* Edit Mode Toggle (for sections with custom editors) */}
+          {hasCustomEditor && (
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Edit Mode</span>
+                <div className="flex gap-1 bg-white dark:bg-gray-800 rounded-md p-0.5 border border-gray-300 dark:border-gray-600">
+                  <button
+                    type="button"
+                    onClick={() => setEditMode('visual')}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-all ${
+                      editMode === 'visual'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    🎨 Visual
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditMode('json')}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-all ${
+                      editMode === 'json'
+                        ? 'bg-purple-600 text-white shadow-sm'
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                    }`}
+                  >
+                    📝 JSON
+                  </button>
+                </div>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-gray-400">
+                {editMode === 'visual' 
+                  ? '✨ Use visual controls to edit section properties'
+                  : '⚡ Edit raw JSON for advanced customization & copy/paste'}
+              </p>
+            </div>
+          )}
+
           {/* Content Tab */}
           <div>
             <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center">
-              <span className="mr-2">📝</span>
-              Content
+              <span className="mr-2">{editMode === 'json' ? '📝' : '🎨'}</span>
+              {editMode === 'json' ? 'JSON Editor' : 'Content'}
             </h3>
-            {renderSectionSpecificFields()}
+            {hasCustomEditor && editMode === 'json' ? (
+              <JSONEditor section={section} onUpdate={onUpdate} />
+            ) : (
+              renderSectionSpecificFields()
+            )}
           </div>
 
           {/* Style Tab */}
