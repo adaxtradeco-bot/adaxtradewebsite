@@ -34,6 +34,18 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
     objectFit: 'cover' as 'cover' | 'contain' | 'fill' | 'scale-down' | 'none'
   });
 
+  // Extract existing settings if they exist
+  React.useEffect(() => {
+    if (typeof value === 'object' && value !== null && value.src) {
+      setImageSettings({
+        alt: value.alt || '',
+        maxWidth: value.maxWidth || '',
+        maxHeight: value.maxHeight || '',
+        objectFit: value.objectFit || 'cover'
+      });
+    }
+  }, [value]);
+
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -62,6 +74,7 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
   };
 
   const currentValue = typeof value === 'object' && value !== null && value.src ? value.src : value;
+  const isImageObject = typeof value === 'object' && value !== null && value.src;
 
   return (
     <>
@@ -71,7 +84,11 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
             <img 
               src={currentValue} 
               alt="Preview" 
-              className="w-full h-full object-cover"
+              className={`w-full h-full object-${imageSettings.objectFit}`}
+              style={{
+                maxWidth: imageSettings.maxWidth ? `${imageSettings.maxWidth}px` : undefined,
+                maxHeight: imageSettings.maxHeight ? `${imageSettings.maxHeight}px` : undefined
+              }}
             />
             <button
               onClick={() => onChange('')}
@@ -105,6 +122,104 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
             <input type="file" accept="image/*" onChange={handleUpload} className="hidden" disabled={uploading} />
           </label>
         </div>
+
+        {currentValue && (
+          <button
+            type="button"
+            onClick={() => setShowAdvanced(!showAdvanced)}
+            className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            {showAdvanced ? '🔽 Hide' : '🔧 Show'} Advanced Settings {isImageObject ? '(Applied)' : ''}
+          </button>
+        )}
+        
+        {showAdvanced && currentValue && (
+          <div className="space-y-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-md border">
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Max Width (px)
+                </label>
+                <input
+                  type="number"
+                  value={imageSettings.maxWidth}
+                  onChange={(e) => setImageSettings(prev => ({ ...prev, maxWidth: e.target.value }))}
+                  placeholder="Auto"
+                  className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Max Height (px)
+                </label>
+                <input
+                  type="number"
+                  value={imageSettings.maxHeight}
+                  onChange={(e) => setImageSettings(prev => ({ ...prev, maxHeight: e.target.value }))}
+                  placeholder="Auto"
+                  className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Object Fit
+              </label>
+              <select
+                value={imageSettings.objectFit}
+                onChange={(e) => setImageSettings(prev => ({ ...prev, objectFit: e.target.value as any }))}
+                className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              >
+                <option value="cover">Cover (crop to fill)</option>
+                <option value="contain">Contain (fit inside)</option>
+                <option value="fill">Fill (stretch to fill)</option>
+                <option value="scale-down">Scale Down (smaller of contain/none)</option>
+                <option value="none">None (original size)</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Alt Text
+              </label>
+              <input
+                type="text"
+                value={imageSettings.alt}
+                onChange={(e) => setImageSettings(prev => ({ ...prev, alt: e.target.value }))}
+                placeholder="Describe the image for accessibility"
+                className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+              />
+            </div>
+            
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  const newImageObject = {
+                    src: currentValue,
+                    alt: imageSettings.alt || '',
+                    maxWidth: imageSettings.maxWidth || null,
+                    maxHeight: imageSettings.maxHeight || null,
+                    objectFit: imageSettings.objectFit || 'cover'
+                  };
+                  onChange(newImageObject, imageSettings);
+                  onSettingsChange?.(imageSettings);
+                }}
+                className="flex-1 px-2 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700"
+              >
+                ✓ Apply Settings
+              </button>
+              <button
+                type="button"
+                onClick={() => setImageSettings({ alt: '', maxWidth: '', maxHeight: '', objectFit: 'cover' })}
+                className="px-2 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700"
+              >
+                Reset
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <MediaBrowser
@@ -159,7 +274,7 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
     }
   };
 
-  const handleImageUpload = (field: string, urlOrObject: string | any) => {
+  const handleImageUpload = (field: string, urlOrObject: string | any, settings?: any) => {
     try {
       const data = JSON.parse(jsonText);
       const keys = field.split('.');
@@ -185,7 +300,20 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
       }
       
       const finalKey = keys[keys.length - 1];
-      obj[finalKey] = urlOrObject;
+      
+      // If it's already an object with settings, use it directly
+      if (typeof urlOrObject === 'object' && urlOrObject !== null && urlOrObject.src) {
+        obj[finalKey] = urlOrObject;
+        
+        // Also set alt field if it exists
+        const altKey = finalKey.replace(/image|img|media|url/i, 'Alt');
+        if (altKey !== finalKey && urlOrObject.alt) {
+          obj[altKey] = urlOrObject.alt;
+        }
+      } else {
+        // It's a simple string URL
+        obj[finalKey] = urlOrObject;
+      }
       
       const newJson = JSON.stringify(data, null, 2);
       setJsonText(newJson);
@@ -265,7 +393,7 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
                   </label>
                   <ImageUploader
                     value={field.value}
-                    onChange={(urlOrObject) => handleImageUpload(field.path, urlOrObject)}
+                    onChange={(urlOrObject, settings) => handleImageUpload(field.path, urlOrObject, settings)}
                     field={field.path}
                   />
                 </div>
