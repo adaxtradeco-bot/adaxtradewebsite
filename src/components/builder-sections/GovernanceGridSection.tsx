@@ -12,9 +12,9 @@ interface GovernanceCard {
   title: string;
   description: string;
   example: string;
-  color: 'green' | 'indigo' | 'amber';
+  color: 'green' | 'indigo' | 'amber' | 'cyan' | 'violet';
   infographic?: {
-    type: 'audit' | 'roles' | 'exception';
+    type: 'audit' | 'roles' | 'exception' | 'stats' | 'flow' | 'timeline';
     data?: any;
   };
 }
@@ -38,6 +38,8 @@ const colorClasses = {
   green: 'before:bg-gradient-to-r before:from-green-500 before:to-cyan-500',
   indigo: 'before:bg-gradient-to-r before:from-indigo-500 before:to-violet-500',
   amber: 'before:bg-gradient-to-r before:from-amber-500 before:to-red-500',
+  cyan: 'before:bg-gradient-to-r before:from-cyan-500 before:to-blue-500',
+  violet: 'before:bg-gradient-to-r before:from-violet-500 before:to-purple-500',
 };
 
 export default function GovernanceGridSection({
@@ -173,6 +175,78 @@ export default function GovernanceGridSection({
                       {card.infographic.data?.badge}
                     </span>
                   </div>
+                </div>
+              )}
+
+              {card.infographic?.type === 'stats' && (
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {card.infographic.data?.metrics?.map((metric: any, i: number) => (
+                    <div key={i} className="p-2 bg-slate-100/50 dark:bg-slate-800/30 rounded-lg border border-slate-200/50 dark:border-white/5">
+                      <div className="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">
+                        {metric.label}
+                      </div>
+                      <div className="text-sm font-bold text-slate-900 dark:text-white">
+                        {metric.value}
+                      </div>
+                      <div className={`text-[10px] flex items-center gap-1 ${
+                        metric.trend === 'up' ? 'text-green-600 dark:text-green-400' :
+                        metric.trend === 'down' ? 'text-red-600 dark:text-red-400' :
+                        'text-slate-500 dark:text-slate-400'
+                      }`}>
+                        {metric.trend === 'up' && '↑'}
+                        {metric.trend === 'down' && '↓'}
+                        {metric.trend === 'neutral' && '→'}
+                        <span>{metric.change}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {card.infographic?.type === 'flow' && (
+                <div className="mt-3 flex flex-col gap-1">
+                  {card.infographic.data?.nodes?.map((node: any, i: number) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
+                        node.type === 'start' ? 'bg-green-500/20 text-green-700 dark:text-green-300' :
+                        node.type === 'end' ? 'bg-red-500/20 text-red-700 dark:text-red-300' :
+                        node.type === 'decision' ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300' :
+                        'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+                      }`}>
+                        {i + 1}
+                      </div>
+                      <span className="text-xs text-slate-600 dark:text-slate-300">
+                        {node.label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {card.infographic?.type === 'timeline' && (
+                <div className="mt-3 flex flex-col gap-1.5">
+                  {card.infographic.data?.steps?.map((step: any, i: number) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <div className={`w-2 h-2 rounded-full mt-1 flex-shrink-0 ${
+                        step.status === 'completed' ? 'bg-green-500' :
+                        step.status === 'active' ? 'bg-blue-500 animate-pulse' :
+                        'bg-slate-300 dark:bg-slate-600'
+                      }`} />
+                      <div className="flex-1">
+                        <div className="text-xs font-semibold text-slate-900 dark:text-white">
+                          {step.title}
+                        </div>
+                        {step.description && (
+                          <div className="text-[10px] text-slate-500 dark:text-slate-400">
+                            {step.description}
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[10px] text-slate-500 dark:text-slate-400">
+                        {step.time}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
