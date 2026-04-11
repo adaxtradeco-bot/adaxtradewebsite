@@ -30,6 +30,7 @@ import { IndustriesGridPropertyPanel } from './IndustriesGridPropertyPanel';
 import { SlaIntegrationSplitPropertyPanel } from './SlaIntegrationSplitPropertyPanel';
 import { PartnerCtaStripPropertyPanel } from './PartnerCtaStripPropertyPanel';
 import { PlatformCapabilitiesPropertyPanel } from './PlatformCapabilitiesPropertyPanel';
+import { GovernanceGridPropertyPanel } from './GovernanceGridPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -544,7 +545,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'partner-showcase-hero', 'platform-snapshot', 'platform-modules-bento',
     'how-it-works-steps', 'automation-engine', 'industries-grid',
     'sla-integration-split', 'partner-cta-strip', 'platform-capabilities',
-    'interactive-feature-wall', 'wall-of-features'
+    'interactive-feature-wall', 'wall-of-features', 'governance-grid'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -597,6 +598,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <InteractiveFeatureWallPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'wall-of-features':
         return <WallOfFeaturesPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'governance-grid':
+        return <GovernanceGridPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
         return (
           <>
