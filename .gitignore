@@ -150,8 +150,9 @@ add-*.js
 *.sh
 !scripts/**/*.sh
 
-# SQL files
+# SQL files (except migrations)
 *.sql
+!prisma/migrations/**/*.sql
 
 # JSON data files (keep package files)
 *-page.json

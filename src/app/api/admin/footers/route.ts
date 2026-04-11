@@ -57,6 +57,14 @@ export async function POST(request: NextRequest) {
 
     const data = await request.json();
 
+    // Validate required fields
+    if (!data.language || !data.companyName) {
+      return NextResponse.json({ 
+        success: false,
+        error: 'Language and company name are required' 
+      }, { status: 400 });
+    }
+
     // چک کردن اینکه فوتر برای این زبان وجود نداره
     const existingFooter = await prisma.footer.findUnique({
       where: { language: data.language }
@@ -85,13 +93,19 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ 
       success: true,
-      footer 
+      footer: {
+        ...footer,
+        contactInfo: JSON.parse(footer.contactInfo || '{}'),
+        columns: JSON.parse(footer.columns || '[]'),
+        bottomBar: JSON.parse(footer.bottomBar || '{}'),
+        style: JSON.parse(footer.style || '{}')
+      }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Footers POST error:', error);
     return NextResponse.json({ 
       success: false,
-      error: 'Internal server error' 
+      error: error.message || 'Internal server error' 
     }, { status: 500 });
   }
 }
