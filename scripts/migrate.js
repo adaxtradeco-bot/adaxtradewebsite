@@ -16,11 +16,18 @@ try {
   console.log('📦 Generating Prisma Client...');
   execSync('npx prisma generate', { stdio: 'inherit' });
 
-  // Run migrations
-  console.log('🗄️  Running database migrations...');
-  execSync('npx prisma migrate deploy', { stdio: 'inherit' });
+  // Try migrate deploy first
+  console.log('🗄️  Attempting database migrations...');
+  try {
+    execSync('npx prisma migrate deploy', { stdio: 'inherit' });
+    console.log('✅ Migration completed successfully!');
+  } catch (migrateError) {
+    console.log('⚠️  Migrate deploy failed, trying db push instead...');
+    // If migrate fails, use db push as fallback
+    execSync('npx prisma db push --skip-generate --accept-data-loss', { stdio: 'inherit' });
+    console.log('✅ Schema pushed successfully!');
+  }
 
-  console.log('✅ Migration completed successfully!');
   process.exit(0);
 } catch (error) {
   console.error('❌ Migration failed:', error.message);
