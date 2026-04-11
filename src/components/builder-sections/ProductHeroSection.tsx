@@ -54,6 +54,10 @@ interface ProductHeroData {
   placeholderIconConfig?: IconConfig;
   placeholderText?: string;
   features?: FeatureItem[];
+  
+  // New options
+  showMediaBackground?: boolean;
+  mediaContainerPadding?: string;
 }
 
 interface ProductHeroSectionProps {
@@ -85,11 +89,13 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
     mediaUrl,
     mediaAlt = 'Product showcase',
     mediaFit = 'cover',
-    mediaAspectRatio = '4/3',
+    mediaAspectRatio = '16/9',
     placeholderIcon,
     placeholderIconConfig,
     placeholderText = 'Product Preview',
-    features = []
+    features = [],
+    showMediaBackground = true,
+    mediaContainerPadding = 'p-6'
   } = data;
 
   const backgroundColor = customBackground || theme?.background || style.backgroundColor || 'bg-gradient-to-br from-indigo-50 via-slate-50 to-cyan-50 dark:from-indigo-950 dark:via-slate-900 dark:to-cyan-950';
@@ -126,8 +132,12 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
         );
 
       case 'image':
+        const containerClasses = showMediaBackground 
+          ? `rounded-3xl bg-gradient-to-br from-indigo-600/20 to-cyan-500/20 dark:from-indigo-600/20 dark:to-cyan-500/20 ${mediaContainerPadding} border border-white/10 dark:border-white/10 backdrop-blur-sm`
+          : '';
+        
         return (
-          <div className="rounded-3xl bg-gradient-to-br from-indigo-600/20 to-cyan-500/20 dark:from-indigo-600/20 dark:to-cyan-500/20 p-6 border border-white/10 dark:border-white/10 backdrop-blur-sm">
+          <div className={containerClasses}>
             <div className="relative rounded-2xl overflow-hidden" style={{ aspectRatio: mediaAspectRatio }}>
               {mediaUrl ? (
                 <Image src={mediaUrl} alt={mediaAlt} fill className={`object-${mediaFit}`} priority />

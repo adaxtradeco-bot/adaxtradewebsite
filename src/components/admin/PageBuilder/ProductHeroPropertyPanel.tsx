@@ -730,6 +730,40 @@ export function ProductHeroPropertyPanel({ section, onUpdate }: ProductHeroPrope
                 className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               />
             </div>
+            
+            <div>
+              <label className="flex items-center gap-2 text-xs font-medium text-gray-700 dark:text-gray-300">
+                <input
+                  type="checkbox"
+                  checked={data.showMediaBackground !== false}
+                  onChange={(e) => updateData({ showMediaBackground: e.target.checked })}
+                  className="rounded"
+                />
+                Show background container
+              </label>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                Disable for full-width image without padding/background
+              </p>
+            </div>
+            
+            {data.showMediaBackground !== false && (
+              <div>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  Container Padding
+                </label>
+                <select
+                  value={data.mediaContainerPadding || 'p-6'}
+                  onChange={(e) => updateData({ mediaContainerPadding: e.target.value })}
+                  className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  <option value="p-0">None</option>
+                  <option value="p-2">Small (8px)</option>
+                  <option value="p-4">Medium (16px)</option>
+                  <option value="p-6">Large (24px)</option>
+                  <option value="p-8">Extra Large (32px)</option>
+                </select>
+              </div>
+            )}
           </div>
         </div>
       )}
