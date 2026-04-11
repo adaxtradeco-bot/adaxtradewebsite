@@ -3,6 +3,86 @@
 import { useState, useEffect } from 'react';
 import { SmartImage } from '@/components/ui/SmartImage';
 
+interface MagnifierImageProps {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  enableMagnifier: boolean;
+}
+
+function MagnifierImage({ src, alt, width, height, enableMagnifier }: MagnifierImageProps) {
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const [magnifierPosition, setMagnifierPosition] = useState({ x: 0, y: 0 });
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!enableMagnifier) return;
+
+    const elem = e.currentTarget;
+    const { top, left, width, height } = elem.getBoundingClientRect();
+
+    const x = ((e.clientX - left) / width) * 100;
+    const y = ((e.clientY - top) / height) * 100;
+
+    setMagnifierPosition({ x, y });
+    setCursorPosition({ x: e.clientX - left, y: e.clientY - top });
+  };
+
+  return (
+    <div className="hero-slide-image-card max-w-3xl">
+      <div
+        className={`relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${
+          enableMagnifier ? 'cursor-none' : ''
+        }`}
+        style={{ maxWidth: `${width}px` }}
+        onMouseEnter={() => enableMagnifier && setShowMagnifier(true)}
+        onMouseLeave={() => setShowMagnifier(false)}
+        onMouseMove={handleMouseMove}
+      >
+        <img
+          src={src}
+          alt={alt}
+          className="w-full h-auto"
+          style={{
+            aspectRatio: `${width}/${height}`,
+            objectFit: 'cover'
+          }}
+        />
+
+        {enableMagnifier && showMagnifier && (
+          <>
+            {/* Magnifier lens */}
+            <div
+              className="absolute pointer-events-none border-2 border-white/80 rounded-full shadow-2xl"
+              style={{
+                width: '150px',
+                height: '150px',
+                left: `${cursorPosition.x - 75}px`,
+                top: `${cursorPosition.y - 75}px`,
+                backgroundImage: `url(${src})`,
+                backgroundSize: `${width * 2}px ${height * 2}px`,
+                backgroundPosition: `${-magnifierPosition.x * width * 2 / 100 + 75}px ${-magnifierPosition.y * height * 2 / 100 + 75}px`,
+                backgroundRepeat: 'no-repeat',
+                zIndex: 10
+              }}
+            />
+            {/* Custom cursor */}
+            <div
+              className="absolute pointer-events-none w-4 h-4 border-2 border-white rounded-full"
+              style={{
+                left: `${cursorPosition.x - 8}px`,
+                top: `${cursorPosition.y - 8}px`,
+                zIndex: 11
+              }}
+            />
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 interface SnapshotCard {
   title: string;
   subtitle: string;
@@ -128,7 +208,7 @@ export default function HeroSliderNWMSection({
 
               {/* Content */}
               <div className="hero-slide-content relative z-20 max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6">
-                <div className="hero-slide-layout flex flex-col lg:grid lg:grid-cols-[1.2fr_0.8fr] gap-6 md:gap-10 items-end">
+                <div className="hero-slide-layout flex flex-col lg:grid lg:grid-cols-[0.8fr_1.2fr] gap-6 md:gap-10 items-end">
                   {/* Left Content */}
                   <div className="hero-slide-left space-y-4 md:space-y-6 animate-fade-in">
                     <div className="hero-slide-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-600/70 dark:border-cyan-500/50 bg-cyan-500/20 dark:bg-cyan-500/10 text-xs md:text-sm text-cyan-900 dark:text-cyan-100 md:backdrop-blur-md">
@@ -184,26 +264,13 @@ export default function HeroSliderNWMSection({
                       const enableMagnifier = slide.enableMagnifier || false;
 
                       return (
-                        <div className="hero-slide-image-card max-w-3xl">
-                          <div 
-                            className={`relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${
-                              enableMagnifier ? 'cursor-zoom-in' : ''
-                            }`}
-                            style={{ maxWidth: `${width}px` }}
-                          >
-                            <img
-                              src={imageSrc}
-                              alt={imageAlt}
-                              className={`w-full h-auto transition-transform duration-300 ${
-                                enableMagnifier ? 'hover:scale-150' : ''
-                              }`}
-                              style={{ 
-                                aspectRatio: `${width}/${height}`,
-                                objectFit: 'cover'
-                              }}
-                            />
-                          </div>
-                        </div>
+                        <MagnifierImage
+                          src={imageSrc}
+                          alt={imageAlt}
+                          width={width}
+                          height={height}
+                          enableMagnifier={enableMagnifier}
+                        />
                       );
                     }
 
