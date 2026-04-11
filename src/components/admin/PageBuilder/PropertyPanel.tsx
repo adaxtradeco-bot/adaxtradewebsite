@@ -659,6 +659,39 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
           </>
         );
 
+      case 'hero-slider-nwm':
+        return (
+          <>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Autoplay Interval (ms)
+                </label>
+                <input
+                  type="number"
+                  {...register('autoPlayInterval')}
+                  min="1000"
+                  step="500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                />
+              </div>
+              
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  💡 <strong>Per-Slide Image Settings:</strong><br/>
+                  Use JSON editor below to configure each slide:
+                  <br/>• <code>useImageInsteadOfCard: true</code> - Show image instead of card
+                  <br/>• <code>cardImage: "path/to/image.jpg"</code> - Image path
+                  <br/>• <code>cardImageWidth: 600</code> - Image width in pixels (default: 600)
+                  <br/>• <code>cardImageHeight: 400</code> - Image height in pixels (default: 400)
+                  <br/>• <code>enableMagnifier: true</code> - Enable zoom on hover (default: false)
+                </p>
+              </div>
+            </div>
+            <JSONEditor section={section} onUpdate={onUpdate} />
+          </>
+        );
+
       case 'hero':
         return (
           <>

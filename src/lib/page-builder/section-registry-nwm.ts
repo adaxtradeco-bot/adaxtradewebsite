@@ -41,6 +41,11 @@ export const NWM_SECTION_TEMPLATES: SectionTemplate[] = [
             badge: 'Government',
             mediaType: 'image',
             mediaSrc: '/placeholder-hero.jpg',
+            useImageInsteadOfCard: false,
+            cardImage: '',
+            cardImageWidth: 600,
+            cardImageHeight: 400,
+            enableMagnifier: false,
             snapshotCard: {
               title: 'Built for Government',
               subtitle: 'Citizen Services Solution',

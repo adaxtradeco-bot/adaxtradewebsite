@@ -32,6 +32,9 @@ interface HeroSlide {
   mediaPoster?: string;
   useImageInsteadOfCard?: boolean;
   cardImage?: string | { src: string; alt?: string; maxWidth?: string | number; maxHeight?: string | number; objectFit?: string };
+  cardImageWidth?: number;
+  cardImageHeight?: number;
+  enableMagnifier?: boolean;
   minHeight?: string;
   snapshotCard?: SnapshotCard;
   statistics?: StatItem[];
@@ -125,7 +128,7 @@ export default function HeroSliderNWMSection({
 
               {/* Content */}
               <div className="hero-slide-content relative z-20 max-w-7xl mx-auto px-4 md:px-6 py-4 md:py-6">
-                <div className="hero-slide-layout flex flex-col lg:grid lg:grid-cols-2 gap-6 md:gap-10 items-end">
+                <div className="hero-slide-layout flex flex-col lg:grid lg:grid-cols-[1.2fr_0.8fr] gap-6 md:gap-10 items-end">
                   {/* Left Content */}
                   <div className="hero-slide-left space-y-4 md:space-y-6 animate-fade-in">
                     <div className="hero-slide-badge inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-cyan-600/70 dark:border-cyan-500/50 bg-cyan-500/20 dark:bg-cyan-500/10 text-xs md:text-sm text-cyan-900 dark:text-cyan-100 md:backdrop-blur-md">
@@ -176,20 +179,28 @@ export default function HeroSliderNWMSection({
                     if (slide.useImageInsteadOfCard && slide.cardImage) {
                       const imageSrc = typeof slide.cardImage === 'string' ? slide.cardImage : slide.cardImage.src;
                       const imageAlt = typeof slide.cardImage === 'string' ? `${slide.title} - ${slide.label}` : slide.cardImage.alt || `${slide.title} - ${slide.label}`;
-                      const imageStyle = typeof slide.cardImage === 'object' && slide.cardImage !== null ? {
-                        maxWidth: slide.cardImage.maxWidth ? `${slide.cardImage.maxWidth}px` : undefined,
-                        maxHeight: slide.cardImage.maxHeight ? `${slide.cardImage.maxHeight}px` : undefined,
-                        objectFit: (slide.cardImage.objectFit || 'cover') as React.CSSProperties['objectFit']
-                      } : { objectFit: 'cover' as React.CSSProperties['objectFit'] };
+                      const width = slide.cardImageWidth || 600;
+                      const height = slide.cardImageHeight || 400;
+                      const enableMagnifier = slide.enableMagnifier || false;
 
                       return (
                         <div className="hero-slide-image-card max-w-3xl">
-                          <div className="relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                          <div 
+                            className={`relative overflow-hidden rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 ${
+                              enableMagnifier ? 'cursor-zoom-in' : ''
+                            }`}
+                            style={{ maxWidth: `${width}px` }}
+                          >
                             <img
                               src={imageSrc}
                               alt={imageAlt}
-                              className="w-full h-auto"
-                              style={{ aspectRatio: '16/9', ...imageStyle }}
+                              className={`w-full h-auto transition-transform duration-300 ${
+                                enableMagnifier ? 'hover:scale-150' : ''
+                              }`}
+                              style={{ 
+                                aspectRatio: `${width}/${height}`,
+                                objectFit: 'cover'
+                              }}
                             />
                           </div>
                         </div>
