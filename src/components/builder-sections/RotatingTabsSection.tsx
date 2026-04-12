@@ -17,7 +17,7 @@ interface TabItem {
     lead: string;
     example: string;
     infographic?: {
-      type: 'workflow' | 'sla' | 'adaptive';
+      type: 'workflow' | 'sla' | 'adaptive' | 'sla-bars';
       data: any;
     };
   };
@@ -220,6 +220,46 @@ export default function RotatingTabsSection({
                                   </span>
                                 </div>
                               )
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {tab.content.infographic.type === 'sla-bars' && (
+                        <div className="tpc-infographic">
+                          <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text3)', marginBottom: '.75rem' }}>
+                            {tab.content.infographic.data.title}
+                          </div>
+                          <div className="sla-bars flex flex-col gap-2">
+                            {tab.content.infographic.data.bars?.map(
+                              (bar: any, i: number) => {
+                                const statusColors = {
+                                  green: 'var(--green, #10b981)',
+                                  amber: 'var(--amber, #f59e0b)',
+                                  red: 'var(--red, #ef4444)',
+                                };
+                                const barColor = statusColors[bar.status as keyof typeof statusColors] || statusColors.green;
+                                
+                                return (
+                                  <div key={i} className="sla-row flex items-center gap-2">
+                                    <span className="sla-label text-xs text-slate-600 dark:text-slate-300 w-24 flex-shrink-0">
+                                      {bar.label}
+                                    </span>
+                                    <div className="sla-bar-wrap flex-1 h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                                      <div
+                                        className="sla-bar h-full rounded-full transition-all duration-1000"
+                                        style={{ width: `${bar.value}%`, background: barColor }}
+                                      />
+                                    </div>
+                                    <span
+                                      className="sla-val text-xs font-semibold w-10 text-right"
+                                      style={{ color: barColor }}
+                                    >
+                                      {bar.value}%
+                                    </span>
+                                  </div>
+                                );
+                              }
                             )}
                           </div>
                         </div>
