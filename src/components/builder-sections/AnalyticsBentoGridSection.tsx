@@ -16,7 +16,7 @@ interface BentoCard {
   span?: 'wide' | 'tall' | 'normal';
   color: 'indigo' | 'cyan' | 'green' | 'amber' | 'violet';
   infographic?: {
-    type: 'kpi' | 'performance' | 'prediction' | 'media';
+    type: 'kpi' | 'performance' | 'prediction' | 'media' | 'status-list';
     data?: any;
   };
 }
@@ -216,6 +216,72 @@ export default function AnalyticsBentoGridSection({
                   <div className="text-xs text-slate-500 font-medium">
                     {card.infographic.data?.placeholder || 'Media placeholder'}
                   </div>
+                </div>
+              )}
+
+              {card.infographic?.type === 'status-list' && (
+                <div style={{ marginTop: '.75rem', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  {card.infographic.data?.items?.map((item: any, i: number) => {
+                    const colorMap = {
+                      red: {
+                        bg: 'rgba(239,68,68,.07)',
+                        border: 'rgba(239,68,68,.2)',
+                        dot: 'var(--red, #ef4444)',
+                        text: 'var(--red, #ef4444)',
+                      },
+                      amber: {
+                        bg: 'rgba(245,158,11,.07)',
+                        border: 'rgba(245,158,11,.2)',
+                        dot: 'var(--amber, #f59e0b)',
+                        text: 'var(--amber, #f59e0b)',
+                      },
+                      green: {
+                        bg: 'rgba(16,185,129,.07)',
+                        border: 'rgba(16,185,129,.2)',
+                        dot: 'var(--green, #10b981)',
+                        text: 'var(--green, #10b981)',
+                      },
+                    };
+                    const colors = colorMap[item.color as keyof typeof colorMap] || colorMap.green;
+
+                    return (
+                      <div
+                        key={i}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '6px 10px',
+                          background: colors.bg,
+                          border: `1px solid ${colors.border}`,
+                          borderRadius: '6px',
+                        }}
+                      >
+                        <span
+                          style={{
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: colors.dot,
+                            flexShrink: 0,
+                          }}
+                        />
+                        <span style={{ fontSize: '11px', color: 'var(--text2, #64748b)' }}>
+                          {item.label}
+                        </span>
+                        <span
+                          style={{
+                            marginLeft: 'auto',
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            color: colors.text,
+                          }}
+                        >
+                          {item.status}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>

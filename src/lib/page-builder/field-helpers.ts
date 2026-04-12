@@ -137,6 +137,44 @@ export const SECTION_FIELD_HELPERS: Record<string, SectionFieldHelpers> = {
     },
   },
 
+  'analytics-bento-grid': {
+    'cards[].infographic.type': {
+      label: 'Infographic Type',
+      description: 'Visual data representation for analytics',
+      allowedValues: [
+        { value: 'kpi', label: 'KPI - Key performance indicators grid' },
+        { value: 'performance', label: 'Performance - Progress bars with scores' },
+        { value: 'prediction', label: 'Prediction - AI predictions with status badges' },
+        { value: 'status-list', label: 'Status List - Colored status items (red/amber/green)' },
+        { value: 'media', label: 'Media - Media placeholder' },
+      ],
+      examples: ['kpi', 'status-list', 'performance'],
+      note: 'Each type requires specific data structure',
+    },
+    'cards[].infographic.data.items[].color': {
+      label: 'Status Color (for status-list type)',
+      description: 'Color indicator for status item',
+      allowedValues: [
+        { value: 'red', label: 'Red - Critical/Bottleneck' },
+        { value: 'amber', label: 'Amber - Warning/Slow' },
+        { value: 'green', label: 'Green - Healthy/Good' },
+      ],
+      examples: ['red', 'amber', 'green'],
+      note: 'Only used with status-list infographic type',
+    },
+    'cards[].span': {
+      label: 'Card Span',
+      description: 'Card size in bento grid',
+      allowedValues: [
+        { value: 'normal', label: 'Normal - 1x1 grid cell' },
+        { value: 'wide', label: 'Wide - 2x1 grid cells' },
+        { value: 'tall', label: 'Tall - 1x2 grid cells' },
+      ],
+      examples: ['normal', 'wide', 'tall'],
+      note: 'Wide and tall only work on medium+ screens',
+    },
+  },
+
   'fusion-teams-tabs': {
     'tabs[].enabled': {
       label: 'Tab Enabled',
