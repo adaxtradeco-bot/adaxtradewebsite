@@ -14,7 +14,7 @@ interface GovernanceCard {
   example: string;
   color: 'green' | 'indigo' | 'amber' | 'cyan' | 'violet';
   infographic?: {
-    type: 'audit' | 'roles' | 'exception' | 'stats' | 'flow' | 'timeline';
+    type: 'audit' | 'roles' | 'exception' | 'stats' | 'flow' | 'timeline' | 'exception-alert' | 'role-levels';
     data?: any;
   };
 }
@@ -247,6 +247,118 @@ export default function GovernanceGridSection({
                       </span>
                     </div>
                   ))}
+                </div>
+              )}
+
+              {card.infographic?.type === 'exception-alert' && (
+                <div style={{ marginTop: '.75rem' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '8px 12px',
+                      background: 'rgba(239,68,68,.07)',
+                      border: '1px solid rgba(239,68,68,.2)',
+                      borderRadius: '8px',
+                    }}
+                  >
+                    <span style={{ fontSize: '16px' }}>⚠</span>
+                    <div>
+                      <div
+                        style={{
+                          fontSize: '11px',
+                          fontWeight: 600,
+                          color: card.infographic.data?.statusColor === 'red' ? 'var(--red, #ef4444)' : 'var(--amber, #f59e0b)',
+                        }}
+                      >
+                        {card.infographic.data?.status}
+                      </div>
+                      <div style={{ fontSize: '10px', color: 'var(--text3, #94a3b8)' }}>
+                        {card.infographic.data?.detail}
+                      </div>
+                    </div>
+                    <span
+                      style={{
+                        marginLeft: 'auto',
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        color:
+                          card.infographic.data?.badgeColor === 'amber'
+                            ? 'var(--amber, #f59e0b)'
+                            : card.infographic.data?.badgeColor === 'green'
+                              ? 'var(--green, #10b981)'
+                              : 'var(--cyan, #06b6d4)',
+                        background:
+                          card.infographic.data?.badgeColor === 'amber'
+                            ? 'rgba(245,158,11,.12)'
+                            : card.infographic.data?.badgeColor === 'green'
+                              ? 'rgba(16,185,129,.12)'
+                              : 'rgba(6,182,212,.12)',
+                        padding: '2px 8px',
+                        borderRadius: '100px',
+                      }}
+                    >
+                      {card.infographic.data?.badge}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {card.infographic?.type === 'role-levels' && (
+                <div style={{ marginTop: '.75rem', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  {card.infographic.data?.roles?.map((role: any, i: number) => {
+                    const colorMap = {
+                      indigo: {
+                        bg: 'rgba(99,102,241,.07)',
+                        border: 'rgba(99,102,241,.15)',
+                        text: 'var(--accent2, #6366f1)',
+                      },
+                      cyan: {
+                        bg: 'rgba(6,182,212,.07)',
+                        border: 'rgba(6,182,212,.15)',
+                        text: 'var(--cyan, #06b6d4)',
+                      },
+                      green: {
+                        bg: 'rgba(16,185,129,.07)',
+                        border: 'rgba(16,185,129,.15)',
+                        text: 'var(--green, #10b981)',
+                      },
+                      amber: {
+                        bg: 'rgba(245,158,11,.07)',
+                        border: 'rgba(245,158,11,.15)',
+                        text: 'var(--amber, #f59e0b)',
+                      },
+                      violet: {
+                        bg: 'rgba(139,92,246,.07)',
+                        border: 'rgba(139,92,246,.15)',
+                        text: 'var(--violet, #8b5cf6)',
+                      },
+                    };
+                    const colors = colorMap[role.color as keyof typeof colorMap] || colorMap.indigo;
+
+                    return (
+                      <div
+                        key={i}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '7px 10px',
+                          background: colors.bg,
+                          border: `1px solid ${colors.border}`,
+                          borderRadius: '6px',
+                        }}
+                      >
+                        <span style={{ fontSize: '11px', color: colors.text, fontWeight: 600 }}>
+                          {role.role}
+                        </span>
+                        <span style={{ fontSize: '11px', color: 'var(--text3, #94a3b8)' }}>
+                          {role.description}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
