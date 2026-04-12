@@ -8,7 +8,7 @@
 import React, { useState } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { InlineFieldHelper } from './InlineFieldHelper';
-import { INFOGRAPHIC_DEFAULT_DATA, INFOGRAPHIC_TYPE_OPTIONS } from '@/lib/page-builder/infographic-defaults';
+import { INFOGRAPHIC_DEFAULT_DATA, INFOGRAPHIC_TYPE_OPTIONS, getInfographicStructurePreview } from '@/lib/page-builder/infographic-defaults';
 
 interface GovernanceGridPropertyPanelProps {
   section: SectionConfig;
@@ -262,8 +262,11 @@ export function GovernanceGridPropertyPanel({
                   </select>
 
                   {card.infographic?.type && (
-                    <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-[10px] text-blue-800 dark:text-blue-200">
-                      💡 Switch to <strong>JSON Editor</strong> to configure {card.infographic.type} data
+                    <div className="mt-2 space-y-1">
+                      <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-[10px] text-blue-800 dark:text-blue-200">
+                        💡 Switch to <strong>JSON Editor</strong> to edit data
+                      </div>
+                      <pre className="p-2 bg-slate-900 text-green-400 rounded text-[9px] leading-relaxed overflow-x-auto max-h-40 overflow-y-auto">{getInfographicStructurePreview(card.infographic.type)}</pre>
                     </div>
                   )}
                 </div>

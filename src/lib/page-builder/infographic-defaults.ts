@@ -135,6 +135,16 @@ export const INFOGRAPHIC_DEFAULT_DATA: Record<string, any> = {
   },
 };
 
+/**
+ * Returns a compact JSON structure preview for a given infographic type.
+ * Used in PropertyPanels to guide content editors.
+ */
+export function getInfographicStructurePreview(type: string): string {
+  const d = INFOGRAPHIC_DEFAULT_DATA[type];
+  if (!d) return '';
+  return JSON.stringify(d, null, 2);
+}
+
 export const INFOGRAPHIC_TYPE_OPTIONS = [
   { value: '', label: 'None' },
   { value: 'audit', label: 'Audit Trail' },
