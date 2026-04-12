@@ -16,7 +16,7 @@ interface BentoCard {
   span?: 'wide' | 'tall' | 'normal';
   color: 'indigo' | 'cyan' | 'green' | 'amber' | 'violet';
   infographic?: {
-    type: 'kpi' | 'performance' | 'prediction' | 'media' | 'status-list';
+    type: 'kpi' | 'performance' | 'prediction' | 'media' | 'status-list' | 'performance-bars';
     data?: any;
   };
 }
@@ -279,6 +279,50 @@ export default function AnalyticsBentoGridSection({
                         >
                           {item.status}
                         </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {card.infographic?.type === 'performance-bars' && (
+                <div style={{ marginTop: '.75rem', display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  {card.infographic.data?.performers?.map((perf: any, i: number) => {
+                    const colorMap = {
+                      green: 'var(--green, #10b981)',
+                      cyan: 'var(--cyan, #06b6d4)',
+                      amber: 'var(--amber, #f59e0b)',
+                      indigo: 'var(--indigo, #6366f1)',
+                      violet: 'var(--violet, #8b5cf6)',
+                    };
+                    const barColor = colorMap[perf.color as keyof typeof colorMap] || colorMap.green;
+
+                    return (
+                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ fontSize: '11px', color: 'var(--text2, #64748b)', width: '60px' }}>
+                          {perf.name}
+                        </div>
+                        <div
+                          style={{
+                            flex: 1,
+                            height: '6px',
+                            background: 'rgba(255,255,255,.06)',
+                            borderRadius: '3px',
+                            overflow: 'hidden',
+                          }}
+                        >
+                          <div
+                            style={{
+                              height: '100%',
+                              width: `${perf.score}%`,
+                              background: barColor,
+                              borderRadius: '3px',
+                            }}
+                          />
+                        </div>
+                        <div style={{ fontSize: '11px', fontWeight: 700, color: barColor }}>
+                          {perf.score}
+                        </div>
                       </div>
                     );
                   })}
