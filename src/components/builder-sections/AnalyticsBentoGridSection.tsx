@@ -6,6 +6,7 @@
 'use client';
 
 import React from 'react';
+import InfographicRenderer from './InfographicRenderer';
 
 interface BentoCard {
   icon: string;
@@ -16,8 +17,13 @@ interface BentoCard {
   span?: 'wide' | 'tall' | 'normal';
   color: 'indigo' | 'cyan' | 'green' | 'amber' | 'violet';
   infographic?: {
-    type: 'kpi' | 'performance' | 'prediction' | 'media' | 'status-list' | 'performance-bars';
+    type: string;
     data?: any;
+    mediaOverride?: {
+      type: 'image' | 'video';
+      src: string;
+      alt?: string;
+    };
   };
 }
 
@@ -111,222 +117,8 @@ export default function AnalyticsBentoGridSection({
                 </div>
               )}
 
-              {card.infographic?.type === 'kpi' && (
-                <div className="grid grid-cols-2 gap-1.5 mt-3">
-                  {card.infographic.data?.kpis?.map((kpi: any, i: number) => (
-                    <div
-                      key={i}
-                      className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg p-2.5 text-center"
-                    >
-                      <div
-                        className={`text-xl font-extrabold ${
-                          kpi.color === 'indigo'
-                            ? 'text-indigo-600 dark:text-indigo-300'
-                            : kpi.color === 'green'
-                              ? 'text-green-700 dark:text-green-400'
-                              : kpi.color === 'amber'
-                                ? 'text-amber-700 dark:text-amber-400'
-                                : 'text-cyan-700 dark:text-cyan-400'
-                        }`}
-                      >
-                        {kpi.value}
-                      </div>
-                      <div className="text-[10px] text-slate-500 mt-0.5">
-                        {kpi.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {card.infographic?.type === 'performance' && (
-                <div className="mt-3 flex flex-col gap-1.5">
-                  {card.infographic.data?.performers?.map(
-                    (perf: any, i: number) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="text-xs text-slate-600 dark:text-slate-300 w-16 flex-shrink-0">
-                          {perf.name}
-                        </div>
-                        <div className="flex-1 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full ${
-                              perf.score >= 90
-                                ? 'bg-green-500'
-                                : perf.score >= 70
-                                  ? 'bg-cyan-500'
-                                  : 'bg-amber-500'
-                            }`}
-                            style={{ width: `${perf.score}%` }}
-                          />
-                        </div>
-                        <div
-                          className={`text-xs font-bold ${
-                            perf.score >= 90
-                              ? 'text-green-700 dark:text-green-400'
-                              : perf.score >= 70
-                                ? 'text-cyan-700 dark:text-cyan-400'
-                                : 'text-amber-700 dark:text-amber-400'
-                          }`}
-                        >
-                          {perf.score}
-                        </div>
-                      </div>
-                    )
-                  )}
-                </div>
-              )}
-
-              {card.infographic?.type === 'prediction' && (
-                <div className="mt-3 flex flex-col gap-1.5">
-                  {card.infographic.data?.predictions?.map(
-                    (pred: any, i: number) => (
-                      <div
-                        key={i}
-                        className={`flex items-center gap-2 p-2 rounded-lg border ${
-                          pred.status === 'ok'
-                            ? 'bg-green-500/6 border-green-500/20'
-                            : pred.status === 'warn'
-                              ? 'bg-amber-500/6 border-amber-500/20'
-                              : 'bg-red-500/6 border-red-500/20'
-                        }`}
-                      >
-                        <span className="text-xs font-medium flex-1">
-                          {pred.label}
-                        </span>
-                        <span
-                          className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                            pred.status === 'ok'
-                              ? 'bg-green-500/15 text-green-700 dark:text-green-400'
-                              : pred.status === 'warn'
-                                ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400'
-                                : 'bg-red-500/15 text-red-400'
-                          }`}
-                        >
-                          {pred.badge}
-                        </span>
-                      </div>
-                    )
-                  )}
-                </div>
-              )}
-
-              {card.infographic?.type === 'media' && (
-                <div className="mt-4 bg-indigo-500/5 border-2 border-dashed border-indigo-500/20 rounded-xl flex flex-col items-center justify-center p-6 gap-2 text-center min-h-[80px]">
-                  <div className="text-3xl opacity-40">🎬</div>
-                  <div className="text-xs text-slate-500 font-medium">
-                    {card.infographic.data?.placeholder || 'Media placeholder'}
-                  </div>
-                </div>
-              )}
-
-              {card.infographic?.type === 'status-list' && (
-                <div style={{ marginTop: '.75rem', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  {card.infographic.data?.items?.map((item: any, i: number) => {
-                    const colorMap = {
-                      red: {
-                        bg: 'rgba(239,68,68,.07)',
-                        border: 'rgba(239,68,68,.2)',
-                        dot: 'var(--red, #ef4444)',
-                        text: 'var(--red, #ef4444)',
-                      },
-                      amber: {
-                        bg: 'rgba(245,158,11,.07)',
-                        border: 'rgba(245,158,11,.2)',
-                        dot: 'var(--amber, #f59e0b)',
-                        text: 'var(--amber, #f59e0b)',
-                      },
-                      green: {
-                        bg: 'rgba(16,185,129,.07)',
-                        border: 'rgba(16,185,129,.2)',
-                        dot: 'var(--green, #10b981)',
-                        text: 'var(--green, #10b981)',
-                      },
-                    };
-                    const colors = colorMap[item.color as keyof typeof colorMap] || colorMap.green;
-
-                    return (
-                      <div
-                        key={i}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '6px 10px',
-                          background: colors.bg,
-                          border: `1px solid ${colors.border}`,
-                          borderRadius: '6px',
-                        }}
-                      >
-                        <span
-                          style={{
-                            width: '8px',
-                            height: '8px',
-                            borderRadius: '50%',
-                            background: colors.dot,
-                            flexShrink: 0,
-                          }}
-                        />
-                        <span style={{ fontSize: '11px', color: 'var(--text2, #64748b)' }}>
-                          {item.label}
-                        </span>
-                        <span
-                          style={{
-                            marginLeft: 'auto',
-                            fontSize: '10px',
-                            fontWeight: 700,
-                            color: colors.text,
-                          }}
-                        >
-                          {item.status}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {card.infographic?.type === 'performance-bars' && (
-                <div style={{ marginTop: '.75rem', display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                  {card.infographic.data?.performers?.map((perf: any, i: number) => {
-                    const colorMap = {
-                      green: 'var(--green, #10b981)',
-                      cyan: 'var(--cyan, #06b6d4)',
-                      amber: 'var(--amber, #f59e0b)',
-                      indigo: 'var(--indigo, #6366f1)',
-                      violet: 'var(--violet, #8b5cf6)',
-                    };
-                    const barColor = colorMap[perf.color as keyof typeof colorMap] || colorMap.green;
-
-                    return (
-                      <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{ fontSize: '11px', color: 'var(--text2, #64748b)', width: '60px' }}>
-                          {perf.name}
-                        </div>
-                        <div
-                          style={{
-                            flex: 1,
-                            height: '6px',
-                            background: 'rgba(255,255,255,.06)',
-                            borderRadius: '3px',
-                            overflow: 'hidden',
-                          }}
-                        >
-                          <div
-                            style={{
-                              height: '100%',
-                              width: `${perf.score}%`,
-                              background: barColor,
-                              borderRadius: '3px',
-                            }}
-                          />
-                        </div>
-                        <div style={{ fontSize: '11px', fontWeight: 700, color: barColor }}>
-                          {perf.score}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+              {card.infographic && (
+                <InfographicRenderer infographic={card.infographic} />
               )}
             </div>
           ))}

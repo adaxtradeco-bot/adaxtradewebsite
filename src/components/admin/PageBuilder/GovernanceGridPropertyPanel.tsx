@@ -8,6 +8,7 @@
 import React, { useState } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { InlineFieldHelper } from './InlineFieldHelper';
+import { INFOGRAPHIC_DEFAULT_DATA, INFOGRAPHIC_TYPE_OPTIONS } from '@/lib/page-builder/infographic-defaults';
 
 interface GovernanceGridPropertyPanelProps {
   section: SectionConfig;
@@ -249,19 +250,15 @@ export function GovernanceGridPropertyPanel({
                         updateCard(index, { infographic: undefined });
                       } else {
                         updateCard(index, {
-                          infographic: { type, data: {} },
+                          infographic: { type, data: INFOGRAPHIC_DEFAULT_DATA[type] || {} },
                         });
                       }
                     }}
                     className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   >
-                    <option value="">None</option>
-                    <option value="audit">Audit Trail</option>
-                    <option value="stats">Stats</option>
-                    <option value="flow">Flow</option>
-                    <option value="timeline">Timeline</option>
-                    <option value="roles">Roles</option>
-                    <option value="exception">Exception</option>
+                    {INFOGRAPHIC_TYPE_OPTIONS.map((t) => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
                   </select>
 
                   {card.infographic?.type && (

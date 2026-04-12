@@ -6,6 +6,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import InfographicRenderer from './InfographicRenderer';
 
 interface TabItem {
   tag: string;
@@ -17,8 +18,13 @@ interface TabItem {
     lead: string;
     example: string;
     infographic?: {
-      type: 'workflow' | 'sla' | 'adaptive' | 'sla-bars';
+      type: string;
       data: any;
+      mediaOverride?: {
+        type: 'image' | 'video';
+        src: string;
+        alt?: string;
+      };
     };
   };
 }
@@ -142,128 +148,7 @@ export default function RotatingTabsSection({
 
                   {tab.content.infographic && (
                     <div className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl p-4">
-                      {tab.content.infographic.type === 'workflow' && (
-                        <div>
-                          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
-                            {tab.content.infographic.data.title}
-                          </div>
-                          <div className="flex flex-col gap-1.5">
-                            {tab.content.infographic.data.steps?.map(
-                              (step: any, i: number) => (
-                                <div
-                                  key={i}
-                                  className="flex items-center gap-2.5 p-2 bg-indigo-500/8 rounded-lg border border-indigo-500/15"
-                                >
-                                  <div className="w-5.5 h-5.5 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
-                                    {step.num}
-                                  </div>
-                                  <div className="text-xs font-medium flex-1">
-                                    {step.label}
-                                  </div>
-                                  <span
-                                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                                      step.type === 'auto'
-                                        ? 'bg-green-500/15 text-green-700 dark:text-green-400'
-                                        : step.type === 'ai'
-                                          ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-300'
-                                          : step.type === 'conditional'
-                                            ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400'
-                                            : 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-400'
-                                    }`}
-                                  >
-                                    {step.badge}
-                                  </span>
-                                </div>
-                              )
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {tab.content.infographic.type === 'sla' && (
-                        <div>
-                          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
-                            {tab.content.infographic.data.title}
-                          </div>
-                          <div className="flex flex-col gap-2">
-                            {tab.content.infographic.data.bars?.map(
-                              (bar: any, i: number) => (
-                                <div
-                                  key={i}
-                                  className="flex items-center gap-2.5"
-                                >
-                                  <span className="text-xs text-slate-600 dark:text-slate-300 w-20 flex-shrink-0">
-                                    {bar.label}
-                                  </span>
-                                  <div className="flex-1 h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
-                                    <div
-                                      className={`h-full rounded-full transition-all duration-1000 ${
-                                        bar.value >= 90
-                                          ? 'bg-green-500'
-                                          : bar.value >= 70
-                                            ? 'bg-amber-500'
-                                            : 'bg-red-500'
-                                      }`}
-                                      style={{ width: `${bar.value}%` }}
-                                    />
-                                  </div>
-                                  <span
-                                    className={`text-[10px] font-semibold w-8 text-right ${
-                                      bar.value >= 90
-                                        ? 'text-green-700 dark:text-green-400'
-                                        : bar.value >= 70
-                                          ? 'text-amber-700 dark:text-amber-400'
-                                          : 'text-red-400'
-                                    }`}
-                                  >
-                                    {bar.value}%
-                                  </span>
-                                </div>
-                              )
-                            )}
-                          </div>
-                        </div>
-                      )}
-
-                      {tab.content.infographic.type === 'sla-bars' && (
-                        <div className="tpc-infographic">
-                          <div style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text3)', marginBottom: '.75rem' }}>
-                            {tab.content.infographic.data.title}
-                          </div>
-                          <div className="sla-bars flex flex-col gap-2">
-                            {tab.content.infographic.data.bars?.map(
-                              (bar: any, i: number) => {
-                                const statusColors = {
-                                  green: 'var(--green, #10b981)',
-                                  amber: 'var(--amber, #f59e0b)',
-                                  red: 'var(--red, #ef4444)',
-                                };
-                                const barColor = statusColors[bar.status as keyof typeof statusColors] || statusColors.green;
-                                
-                                return (
-                                  <div key={i} className="sla-row flex items-center gap-2">
-                                    <span className="sla-label text-xs text-slate-600 dark:text-slate-300 w-24 flex-shrink-0">
-                                      {bar.label}
-                                    </span>
-                                    <div className="sla-bar-wrap flex-1 h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
-                                      <div
-                                        className="sla-bar h-full rounded-full transition-all duration-1000"
-                                        style={{ width: `${bar.value}%`, background: barColor }}
-                                      />
-                                    </div>
-                                    <span
-                                      className="sla-val text-xs font-semibold w-10 text-right"
-                                      style={{ color: barColor }}
-                                    >
-                                      {bar.value}%
-                                    </span>
-                                  </div>
-                                );
-                              }
-                            )}
-                          </div>
-                        </div>
-                      )}
+                      <InfographicRenderer infographic={tab.content.infographic} />
                     </div>
                   )}
                 </div>

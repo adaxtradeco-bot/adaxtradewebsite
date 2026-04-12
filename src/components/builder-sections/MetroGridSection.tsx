@@ -6,6 +6,7 @@
 'use client';
 
 import React from 'react';
+import InfographicRenderer from './InfographicRenderer';
 
 interface MetroCard {
   number: string;
@@ -15,8 +16,13 @@ interface MetroCard {
   description: string;
   example?: string;
   infographic?: {
-    type: 'flow' | 'org' | 'media';
+    type: string;
     data?: any;
+    mediaOverride?: {
+      type: 'image' | 'video';
+      src: string;
+      alt?: string;
+    };
   };
   span?: 'wide' | 'tall' | 'normal';
   color: 'indigo' | 'cyan' | 'amber' | 'violet' | 'green';
@@ -129,52 +135,8 @@ export default function MetroGridSection({
                 </div>
               )}
 
-              {card.infographic?.type === 'flow' && (
-                <div className="flex items-center gap-1 flex-wrap mt-3">
-                  {card.infographic?.data?.steps?.map(
-                    (step: string, i: number) => (
-                      <React.Fragment key={i}>
-                        <span className="bg-indigo-500/15 border border-indigo-500/25 rounded-md px-2.5 py-1 text-[10px] font-semibold text-indigo-600 dark:text-indigo-300">
-                          {step}
-                        </span>
-                        {i <
-                          (card.infographic?.data?.steps?.length ?? 0) - 1 && (
-                          <span className="text-[10px] text-slate-500">→</span>
-                        )}
-                      </React.Fragment>
-                    )
-                  )}
-                </div>
-              )}
-
-              {card.infographic?.type === 'org' && (
-                <div className="flex flex-col items-center gap-1.5 mt-3">
-                  <div className="bg-indigo-500/15 border border-indigo-500/30 rounded-md px-2.5 py-1 text-[10px] font-semibold text-indigo-600 dark:text-indigo-300">
-                    {card.infographic.data?.root}
-                  </div>
-                  <div className="w-px h-3 bg-slate-300 dark:bg-white/10" />
-                  <div className="flex gap-1.5">
-                    {card.infographic.data?.children?.map(
-                      (child: string, i: number) => (
-                        <div
-                          key={i}
-                          className="bg-cyan-500/12 border border-cyan-500/25 rounded-md px-2.5 py-1 text-[10px] font-semibold text-cyan-700 dark:text-cyan-400 text-center"
-                        >
-                          {child}
-                        </div>
-                      )
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {card.infographic?.type === 'media' && (
-                <div className="mt-4 bg-indigo-500/5 border-2 border-dashed border-indigo-500/20 rounded-xl flex flex-col items-center justify-center p-8 gap-2 text-center">
-                  <div className="text-3xl opacity-40">🎬</div>
-                  <div className="text-xs text-slate-500 font-medium">
-                    {card.infographic.data?.placeholder || 'Media placeholder'}
-                  </div>
-                </div>
+              {card.infographic && (
+                <InfographicRenderer infographic={card.infographic} />
               )}
             </div>
           ))}

@@ -37,6 +37,8 @@ import { PlatformTabsPropertyPanel } from './PlatformTabsPropertyPanel';
 import { HeroSliderPropertyPanel } from './HeroSliderPropertyPanel';
 import { HeroSliderNWMPropertyPanel } from './HeroSliderNWMPropertyPanel';
 import { MetroGridPropertyPanel } from './MetroGridPropertyPanel';
+import { RotatingTabsPropertyPanel } from './RotatingTabsPropertyPanel';
+import { AnalyticsBentoGridPropertyPanel } from './AnalyticsBentoGridPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -553,7 +555,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'sla-integration-split', 'partner-cta-strip', 'platform-capabilities',
     'interactive-feature-wall', 'wall-of-features', 'governance-grid',
     'fusion-teams-tabs', 'feature-video-tabs', 'platform-tabs',
-    'hero-slider', 'hero-slider-nwm', 'metro-grid'
+    'hero-slider', 'hero-slider-nwm', 'metro-grid',
+    'rotating-tabs', 'analytics-bento-grid'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -616,6 +619,10 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <PlatformTabsPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'metro-grid':
         return <MetroGridPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'rotating-tabs':
+        return <RotatingTabsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'analytics-bento-grid':
+        return <AnalyticsBentoGridPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
         return (
           <>
