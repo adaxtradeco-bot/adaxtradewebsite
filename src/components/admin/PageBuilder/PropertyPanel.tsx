@@ -31,6 +31,12 @@ import { SlaIntegrationSplitPropertyPanel } from './SlaIntegrationSplitPropertyP
 import { PartnerCtaStripPropertyPanel } from './PartnerCtaStripPropertyPanel';
 import { PlatformCapabilitiesPropertyPanel } from './PlatformCapabilitiesPropertyPanel';
 import { GovernanceGridPropertyPanel } from './GovernanceGridPropertyPanel';
+import { FusionTeamsTabsPropertyPanel } from './FusionTeamsTabsPropertyPanel';
+import { FeatureVideoTabsPropertyPanel } from './FeatureVideoTabsPropertyPanel';
+import { PlatformTabsPropertyPanel } from './PlatformTabsPropertyPanel';
+import { HeroSliderPropertyPanel } from './HeroSliderPropertyPanel';
+import { HeroSliderNWMPropertyPanel } from './HeroSliderNWMPropertyPanel';
+import { MetroGridPropertyPanel } from './MetroGridPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -545,7 +551,9 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'partner-showcase-hero', 'platform-snapshot', 'platform-modules-bento',
     'how-it-works-steps', 'automation-engine', 'industries-grid',
     'sla-integration-split', 'partner-cta-strip', 'platform-capabilities',
-    'interactive-feature-wall', 'wall-of-features', 'governance-grid'
+    'interactive-feature-wall', 'wall-of-features', 'governance-grid',
+    'fusion-teams-tabs', 'feature-video-tabs', 'platform-tabs',
+    'hero-slider', 'hero-slider-nwm', 'metro-grid'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -600,98 +608,31 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <WallOfFeaturesPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'governance-grid':
         return <GovernanceGridPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'fusion-teams-tabs':
+        return <FusionTeamsTabsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'feature-video-tabs':
+        return <FeatureVideoTabsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'platform-tabs':
+        return <PlatformTabsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'metro-grid':
+        return <MetroGridPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
         return (
           <>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Global Min Height
-                </label>
-                <input
-                  type="text"
-                  {...register('globalMinHeight')}
-                  placeholder="90vh, 600px, 100%"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Autoplay
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    {...register('autoplay')}
-                    className="mr-2"
-                  />
-                  <span className="text-sm">Enable automatic slide transitions</span>
-                </label>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Interval (ms)
-                </label>
-                <input
-                  type="number"
-                  {...register('interval')}
-                  min="1000"
-                  step="500"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-              
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  💡 <strong>Height Controls:</strong><br/>
-                  • <code>globalMinHeight</code> - Default height for all slides<br/>
-                  • Per-slide <code>minHeight</code> - Overrides global setting<br/>
-                  • Values: "90vh", "600px", "100%", etc.<br/><br/>
-                  <strong>Per-Slide Settings:</strong><br/>
-                  Use the JSON editor below to configure individual slides. Each slide can have:
-                  <br/>• <code>useImageInsteadOfCard: true</code> - Replace card with image
-                  <br/>• <code>cardImage: "path/to/image.jpg"</code> - Image to display
-                  <br/>• <code>minHeight: "80vh"</code> - Custom height for this slide
-                  <br/>• Standard card content (title, description, buttons, etc.)
-                </p>
-              </div>
+            <HeroSliderPropertyPanel section={section} onUpdate={onUpdate} />
+            <div className="mt-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+              <JSONEditor section={section} onUpdate={onUpdate} />
             </div>
-            <JSONEditor section={section} onUpdate={onUpdate} />
           </>
         );
 
       case 'hero-slider-nwm':
         return (
           <>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Autoplay Interval (ms)
-                </label>
-                <input
-                  type="number"
-                  {...register('autoPlayInterval')}
-                  min="1000"
-                  step="500"
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-              
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  💡 <strong>Per-Slide Image Settings:</strong><br/>
-                  Use JSON editor below to configure each slide:
-                  <br/>• <code>useImageInsteadOfCard: true</code> - Show image instead of card
-                  <br/>• <code>cardImage: "path/to/image.jpg"</code> - Image path
-                  <br/>• <code>cardImageWidth: 600</code> - Image width in pixels (default: 600)
-                  <br/>• <code>cardImageHeight: 400</code> - Image height in pixels (default: 400)
-                  <br/>• <code>enableMagnifier: true</code> - Enable zoom on hover (default: false)
-                </p>
-              </div>
+            <HeroSliderNWMPropertyPanel section={section} onUpdate={onUpdate} />
+            <div className="mt-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+              <JSONEditor section={section} onUpdate={onUpdate} />
             </div>
-            <JSONEditor section={section} onUpdate={onUpdate} />
           </>
         );
 
