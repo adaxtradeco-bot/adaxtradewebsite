@@ -381,4 +381,38 @@ export const MEDIA_PROOF_CORE_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+
+  {
+    id: 'logo-cloud',
+    name: 'Logo Cloud',
+    type: 'logo-cloud',
+    category: SECTION_CATEGORIES.SOCIAL,
+    description: 'Display partner, client, or integration logos in a grid',
+    icon: '🏢',
+    defaultData: {
+      id: '',
+      type: 'logo-cloud',
+      order: 0,
+      data: {
+        title: 'Trusted by Industry Leaders',
+        subtitle: 'Join thousands of companies using our platform',
+        logos: [
+          { name: 'Company 1', imageUrl: '', alt: 'Company 1' },
+          { name: 'Company 2', imageUrl: '', alt: 'Company 2' },
+          { name: 'Company 3', imageUrl: '', alt: 'Company 3' },
+          { name: 'Company 4', imageUrl: '', alt: 'Company 4' },
+          { name: 'Company 5', imageUrl: '', alt: 'Company 5' },
+          { name: 'Company 6', imageUrl: '', alt: 'Company 6' },
+          { name: 'Company 7', imageUrl: '', alt: 'Company 7' },
+          { name: 'Company 8', imageUrl: '', alt: 'Company 8' },
+        ],
+      },
+      style: {
+        backgroundColor: 'bg-slate-50 dark:bg-neutral-900',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-16',
+      },
+    },
+    configSchema: {},
+  },
 ];
