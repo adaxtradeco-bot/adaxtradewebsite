@@ -38,28 +38,32 @@ export default function PartnerBenefitsSection({ data, style }: PartnerBenefitsS
           )}
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {data.benefits.map((benefit, idx) => (
-            <div
-              key={idx}
-              className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 dark:from-teal-500 dark:to-teal-700 flex items-center justify-center text-3xl mb-4">
-                {benefit.icon}
+        {data.benefits.length > 0 && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.benefits.map((benefit, idx) => (
+              <div
+                key={idx}
+                className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-teal-400 to-teal-600 dark:from-teal-500 dark:to-teal-700 flex items-center justify-center text-3xl mb-4">
+                  {benefit.icon}
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{benefit.title}</h3>
+                <p className="text-slate-600 dark:text-slate-400 mb-4">{benefit.description}</p>
+                {benefit.features.length > 0 && (
+                  <ul className="space-y-2">
+                    {benefit.features.map((feature, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
+                        <span className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-500 to-teal-500 flex-shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-              <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">{benefit.title}</h3>
-              <p className="text-slate-600 dark:text-slate-400 mb-4">{benefit.description}</p>
-              <ul className="space-y-2">
-                {benefit.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
-                    <span className="w-4 h-4 rounded-full bg-gradient-to-br from-blue-500 to-teal-500 flex-shrink-0" />
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

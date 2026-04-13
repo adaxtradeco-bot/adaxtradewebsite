@@ -26,6 +26,7 @@ interface PartnerShowcaseHeroData {
   label?: string;
   labelHighlight?: string;
   title?: string;
+  titleMiddle?: string;
   titleHighlight?: string;
   description?: string;
   buttons?: Button[];
@@ -65,6 +66,7 @@ export default function PartnerShowcaseHeroSection({
     label = 'For Technology Partners & Resellers',
     labelHighlight = 'White-label ready',
     title = 'A platform your clients',
+    titleMiddle = 'will rely on —',
     titleHighlight = 'forever',
     description = 'IVAFLOW is a complete no-code Business Process Management Suite. Visual, modular, and built for any industry. Give your clients the power to automate their operations — and give your practice a product that closes deals.',
     buttons = DEFAULT_BUTTONS,
@@ -117,8 +119,12 @@ export default function PartnerShowcaseHeroSection({
           style={{ fontSize: 'clamp(40px, 6vw, 72px)' }}
         >
           {title}
-          <br />
-          will rely on —{' '}
+          {titleMiddle && (
+            <>
+              <br />
+              {titleMiddle}{' '}
+            </>
+          )}
           <em
             className="not-italic"
             style={{
@@ -164,28 +170,30 @@ export default function PartnerShowcaseHeroSection({
         </div>
 
         {/* Trust strip */}
-        <div className="flex flex-wrap border border-slate-200 dark:border-white/[0.07] rounded-[22px] bg-slate-50 dark:bg-[#1A1D24] overflow-hidden max-w-[800px] mx-auto">
-          {trustItems.map((item, i) => (
-            <div
-              key={i}
-              className="flex-1 min-w-[140px] px-5 py-[18px] text-center border-r border-slate-200 dark:border-white/[0.07] last:border-r-0 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-[#20242D]"
-            >
-              <div className="font-extrabold text-[22px] mb-1 leading-none">
-                <span
-                  style={{
-                    background: `linear-gradient(120deg, ${accentColor}, ${accentColor2})`,
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  {item.value}
-                </span>
+        {trustItems.length > 0 && (
+          <div className="flex flex-wrap border border-slate-200 dark:border-white/[0.07] rounded-[22px] bg-slate-50 dark:bg-[#1A1D24] overflow-hidden max-w-[800px] mx-auto">
+            {trustItems.map((item, i) => (
+              <div
+                key={i}
+                className="flex-1 min-w-[140px] px-5 py-[18px] text-center border-r border-slate-200 dark:border-white/[0.07] last:border-r-0 transition-colors duration-200 hover:bg-slate-100 dark:hover:bg-[#20242D]"
+              >
+                <div className="font-extrabold text-[22px] mb-1 leading-none">
+                  <span
+                    style={{
+                      background: `linear-gradient(120deg, ${accentColor}, ${accentColor2})`,
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text',
+                    }}
+                  >
+                    {item.value}
+                  </span>
+                </div>
+                <div className="text-[12px] text-slate-500 dark:text-[#8A8FA8] tracking-[0.04em]">{item.label}</div>
               </div>
-              <div className="text-[12px] text-slate-500 dark:text-[#8A8FA8] tracking-[0.04em]">{item.label}</div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

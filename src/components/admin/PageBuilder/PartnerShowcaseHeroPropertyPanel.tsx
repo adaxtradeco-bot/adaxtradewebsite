@@ -124,8 +124,11 @@ export function PartnerShowcaseHeroPropertyPanel({ section, onUpdate }: PartnerS
         <Field label="Label Highlight">
           <input className={inputCls} value={data.labelHighlight ?? ''} onChange={e => update({ labelHighlight: e.target.value })} />
         </Field>
-        <Field label="Title">
+        <Field label="Title (first line)">
           <input className={inputCls} value={data.title ?? ''} onChange={e => update({ title: e.target.value })} />
+        </Field>
+        <Field label="Title Middle (second line)">
+          <input className={inputCls} value={data.titleMiddle ?? ''} onChange={e => update({ titleMiddle: e.target.value })} placeholder="e.g. will rely on —" />
         </Field>
         <Field label="Title Highlight (gradient)">
           <input className={inputCls} value={data.titleHighlight ?? ''} onChange={e => update({ titleHighlight: e.target.value })} />

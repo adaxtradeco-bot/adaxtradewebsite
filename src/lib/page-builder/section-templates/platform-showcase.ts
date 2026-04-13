@@ -25,6 +25,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
         label: 'For Technology Partners & Resellers',
         labelHighlight: 'White-label ready',
         title: 'A platform your clients',
+        titleMiddle: 'will rely on —',
         titleHighlight: 'forever',
         description:
           'IVAFLOW is a complete no-code Business Process Management Suite. Visual, modular, and built for any industry. Give your clients the power to automate their operations — and give your practice a product that closes deals.',

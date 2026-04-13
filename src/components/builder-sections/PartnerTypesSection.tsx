@@ -42,35 +42,39 @@ export default function PartnerTypesSection({ data, style }: PartnerTypesSection
           )}
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {data.types.map((type, idx) => (
-            <div
-              key={idx}
-              className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-lg"
-            >
-              <div className="flex items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-700 mb-4">
-                <div className="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-3xl">
-                  {type.icon}
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white">{type.title}</h3>
-              </div>
-              <p className="text-slate-600 dark:text-slate-400 mb-4">{type.description}</p>
-              <ul className="space-y-3 mb-6">
-                {type.features.map((feature, i) => (
-                  <li key={i} className="text-sm py-2 border-b border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-300">
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={type.cta.href}
-                className="block w-full text-center px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 rounded-full font-bold hover:from-yellow-500 hover:to-yellow-600 transition-all shadow-lg hover:shadow-xl"
+        {data.types.length > 0 && (
+          <div className="grid md:grid-cols-3 gap-6">
+            {data.types.map((type, idx) => (
+              <div
+                key={idx}
+                className="bg-white dark:bg-slate-900 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-lg"
               >
-                {type.cta.text}
-              </a>
-            </div>
-          ))}
-        </div>
+                <div className="flex items-center gap-4 pb-4 border-b border-slate-200 dark:border-slate-700 mb-4">
+                  <div className="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-3xl">
+                    {type.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white">{type.title}</h3>
+                </div>
+                <p className="text-slate-600 dark:text-slate-400 mb-4">{type.description}</p>
+                {type.features.length > 0 && (
+                  <ul className="space-y-3 mb-6">
+                    {type.features.map((feature, i) => (
+                      <li key={i} className="text-sm py-2 border-b border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-300">
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <a
+                  href={type.cta.href}
+                  className="block w-full text-center px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-500 text-slate-900 rounded-full font-bold hover:from-yellow-500 hover:to-yellow-600 transition-all shadow-lg hover:shadow-xl"
+                >
+                  {type.cta.text}
+                </a>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
