@@ -55,6 +55,16 @@ interface TickerItem {
   iconConfig?: IconConfig; // FontAwesome icon (optional)
 }
 
+// Type guard to check if ticker item is old format (string) or new format (object)
+type TickerItemInput = string | TickerItem;
+
+function normalizeTickerItem(item: TickerItemInput): TickerItem {
+  if (typeof item === 'string') {
+    return { text: item }; // Backward compatibility: convert string to object
+  }
+  return item;
+}
+
 interface WhyAutomateWithUsSectionData {
   eyebrow?: string;
   title?: string;
@@ -67,7 +77,7 @@ interface WhyAutomateWithUsSectionData {
   row1Cards?: BentoCard[];
   row2Cards?: BentoCard[];
   row3Cards?: BentoCard[];
-  tickerItems?: TickerItem[];
+  tickerItems?: TickerItemInput[];
   tickerSpeed?: number;
   sectionPaddingY?: string;
 }
@@ -179,7 +189,7 @@ const DEFAULT_ROW3: BentoCard[] = [
   },
 ];
 
-const DEFAULT_TICKER: TickerItem[] = [
+const DEFAULT_TICKER: TickerItemInput[] = [
   { text: 'Visual workflow designer' },
   { text: 'No-code form builder' },
   { text: 'Role-based access control' },
@@ -426,8 +436,9 @@ export default function WhyAutomateWithUsSection({
   const accent2 = accentColor2;
   const accent3 = accentColor3;
 
-  /* duplicate ticker for seamless loop */
-  const tickerDup = [...tickerItems, ...tickerItems];
+  /* normalize ticker items for backward compatibility */
+  const normalizedTickerItems = tickerItems.map(normalizeTickerItem);
+  const tickerDup = [...normalizedTickerItems, ...normalizedTickerItems];
 
   return (
     <section className={`relative ${sectionPaddingY} overflow-hidden bg-white dark:bg-[#07080A]`}>
