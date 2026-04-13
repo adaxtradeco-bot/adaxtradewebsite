@@ -975,23 +975,40 @@ export function SectionRenderer({
             <section className="py-16 px-6 bg-slate-50 dark:bg-neutral-900">
               <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-12">
-                  <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                    {(section as any).data?.title}
-                  </h2>
-                  <p className="text-lg text-slate-600 dark:text-slate-300">
-                    {(section as any).data?.subtitle}
-                  </p>
+                  {(section as any).data?.title && (
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
+                      {(section as any).data.title}
+                    </h2>
+                  )}
+                  {(section as any).data?.subtitle && (
+                    <p className="text-lg text-slate-600 dark:text-slate-300">
+                      {(section as any).data.subtitle}
+                    </p>
+                  )}
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-8 items-center">
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-6 items-center">
                   {((section as any).data?.logos || []).map(
                     (logo: any, idx: number) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-center p-4 bg-white dark:bg-neutral-800 rounded-lg border border-slate-200 dark:border-neutral-700"
+                        className="flex items-center justify-center p-6 bg-white dark:bg-neutral-800 rounded-lg border border-slate-200 dark:border-neutral-700 hover:border-blue-400 dark:hover:border-blue-600 transition-colors min-h-[80px]"
                       >
-                        <span className="text-slate-400 text-sm">
-                          {logo.name}
-                        </span>
+                        {logo.imageUrl ? (
+                          <img
+                            src={logo.imageUrl}
+                            alt={logo.alt || logo.name}
+                            className="max-w-full max-h-12 object-contain grayscale hover:grayscale-0 transition-all"
+                          />
+                        ) : logo.iconName ? (
+                          <i
+                            className={`fa-brands fa-${logo.iconName} text-4xl text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors`}
+                            title={logo.name}
+                          />
+                        ) : (
+                          <span className="text-slate-500 dark:text-slate-400 text-sm font-medium text-center">
+                            {logo.name}
+                          </span>
+                        )}
                       </div>
                     )
                   )}

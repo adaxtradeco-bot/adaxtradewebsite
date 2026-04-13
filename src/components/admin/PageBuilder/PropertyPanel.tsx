@@ -39,6 +39,7 @@ import { HeroSliderNWMPropertyPanel } from './HeroSliderNWMPropertyPanel';
 import { MetroGridPropertyPanel } from './MetroGridPropertyPanel';
 import { RotatingTabsPropertyPanel } from './RotatingTabsPropertyPanel';
 import { AnalyticsBentoGridPropertyPanel } from './AnalyticsBentoGridPropertyPanel';
+import { LogoCloudPropertyPanel } from './LogoCloudPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -556,7 +557,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'interactive-feature-wall', 'wall-of-features', 'governance-grid',
     'fusion-teams-tabs', 'feature-video-tabs', 'platform-tabs',
     'hero-slider', 'hero-slider-nwm', 'metro-grid',
-    'rotating-tabs', 'analytics-bento-grid'
+    'rotating-tabs', 'analytics-bento-grid', 'logo-cloud'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -623,6 +624,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <RotatingTabsPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'analytics-bento-grid':
         return <AnalyticsBentoGridPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'logo-cloud':
+        return <LogoCloudPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
         return (
           <>
