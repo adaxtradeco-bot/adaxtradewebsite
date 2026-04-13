@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { InlineFieldHelper } from './InlineFieldHelper';
 import { INFOGRAPHIC_DEFAULT_DATA, INFOGRAPHIC_TYPE_OPTIONS, getInfographicStructurePreview } from '@/lib/page-builder/infographic-defaults';
+import { IconButton, type IconConfig } from '@/components/ui/IconPicker';
 
 interface AnalyticsBentoGridPropertyPanelProps {
   section: SectionConfig;
@@ -121,13 +122,21 @@ export function AnalyticsBentoGridPropertyPanel({ section, onUpdate }: Analytics
               </div>
 
               <div className="space-y-2">
-                <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-2">
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Icon (Emoji)</label>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Icon</label>
+                    <IconButton
+                      value={card.iconConfig}
+                      onChange={(icon: IconConfig | null) => updateCard(index, { iconConfig: icon })}
+                      placeholder="Select FontAwesome icon"
+                      className="mb-2"
+                    />
+                    <div className="text-[10px] text-gray-500 dark:text-gray-400 text-center py-1">— OR —</div>
                     <input
                       type="text"
                       value={card.icon || ''}
                       onChange={(e) => updateCard(index, { icon: e.target.value })}
+                      placeholder="Emoji (legacy)"
                       className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                     />
                   </div>

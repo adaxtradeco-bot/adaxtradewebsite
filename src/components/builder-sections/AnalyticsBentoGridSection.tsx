@@ -7,9 +7,11 @@
 
 import React from 'react';
 import InfographicRenderer from './InfographicRenderer';
+import { IconDisplay, type IconConfig } from '@/components/ui/IconPicker';
 
 interface BentoCard {
-  icon: string;
+  icon: string;              // Legacy: emoji
+  iconConfig?: IconConfig;   // New: FontAwesome
   tag: string;
   title: string;
   description: string;
@@ -102,7 +104,13 @@ export default function AnalyticsBentoGridSection({
                 ${colorClasses[card.color]}
               `}
             >
-              <div className="text-2xl mb-3">{card.icon}</div>
+              <div className="text-2xl mb-3">
+                {card.iconConfig ? (
+                  <IconDisplay icon={card.iconConfig} className="text-3xl" />
+                ) : (
+                  card.icon
+                )}
+              </div>
               <div className="text-[10px] font-semibold tracking-widest uppercase text-slate-500 mb-1.5">
                 {card.tag}
               </div>
