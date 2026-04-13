@@ -242,9 +242,9 @@ export function WhyAutomateWithUsPropertyPanel({ section, onUpdate }: WhyAutomat
     });
   };
 
-  const updateTicker = (idx: number, val: string) => {
+  const updateTicker = (idx: number, field: 'text' | 'iconConfig', val: any) => {
     const items = [...(data.tickerItems ?? [])];
-    items[idx] = { text: val };
+    items[idx] = { ...items[idx], [field]: val };
     update({ tickerItems: items });
   };
   const addTicker = () => update({ tickerItems: [...(data.tickerItems ?? []), { text: '' }] });
@@ -324,16 +324,28 @@ export function WhyAutomateWithUsPropertyPanel({ section, onUpdate }: WhyAutomat
           <input type="number" className={inputCls} value={data.tickerSpeed ?? 30} min={5} max={120}
             onChange={e => update({ tickerSpeed: parseInt(e.target.value) || 30 })} />
         </Field>
-        <div className="space-y-1.5 max-h-60 overflow-y-auto">
+        <div className="space-y-3 max-h-96 overflow-y-auto">
           {(data.tickerItems ?? []).map((item: any, i: number) => (
-            <div key={i} className="flex gap-2">
-              <input className={inputCls} value={item.text ?? ''} onChange={e => updateTicker(i, e.target.value)} placeholder="Ticker text" />
-              <button type="button" onClick={() => removeTicker(i)} className="text-red-500 px-1 text-sm">✕</button>
+            <div key={i} className="border border-gray-200 dark:border-gray-600 rounded-lg p-3 space-y-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Item #{i + 1}</span>
+                <button type="button" onClick={() => removeTicker(i)} className="text-red-500 px-2 py-1 text-xs hover:bg-red-50 dark:hover:bg-red-900/20 rounded">✕ Remove</button>
+              </div>
+              <Field label="Text">
+                <input className={inputCls} value={item.text ?? ''} onChange={e => updateTicker(i, 'text', e.target.value)} placeholder="Ticker text" />
+              </Field>
+              <Field label="Icon (optional)">
+                <IconButton
+                  value={item.iconConfig}
+                  onChange={(icon: IconConfig | null) => updateTicker(i, 'iconConfig', icon)}
+                  placeholder="Select icon (or leave empty for dot)"
+                />
+              </Field>
             </div>
           ))}
         </div>
         <button type="button" onClick={addTicker}
-          className="w-full py-1.5 border border-dashed border-gray-300 dark:border-gray-600 rounded text-xs text-gray-500 hover:border-blue-400 hover:text-blue-500">
+          className="w-full py-2 mt-2 border border-dashed border-blue-300 dark:border-blue-700 rounded-md text-sm text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium">
           + Add Ticker Item
         </button>
       </Collapsible>

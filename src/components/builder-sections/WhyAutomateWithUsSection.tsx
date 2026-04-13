@@ -52,6 +52,7 @@ interface BentoCard {
 
 interface TickerItem {
   text: string;
+  iconConfig?: IconConfig; // FontAwesome icon (optional)
 }
 
 interface WhyAutomateWithUsSectionData {
@@ -544,7 +545,11 @@ export default function WhyAutomateWithUsSection({
                     hover:border-slate-300 dark:hover:border-white/[0.13]
                     hover:text-slate-700 dark:hover:text-[#F0F2F8]"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: accent }} />
+                  {item.iconConfig ? (
+                    <IconDisplay icon={item.iconConfig} className="flex-shrink-0" />
+                  ) : (
+                    <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: accent }} />
+                  )}
                   {item.text}
                 </span>
               ))}
