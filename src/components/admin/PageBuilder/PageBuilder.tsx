@@ -186,16 +186,18 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
         pageStatus={pageStatus}
       />
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative">
         {!isPreviewMode && (
           <>
-            {/* Section Library - Hidden when section is selected */}
-            {!selectedSectionId && (
+            {/* Section Library - Hidden when section is selected on small screens */}
+            <div className={`${
+              selectedSectionId ? 'hidden lg:flex' : 'flex'
+            } flex-shrink-0`}>
               <SectionLibrary onAddSection={handleAddSection} />
-            )}
+            </div>
 
             {/* Main Canvas */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col min-w-0">
               <PreviewModes 
                 mode={previewMode} 
                 onModeChange={setPreviewMode} 
@@ -227,12 +229,22 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
               </DndContext>
             </div>
 
-            {/* Property Panel */}
+            {/* Property Panel - Overlay on small screens, sidebar on large */}
             {selectedSection && (
-              <PropertyPanel
-                section={selectedSection}
-                onUpdate={(updates) => handleUpdateSection(selectedSection.id, updates)}
-                onClose={() => setSelectedSectionId(null)}
+              <div className="fixed lg:relative inset-y-0 right-0 z-50 lg:flex-shrink-0 transform transition-transform duration-300 ease-in-out">
+                <PropertyPanel
+                  section={selectedSection}
+                  onUpdate={(updates) => handleUpdateSection(selectedSection.id, updates)}
+                  onClose={() => setSelectedSectionId(null)}
+                />
+              </div>
+            )}
+            
+            {/* Backdrop for mobile when PropertyPanel is open */}
+            {selectedSection && (
+              <div 
+                className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+                onClick={() => setSelectedSectionId(null)}
               />
             )}
           </>

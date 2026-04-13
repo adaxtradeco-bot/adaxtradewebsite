@@ -40,7 +40,7 @@ export function SectionLibrary({ onAddSection }: SectionLibraryProps) {
   }, {} as Record<string, typeof SECTION_TEMPLATES>);
 
   return (
-    <div className="w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+    <div className="w-full lg:w-72 xl:w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col max-w-full">
       {/* Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">

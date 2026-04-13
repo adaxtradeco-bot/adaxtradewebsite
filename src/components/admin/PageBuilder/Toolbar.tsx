@@ -67,13 +67,13 @@ export function Toolbar({
     }
   };
   return (
-    <div className="h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6">
+    <div className="h-auto min-h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-stretch sm:items-center justify-between px-3 sm:px-6 py-2 sm:py-0 gap-2 sm:gap-0">
       {/* Left Section - Page Info */}
-      <div className="flex items-center space-x-4">
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+      <div className="flex items-center space-x-2 sm:space-x-4">
+        <h1 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
           Page Builder
         </h1>
-        <div className="text-sm text-gray-500 dark:text-gray-400">
+        <div className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
           Visual Editor
         </div>
       </div>
@@ -89,26 +89,26 @@ export function Toolbar({
             <button
               key={mode}
               onClick={() => onPreviewModeChange(mode)}
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium transition-colors ${
                 previewMode === mode
                   ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
                   : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
               }`}
               title={label}
             >
-              <span className="mr-2">{icon}</span>
-              <span className="hidden sm:inline">{label}</span>
+              <span className="mr-1 sm:mr-2">{icon}</span>
+              <span className="hidden md:inline">{label}</span>
             </button>
           ))}
         </div>
       )}
 
       {/* Right Section - Actions */}
-      <div className="flex items-center space-x-3">
+      <div className="flex items-center space-x-2 sm:space-x-3">
         {/* Preview Toggle */}
         <button
           onClick={onTogglePreview}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+          className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
             isPreviewMode
               ? 'bg-blue-600 text-white hover:bg-blue-700'
               : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -116,13 +116,13 @@ export function Toolbar({
         >
           {isPreviewMode ? (
             <>
-              <span className="mr-2">✏️</span>
-              Edit
+              <span className="mr-1 sm:mr-2">✏️</span>
+              <span className="hidden sm:inline">Edit</span>
             </>
           ) : (
             <>
-              <span className="mr-2">👁️</span>
-              Preview
+              <span className="mr-1 sm:mr-2">👁️</span>
+              <span className="hidden sm:inline">Preview</span>
             </>
           )}
         </button>
@@ -131,17 +131,17 @@ export function Toolbar({
         <button
           onClick={onSave}
           disabled={isSaving}
-          className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg font-medium transition-colors flex items-center"
+          className="px-3 sm:px-4 py-1.5 sm:py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center"
         >
           {isSaving ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
-              Saving...
+              <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-2 border-white border-t-transparent mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Saving...</span>
             </>
           ) : (
             <>
-              <span className="mr-2">💾</span>
-              Save
+              <span className="mr-1 sm:mr-2">💾</span>
+              <span className="hidden sm:inline">Save</span>
             </>
           )}
         </button>
@@ -150,22 +150,22 @@ export function Toolbar({
         <button
           onClick={handlePublish}
           disabled={isPublishing || pageStatus === 'published'}
-          className="px-4 py-2 bg-violet-600 hover:bg-violet-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors flex items-center"
+          className="px-3 sm:px-4 py-1.5 sm:py-2 bg-violet-600 hover:bg-violet-700 disabled:bg-gray-400 text-white rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center"
         >
           {isPublishing ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2" />
-              Publishing...
+              <div className="animate-spin rounded-full h-3 w-3 sm:h-4 sm:w-4 border-2 border-white border-t-transparent mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Publishing...</span>
             </>
           ) : pageStatus === 'published' ? (
             <>
-              <span className="mr-2">✅</span>
-              Published
+              <span className="mr-1 sm:mr-2">✅</span>
+              <span className="hidden sm:inline">Published</span>
             </>
           ) : (
             <>
-              <span className="mr-2">🚀</span>
-              Publish
+              <span className="mr-1 sm:mr-2">🚀</span>
+              <span className="hidden sm:inline">Publish</span>
             </>
           )}
         </button>

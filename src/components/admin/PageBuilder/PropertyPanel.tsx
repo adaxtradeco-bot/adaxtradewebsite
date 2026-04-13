@@ -753,7 +753,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
   };
 
   return (
-    <div className="w-96 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col">
+    <div className="w-full sm:w-96 lg:w-96 xl:w-[28rem] h-full bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col max-w-full shadow-2xl lg:shadow-none">
       {/* Header */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">

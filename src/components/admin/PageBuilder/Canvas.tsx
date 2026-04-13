@@ -64,7 +64,7 @@ export const Canvas = memo(function Canvas({
   }, [onSectionDuplicate]);
 
   return (
-    <div className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900 p-6">
+    <div className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900 p-2 sm:p-4 lg:p-6">
       <SectionCSSLoader sections={sections} />
       <div className={`${getCanvasWidth()} bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden transition-all duration-300 border border-gray-200 dark:border-gray-700`}>
         {sections.length === 0 ? (
@@ -232,39 +232,39 @@ const SortableSection = memo(function SortableSection({
           <div
             {...attributes}
             {...listeners}
-            className={`absolute top-4 left-4 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg cursor-grab hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 border border-gray-200 dark:border-gray-600 backdrop-blur-sm ${
+            className={`absolute top-2 left-2 lg:top-4 lg:left-4 p-2 lg:p-3 bg-white dark:bg-gray-800 rounded-lg lg:rounded-xl shadow-lg cursor-grab hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 border border-gray-200 dark:border-gray-600 backdrop-blur-sm ${
               isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100'
             }`}
             title="Drag to reorder"
           >
-            <Grip className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+            <Grip className="w-4 h-4 lg:w-5 lg:h-5 text-gray-600 dark:text-gray-400" />
           </div>
 
           {/* Action Buttons - Amazon Q Style */}
-          <div className={`absolute top-4 right-4 flex space-x-2 transition-all duration-200 ${
+          <div className={`absolute top-2 right-2 lg:top-4 lg:right-4 flex space-x-1 lg:space-x-2 transition-all duration-200 ${
             isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100'
           }`}>
             <button
               onClick={handleCSSEditor}
-              className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:bg-cyan-50 dark:hover:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400 transition-all duration-200 border border-gray-200 dark:border-gray-600 hover:border-cyan-300 dark:hover:border-cyan-600 backdrop-blur-sm"
+              className="p-2 lg:p-3 bg-white dark:bg-gray-800 rounded-lg lg:rounded-xl shadow-lg hover:bg-cyan-50 dark:hover:bg-cyan-900/20 text-cyan-600 dark:text-cyan-400 transition-all duration-200 border border-gray-200 dark:border-gray-600 hover:border-cyan-300 dark:hover:border-cyan-600 backdrop-blur-sm"
               title="Custom CSS"
             >
-              <Palette className="w-5 h-5" />
+              <Palette className="w-4 h-4 lg:w-5 lg:h-5" />
             </button>
             <button
               onClick={handleDuplicate}
-              className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 backdrop-blur-sm"
+              className="p-2 lg:p-3 bg-white dark:bg-gray-800 rounded-lg lg:rounded-xl shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200 border border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 backdrop-blur-sm"
               title="Duplicate Section"
             >
-              <Copy className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+              <Copy className="w-4 h-4 lg:w-5 lg:h-5 text-gray-600 dark:text-gray-400" />
             </button>
             
             <button
               onClick={handleDelete}
-              className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition-all duration-200 border border-gray-200 dark:border-gray-600 hover:border-red-300 dark:hover:border-red-600 backdrop-blur-sm"
+              className="p-2 lg:p-3 bg-white dark:bg-gray-800 rounded-lg lg:rounded-xl shadow-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 transition-all duration-200 border border-gray-200 dark:border-gray-600 hover:border-red-300 dark:hover:border-red-600 backdrop-blur-sm"
               title="Delete Section"
             >
-              <Trash2 className="w-5 h-5" />
+              <Trash2 className="w-4 h-4 lg:w-5 lg:h-5" />
             </button>
           </div>
 
