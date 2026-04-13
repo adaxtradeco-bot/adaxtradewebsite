@@ -33,6 +33,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
   const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [draggedSection, setDraggedSection] = useState<SectionConfig | null>(null);
+  const [isSectionLibraryVisible, setIsSectionLibraryVisible] = useState(true);
   const [cssEditorSection, setCssEditorSection] = useState<{
     sectionId: string;
     sectionType: string;
@@ -184,17 +185,21 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
         onPreviewModeChange={setPreviewMode}
         pageId={pageId}
         pageStatus={pageStatus}
+        isSectionLibraryVisible={isSectionLibraryVisible}
+        onToggleSectionLibrary={() => setIsSectionLibraryVisible(!isSectionLibraryVisible)}
       />
 
       <div className="flex-1 flex overflow-hidden relative">
         {!isPreviewMode && (
           <>
             {/* Section Library - Hidden when section is selected on small screens */}
-            <div className={`${
-              selectedSectionId ? 'hidden lg:flex' : 'flex'
-            } flex-shrink-0`}>
-              <SectionLibrary onAddSection={handleAddSection} />
-            </div>
+            {isSectionLibraryVisible && (
+              <div className={`${
+                selectedSectionId ? 'hidden lg:flex' : 'flex'
+              } flex-shrink-0`}>
+                <SectionLibrary onAddSection={handleAddSection} />
+              </div>
+            )}
 
             {/* Main Canvas */}
             <div className="flex-1 flex flex-col min-w-0">

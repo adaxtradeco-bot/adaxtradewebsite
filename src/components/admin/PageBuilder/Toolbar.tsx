@@ -19,6 +19,8 @@ interface ToolbarProps {
   pageId?: string;
   pageStatus?: string;
   onPublish?: () => Promise<void>;
+  isSectionLibraryVisible?: boolean;
+  onToggleSectionLibrary?: () => void;
 }
 
 export function Toolbar({
@@ -31,6 +33,8 @@ export function Toolbar({
   pageId,
   pageStatus,
   onPublish,
+  isSectionLibraryVisible = true,
+  onToggleSectionLibrary,
 }: ToolbarProps) {
   const [isPublishing, setIsPublishing] = React.useState(false);
 
@@ -68,8 +72,27 @@ export function Toolbar({
   };
   return (
     <div className="h-auto min-h-16 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-stretch sm:items-center justify-between px-3 sm:px-6 py-2 sm:py-0 gap-2 sm:gap-0">
-      {/* Left Section - Page Info */}
+      {/* Left Section - Page Info & Toggle */}
       <div className="flex items-center space-x-2 sm:space-x-4">
+        {/* Section Library Toggle */}
+        {onToggleSectionLibrary && !isPreviewMode && (
+          <button
+            onClick={onToggleSectionLibrary}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            title={isSectionLibraryVisible ? 'Hide Section Library' : 'Show Section Library'}
+          >
+            {isSectionLibraryVisible ? (
+              <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5 text-gray-700 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+              </svg>
+            )}
+          </button>
+        )}
+        
         <h1 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
           Page Builder
         </h1>
