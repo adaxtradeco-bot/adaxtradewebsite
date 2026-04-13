@@ -358,12 +358,9 @@ function BentoCardRenderer({
               border: '1.5px solid rgba(255,255,255,0.07)',
               color: card.iconColor ?? accent  // SVG needs color on parent for currentColor
             }}
+            dangerouslySetInnerHTML={card.iconConfig ? undefined : { __html: card.iconSvg! }}
           >
-            {card.iconConfig ? (
-              <IconDisplay icon={card.iconConfig} className="text-xl" />
-            ) : card.iconSvg ? (
-              <div dangerouslySetInnerHTML={{ __html: card.iconSvg }} />
-            ) : null}
+            {card.iconConfig && <IconDisplay icon={card.iconConfig} className="text-xl" />}
           </div>
         )}
 
