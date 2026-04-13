@@ -122,6 +122,7 @@ import ProcessPipelineSection from '@/components/builder-sections/ProcessPipelin
 import AIPoweredAutomationSection from '@/components/builder-sections/AIPoweredAutomationSection';
 import OmnichannelHubSection from '@/components/builder-sections/OmnichannelHubSection';
 import CompetitiveComparisonSection from '@/components/builder-sections/CompetitiveComparisonSection';
+import { IconDisplay } from '@/components/ui/IconPicker';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -993,15 +994,17 @@ export function SectionRenderer({
                         key={idx}
                         className="flex items-center justify-center p-6 bg-white dark:bg-neutral-800 rounded-lg border border-slate-200 dark:border-neutral-700 hover:border-blue-400 dark:hover:border-blue-600 transition-colors min-h-[80px]"
                       >
-                        {logo.imageUrl ? (
+                        {logo.image ? (
                           <img
-                            src={logo.imageUrl}
+                            src={logo.image}
                             alt={logo.alt || logo.name}
                             className="max-w-full max-h-12 object-contain grayscale hover:grayscale-0 transition-all"
                           />
-                        ) : logo.iconName ? (
+                        ) : logo.iconConfig ? (
+                          <IconDisplay icon={logo.iconConfig} className="text-4xl text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors" />
+                        ) : logo.icon ? (
                           <i
-                            className={`fa-brands fa-${logo.iconName} text-4xl text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors`}
+                            className={`fa-brands fa-${logo.icon} text-4xl text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 transition-colors`}
                             title={logo.name}
                           />
                         ) : (
