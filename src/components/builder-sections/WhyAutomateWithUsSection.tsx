@@ -355,16 +355,14 @@ function BentoCardRenderer({
             className="w-[46px] h-[46px] rounded-[13px] flex items-center justify-center mb-5 flex-shrink-0"
             style={{ 
               background: card.iconBg ?? 'rgba(79,127,255,0.08)', 
-              border: '1.5px solid rgba(255,255,255,0.07)'
+              border: '1.5px solid rgba(255,255,255,0.07)',
+              color: card.iconColor ?? accent  // SVG needs color on parent for currentColor
             }}
           >
             {card.iconConfig ? (
               <IconDisplay icon={card.iconConfig} className="text-xl" />
             ) : card.iconSvg ? (
-              <div 
-                style={{ color: card.iconColor ?? accent }}
-                dangerouslySetInnerHTML={{ __html: card.iconSvg }} 
-              />
+              <div dangerouslySetInnerHTML={{ __html: card.iconSvg }} />
             ) : null}
           </div>
         )}
