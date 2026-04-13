@@ -9,6 +9,7 @@
 'use client';
 
 import React from 'react';
+import { IconDisplay, type IconConfig } from '@/components/ui/IconPicker';
 
 /* ─── Types ─── */
 interface MediaSlot {
@@ -35,7 +36,9 @@ interface BentoCard {
   label?: string;
   title: string;
   description: string;
-  iconSvg?: string;
+  // Icon support: backward compatible
+  iconSvg?: string;           // Legacy: inline SVG
+  iconConfig?: IconConfig;    // New: FontAwesome via IconPicker
   iconBg?: string;
   iconColor?: string;
   stats?: StatItem[];
@@ -335,13 +338,18 @@ function BentoCardRenderer({
           </div>
         )}
 
-        {/* icon */}
-        {card.iconSvg && (
+        {/* icon - backward compatible: iconConfig (new) or iconSvg (legacy) */}
+        {(card.iconConfig || card.iconSvg) && (
           <div
             className="w-[46px] h-[46px] rounded-[13px] flex items-center justify-center mb-5 flex-shrink-0"
             style={{ background: card.iconBg ?? 'rgba(79,127,255,0.08)', border: '1.5px solid rgba(255,255,255,0.07)', color: card.iconColor ?? accent }}
-            dangerouslySetInnerHTML={{ __html: card.iconSvg }}
-          />
+          >
+            {card.iconConfig ? (
+              <IconDisplay icon={card.iconConfig} className="text-xl" />
+            ) : (
+              <div dangerouslySetInnerHTML={{ __html: card.iconSvg! }} />
+            )}
+          </div>
         )}
 
         {/* label */}

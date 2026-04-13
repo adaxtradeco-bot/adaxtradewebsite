@@ -10,6 +10,7 @@
 import React, { useState } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { MediaUpload } from '@/components/ui/MediaUpload';
+import { IconButton, type IconConfig } from '@/components/ui/IconPicker';
 
 interface WhyAutomateWithUsPropertyPanelProps {
   section: SectionConfig;
@@ -87,20 +88,55 @@ function CardEditor({ card, onChange, onRemove, onMoveUp, onMoveDown, isFirst, i
         <textarea className={textareaCls} rows={3} value={card.description ?? ''} onChange={e => onChange({ ...card, description: e.target.value })} />
       </Field>
 
-      {/* Icon */}
-      <Field label="Icon Color">
-        <div className="flex gap-2">
-          <input type="color" value={card.iconColor ?? '#4F7FFF'} onChange={e => onChange({ ...card, iconColor: e.target.value })}
-            className="w-10 h-9 rounded border border-gray-300 dark:border-gray-600 cursor-pointer p-0.5 bg-white dark:bg-gray-700" />
-          <input className={inputCls} value={card.iconColor ?? '#4F7FFF'} onChange={e => onChange({ ...card, iconColor: e.target.value })} />
-        </div>
-      </Field>
-      <Field label="Icon Background (rgba)">
-        <input className={inputCls} value={card.iconBg ?? ''} placeholder="rgba(79,127,255,0.08)" onChange={e => onChange({ ...card, iconBg: e.target.value })} />
-      </Field>
-      <Field label="Icon SVG (paste raw SVG)">
-        <textarea className={textareaCls} rows={3} value={card.iconSvg ?? ''} onChange={e => onChange({ ...card, iconSvg: e.target.value })} />
-      </Field>
+      {/* Icon - New: FontAwesome Picker */}
+      <Collapsible title="Icon" badge={card.iconConfig ? 'FA' : card.iconSvg ? 'SVG' : 'None'}>
+        <Field label="FontAwesome Icon (Recommended)">
+          <IconButton
+            value={card.iconConfig}
+            onChange={(icon: IconConfig | null) => onChange({ ...card, iconConfig: icon })}
+            placeholder="Select FontAwesome icon"
+          />
+        </Field>
+        
+        <div className="text-xs text-gray-500 dark:text-gray-400 text-center py-2">— OR —</div>
+        
+        <Field label="Legacy: Icon SVG (paste raw SVG)">
+          <textarea 
+            className={textareaCls} 
+            rows={3} 
+            value={card.iconSvg ?? ''} 
+            onChange={e => onChange({ ...card, iconSvg: e.target.value })} 
+            placeholder="<svg viewBox='0 0 24 24'>...</svg>"
+          />
+        </Field>
+        
+        <Field label="Icon Background (rgba)">
+          <input 
+            className={inputCls} 
+            value={card.iconBg ?? ''} 
+            placeholder="rgba(79,127,255,0.08)" 
+            onChange={e => onChange({ ...card, iconBg: e.target.value })} 
+          />
+        </Field>
+        
+        {!card.iconConfig && (
+          <Field label="Icon Color (for SVG only)">
+            <div className="flex gap-2">
+              <input 
+                type="color" 
+                value={card.iconColor ?? '#4F7FFF'} 
+                onChange={e => onChange({ ...card, iconColor: e.target.value })}
+                className="w-10 h-9 rounded border border-gray-300 dark:border-gray-600 cursor-pointer p-0.5 bg-white dark:bg-gray-700" 
+              />
+              <input 
+                className={inputCls} 
+                value={card.iconColor ?? '#4F7FFF'} 
+                onChange={e => onChange({ ...card, iconColor: e.target.value })} 
+              />
+            </div>
+          </Field>
+        )}
+      </Collapsible>
 
       {/* Team card toggle */}
       <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
