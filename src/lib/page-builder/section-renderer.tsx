@@ -123,6 +123,7 @@ import AIPoweredAutomationSection from '@/components/builder-sections/AIPoweredA
 import OmnichannelHubSection from '@/components/builder-sections/OmnichannelHubSection';
 import CompetitiveComparisonSection from '@/components/builder-sections/CompetitiveComparisonSection';
 import { IconDisplay } from '@/components/ui/IconPicker';
+import IntegrationMarqueeSection from '@/components/builder-sections/IntegrationMarqueeSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -922,6 +923,12 @@ export function SectionRenderer({
               key={section.id}
               data={(section as any).data}
               style={(section as any).style}
+            />
+          );
+        case 'integration-marquee':
+          return (
+            <IntegrationMarqueeSection
+              section={section}
             />
           );
         case 'showcase':

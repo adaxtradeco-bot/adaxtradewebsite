@@ -138,6 +138,7 @@ export const BaseSectionSchema = z.object({
     'reports-scale',
     'reports-integration',
     'reports-roles',
+    'integration-marquee',
   ]),
   order: z.number(),
   data: z.record(z.string(), z.any()),
