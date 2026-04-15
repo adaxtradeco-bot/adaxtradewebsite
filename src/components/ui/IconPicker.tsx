@@ -220,12 +220,27 @@ export function IconPicker({ value, onChange, onClose, className = '' }: IconPic
   );
 }
 
-export function IconDisplay({ icon, className = '', enableHover = false }: { icon: IconConfig; className?: string; enableHover?: boolean }) {
+export function IconDisplay({ icon, className = '', enableHover = false }: { icon: IconConfig | any; className?: string; enableHover?: boolean }) {
+  // Handle both old format (type: 'fa', value: 'fa-icon', style: 'solid') and new format (name, type, size, color)
+  if (icon.type === 'fa' && icon.value) {
+    // Old format from logo-cloud
+    const iconName = icon.value.replace(/^fa-/, ''); // Remove fa- prefix if exists
+    const styleMap: Record<string, string> = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
+    const prefix = styleMap[icon.style] || 'fas';
+    return (
+      <i
+        className={`${prefix} fa-${iconName} ${className}`}
+        style={{ fontStyle: 'normal' }}
+        aria-hidden="true"
+      />
+    );
+  }
+  
+  // New format from IconPicker
   const typeMap: Record<string, string> = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
   const sizeMap: Record<string, string> = { xs: 'fa-xs', sm: 'fa-sm', lg: 'fa-lg', xl: 'fa-xl', '2xl': 'fa-2xl', '3xl': 'fa-3xl', '4xl': 'fa-4xl', '5xl': 'fa-5xl' };
   const prefix = typeMap[icon.type] || 'fas';
   const sizeClass = sizeMap[icon.size] || 'fa-lg';
-  // Use both class formats for compatibility
   return (
     <i
       className={`${prefix} fa-${icon.name} ${sizeClass} ${className}`}
