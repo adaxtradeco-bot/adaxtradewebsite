@@ -13,8 +13,13 @@ interface IntegrationApp {
   name: string;
   status: string;
   statusColor: 'green' | 'amber' | 'gray';
-  iconType: 'emoji' | 'fontawesome' | 'svg' | 'image';
+  iconType: 'emoji' | 'fontawesome' | 'fa' | 'svg' | 'image';
   icon?: string;
+  iconConfig?: {
+    type: 'fa';
+    value: string;
+    style: 'solid' | 'regular' | 'light' | 'thin' | 'duotone' | 'brands';
+  };
   faIcon?: string;
   svgCode?: string;
   imageUrl?: string;
@@ -45,11 +50,20 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
   useEffect(() => {
     trackRefs.current.forEach((track) => {
       if (track && track.children.length > 0) {
-        const clone = track.cloneNode(true) as HTMLDivElement;
-        track.parentElement?.appendChild(clone);
+        const parent = track.parentElement;
+        if (parent) {
+          // Remove existing clones
+          const existingClones = parent.querySelectorAll('.marquee-clone');
+          existingClones.forEach(clone => clone.remove());
+          
+          // Create new clone
+          const clone = track.cloneNode(true) as HTMLDivElement;
+          clone.classList.add('marquee-clone');
+          parent.appendChild(clone);
+        }
       }
     });
-  }, []);
+  }, [row1Apps, row2Apps, row3Apps]);
 
   const setTrackRef = (index: number) => (el: HTMLDivElement | null) => {
     trackRefs.current[index] = el;
@@ -57,11 +71,23 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
 
   const renderIcon = (app: IntegrationApp) => {
     switch (app.iconType) {
+      case 'fa':
       case 'fontawesome':
+        if (app.iconConfig) {
+          const iconName = app.iconConfig.value?.replace(/^fa-/, '') || '';
+          const styleMap: Record<string, string> = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
+          const prefix = styleMap[app.iconConfig.style] || 'fas';
+          return (
+            <i
+              className={`${prefix} fa-${iconName}`}
+              style={{ fontSize: '20px', color: app.iconColor || 'currentColor', fontStyle: 'normal' }}
+            />
+          );
+        }
         return (
           <i
             className={app.faIcon}
-            style={{ fontSize: '20px', color: app.iconColor || 'currentColor' }}
+            style={{ fontSize: '20px', color: app.iconColor || 'currentColor', fontStyle: 'normal' }}
           />
         );
       case 'svg':
@@ -113,7 +139,7 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
         {/* Track */}
         <div
           ref={setTrackRef(index)}
-          className="flex items-center gap-7 h-full w-max"
+          className="flex items-center gap-7 h-full"
           style={{
             animation: `marquee-${direction} ${speed}s linear infinite`,
           }}
@@ -155,19 +181,19 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
     >
       <style jsx>{`
         @keyframes marquee-right {
-          from {
-            transform: translateX(-50%);
-          }
-          to {
+          0% {
             transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(-100%);
           }
         }
         @keyframes marquee-left {
-          from {
-            transform: translateX(0%);
+          0% {
+            transform: translateX(-100%);
           }
-          to {
-            transform: translateX(-50%);
+          100% {
+            transform: translateX(0%);
           }
         }
         .hover\\:scale-\\[1\\.03\\]:hover {

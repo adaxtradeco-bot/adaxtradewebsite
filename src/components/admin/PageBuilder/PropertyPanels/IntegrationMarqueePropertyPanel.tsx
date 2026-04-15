@@ -8,6 +8,7 @@
 
 import React, { useState } from 'react';
 import type { SectionConfig } from '@/lib/page-builder/section-schemas';
+import { IconButton, type IconConfig } from '@/components/ui/IconPicker';
 
 interface IntegrationMarqueePropertyPanelProps {
   section: SectionConfig;
@@ -52,8 +53,12 @@ const IntegrationMarqueePropertyPanel: React.FC<
       name: 'New App',
       status: 'Connected',
       statusColor: 'green' as const,
-      iconType: 'emoji' as const,
-      icon: '📦',
+      iconType: 'fa' as const,
+      iconConfig: {
+        type: 'fa' as const,
+        value: 'building',
+        style: 'solid' as const
+      },
       bgColor: 'rgba(100, 116, 139, 0.1)',
       iconColor: '#64748b',
     };
@@ -236,11 +241,42 @@ const IntegrationMarqueePropertyPanel: React.FC<
                     }
                     className="w-full px-2 py-1 text-sm border rounded bg-white dark:bg-gray-900"
                   >
+                    <option value="fa">Font Awesome</option>
                     <option value="emoji">Emoji</option>
-                    <option value="fontawesome">Font Awesome</option>
                     <option value="svg">SVG Code</option>
                     <option value="image">Image URL</option>
                   </select>
+
+                  {(app.iconType === 'fa' || app.iconType === 'fontawesome') && (
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Font Awesome Icon
+                      </label>
+                      <IconButton
+                        value={app.iconConfig ? {
+                          name: app.iconConfig.value?.replace(/^fa-/, '') || '',
+                          type: app.iconConfig.style || 'solid',
+                          size: 'lg',
+                          color: app.iconColor || '#374151'
+                        } : undefined}
+                        onChange={(icon: IconConfig | null) => {
+                          if (icon) {
+                            updateApp(index, {
+                              iconConfig: {
+                                type: 'fa',
+                                value: icon.name,
+                                style: icon.type
+                              },
+                              iconColor: icon.color
+                            });
+                          } else {
+                            updateApp(index, { iconConfig: null });
+                          }
+                        }}
+                        placeholder="Select Font Awesome icon"
+                      />
+                    </div>
+                  )}
 
                   {app.iconType === 'emoji' && (
                     <input
@@ -248,16 +284,6 @@ const IntegrationMarqueePropertyPanel: React.FC<
                       placeholder="Emoji (e.g., 📦)"
                       value={app.icon || ''}
                       onChange={(e) => updateApp(index, { icon: e.target.value })}
-                      className="w-full px-2 py-1 text-sm border rounded bg-white dark:bg-gray-900"
-                    />
-                  )}
-
-                  {app.iconType === 'fontawesome' && (
-                    <input
-                      type="text"
-                      placeholder="FA Class (e.g., fas fa-rocket)"
-                      value={app.faIcon || ''}
-                      onChange={(e) => updateApp(index, { faIcon: e.target.value })}
                       className="w-full px-2 py-1 text-sm border rounded bg-white dark:bg-gray-900"
                     />
                   )}
