@@ -139,6 +139,7 @@ export const BaseSectionSchema = z.object({
     'reports-integration',
     'reports-roles',
     'integration-marquee',
+    'wall-of-fields',
   ]),
   order: z.number(),
   data: z.record(z.string(), z.any()),
@@ -379,6 +380,35 @@ export const WallOfFeaturesSchema = BaseSectionSchema.extend({
   }),
 });
 
+// Wall of Fields section schema (compact 30-field version)
+export const WallOfFieldsSchema = BaseSectionSchema.extend({
+  type: z.literal('wall-of-fields'),
+  data: z.object({
+    title: z.string().default('Complete Feature Set'),
+    subtitle: z.string().default('Everything you need in one place'),
+    fields: z
+      .array(
+        z.object({
+          id: z.string(),
+          title: z.string(),
+          faIcon: z
+            .object({
+              name: z.string(),
+              type: z.enum(['solid', 'regular', 'light', 'thin', 'duotone', 'brands']),
+              size: z.enum(['xs', 'sm', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl']),
+              color: z.string().optional(),
+            })
+            .optional(),
+          position: z.object({
+            row: z.number(),
+            column: z.number(),
+          }),
+        })
+      )
+      .default([]),
+  }),
+});
+
 // Why IvaFlow New Version section schema
 export const WhyIvaFlowNewVersionSchema = BaseSectionSchema.extend({
   type: z.literal('why-ivaflow-new-version'),
@@ -593,6 +623,7 @@ export type InteractiveFeatureWallConfig = z.infer<
   typeof InteractiveFeatureWallSchema
 >;
 export type WallOfFeaturesConfig = z.infer<typeof WallOfFeaturesSchema>;
+export type WallOfFieldsConfig = z.infer<typeof WallOfFieldsSchema>;
 export type WhyIvaFlowNewVersionConfig = z.infer<
   typeof WhyIvaFlowNewVersionSchema
 >;

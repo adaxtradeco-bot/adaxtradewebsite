@@ -1,0 +1,584 @@
+{
+  "meta": {
+    "project": "Form Builder Landing Page Redesign",
+    "source_reference": "https://www.ivaflow.com/en/form-builder",
+    "persian_reference": "https://setiran.com/محصولات/سامانه-ی-فرم-ساز/",
+    "competitive_sources": ["Typeform", "Jotform", "Fillout", "Knack", "Google Forms"],
+    "intent": "Redesign the form-builder product page. Tone: technical, user-first, minimal marketing fluff. Goal: enterprise B2B buyers + IT decision makers.",
+    "amazon_q_prompt": {
+      "task": "You are helping redesign a product landing page for an enterprise form builder (ivaflow.com/en/form-builder). I have 10 sections of content data below. For EACH section: (1) look at the existing page builder templates/sections available in the current site builder and suggest which existing section/block best fits. (2) For sections marked 'needs_new_section: true', design a brand-new custom section and provide its complete JSON configuration with all content filled in, ready to paste into the page builder. (3) Walk me through each section one at a time and wait for my approval before moving to the next. Do NOT skip or summarize — every field in the data must appear in the output.",
+      "sections_requiring_new_build": ["section_05_multistep", "section_10_voice_mobile"],
+      "notes": [
+        "Section 05 (Multi-step / Wizard) needs a new section because no standard template shows progressive step UI + form-in-form concept well.",
+        "Section 10 (Voice & Mobile) needs a new section because IVR voice form filling is a unique differentiator with no template equivalent.",
+        "All other sections should map to existing page builder blocks where possible.",
+        "Preserve every badge, chip, feature item, and table row — do not omit or summarize."
+      ]
+    }
+  },
+  "sections": [
+    {
+      "id": "section_01_hero",
+      "order": 1,
+      "type": "Hero",
+      "needs_new_section": false,
+      "suggested_block_type": "Full-width hero with headline, subheadline, badge chips, dual CTA buttons, and a product screenshot/mockup on the right",
+      "content": {
+        "headline": "Build any form or data structure — zero code required",
+        "subheadline": "From a simple contact form to a multi-step enterprise data model with conditional logic, API connections, and approval workflows. One visual designer handles it all.",
+        "body_copy": null,
+        "badges": [
+          { "label": "30+ field types", "color_hint": "blue" },
+          { "label": "Drag & drop canvas", "color_hint": "neutral" },
+          { "label": "Real-time validation", "color_hint": "neutral" },
+          { "label": "API & webhook ready", "color_hint": "teal" },
+          { "label": "No-code", "color_hint": "purple" }
+        ],
+        "ctas": [
+          { "label": "Get started free", "style": "primary" },
+          { "label": "Request a demo", "style": "secondary" }
+        ],
+        "media": {
+          "type": "product_screenshot",
+          "description": "Visual designer canvas showing a multi-column form with fields being dragged, mobile preview panel visible on the right side"
+        }
+      },
+      "copy_notes": "Lead with what the product does, not what it is. Avoid words like 'enterprise-grade', 'powerful', 'cutting-edge'. Users scan hero in under 3 seconds — headline + 2 chips + 1 CTA is enough. The unique angle vs competitors: this builder handles both simple forms AND complex data structures — that breadth is the hook."
+    },
+    {
+      "id": "section_02_visual_designer",
+      "order": 2,
+      "type": "Feature deep-dive",
+      "needs_new_section": false,
+      "suggested_block_type": "Two-column feature block: text/feature list on left, animated product screenshot or interactive demo on right",
+      "content": {
+        "headline": "Design the form exactly as it should look",
+        "subheadline": "Drag fields onto the canvas, resize them, arrange multi-column layouts. Preview on desktop, tablet, or mobile before publishing.",
+        "body_copy": "Unlike code-based form builders, changes render instantly in the same view. No save-and-refresh cycle. Start from a blank canvas or a template, apply your brand colors, font, and logo in one settings panel.",
+        "badges": [],
+        "ctas": [],
+        "feature_items": [
+          {
+            "title": "Live preview",
+            "description": "See desktop, tablet, and mobile simultaneously while editing."
+          },
+          {
+            "title": "Multi-column layout",
+            "description": "Place fields side by side, not just stacked vertically."
+          },
+          {
+            "title": "Brand kit",
+            "description": "Logo, colors, fonts applied globally across all forms in one settings panel."
+          },
+          {
+            "title": "Custom CSS class",
+            "description": "Assign a CSS class to any field or container for advanced styling without touching the core builder."
+          },
+          {
+            "title": "Starter templates",
+            "description": "Pre-built layouts for HR, Finance, IT, Sales, and Ops workflows ready to customize."
+          },
+          {
+            "title": "Undo / version history",
+            "description": "Non-destructive editing — roll back any change at any time."
+          }
+        ],
+        "media": {
+          "type": "product_screenshot",
+          "description": "Canvas editor showing drag-and-drop in progress, with responsive preview panel toggling between desktop and mobile views"
+        }
+      },
+      "copy_notes": "Key differentiator vs Typeform: multi-column layouts are not possible in Typeform's one-question-per-page model. Key differentiator vs Jotform: cleaner canvas UX — Jotform's editor can feel cluttered. Emphasize the 'see it instantly' angle — no publish-to-preview friction."
+    },
+    {
+      "id": "section_03_field_library",
+      "order": 3,
+      "type": "Feature list with data table",
+      "needs_new_section": false,
+      "suggested_block_type": "Centered headline + subheadline, then a categorized grid or table of field types, optionally with icon per category",
+      "content": {
+        "headline": "30+ field types — one library for every data shape",
+        "subheadline": "Text, numbers, dates, files, signatures, maps, lookups, calculated values, and embedded sub-forms. Every field is configurable: label, placeholder, help text, validation rules, and visibility conditions.",
+        "body_copy": null,
+        "badges": [],
+        "ctas": [],
+        "field_categories": [
+          {
+            "category": "Basic input",
+            "fields": ["Short text", "Long text", "Number", "Email", "Phone", "URL", "Password"]
+          },
+          {
+            "category": "Selection",
+            "fields": ["Dropdown", "Multi-select", "Radio button", "Checkbox", "Toggle", "Star rating", "NPS score"]
+          },
+          {
+            "category": "Date & time",
+            "fields": ["Date picker", "Time picker", "Date range", "Calendar view"]
+          },
+          {
+            "category": "Upload",
+            "fields": ["File upload (any type)", "Image upload", "Signature pad", "Drawing / sketch pad"]
+          },
+          {
+            "category": "Location",
+            "fields": ["Map pin", "Address autocomplete", "GPS coordinates"]
+          },
+          {
+            "category": "Data & logic",
+            "fields": ["Calculated field", "Formula field", "Hidden field", "Lookup from another form"]
+          },
+          {
+            "category": "Layout / content",
+            "fields": ["Section header", "Horizontal separator", "HTML block", "Image embed", "Video embed"]
+          },
+          {
+            "category": "CRM-style",
+            "fields": ["Contact lookup", "Company lookup", "Master-detail relationship field"]
+          },
+          {
+            "category": "Communication (unique)",
+            "fields": ["SMS trigger field", "Email notification field", "IVR voice form field", "Fax trigger field"]
+          }
+        ],
+        "media": {
+          "type": "field_palette_screenshot",
+          "description": "Screenshot of the field picker sidebar showing categorized field type icons"
+        }
+      },
+      "copy_notes": "The Communication category (IVR voice field, SMS trigger, Fax) is unique to IVA — no competitor offers these as native form fields. Flag these visually with a 'Unique' or 'IVA exclusive' badge in the UI."
+    },
+    {
+      "id": "section_04_conditional_logic",
+      "order": 4,
+      "type": "Feature deep-dive",
+      "needs_new_section": false,
+      "suggested_block_type": "Two-column block: feature list on one side, logic rule builder screenshot or diagram on the other",
+      "content": {
+        "headline": "Show only what's relevant — hide the rest",
+        "subheadline": "Define rules on any field: show/hide, enable/disable, set required/optional, pre-fill values — all based on previous answers, user role, or the current workflow stage.",
+        "body_copy": "Rules are built in a visual editor, not YAML or code. Complex branching with multiple conditions using AND/OR operators is fully supported. Logic can reference fields across different sections or even across linked forms.",
+        "badges": [
+          { "label": "AND / OR operators", "color_hint": "neutral" },
+          { "label": "Cross-field rules", "color_hint": "neutral" },
+          { "label": "Role-based visibility", "color_hint": "blue" },
+          { "label": "Workflow-stage aware", "color_hint": "teal" }
+        ],
+        "ctas": [],
+        "feature_items": [
+          {
+            "title": "Show / hide fields",
+            "description": "Conditionally render any individual field or entire form sections based on user input."
+          },
+          {
+            "title": "Dynamic required",
+            "description": "Make a field required only when a specific condition is met, not always."
+          },
+          {
+            "title": "Dependent dropdowns",
+            "description": "Cascade select options based on the value of a prior field — e.g. Country → City → District."
+          },
+          {
+            "title": "Workflow-stage aware logic",
+            "description": "Show different fields depending on the current stage in the BPMS workflow (e.g. draft vs review vs approved)."
+          },
+          {
+            "title": "Computed default values",
+            "description": "Pre-fill a field automatically using a formula result or a value fetched from an external API."
+          }
+        ],
+        "media": {
+          "type": "logic_builder_screenshot",
+          "description": "Visual rule builder showing conditions: IF field A = value THEN show field B, with AND/OR toggles visible"
+        }
+      },
+      "copy_notes": "Typeform supports basic skip logic only. Jotform supports multi-condition logic. IVA's differentiator is workflow-stage awareness — the form's visible fields change based on where it sits in a BPMS process, not just user input. This is a feature no standalone form builder can match."
+    },
+    {
+      "id": "section_05_multistep",
+      "order": 5,
+      "type": "Feature deep-dive",
+      "needs_new_section": true,
+      "new_section_design_brief": {
+        "layout": "Full-width section with a horizontal step-progress illustration at top (3-5 steps shown as numbered nodes connected by a line), followed by a two-column layout: feature list left, animated wizard demo or screenshot right. The step progress visual should be custom-built, not a generic progress bar.",
+        "visual_concept": "Show a form being filled step by step — step 1 complete (checkmark), step 2 active (highlighted), steps 3-4 greyed out. Below the steps, show a nested/repeatable sub-form row to illustrate 'form-in-form'.",
+        "unique_selling_point": "Form-in-form (nested repeatable sub-forms) — highlight this as a named feature, not just a bullet. It's the key differentiator for enterprise data collection with repeating records."
+      },
+      "content": {
+        "headline": "Break long forms into guided steps — with validation at every stage",
+        "subheadline": "Split any form into wizard pages with a progress bar. Validate each step before advancing. Embed repeatable sub-forms inside any step for complex data structures.",
+        "body_copy": "Completion rates drop sharply on single-page forms with more than 8 fields. Wizard mode shows one step at a time with validation gates between pages — invalid data never reaches the next step. For enterprise use cases, form-in-form technology lets you embed a fully repeatable sub-form inside any step, eliminating the need to re-design shared field groups.",
+        "badges": [],
+        "ctas": [],
+        "feature_items": [
+          {
+            "title": "Page-level validation",
+            "description": "Block the 'Next' button until all required fields on the current step pass validation rules."
+          },
+          {
+            "title": "Progress indicator",
+            "description": "Step counter or progress bar — style and label text are fully configurable per form."
+          },
+          {
+            "title": "Conditional step routing",
+            "description": "Skip entire pages based on earlier answers — users never see steps irrelevant to them."
+          },
+          {
+            "title": "Form-in-form (nested sub-forms)",
+            "description": "Embed a fully repeatable sub-form inside any step. Add/remove rows dynamically. Avoids re-building shared field sets across multiple forms."
+          },
+          {
+            "title": "Save & resume",
+            "description": "Users can save a draft mid-wizard and return later to complete it — ideal for lengthy approval or onboarding forms."
+          },
+          {
+            "title": "Per-step help text",
+            "description": "Add section-level instructions, images, or video to any step to guide users through complex inputs."
+          }
+        ],
+        "stats": [],
+        "media": {
+          "type": "wizard_demo_screenshot",
+          "description": "Multi-step form showing step 1 complete, step 2 active with fields, steps 3-4 pending. Below a step, a nested repeatable table sub-form with Add Row button visible."
+        }
+      },
+      "copy_notes": "Form-in-form is the anchor feature here — give it a named callout card or a highlighted box, not just a bullet point. Neither Typeform nor basic Jotform plans support nested repeatable sub-forms. This is the key enterprise differentiator for HR, procurement, and operations teams."
+    },
+    {
+      "id": "section_06_events_actions",
+      "order": 6,
+      "type": "Feature deep-dive",
+      "needs_new_section": false,
+      "suggested_block_type": "Three-column or four-column icon + title + description card grid, or a horizontal event-flow diagram showing Trigger → Condition → Action",
+      "content": {
+        "headline": "What happens after submit is as important as the form itself",
+        "subheadline": "Trigger actions on submit, update, or field-change events. Send notifications, create records, start approval workflows, or call external APIs — all configured without writing code.",
+        "body_copy": null,
+        "badges": [],
+        "ctas": [],
+        "feature_items": [
+          {
+            "title": "On-submit actions",
+            "description": "Email or SMS notification, record creation in CRM or ERP, API call, or BPMS workflow start — triggered immediately on form submission."
+          },
+          {
+            "title": "On-field-change events",
+            "description": "Recalculate a running total, fetch a lookup value from an external system, or display a contextual message the moment a specific field is changed."
+          },
+          {
+            "title": "Real-time notifications",
+            "description": "Push alerts to email, SMS, fax, or system notification channel simultaneously on submission."
+          },
+          {
+            "title": "Webhook / external API call",
+            "description": "POST the full form payload (or a subset of fields) to any external HTTPS endpoint on any event."
+          },
+          {
+            "title": "Approval routing",
+            "description": "Route submission to one or more reviewers; form re-opens for correction if a reviewer rejects — with comments attached."
+          },
+          {
+            "title": "Payment trigger",
+            "description": "Initiate a payment gateway transaction (e.g. Stripe, PayPal) as a form submission action."
+          }
+        ],
+        "event_flow_diagram": {
+          "description": "Visual: Event (Submit / Field Change / Update) → Condition (optional: IF field X = Y) → Action (Notify / Create Record / Call API / Start Workflow / Request Payment)",
+          "nodes": [
+            { "label": "Event", "examples": ["On submit", "On update", "On field change"] },
+            { "label": "Condition (optional)", "examples": ["IF department = HR", "IF amount > 1000"] },
+            { "label": "Action", "examples": ["Send email/SMS", "Create CRM record", "Call webhook", "Start approval flow", "Trigger payment"] }
+          ]
+        },
+        "media": {
+          "type": "event_action_config_screenshot",
+          "description": "Screenshot of the event/action configuration panel showing a submit event triggering an email notification and a webhook call"
+        }
+      },
+      "copy_notes": "This section bridges the form builder to the broader BPMS platform — use this to reinforce that IVA forms are not standalone but part of an end-to-end process. The event flow diagram (Trigger → Condition → Action) is the most important visual here."
+    },
+    {
+      "id": "section_07_integrations",
+      "order": 7,
+      "type": "Integrations feature list",
+      "needs_new_section": false,
+      "suggested_block_type": "Logo grid / hub-and-spoke integration diagram + categorized table below, or tabs by category",
+      "content": {
+        "headline": "Forms that talk to the rest of your stack",
+        "subheadline": "Pre-populate fields from CRM, ERP, or any REST API. Push submissions into project tools, accounting systems, file storage, or e-signature platforms. Bi-directional sync, not just one-way export.",
+        "body_copy": null,
+        "badges": [
+          { "label": "CRM sync", "color_hint": "blue" },
+          { "label": "REST API / webhooks", "color_hint": "neutral" },
+          { "label": "Pre-populate from external data", "color_hint": "teal" },
+          { "label": "Zapier / Make compatible", "color_hint": "neutral" }
+        ],
+        "ctas": [],
+        "integration_table": [
+          {
+            "category": "CRM / Sales",
+            "examples": "Salesforce, HubSpot, Zoho CRM",
+            "direction": "Push & pull (bi-directional)"
+          },
+          {
+            "category": "Project management / Tickets",
+            "examples": "Jira, Asana, Trello, monday.com",
+            "direction": "Push"
+          },
+          {
+            "category": "Accounting",
+            "examples": "QuickBooks, Xero",
+            "direction": "Push"
+          },
+          {
+            "category": "File storage",
+            "examples": "Google Drive, Dropbox, SharePoint",
+            "direction": "Push"
+          },
+          {
+            "category": "E-signature",
+            "examples": "DocuSign, HelloSign",
+            "direction": "Push & trigger"
+          },
+          {
+            "category": "Email / Marketing automation",
+            "examples": "Mailchimp, ActiveCampaign, SendGrid",
+            "direction": "Push"
+          },
+          {
+            "category": "Custom / Internal APIs",
+            "examples": "Any REST endpoint via webhook or API field",
+            "direction": "Push & pull"
+          },
+          {
+            "category": "BPMS (native — IVA only)",
+            "examples": "IVA workflow engine, IVA dashboard, IVA CRM",
+            "direction": "Deep native integration — not via connector"
+          }
+        ],
+        "media": {
+          "type": "hub_and_spoke_diagram",
+          "description": "Central node labeled 'IVA Form' with spokes connecting to: CRM, ERP, Email, File Storage, E-signature, Accounting, Webhooks, BPMS"
+        }
+      },
+      "copy_notes": "The key differentiator here is bi-directional: forms can READ from master data (e.g. pull a product list from ERP into a dropdown) AND write back on submit. Jotform and Typeform mostly export/push only. The BPMS native integration row should be visually highlighted as different from third-party connectors."
+    },
+    {
+      "id": "section_08_analytics_reporting",
+      "order": 8,
+      "type": "Feature deep-dive",
+      "needs_new_section": false,
+      "suggested_block_type": "Two-column block with feature cards on left and a dashboard/report screenshot on right, or a tab-based feature showcase",
+      "content": {
+        "headline": "Data collected is only useful if you can act on it",
+        "subheadline": "Explore submissions in a live table view. Build pivot reports, charts, and KPI widgets. Export to XLS, CSV, or PDF — or embed dashboards in internal portals.",
+        "body_copy": "Unlike Google Forms (basic spreadsheet export) or Typeform (response view with drop-off rates), IVA's reporting engine is part of the same BPMS platform — submission data joins with workflow, approval, and process data in one unified reporting layer.",
+        "badges": [],
+        "ctas": [],
+        "feature_items": [
+          {
+            "title": "Custom views",
+            "description": "Table view, gallery view, and spreadsheet-like grid. Filter and sort by any field. Save views for reuse."
+          },
+          {
+            "title": "Advanced formula columns",
+            "description": "Add calculated columns inside the data table — aggregations, conditionals, and mathematical formulas on submission data."
+          },
+          {
+            "title": "Chart builder",
+            "description": "Pie, bar, line, and pivot charts — all built directly from submission data, no export required."
+          },
+          {
+            "title": "Drop-off analysis",
+            "description": "For multi-step forms: see exactly which step users abandon, and how long they spend on each page."
+          },
+          {
+            "title": "Export",
+            "description": "XLS, CSV, and PDF export with custom column selection and date range filters."
+          },
+          {
+            "title": "Embedded dashboards",
+            "description": "Embed report widgets in a portal page, intranet, or external site via iframe or API."
+          }
+        ],
+        "media": {
+          "type": "analytics_dashboard_screenshot",
+          "description": "Dashboard view showing a bar chart of submissions over time, a pivot table of department-level responses, and a KPI card for total submissions this month"
+        }
+      },
+      "copy_notes": "Typeform is the only major competitor with question-level drop-off analysis — IVA should highlight this as a parity feature when positioning against Typeform in enterprise analytics conversations. The BPMS unified data angle (form data + process data in one report) is a structural advantage no standalone form builder can match."
+    },
+    {
+      "id": "section_09_security_governance",
+      "order": 9,
+      "type": "Security feature list",
+      "needs_new_section": false,
+      "suggested_block_type": "Dark or neutral background section with icon + title + description cards in a 3-column grid, plus a security badge row (SSL, GDPR, etc.)",
+      "content": {
+        "headline": "Field-level access control, audit trails, and encryption",
+        "subheadline": "Role-based permissions control who sees, fills, edits, or approves each form. Every submission and field-level change is logged in an immutable audit trail.",
+        "body_copy": null,
+        "security_badges": [
+          { "label": "SSL 256-bit encryption", "color_hint": "teal" },
+          { "label": "Role-based access control", "color_hint": "neutral" },
+          { "label": "Field-level permissions", "color_hint": "blue" },
+          { "label": "Immutable audit trail", "color_hint": "neutral" },
+          { "label": "SSO / LDAP support", "color_hint": "neutral" },
+          { "label": "GDPR-ready", "color_hint": "neutral" },
+          { "label": "Invisible reCAPTCHA", "color_hint": "neutral" }
+        ],
+        "ctas": [],
+        "feature_items": [
+          {
+            "title": "Role-based access control",
+            "description": "Separate permission levels for form designer, form filler, reviewer, and administrator — per form and per field."
+          },
+          {
+            "title": "Field-level visibility permissions",
+            "description": "Hide sensitive fields from specific roles — e.g. salary fields hidden from non-HR reviewers in the same form."
+          },
+          {
+            "title": "Immutable audit log",
+            "description": "Full history of every submission, field edit, and approval action with timestamp, user ID, and IP address. Cannot be altered retroactively."
+          },
+          {
+            "title": "Data encryption at rest",
+            "description": "Submission data encrypted at the database level using AES-256."
+          },
+          {
+            "title": "Invisible reCAPTCHA",
+            "description": "Spam and bot protection on public-facing forms without visible friction for real users."
+          },
+          {
+            "title": "Password-protected forms",
+            "description": "Require a passcode to access a form URL — useful for internal forms shared externally."
+          },
+          {
+            "title": "SSO / LDAP integration",
+            "description": "Authenticate form users against your corporate identity provider (Active Directory, Okta, etc.)."
+          }
+        ],
+        "media": {
+          "type": "security_config_screenshot",
+          "description": "Screenshot of the form permissions panel showing role assignment grid with view/edit/approve checkboxes per role"
+        }
+      },
+      "copy_notes": "This section targets IT security reviewers and procurement teams, not end users. Lead with field-level permissions — this is deeper than what Typeform or standard Jotform plans offer. The immutable audit log is critical for compliance-heavy industries (finance, healthcare, government). Use trust-signal visual language: shields, locks, checkmarks — not abstract icons."
+    },
+    {
+      "id": "section_10_voice_mobile",
+      "order": 10,
+      "type": "Unique differentiator",
+      "needs_new_section": true,
+      "new_section_design_brief": {
+        "layout": "Split layout: left side shows a mobile phone mockup with a responsive form, right side shows a phone/IVR call flow diagram (caller → IVR → form questions → answers captured → data in platform). A bold 'IVA Exclusive' or 'Only on IVA' badge on the IVR side.",
+        "visual_concept": "Two sub-sections visually separated: (A) Mobile / Offline — standard responsive form on phone, (B) Voice / IVR — phone call flow showing questions delivered as audio and answers captured via keypad or voice. Use a horizontal divider or tab between the two.",
+        "unique_selling_point": "IVR voice form filling is completely unique to IVA — no western competitor (Typeform, Jotform, Fillout, Google Forms) offers this as a native form feature. This is the single most defensible differentiator on the entire page.",
+        "tone": "Matter-of-fact, not hypey. Show the real workflow: 500 customers need to fill a survey → auto-dialer calls all 500 → each answers via keypad → all responses land in the form dashboard. That's the story."
+      },
+      "content": {
+        "headline": "Forms filled by phone call — not just a mobile browser",
+        "subheadline": "Native IVR integration delivers form questions as an automated phone call and captures answers via keypad or voice recording. No smartphone required. No app to install.",
+        "body_copy": "IVR voice form filling is available natively in IVA — not via a third-party integration. Deliver surveys, intake forms, complaint forms, and satisfaction questionnaires to any phone number. Combine with the auto-dialer module to run campaigns at scale: the system calls your list automatically, asks the questions, captures the answers, and populates the form dashboard in real time.",
+        "badges": [
+          { "label": "IVR voice form (IVA exclusive)", "color_hint": "amber" },
+          { "label": "Auto-dialer campaign integration", "color_hint": "neutral" },
+          { "label": "Keypad + voice recording input", "color_hint": "neutral" },
+          { "label": "Offline web form sync", "color_hint": "teal" },
+          { "label": "Responsive on all screen sizes", "color_hint": "neutral" }
+        ],
+        "ctas": [
+          { "label": "See voice form demo", "style": "primary" }
+        ],
+        "feature_items": [
+          {
+            "title": "IVR form delivery",
+            "description": "Form questions are played as voice prompts over an automated phone call. Respondents answer using their keypad (DTMF digits) or by recording a voice response for open-ended questions."
+          },
+          {
+            "title": "Auto-dialer campaign",
+            "description": "Upload a contact list and the system automatically calls each contact to complete the form — no human agent required. Ideal for surveys, reminders, and data collection at scale."
+          },
+          {
+            "title": "Manual IVR form entry",
+            "description": "Callers who reach your IVR menu can navigate to a form and fill it in during the call — useful for complaint registration, service requests, and satisfaction surveys."
+          },
+          {
+            "title": "Offline web form",
+            "description": "Web forms continue to work offline on mobile devices. Responses are queued locally and synced to the server automatically when connectivity is restored."
+          },
+          {
+            "title": "Responsive layout by default",
+            "description": "All forms auto-adapt to any screen size — phone, tablet, or desktop. No separate mobile version to maintain."
+          }
+        ],
+        "stats": [
+          {
+            "value": "500+",
+            "label": "Contacts reachable per auto-dialer campaign",
+            "context": "System calls all contacts automatically with zero manual effort"
+          },
+          {
+            "value": "0",
+            "label": "Manual follow-up calls required",
+            "context": "The auto-dialer handles the entire outreach and data capture cycle"
+          },
+          {
+            "value": "3",
+            "label": "Input modes supported",
+            "context": "Web browser, mobile (online/offline), and IVR voice call"
+          }
+        ],
+        "voice_form_flow_diagram": {
+          "description": "Step-by-step flow showing: (1) Form designer creates form in IVA builder → (2) Auto-dialer calls contact list → (3) Respondent hears question via IVR → (4) Respondent presses keypad or speaks answer → (5) Answer captured → (6) Next question plays → (7) All answers land in form dashboard in real time",
+          "steps": [
+            "Form created in IVA builder",
+            "Auto-dialer initiates call to contact",
+            "Question delivered as voice prompt",
+            "Answer captured via keypad or voice",
+            "Next question plays automatically",
+            "All responses stored in form dashboard"
+          ]
+        },
+        "competitive_context": {
+          "typeform": "Web and mobile only — no IVR or voice capability",
+          "jotform": "No native IVR integration — IVR would require custom middleware",
+          "fillout": "Web only — no voice or IVR support",
+          "google_forms": "Web only — no voice or IVR support",
+          "iva": "Only platform with native IVR voice forms + auto-dialer + BPMS + web forms in a single product"
+        },
+        "media": {
+          "type": "split_mockup",
+          "description": "Left: mobile phone showing a responsive multi-step form. Right: phone handset icon with an IVR call flow diagram showing question → keypad answer → next question → data captured in dashboard."
+        }
+      },
+      "copy_notes": "This is the single strongest differentiator on the entire page. No western competitor has it. Do not bury this at the bottom — consider moving it to section 2 or 3 in the final page order if the target market includes government, utilities, or large enterprise with field workers. Keep the tone factual and workflow-focused — explain the exact scenario (500 customer survey via auto-dialer) rather than abstract claims."
+    }
+  ],
+  "page_order_recommendation": {
+    "current_order": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "alternative_for_enterprise_focus": [1, 10, 2, 4, 5, 3, 6, 7, 8, 9],
+    "rationale": "For enterprise/government audiences, move the Voice & Mobile section (10) to position 2 right after the hero — it is the most defensible differentiator and will immediately qualify the right buyers. For general B2B SaaS audiences, the current order (visual designer → fields → logic → steps → integrations → analytics → security → voice) follows a logical product discovery flow."
+  },
+  "global_tone_guidelines": {
+    "avoid": [
+      "enterprise-grade",
+      "powerful",
+      "cutting-edge",
+      "robust",
+      "seamless",
+      "best-in-class",
+      "world-class",
+      "revolutionary",
+      "game-changing"
+    ],
+    "prefer": [
+      "Specific numbers (30+ field types, not 'many field types')",
+      "Workflow descriptions (what the user does, not what the product is)",
+      "Outcome-first headlines ('Show only what's relevant' not 'Conditional Logic Feature')",
+      "Competitive specificity where accurate (name the exact limitation of a competitor)",
+      "Action verbs: build, define, connect, trigger, show, hide, route, embed"
+    ],
+    "primary_audience": "IT managers, operations leads, and digital transformation teams at mid-to-large organizations. Secondary: developers evaluating no-code vs custom build.",
+    "reading_level": "Technical but not developer-only. Assume the reader knows what an API, webhook, and CRM are, but not what DTMF is."
+  }
+}

@@ -84,6 +84,7 @@ import FusionTeamsTabsSection from '@/components/builder-sections/FusionTeamsTab
 import PlatformFeaturesSection from '@/components/builder-sections/PlatformFeaturesSection';
 import InteractiveFeatureWall from '@/components/builder-sections/InteractiveFeatureWall';
 import WallOfFeaturesSection from '@/components/builder-sections/WallOfFeaturesSection';
+import WallOfFieldsSection from '@/components/builder-sections/WallOfFieldsSection';
 import WhyIvaFlowNewVersion from '@/components/builder-sections/WhyIvaFlowNewVersion';
 import FeatureVideoTabsSection from '@/components/builder-sections/FeatureVideoTabsSection';
 import ProcessStepsSection from '@/components/builder-sections/ProcessStepsSection';
@@ -630,6 +631,14 @@ export function SectionRenderer({
         case 'wall-of-features':
           return (
             <WallOfFeaturesSection
+              data={(section as any).data}
+              isBuilder={isBuilder}
+              onEdit={onSelect}
+            />
+          );
+        case 'wall-of-fields':
+          return (
+            <WallOfFieldsSection
               data={(section as any).data}
               isBuilder={isBuilder}
               onEdit={onSelect}

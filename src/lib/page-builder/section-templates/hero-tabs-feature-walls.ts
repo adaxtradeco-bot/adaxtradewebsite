@@ -521,4 +521,30 @@ export const HERO_TABS_FEATURE_WALLS_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+
+  {
+    id: 'wall-of-fields',
+    name: 'Wall of Fields',
+    type: 'wall-of-fields',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Compact 30-field grid (6x5) - smaller version of wall-of-features',
+    icon: '📦',
+    defaultData: {
+      id: '',
+      type: 'wall-of-fields',
+      order: 0,
+      data: {
+        title: 'Complete Feature Set',
+        subtitle: 'Everything you need in one place',
+        fields: [],
+      },
+      style: {
+        backgroundColor: 'bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20',
+        alignment: 'center',
+      },
+    },
+    configSchema: {},
+  },
 ];
