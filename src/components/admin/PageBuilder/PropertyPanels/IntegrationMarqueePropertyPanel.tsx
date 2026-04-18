@@ -27,9 +27,9 @@ const IntegrationMarqueePropertyPanel: React.FC<
     row1Apps = [],
     row2Apps = [],
     row3Apps = [],
-    row1Speed = 28,
-    row2Speed = 24,
-    row3Speed = 32,
+    row1Speed = 50,
+    row2Speed = 45,
+    row3Speed = 55,
   } = data;
 
   const getCurrentApps = () => {

@@ -40,29 +40,31 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
     row1Apps = [],
     row2Apps = [],
     row3Apps = [],
-    row1Speed = 28,
-    row2Speed = 24,
-    row3Speed = 32,
+    row1Speed = 50,
+    row2Speed = 45,
+    row3Speed = 55,
   } = data;
 
   const trackRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    trackRefs.current.forEach((track) => {
-      if (track && track.children.length > 0) {
-        const parent = track.parentElement;
-        if (parent) {
-          // Remove existing clones
-          const existingClones = parent.querySelectorAll('.marquee-clone');
-          existingClones.forEach(clone => clone.remove());
-          
-          // Create new clone
-          const clone = track.cloneNode(true) as HTMLDivElement;
-          clone.classList.add('marquee-clone');
-          parent.appendChild(clone);
+    const timer = setTimeout(() => {
+      trackRefs.current.forEach((track) => {
+        if (track && track.children.length > 0) {
+          const parent = track.parentElement;
+          if (parent) {
+            const existingClones = parent.querySelectorAll('.marquee-clone');
+            existingClones.forEach(clone => clone.remove());
+            
+            const clone = track.cloneNode(true) as HTMLDivElement;
+            clone.classList.add('marquee-clone');
+            parent.appendChild(clone);
+          }
         }
-      }
-    });
+      });
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [row1Apps, row2Apps, row3Apps]);
 
   const setTrackRef = (index: number) => (el: HTMLDivElement | null) => {
@@ -137,14 +139,15 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
         <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-white dark:from-neutral-900 to-transparent z-10 pointer-events-none" />
 
         {/* Track */}
-        <div
-          ref={setTrackRef(index)}
-          className="flex items-center gap-7 h-full"
-          style={{
-            animation: `marquee-${direction} ${speed}s linear infinite`,
-          }}
-        >
-          {apps.map((app, idx) => (
+        <div className="flex">
+          <div
+            ref={setTrackRef(index)}
+            className="flex items-center gap-7 h-full flex-shrink-0"
+            style={{
+              animation: `marquee-${direction} ${speed}s linear infinite`,
+            }}
+          >
+            {apps.map((app, idx) => (
             <div
               key={`${app.name}-${idx}`}
               className="inline-flex items-center gap-2.5 px-5 py-3.5 rounded-xl bg-white dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600 hover:bg-gray-50 dark:hover:bg-neutral-750 transition-all duration-200 hover:-translate-y-0.5 hover:scale-[1.03] cursor-pointer flex-shrink-0 h-14 shadow-sm"
@@ -167,7 +170,8 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
               </div>
               {renderStatusDot(app.statusColor)}
             </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     );
