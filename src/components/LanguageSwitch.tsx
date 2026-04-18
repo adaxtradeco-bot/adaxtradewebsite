@@ -52,43 +52,50 @@ export function LanguageSwitch() {
     setIsOpen(false);
     
     const targetLang = languages[langCode];
-    
-    // بررسی وجود صفحه در زبان جدید
     const segments = pathname.split('/');
     const currentLangCode = segments[1];
     
     // اگر در صفحه با زبان هستیم
     if (Object.keys(languages).includes(currentLangCode)) {
+      // مرحله 1: تلاش ساده - فقط تعویض کد زبان
       segments[1] = langCode;
-      const newPath = segments.join('/');
+      const simplePath = segments.join('/');
       
       try {
-        // چک کردن وجود صفحه
-        const response = await fetch(`/api/pages/check?path=${newPath}`);
+        const simpleCheck = await fetch(`/api/pages/check?path=${simplePath}`);
         
-        if (response.ok) {
-          const data = await response.json();
-          if (data.exists) {
-            router.push(newPath);
-          } else {
-            // صفحه وجود نداره، برو به صفحه اصلی
-            setNotificationMessage(`This page is not available in ${targetLang.nativeName}. Redirecting to homepage...`);
-            setShowNotification(true);
-            setTimeout(() => {
-              router.push(`/${langCode}`);
-              setShowNotification(false);
-            }, 2000);
+        if (simpleCheck.ok) {
+          const simpleData = await simpleCheck.json();
+          if (simpleData.exists) {
+            router.push(simplePath);
+            return;
           }
-        } else {
-          // در صورت خطا، برو به صفحه اصلی
-          router.push(`/${langCode}`);
         }
+        
+        // مرحله 2: جستجو در PageGroup
+        const currentSlug = pathname; // full path with lang
+        const groupCheck = await fetch(`/api/pages/find-equivalent?slug=${encodeURIComponent(currentSlug)}&lang=${langCode}`);
+        
+        if (groupCheck.ok) {
+          const groupData = await groupCheck.json();
+          if (groupData.found && groupData.slug) {
+            router.push(groupData.slug);
+            return;
+          }
+        }
+        
+        // مرحله 3: برو به homepage
+        setNotificationMessage(`This page is not available in ${targetLang.nativeName}. Redirecting to homepage...`);
+        setShowNotification(true);
+        setTimeout(() => {
+          router.push(`/${langCode}`);
+          setShowNotification(false);
+        }, 2000);
+        
       } catch (error) {
-        // در صورت خطا، برو به صفحه اصلی
         router.push(`/${langCode}`);
       }
     } else {
-      // اگر در صفحه بدون زبان هستیم
       router.push(`/${langCode}`);
     }
   };
