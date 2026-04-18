@@ -10,7 +10,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
-import { MediaBrowser } from './MediaBrowser';
 import InteractiveFeatureWallPropertyPanel from './InteractiveFeatureWallPropertyPanel';
 import { WallOfFeaturesPropertyPanel } from './WallOfFeaturesPropertyPanel';
 import { ProductHeroPropertyPanel } from './ProductHeroPropertyPanel';
@@ -55,7 +54,6 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
   onSettingsChange?: (settings: any) => void;
 }) {
   const [uploading, setUploading] = React.useState(false);
-  const [showMediaBrowser, setShowMediaBrowser] = React.useState(false);
   const [showAdvanced, setShowAdvanced] = React.useState(false);
   const [imageSettings, setImageSettings] = React.useState({
     alt: '',
@@ -104,6 +102,16 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
     } finally {
       setUploading(false);
     }
+  };
+
+  const handleBrowseMedia = () => {
+    const event = new CustomEvent('openMediaBrowser', {
+      detail: {
+        onSelect: (url: string) => onChange(url),
+        acceptTypes: ['image/*', 'video/*']
+      }
+    });
+    window.dispatchEvent(event);
   };
 
   const isAltField = field && field.toLowerCase().includes('alt');
@@ -157,7 +165,7 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
               
               <button
                 type="button"
-                onClick={() => setShowMediaBrowser(true)}
+                onClick={handleBrowseMedia}
                 className="px-3 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 text-sm font-medium whitespace-nowrap"
               >
                 📚 Browse
@@ -270,16 +278,6 @@ function ImageUploader({ value, onChange, field, onSettingsChange }: {
           </>
         )}
       </div>
-
-      <MediaBrowser
-        isOpen={showMediaBrowser}
-        onClose={() => setShowMediaBrowser(false)}
-        onSelect={(url) => {
-          onChange(url);
-          setShowMediaBrowser(false);
-        }}
-        acceptTypes={['image/*', 'video/*']}
-      />
     </>
   );
 }
@@ -805,7 +803,11 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
                 <div className="flex gap-1 bg-white dark:bg-gray-800 rounded-md p-0.5 border border-gray-300 dark:border-gray-600">
                   <button
                     type="button"
-                    onClick={() => setEditMode('visual')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setEditMode('visual');
+                    }}
                     className={`px-3 py-1 text-xs font-medium rounded transition-all ${
                       editMode === 'visual'
                         ? 'bg-blue-600 text-white shadow-sm'
@@ -816,7 +818,11 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
                   </button>
                   <button
                     type="button"
-                    onClick={() => setEditMode('json')}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setEditMode('json');
+                    }}
                     className={`px-3 py-1 text-xs font-medium rounded transition-all ${
                       editMode === 'json'
                         ? 'bg-purple-600 text-white shadow-sm'

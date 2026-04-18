@@ -15,6 +15,7 @@ import { PropertyPanel } from './PropertyPanel';
 import { Toolbar } from './Toolbar';
 import { PreviewModes } from './PreviewModes';
 import { InlineCSSEditor } from '@/components/ui/InlineCSSEditor';
+import { MediaBrowser } from './MediaBrowser';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { SECTION_TEMPLATES } from '@/lib/page-builder/section-registry';
 
@@ -44,10 +45,15 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
     pageId: string;
     pageTitle: string;
   } | null>(null);
+  const [mediaBrowser, setMediaBrowser] = useState<{
+    isOpen: boolean;
+    onSelect: (url: string) => void;
+    acceptTypes?: string[];
+  }>({ isOpen: false, onSelect: () => {}, acceptTypes: ['image/*', 'video/*'] });
 
   const selectedSection = Array.isArray(sections) ? sections.find(s => s.id === selectedSectionId) : null;
 
-  // Listen for CSS editor events
+  // Listen for CSS editor and media browser events
   useEffect(() => {
     const handleOpenCSSEditor = (event: CustomEvent) => {
       const { sectionId, sectionType, sectionOrder } = event.detail;
@@ -63,14 +69,21 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
       setPageCSSEditor({ pageId, pageTitle });
     };
 
+    const handleOpenMediaBrowser = (event: CustomEvent) => {
+      const { onSelect, acceptTypes } = event.detail;
+      setMediaBrowser({ isOpen: true, onSelect, acceptTypes: acceptTypes || ['image/*', 'video/*'] });
+    };
+
     window.addEventListener('openCSSEditor', handleOpenCSSEditor as EventListener);
     window.addEventListener('openGlobalCSSEditor', handleOpenGlobalCSSEditor);
     window.addEventListener('openPageCSSEditor', handleOpenPageCSSEditor as EventListener);
+    window.addEventListener('openMediaBrowser', handleOpenMediaBrowser as EventListener);
     
     return () => {
       window.removeEventListener('openCSSEditor', handleOpenCSSEditor as EventListener);
       window.removeEventListener('openGlobalCSSEditor', handleOpenGlobalCSSEditor);
       window.removeEventListener('openPageCSSEditor', handleOpenPageCSSEditor as EventListener);
+      window.removeEventListener('openMediaBrowser', handleOpenMediaBrowser as EventListener);
     };
   }, []);
 
@@ -297,6 +310,17 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
           onClose={() => setPageCSSEditor(null)}
         />
       )}
+
+      {/* Global Media Browser */}
+      <MediaBrowser
+        isOpen={mediaBrowser.isOpen}
+        onClose={() => setMediaBrowser(prev => ({ ...prev, isOpen: false }))}
+        onSelect={(url) => {
+          mediaBrowser.onSelect(url);
+          setMediaBrowser(prev => ({ ...prev, isOpen: false }));
+        }}
+        acceptTypes={mediaBrowser.acceptTypes}
+      />
     </div>
   );
 }
