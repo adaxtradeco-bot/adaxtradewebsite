@@ -110,8 +110,13 @@ const IntegrationMarqueePropertyPanel: React.FC<
         <div className="flex gap-2">
           {[1, 2, 3].map((row) => (
             <button
+              type="button"
               key={row}
-              onClick={() => setActiveRow(row as 1 | 2 | 3)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setActiveRow(row as 1 | 2 | 3);
+              }}
               className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                 activeRow === row
                   ? 'bg-blue-600 text-white'
@@ -155,7 +160,12 @@ const IntegrationMarqueePropertyPanel: React.FC<
             Apps in Row {activeRow}
           </label>
           <button
-            onClick={addApp}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              addApp();
+            }}
             className="px-3 py-1 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700"
           >
             + Add App
@@ -174,29 +184,47 @@ const IntegrationMarqueePropertyPanel: React.FC<
                 </span>
                 <div className="flex gap-1">
                   <button
-                    onClick={() => moveApp(index, 'up')}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      moveApp(index, 'up');
+                    }}
                     disabled={index === 0}
                     className="px-2 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50"
                   >
                     ↑
                   </button>
                   <button
-                    onClick={() => moveApp(index, 'down')}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      moveApp(index, 'down');
+                    }}
                     disabled={index === getCurrentApps().length - 1}
                     className="px-2 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50"
                   >
                     ↓
                   </button>
                   <button
-                    onClick={() =>
-                      setEditingAppIndex(editingAppIndex === index ? null : index)
-                    }
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setEditingAppIndex(editingAppIndex === index ? null : index);
+                    }}
                     className="px-2 py-1 text-xs bg-blue-600 text-white rounded"
                   >
                     {editingAppIndex === index ? 'Close' : 'Edit'}
                   </button>
                   <button
-                    onClick={() => deleteApp(index)}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      deleteApp(index);
+                    }}
                     className="px-2 py-1 text-xs bg-red-600 text-white rounded"
                   >
                     ×
