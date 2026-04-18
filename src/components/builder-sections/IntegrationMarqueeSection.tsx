@@ -15,6 +15,7 @@ interface IntegrationApp {
   statusColor: 'green' | 'amber' | 'gray';
   iconType: 'emoji' | 'fontawesome' | 'fa' | 'svg' | 'image';
   icon?: string;
+  iconStyle?: 'solid' | 'regular' | 'light' | 'thin' | 'duotone' | 'brands';
   iconConfig?: {
     type: 'fa';
     value: string;
@@ -65,6 +66,17 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
           const iconName = app.iconConfig.value?.replace(/^fa-/, '') || '';
           const styleMap: Record<string, string> = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
           const prefix = styleMap[app.iconConfig.style] || 'fas';
+          return (
+            <i
+              className={`${prefix} fa-${iconName}`}
+              style={{ fontSize: '20px', color: app.iconColor || 'currentColor', fontStyle: 'normal' }}
+            />
+          );
+        }
+        if (app.icon) {
+          const iconName = app.icon.replace(/^fa-/, '');
+          const styleMap: Record<string, string> = { solid: 'fas', regular: 'far', light: 'fal', thin: 'fat', duotone: 'fad', brands: 'fab' };
+          const prefix = styleMap[app.iconStyle || 'solid'] || 'fas';
           return (
             <i
               className={`${prefix} fa-${iconName}`}
