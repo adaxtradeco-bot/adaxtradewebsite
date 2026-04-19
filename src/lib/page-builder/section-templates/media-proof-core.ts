@@ -305,6 +305,12 @@ export const MEDIA_PROOF_CORE_TEMPLATES: SectionTemplate[] = [
         placeholderIconConfig: null,
         placeholderText: 'Product Preview',
         features: [],
+        showMediaBackground: true,
+        mediaContainerPadding: 'p-6',
+        leftColumnWidth: 'lg:w-1/2',
+        rightColumnWidth: 'lg:w-1/2',
+        columnGap: 'gap-12',
+        mediaScale: 'scale-100',
       },
       style: {
         backgroundColor: '',

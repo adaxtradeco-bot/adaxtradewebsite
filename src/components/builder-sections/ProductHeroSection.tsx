@@ -58,6 +58,12 @@ interface ProductHeroData {
   // New options
   showMediaBackground?: boolean;
   mediaContainerPadding?: string;
+  
+  // Layout options
+  leftColumnWidth?: string; // e.g., 'lg:w-1/2', 'lg:w-7/12'
+  rightColumnWidth?: string; // e.g., 'lg:w-1/2', 'lg:w-5/12'
+  columnGap?: string; // e.g., 'gap-8', 'gap-12', 'gap-16'
+  mediaScale?: string; // e.g., 'scale-90', 'scale-100', 'scale-110'
 }
 
 interface ProductHeroSectionProps {
@@ -95,7 +101,11 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
     placeholderText = 'Product Preview',
     features = [],
     showMediaBackground = true,
-    mediaContainerPadding = 'p-6'
+    mediaContainerPadding = 'p-6',
+    leftColumnWidth = 'lg:w-1/2',
+    rightColumnWidth = 'lg:w-1/2',
+    columnGap = 'gap-12',
+    mediaScale = 'scale-100'
   } = data;
 
   const backgroundColor = customBackground || theme?.background || style.backgroundColor || 'bg-gradient-to-br from-indigo-50 via-slate-50 to-cyan-50 dark:from-indigo-950 dark:via-slate-900 dark:to-cyan-950';
@@ -217,8 +227,8 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
       <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/30 via-transparent to-cyan-200/30 dark:from-indigo-600/20 dark:via-transparent dark:to-cyan-500/20" />
       
       <div className={`relative max-w-7xl mx-auto px-6 ${padding}`}>
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8">
+        <div className={`flex flex-col lg:flex-row ${columnGap} items-center`}>
+          <div className={`space-y-8 w-full ${leftColumnWidth}`}>
             {badge && (
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 dark:bg-white/10 border border-white/10 dark:border-white/10 text-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -265,7 +275,7 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
             )}
           </div>
           
-          <div className="relative">
+          <div className={`relative w-full ${rightColumnWidth} transition-transform duration-300 ${mediaScale}`}>
             {renderRightContent()}
           </div>
         </div>

@@ -569,6 +569,82 @@ export function ProductHeroPropertyPanel({ section, onUpdate }: ProductHeroPrope
       </div>
 
       {/* Right Content Type */}
+      <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
+        <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center">
+          <span className="mr-2">📐</span>
+          Layout Settings
+        </h3>
+        
+        <div className="space-y-3">
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Left Column Width (Content)
+            </label>
+            <select
+              value={data.leftColumnWidth || 'lg:w-1/2'}
+              onChange={(e) => updateData({ leftColumnWidth: e.target.value })}
+              className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="lg:w-5/12">5/12 (42%)</option>
+              <option value="lg:w-1/2">1/2 (50%)</option>
+              <option value="lg:w-7/12">7/12 (58%)</option>
+              <option value="lg:w-2/3">2/3 (66%)</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Right Column Width (Media)
+            </label>
+            <select
+              value={data.rightColumnWidth || 'lg:w-1/2'}
+              onChange={(e) => updateData({ rightColumnWidth: e.target.value })}
+              className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="lg:w-1/3">1/3 (33%)</option>
+              <option value="lg:w-5/12">5/12 (42%)</option>
+              <option value="lg:w-1/2">1/2 (50%)</option>
+              <option value="lg:w-7/12">7/12 (58%)</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Gap Between Columns
+            </label>
+            <select
+              value={data.columnGap || 'gap-12'}
+              onChange={(e) => updateData({ columnGap: e.target.value })}
+              className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="gap-4">Small (16px)</option>
+              <option value="gap-6">Medium (24px)</option>
+              <option value="gap-8">Large (32px)</option>
+              <option value="gap-12">Extra Large (48px)</option>
+              <option value="gap-16">Huge (64px)</option>
+            </select>
+          </div>
+          
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Media Scale
+            </label>
+            <select
+              value={data.mediaScale || 'scale-100'}
+              onChange={(e) => updateData({ mediaScale: e.target.value })}
+              className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+            >
+              <option value="scale-75">75% (Smaller)</option>
+              <option value="scale-90">90%</option>
+              <option value="scale-100">100% (Default)</option>
+              <option value="scale-110">110%</option>
+              <option value="scale-125">125% (Larger)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Content Type */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Right Content Type
