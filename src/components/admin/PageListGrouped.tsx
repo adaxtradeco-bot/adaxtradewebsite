@@ -7,7 +7,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, Plus, Edit, Globe, Clock, FolderPlus } from 'lucide-react';
+import { ChevronDown, ChevronRight, Plus, Edit, Globe, Clock, FolderPlus, Star } from 'lucide-react';
 import Link from 'next/link';
 import { GroupPagesModal } from './GroupPagesModal';
 
@@ -40,6 +40,7 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [showGroupModal, setShowGroupModal] = useState(false);
+  const [settingDefault, setSettingDefault] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPages();
@@ -114,6 +115,30 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
     return daysSinceSync > 7;
   };
 
+  const handleSetDefault = async (pageId: string) => {
+    setSettingDefault(pageId);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`/api/admin/pages/${pageId}/set-default`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const result = await res.json();
+      if (result.success) {
+        fetchPages(); // رفرش لیست
+      } else {
+        alert(result.error || 'Failed to set default page');
+      }
+    } catch (error) {
+      console.error('Error setting default:', error);
+      alert('Failed to set default page');
+    } finally {
+      setSettingDefault(null);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -178,7 +203,8 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
                             {page.language.toUpperCase()}
                           </span>
                           {page.isDefaultLang && (
-                            <span className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 rounded">
+                            <span className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-0.5 rounded flex items-center gap-1">
+                              <Star size={12} fill="currentColor" />
                               Default
                             </span>
                           )}
@@ -195,6 +221,22 @@ export function PageListGrouped({ onAddTranslation }: PageListGroupedProps) {
                     </div>
                     
                     <div className="flex items-center gap-2">
+                      {!page.isDefaultLang && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleSetDefault(page.id);
+                          }}
+                          disabled={settingDefault === page.id}
+                          className="px-2 py-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors flex items-center gap-1 disabled:opacity-50"
+                          title="Set as default language"
+                        >
+                          <Star size={14} />
+                          {settingDefault === page.id ? 'Setting...' : 'Set Default'}
+                        </button>
+                      )}
                       <Link
                         href={`/admin/pages/builder/${page.id}`}
                         className="px-3 py-1.5 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded transition-colors flex items-center gap-1"

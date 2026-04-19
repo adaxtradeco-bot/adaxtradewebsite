@@ -29,9 +29,11 @@ export function AddTranslationModal({
   const [copyStructure, setCopyStructure] = useState(true);
   const [copyStyles, setCopyStyles] = useState(true);
   const [copyContent, setCopyContent] = useState(false);
+  const [sourceLanguage, setSourceLanguage] = useState(''); // زبان مبدا برای کپی محتوا
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [sourcePageData, setSourcePageData] = useState<any>(null);
+  const [groupPages, setGroupPages] = useState<any[]>([]); // صفحات موجود در گروه
   const [copied, setCopied] = useState(false);
 
   const availableLanguages = [
@@ -52,6 +54,7 @@ export function AddTranslationModal({
       setCopyStructure(true);
       setCopyStyles(true);
       setCopyContent(false);
+      setSourceLanguage('');
       setCopied(false);
     }
   }, [isOpen, sourcePageId]);
@@ -67,6 +70,21 @@ export function AddTranslationModal({
       const result = await res.json();
       if (result.success) {
         setSourcePageData(result.data);
+        setSourceLanguage(result.data.language); // تنظیم زبان پیشفرض
+        
+        // دریافت صفحات گروه
+        if (result.data.pageGroupId) {
+          const groupRes = await fetch(`/api/admin/pages/grouped`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const groupResult = await groupRes.json();
+          if (groupResult.success) {
+            const group = groupResult.data.groups.find((g: any) => g.id === result.data.pageGroupId);
+            if (group) {
+              setGroupPages(group.pages);
+            }
+          }
+        }
       }
     } catch (err) {
       console.error('Failed to load source page:', err);
@@ -80,7 +98,6 @@ export function AddTranslationModal({
       const slugWithoutLang = sourceSlug.replace(/^\/(en|ar|tr|fr|de|es)\//, '');
       const newSlug = `/${language}/${slugWithoutLang}`;
       setSlug(newSlug);
-      console.log('Auto-generated slug:', newSlug);
     }
   }, [language, sourcePageData]);
 
@@ -128,7 +145,16 @@ export function AddTranslationModal({
     setLoading(true);
 
     try {
-      const res = await fetch(`/api/admin/pages/${sourcePageId}/add-translation`, {
+      // اگر copyContent فعال است، از صفحه با زبان انتخابی استفاده کن
+      let targetSourcePageId = sourcePageId;
+      if (copyContent && sourceLanguage) {
+        const sourcePage = groupPages.find(p => p.language === sourceLanguage);
+        if (sourcePage) {
+          targetSourcePageId = sourcePage.id;
+        }
+      }
+
+      const res = await fetch(`/api/admin/pages/${targetSourcePageId}/add-translation`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -148,10 +174,6 @@ export function AddTranslationModal({
         console.log('=== DEBUG LOGS ===');
         result.debugLogs.forEach((log: string) => console.log(log));
         console.log('==================');
-        
-        // نمایش لاگها در alert قبل از بستن modal
-        const logsText = result.debugLogs.join('\n');
-        alert('Debug Logs:\n\n' + logsText);
       }
 
       if (result.success) {
@@ -270,7 +292,7 @@ export function AddTranslationModal({
                 required
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                URL path for this page (e.g., /{language}/about)
+                Auto-generated based on language and source page. You can edit it.
               </p>
             </div>
           )}
@@ -327,7 +349,7 @@ export function AddTranslationModal({
                   className="mt-1 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                   disabled={!copyStructure}
                 />
-                <div>
+                <div className="flex-1">
                   <div className="flex items-center gap-2 text-sm font-medium text-gray-900 dark:text-white">
                     <FileText size={14} />
                     Copy content (text will need translation)
@@ -335,6 +357,26 @@ export function AddTranslationModal({
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                     Copy all text content - you can edit and translate it later
                   </p>
+                  
+                  {/* انتخاب زبان مبدا */}
+                  {copyContent && groupPages.length > 0 && (
+                    <div className="mt-2">
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Copy content from:
+                      </label>
+                      <select
+                        value={sourceLanguage}
+                        onChange={(e) => setSourceLanguage(e.target.value)}
+                        className="w-full px-2 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                      >
+                        {groupPages.map(page => (
+                          <option key={page.id} value={page.language}>
+                            {page.language.toUpperCase()} - {page.title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
               </label>
             </div>

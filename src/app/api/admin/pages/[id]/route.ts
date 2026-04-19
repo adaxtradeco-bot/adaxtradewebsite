@@ -72,17 +72,24 @@ export async function PUT(
       }
     }
     
+    const updateData: any = {
+      title: data.title,
+      slug: data.slug,
+      status: data.status,
+      metaTitle: data.metaTitle,
+      metaDescription: data.metaDescription,
+      sections: data.sections ? JSON.stringify(data.sections) : undefined,
+      updatedAt: new Date(),
+    };
+    
+    // اگر language تغییر کرده، آپدیت کن
+    if (data.language) {
+      updateData.language = data.language;
+    }
+    
     const page = await prisma.page.update({
       where: { id: params.id },
-      data: {
-        title: data.title,
-        slug: data.slug,
-        status: data.status,
-        metaTitle: data.metaTitle,
-        metaDescription: data.metaDescription,
-        sections: data.sections ? JSON.stringify(data.sections) : undefined,
-        updatedAt: new Date(),
-      },
+      data: updateData,
     });
 
     console.log('Page updated:', { id: page.id, status: page.status });
@@ -107,9 +114,31 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // دریافت اطلاعات صفحه قبل از حذف
+    const page = await prisma.page.findUnique({
+      where: { id: params.id },
+      select: { pageGroupId: true }
+    });
+
+    // حذف صفحه
     await prisma.page.delete({
       where: { id: params.id },
     });
+
+    // اگر صفحه در گروهی بود، بررسی کن که آیا گروه خالی شده
+    if (page?.pageGroupId) {
+      const remainingPages = await prisma.page.count({
+        where: { pageGroupId: page.pageGroupId }
+      });
+      
+      // اگر هیچ صفحهای در گروه نمانده، گروه را حذف کن
+      if (remainingPages === 0) {
+        await prisma.pageGroup.delete({
+          where: { id: page.pageGroupId }
+        });
+        console.log(`Deleted empty page group: ${page.pageGroupId}`);
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -20,6 +20,7 @@ export default function PageSettings() {
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
 
   useEffect(() => {
     fetchPage();
@@ -34,6 +35,20 @@ export default function PageSettings() {
       const result = await res.json();
       if (result.success) {
         setPage(result.page);
+        
+        // اگر صفحه در گروهی است، زبانهای موجود در گروه را بگیر
+        if (result.page.pageGroupId) {
+          const groupRes = await fetch(`/api/admin/pages/grouped`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          const groupResult = await groupRes.json();
+          if (groupResult.success) {
+            const group = groupResult.data.groups.find((g: any) => g.id === result.page.pageGroupId);
+            if (group) {
+              setAvailableLanguages(group.pages.map((p: any) => p.language));
+            }
+          }
+        }
       }
     } catch (err) {
       console.error('Error fetching page:', err);
@@ -57,6 +72,7 @@ export default function PageSettings() {
           title: page.title,
           slug: page.slug,
           status: page.status,
+          language: page.language,
           metaTitle: page.metaTitle,
           metaDescription: page.metaDescription
         })
@@ -192,12 +208,29 @@ export default function PageSettings() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Language
                 </label>
-                <input
-                  type="text"
-                  value={page.language}
-                  disabled
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-white"
-                />
+                {page.pageGroupId && availableLanguages.length > 0 ? (
+                  <select
+                    value={page.language}
+                    onChange={(e) => setPage({ ...page, language: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
+                  >
+                    {availableLanguages.map(lang => (
+                      <option key={lang} value={lang}>{lang.toUpperCase()}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    value={page.language}
+                    disabled
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-slate-600 text-gray-900 dark:text-white"
+                  />
+                )}
+                {page.pageGroupId && (
+                  <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    Change the language of this page within its group
+                  </p>
+                )}
               </div>
 
               <div>
