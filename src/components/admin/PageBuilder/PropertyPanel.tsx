@@ -40,6 +40,7 @@ import { RotatingTabsPropertyPanel } from './RotatingTabsPropertyPanel';
 import { AnalyticsBentoGridPropertyPanel } from './AnalyticsBentoGridPropertyPanel';
 import { LogoCloudPropertyPanel } from './LogoCloudPropertyPanel';
 import IntegrationMarqueePropertyPanel from './PropertyPanels/IntegrationMarqueePropertyPanel';
+import { FormBuilderTemplatesPropertyPanel } from './FormBuilderTemplatesPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -556,7 +557,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'interactive-feature-wall', 'wall-of-features', 'governance-grid',
     'fusion-teams-tabs', 'feature-video-tabs', 'platform-tabs',
     'hero-slider', 'hero-slider-nwm', 'metro-grid',
-    'rotating-tabs', 'analytics-bento-grid', 'logo-cloud', 'integration-marquee'
+    'rotating-tabs', 'analytics-bento-grid', 'logo-cloud', 'integration-marquee',
+    'form-builder-templates'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -627,6 +629,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <LogoCloudPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'integration-marquee':
         return <IntegrationMarqueePropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'form-builder-templates':
+        return <FormBuilderTemplatesPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
         return (
           <>

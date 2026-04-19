@@ -1,0 +1,347 @@
+{
+  "id": "wall-of-fields-1",
+  "type": "wall-of-fields",
+  "order": 3,
+  "data": {
+    "title": "30+ field types — one library for every data shape",
+    "subtitle": "Text, numbers, dates, files, signatures, maps, lookups, calculated values, and embedded sub-forms. Every field is configurable: label, placeholder, help text, validation rules, and visibility.",
+    "fields": [
+      {
+        "id": "short-text",
+        "title": "Short Text",
+        "faIcon": {
+          "name": "font",
+          "type": "solid",
+          "size": "lg",
+          "color": "#3B82F6"
+        },
+        "position": { "row": 1, "column": 1 }
+      },
+      {
+        "id": "long-text",
+        "title": "Long Text",
+        "faIcon": {
+          "name": "align-left",
+          "type": "solid",
+          "size": "lg",
+          "color": "#10B981"
+        },
+        "position": { "row": 1, "column": 2 }
+      },
+      {
+        "id": "number",
+        "title": "Number",
+        "faIcon": {
+          "name": "hashtag",
+          "type": "solid",
+          "size": "lg",
+          "color": "#F59E0B"
+        },
+        "position": { "row": 1, "column": 3 }
+      },
+      {
+        "id": "email",
+        "title": "Email",
+        "faIcon": {
+          "name": "envelope",
+          "type": "solid",
+          "size": "lg",
+          "color": "#8B5CF6"
+        },
+        "position": { "row": 1, "column": 4 }
+      },
+      {
+        "id": "phone",
+        "title": "Phone",
+        "faIcon": {
+          "name": "phone",
+          "type": "solid",
+          "size": "lg",
+          "color": "#EF4444"
+        },
+        "position": { "row": 1, "column": 5 }
+      },
+      {
+        "id": "url",
+        "title": "URL",
+        "faIcon": {
+          "name": "link",
+          "type": "solid",
+          "size": "lg",
+          "color": "#06B6D4"
+        },
+        "position": { "row": 1, "column": 6 }
+      },
+      {
+        "id": "dropdown",
+        "title": "Dropdown",
+        "faIcon": {
+          "name": "caret-down",
+          "type": "solid",
+          "size": "lg",
+          "color": "#84CC16"
+        },
+        "position": { "row": 2, "column": 1 }
+      },
+      {
+        "id": "multi-select",
+        "title": "Multi-Select",
+        "faIcon": {
+          "name": "list-check",
+          "type": "solid",
+          "size": "lg",
+          "color": "#F97316"
+        },
+        "position": { "row": 2, "column": 2 }
+      },
+      {
+        "id": "radio",
+        "title": "Radio",
+        "faIcon": {
+          "name": "circle-dot",
+          "type": "solid",
+          "size": "lg",
+          "color": "#A855F7"
+        },
+        "position": { "row": 2, "column": 3 }
+      },
+      {
+        "id": "checkbox",
+        "title": "Checkbox",
+        "faIcon": {
+          "name": "square-check",
+          "type": "solid",
+          "size": "lg",
+          "color": "#EC4899"
+        },
+        "position": { "row": 2, "column": 4 }
+      },
+      {
+        "id": "toggle",
+        "title": "Toggle",
+        "faIcon": {
+          "name": "toggle-on",
+          "type": "solid",
+          "size": "lg",
+          "color": "#3B82F6"
+        },
+        "position": { "row": 2, "column": 5 }
+      },
+      {
+        "id": "rating",
+        "title": "Rating",
+        "faIcon": {
+          "name": "star",
+          "type": "solid",
+          "size": "lg",
+          "color": "#F59E0B"
+        },
+        "position": { "row": 2, "column": 6 }
+      },
+      {
+        "id": "date-picker",
+        "title": "Date Picker",
+        "faIcon": {
+          "name": "calendar-day",
+          "type": "solid",
+          "size": "lg",
+          "color": "#10B981"
+        },
+        "position": { "row": 3, "column": 1 }
+      },
+      {
+        "id": "time-picker",
+        "title": "Time Picker",
+        "faIcon": {
+          "name": "clock",
+          "type": "solid",
+          "size": "lg",
+          "color": "#8B5CF6"
+        },
+        "position": { "row": 3, "column": 2 }
+      },
+      {
+        "id": "date-range",
+        "title": "Date Range",
+        "faIcon": {
+          "name": "calendar-week",
+          "type": "solid",
+          "size": "lg",
+          "color": "#EF4444"
+        },
+        "position": { "row": 3, "column": 3 }
+      },
+      {
+        "id": "file-upload",
+        "title": "File Upload",
+        "faIcon": {
+          "name": "file-arrow-up",
+          "type": "solid",
+          "size": "lg",
+          "color": "#06B6D4"
+        },
+        "position": { "row": 3, "column": 4 }
+      },
+      {
+        "id": "image-upload",
+        "title": "Image Upload",
+        "faIcon": {
+          "name": "image",
+          "type": "solid",
+          "size": "lg",
+          "color": "#84CC16"
+        },
+        "position": { "row": 3, "column": 5 }
+      },
+      {
+        "id": "signature",
+        "title": "Signature",
+        "faIcon": {
+          "name": "signature",
+          "type": "solid",
+          "size": "lg",
+          "color": "#F97316"
+        },
+        "position": { "row": 3, "column": 6 }
+      },
+      {
+        "id": "map-pin",
+        "title": "Map Pin",
+        "faIcon": {
+          "name": "location-dot",
+          "type": "solid",
+          "size": "lg",
+          "color": "#A855F7"
+        },
+        "position": { "row": 4, "column": 1 }
+      },
+      {
+        "id": "address",
+        "title": "Address",
+        "faIcon": {
+          "name": "map-location-dot",
+          "type": "solid",
+          "size": "lg",
+          "color": "#EC4899"
+        },
+        "position": { "row": 4, "column": 2 }
+      },
+      {
+        "id": "gps",
+        "title": "GPS",
+        "faIcon": {
+          "name": "location-crosshairs",
+          "type": "solid",
+          "size": "lg",
+          "color": "#3B82F6"
+        },
+        "position": { "row": 4, "column": 3 }
+      },
+      {
+        "id": "calculated",
+        "title": "Calculated",
+        "faIcon": {
+          "name": "calculator",
+          "type": "solid",
+          "size": "lg",
+          "color": "#10B981"
+        },
+        "position": { "row": 4, "column": 4 }
+      },
+      {
+        "id": "formula",
+        "title": "Formula",
+        "faIcon": {
+          "name": "function",
+          "type": "solid",
+          "size": "lg",
+          "color": "#F59E0B"
+        },
+        "position": { "row": 4, "column": 5 }
+      },
+      {
+        "id": "lookup",
+        "title": "Lookup",
+        "faIcon": {
+          "name": "magnifying-glass",
+          "type": "solid",
+          "size": "lg",
+          "color": "#8B5CF6"
+        },
+        "position": { "row": 4, "column": 6 }
+      },
+      {
+        "id": "contact-lookup",
+        "title": "Contact",
+        "faIcon": {
+          "name": "address-book",
+          "type": "solid",
+          "size": "lg",
+          "color": "#EF4444"
+        },
+        "position": { "row": 5, "column": 1 }
+      },
+      {
+        "id": "company-lookup",
+        "title": "Company",
+        "faIcon": {
+          "name": "building",
+          "type": "solid",
+          "size": "lg",
+          "color": "#06B6D4"
+        },
+        "position": { "row": 5, "column": 2 }
+      },
+      {
+        "id": "relationship",
+        "title": "Relationship",
+        "faIcon": {
+          "name": "diagram-project",
+          "type": "solid",
+          "size": "lg",
+          "color": "#84CC16"
+        },
+        "position": { "row": 5, "column": 3 }
+      },
+      {
+        "id": "sms-trigger",
+        "title": "SMS Trigger",
+        "faIcon": {
+          "name": "comment-sms",
+          "type": "solid",
+          "size": "lg",
+          "color": "#F97316"
+        },
+        "position": { "row": 5, "column": 4 }
+      },
+      {
+        "id": "email-notification",
+        "title": "Email Alert",
+        "faIcon": {
+          "name": "envelope-open-text",
+          "type": "solid",
+          "size": "lg",
+          "color": "#A855F7"
+        },
+        "position": { "row": 5, "column": 5 }
+      },
+      {
+        "id": "ivr-voice",
+        "title": "IVR Voice",
+        "faIcon": {
+          "name": "phone-volume",
+          "type": "solid",
+          "size": "lg",
+          "color": "#EC4899"
+        },
+        "position": { "row": 5, "column": 6 }
+      }
+    ]
+  },
+  "style": {
+    "backgroundColor": "bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800",
+    "textColor": "text-slate-900 dark:text-white",
+    "padding": "py-20",
+    "alignment": "center"
+  }
+}

@@ -166,7 +166,7 @@ export const FORM_BUILDER_SPECIAL_TEMPLATES: SectionTemplate[] = [
     name: 'Form Builder Templates',
     type: 'form-builder-templates',
     category: SECTION_CATEGORIES.CONTENT,
-    description: 'Horizontal scrolling template carousel',
+    description: 'Horizontal scrolling template carousel with icons & infographics',
     icon: '📋',
     defaultData: {
       id: '',
@@ -180,29 +180,82 @@ export const FORM_BUILDER_SPECIAL_TEMPLATES: SectionTemplate[] = [
           {
             title: 'Employee Onboarding',
             description: 'Checklists, docs, signatures, approvals.',
+            icon: 'fas fa-user-plus',
+            infographic: {
+              type: 'timeline',
+              data: {
+                steps: [
+                  { title: 'Submit', description: 'Employee info', time: 'Day 1', status: 'completed' },
+                  { title: 'Review', description: 'HR approval', time: 'Day 2', status: 'active' },
+                  { title: 'Complete', description: 'Access granted', time: 'Day 3', status: 'pending' },
+                ],
+              },
+            },
           },
           {
             title: 'Leave Requests',
             description: 'Policy-aware approvals and calendars.',
+            icon: 'fas fa-calendar-check',
+            infographic: {
+              type: 'stats',
+              data: {
+                metrics: [
+                  { label: 'Approved', value: '87%', trend: 'up', change: '+5%' },
+                  { label: 'Pending', value: '12', trend: 'neutral', change: '0%' },
+                ],
+              },
+            },
           },
           {
             title: 'Expense Claims',
             description: 'Receipts, limits, multi-level approvals.',
+            icon: 'fas fa-receipt',
+            infographic: {
+              type: 'flow',
+              data: {
+                nodes: [
+                  { label: 'Submit', type: 'start' },
+                  { label: 'Validate', type: 'process' },
+                  { label: 'Approve', type: 'decision' },
+                  { label: 'Reimburse', type: 'end' },
+                ],
+              },
+            },
           },
           {
             title: 'IT Access',
             description: 'Provisioning, de-provisioning, audit.',
+            icon: 'fas fa-key',
+            infographic: {
+              type: 'roles',
+              data: {
+                roles: [
+                  { name: 'Admin', access: 'Full access', level: 'admin' },
+                  { name: 'User', access: 'Limited', level: 'viewer' },
+                ],
+              },
+            },
           },
           {
             title: 'Marketing Brief',
             description: 'Intake, assets, deadlines, approvals.',
+            icon: 'fas fa-bullhorn',
+            infographic: {
+              type: 'kpi',
+              data: {
+                kpis: [
+                  { value: '24', label: 'Active', color: 'green' },
+                  { value: '8', label: 'Pending', color: 'amber' },
+                ],
+              },
+            },
           },
         ],
       },
       style: {
-        backgroundColor: 'bg-slate-900',
-        textColor: 'text-white',
-        padding: 'py-16',
+        backgroundColor: 'bg-white',
+        textColor: 'text-slate-900',
+        padding: 'py-20',
       },
     },
     configSchema: {},
