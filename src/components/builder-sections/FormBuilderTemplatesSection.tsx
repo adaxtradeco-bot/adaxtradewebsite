@@ -37,7 +37,10 @@ export default function FormBuilderTemplatesSection({ data }: FormBuilderTemplat
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 400;
+      const containerWidth = scrollRef.current.clientWidth;
+      const isMobile = window.innerWidth < 768;
+      const scrollAmount = isMobile ? containerWidth : Math.floor(containerWidth / 3);
+      
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -50,20 +53,28 @@ export default function FormBuilderTemplatesSection({ data }: FormBuilderTemplat
     if (!autoScrollEnabled || isPaused || !scrollRef.current) return;
 
     const scrollContainer = scrollRef.current;
-    const cardWidth = 400 + 24; // card width + gap
 
     const autoScroll = () => {
       if (!scrollContainer) return;
 
-      const maxScroll = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+      const containerWidth = scrollContainer.clientWidth;
+      const scrollWidth = scrollContainer.scrollWidth;
       const currentScroll = scrollContainer.scrollLeft;
+      
+      // Calculate card width based on viewport
+      const isMobile = window.innerWidth < 768;
+      const cardWidth = isMobile ? containerWidth : Math.floor(containerWidth / 3);
+      
+      // Calculate next scroll position
+      const nextScroll = currentScroll + cardWidth;
+      const maxScroll = scrollWidth - containerWidth;
 
       // If reached end, scroll back to start
-      if (currentScroll >= maxScroll - 10) {
+      if (nextScroll >= maxScroll - 10) {
         scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
-        // Scroll one card width
-        scrollContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        // Scroll exactly one card width
+        scrollContainer.scrollTo({ left: nextScroll, behavior: 'smooth' });
       }
     };
 
@@ -116,57 +127,58 @@ export default function FormBuilderTemplatesSection({ data }: FormBuilderTemplat
   ];
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20 bg-white dark:bg-slate-900">
-      <div className="flex items-end justify-between mb-10">
-        <div>
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-violet-600 to-purple-600 dark:from-blue-400 dark:via-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
-            {data.title}
-          </h2>
-          <p className="mt-4 text-lg text-slate-600 dark:text-slate-300 max-w-3xl">{data.description}</p>
-        </div>
-        <div className="flex gap-2">
-          {autoScrollEnabled && (
+    <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-slate-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-violet-600 to-purple-600 dark:from-blue-400 dark:via-violet-400 dark:to-purple-400 bg-clip-text text-transparent">
+              {data.title}
+            </h2>
+            <p className="mt-4 text-lg text-slate-600 dark:text-slate-300 max-w-3xl">{data.description}</p>
+          </div>
+          <div className="hidden md:flex gap-2">
+            {autoScrollEnabled && (
+              <button 
+                type="button"
+                onClick={() => setIsPaused(!isPaused)}
+                className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md"
+                title={isPaused ? 'Resume auto-scroll' : 'Pause auto-scroll'}
+              >
+                {isPaused ? '▶' : '⏸'}
+              </button>
+            )}
             <button 
               type="button"
-              onClick={() => setIsPaused(!isPaused)}
-              className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md"
-              title={isPaused ? 'Resume auto-scroll' : 'Pause auto-scroll'}
+              onClick={() => scroll('left')}
+              className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md"
             >
-              {isPaused ? '▶' : '⏸'}
+              ‹
             </button>
-          )}
-          <button 
-            type="button"
-            onClick={() => scroll('left')}
-            className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md"
-          >
-            ‹
-          </button>
-          <button 
-            type="button"
-            onClick={() => scroll('right')}
-            className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md"
-          >
-            ›
-          </button>
+            <button 
+              type="button"
+              onClick={() => scroll('right')}
+              className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md"
+            >
+              ›
+            </button>
+          </div>
         </div>
-      </div>
-      
-      <div 
-        ref={scrollRef}
-        className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent"
-        style={{ scrollbarWidth: 'thin' }}
-        onMouseEnter={() => autoScrollEnabled && setIsPaused(true)}
-        onMouseLeave={() => autoScrollEnabled && setIsPaused(false)}
-      >
-        <div className="flex gap-6 pb-4" style={{ minWidth: 'max-content' }}>
-          {data.templates.map((template, index) => {
-            const theme = themeConfigs[index % themeConfigs.length];
-            return (
-              <div 
-                key={index} 
-                className={`w-96 rounded-2xl border-2 p-6 hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl flex-shrink-0 shadow-lg backdrop-blur-sm ${theme.bg} ${theme.border}`}
-              >
+        
+        <div 
+          ref={scrollRef}
+          className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700 scrollbar-track-transparent snap-x snap-mandatory"
+          style={{ scrollbarWidth: 'thin' }}
+          onMouseEnter={() => autoScrollEnabled && setIsPaused(true)}
+          onMouseLeave={() => autoScrollEnabled && setIsPaused(false)}
+        >
+          <div className="flex gap-6 pb-4">
+            {data.templates.map((template, index) => {
+              const theme = themeConfigs[index % themeConfigs.length];
+              return (
+                <div 
+                  key={index} 
+                  className={`flex-shrink-0 w-full md:w-[calc(33.333%-16px)] rounded-2xl border-2 p-6 hover:transform hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl shadow-lg backdrop-blur-sm snap-start ${theme.bg} ${theme.border}`}
+                >
                 {/* Icon Header */}
                 {template.icon && (
                   <div className={`w-14 h-14 rounded-xl ${theme.iconBg} flex items-center justify-center mb-4 shadow-md`}>
@@ -197,6 +209,34 @@ export default function FormBuilderTemplatesSection({ data }: FormBuilderTemplat
           })}
         </div>
       </div>
+      
+      {/* Mobile Navigation */}
+      <div className="flex md:hidden justify-center gap-2 mt-6">
+        {autoScrollEnabled && (
+          <button 
+            type="button"
+            onClick={() => setIsPaused(!isPaused)}
+            className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+          >
+            {isPaused ? '▶' : '⏸'}
+          </button>
+        )}
+        <button 
+          type="button"
+          onClick={() => scroll('left')}
+          className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+        >
+          ‹
+        </button>
+        <button 
+          type="button"
+          onClick={() => scroll('right')}
+          className="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all border border-slate-200 dark:border-slate-700 shadow-sm"
+        >
+          ›
+        </button>
+      </div>
+    </div>
     </section>
   );
 }
