@@ -1,5 +1,5 @@
 /**
- * Form Builder Templates Property Panel
+ * Form Builder Mobile & Voice Property Panel
  * Author: Amazon Q
  * Created: 2025-01-XX
  */
@@ -10,12 +10,12 @@ import React from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { INFOGRAPHIC_TYPE_OPTIONS, INFOGRAPHIC_DEFAULT_DATA } from '@/lib/page-builder/infographic-defaults';
 
-interface FormBuilderTemplatesPropertyPanelProps {
+interface FormBuilderMobileVoicePropertyPanelProps {
   section: SectionConfig;
   onUpdate: (updates: Partial<SectionConfig>) => void;
 }
 
-export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBuilderTemplatesPropertyPanelProps) {
+export function FormBuilderMobileVoicePropertyPanel({ section, onUpdate }: FormBuilderMobileVoicePropertyPanelProps) {
   const data = section.data;
 
   const updateField = (field: string, value: any) => {
@@ -27,39 +27,39 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
     });
   };
 
-  const updateTemplate = (index: number, field: string, value: any) => {
-    const templates = [...(data.templates || [])];
-    templates[index] = { ...templates[index], [field]: value };
-    updateField('templates', templates);
+  const updateFeature = (index: number, field: string, value: any) => {
+    const features = [...(data.features || [])];
+    features[index] = { ...features[index], [field]: value };
+    updateField('features', features);
   };
 
-  const updateTemplateInfographic = (index: number, type: string) => {
-    const templates = [...(data.templates || [])];
-    templates[index] = {
-      ...templates[index],
+  const updateFeatureInfographic = (index: number, type: string) => {
+    const features = [...(data.features || [])];
+    features[index] = {
+      ...features[index],
       infographic: type ? {
         type,
         data: INFOGRAPHIC_DEFAULT_DATA[type] || {}
       } : undefined
     };
-    updateField('templates', templates);
+    updateField('features', features);
   };
 
-  const addTemplate = () => {
-    const templates = [...(data.templates || [])];
-    templates.push({
-      title: 'New Template',
-      description: 'Template description',
-      icon: 'fas fa-file-alt',
+  const addFeature = () => {
+    const features = [...(data.features || [])];
+    features.push({
+      title: 'New Feature',
+      description: 'Feature description',
+      icon: 'fas fa-mobile-alt',
       infographic: undefined
     });
-    updateField('templates', templates);
+    updateField('features', features);
   };
 
-  const removeTemplate = (index: number) => {
-    const templates = [...(data.templates || [])];
-    templates.splice(index, 1);
-    updateField('templates', templates);
+  const removeFeature = (index: number) => {
+    const features = [...(data.features || [])];
+    features.splice(index, 1);
+    updateField('features', features);
   };
 
   return (
@@ -89,59 +89,28 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
         />
       </div>
 
-      {/* Auto-Scroll Settings */}
-      <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-        <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-          <span>⚡</span> Auto-Scroll Settings
-        </h3>
-        
-        <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="autoScroll"
-              checked={data.autoScroll !== false}
-              onChange={(e) => updateField('autoScroll', e.target.checked)}
-              className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-            />
-            <label htmlFor="autoScroll" className="text-sm text-gray-700 dark:text-gray-300">
-              Enable auto-scroll carousel
-            </label>
-          </div>
-
-          {data.autoScroll !== false && (
-            <div>
-              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Scroll Speed (milliseconds)
-              </label>
-              <input
-                type="number"
-                value={data.scrollSpeed || 3000}
-                onChange={(e) => updateField('scrollSpeed', parseInt(e.target.value) || 3000)}
-                min="1000"
-                max="10000"
-                step="500"
-                className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Current: {((data.scrollSpeed || 3000) / 1000).toFixed(1)}s per card
-                <br />
-                Recommended: 2000-5000ms (2-5 seconds)
-              </p>
-            </div>
-          )}
-        </div>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Illustration Alt Text
+        </label>
+        <input
+          type="text"
+          value={data.illustrationAlt || ''}
+          onChange={(e) => updateField('illustrationAlt', e.target.value)}
+          placeholder="Mobile screens and voice flow illustration"
+          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+        />
       </div>
 
-      {/* Templates */}
+      {/* Features */}
       <div>
         <div className="flex items-center justify-between mb-3">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-            Templates ({data.templates?.length || 0})
+            Features ({data.features?.length || 0})
           </label>
           <button
             type="button"
-            onClick={addTemplate}
+            onClick={addFeature}
             className="px-3 py-1 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm"
           >
             + Add
@@ -149,15 +118,15 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
         </div>
 
         <div className="space-y-4">
-          {(data.templates || []).map((template: any, index: number) => (
+          {(data.features || []).map((feature: any, index: number) => (
             <div key={index} className="p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700/50">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Template {index + 1}
+                  Feature {index + 1}
                 </span>
                 <button
                   type="button"
-                  onClick={() => removeTemplate(index)}
+                  onClick={() => removeFeature(index)}
                   className="px-2 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700"
                 >
                   Remove
@@ -171,8 +140,8 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
                   </label>
                   <input
                     type="text"
-                    value={template.title || ''}
-                    onChange={(e) => updateTemplate(index, 'title', e.target.value)}
+                    value={feature.title || ''}
+                    onChange={(e) => updateFeature(index, 'title', e.target.value)}
                     className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   />
                 </div>
@@ -182,8 +151,8 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
                     Description
                   </label>
                   <textarea
-                    value={template.description || ''}
-                    onChange={(e) => updateTemplate(index, 'description', e.target.value)}
+                    value={feature.description || ''}
+                    onChange={(e) => updateFeature(index, 'description', e.target.value)}
                     rows={2}
                     className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   />
@@ -195,13 +164,13 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
                   </label>
                   <input
                     type="text"
-                    value={template.icon || ''}
-                    onChange={(e) => updateTemplate(index, 'icon', e.target.value)}
-                    placeholder="fas fa-file-alt"
+                    value={feature.icon || ''}
+                    onChange={(e) => updateFeature(index, 'icon', e.target.value)}
+                    placeholder="fas fa-mobile-alt"
                     className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   />
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    Example: fas fa-file-alt, fas fa-chart-bar, fas fa-users
+                    Example: fas fa-mobile-alt, fas fa-microphone, fas fa-qrcode
                   </p>
                 </div>
 
@@ -210,8 +179,8 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
                     Infographic Type
                   </label>
                   <select
-                    value={template.infographic?.type || ''}
-                    onChange={(e) => updateTemplateInfographic(index, e.target.value)}
+                    value={feature.infographic?.type || ''}
+                    onChange={(e) => updateFeatureInfographic(index, e.target.value)}
                     className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   >
                     {INFOGRAPHIC_TYPE_OPTIONS.map((opt) => (
@@ -220,9 +189,9 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
                       </option>
                     ))}
                   </select>
-                  {template.infographic?.type && (
+                  {feature.infographic?.type && (
                     <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-                      ✓ Using default data for {template.infographic.type}
+                      ✓ Using default data for {feature.infographic.type}
                     </p>
                   )}
                 </div>

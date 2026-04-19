@@ -41,6 +41,7 @@ import { AnalyticsBentoGridPropertyPanel } from './AnalyticsBentoGridPropertyPan
 import { LogoCloudPropertyPanel } from './LogoCloudPropertyPanel';
 import IntegrationMarqueePropertyPanel from './PropertyPanels/IntegrationMarqueePropertyPanel';
 import { FormBuilderTemplatesPropertyPanel } from './FormBuilderTemplatesPropertyPanel';
+import { FormBuilderMobileVoicePropertyPanel } from './FormBuilderMobileVoicePropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -558,7 +559,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'fusion-teams-tabs', 'feature-video-tabs', 'platform-tabs',
     'hero-slider', 'hero-slider-nwm', 'metro-grid',
     'rotating-tabs', 'analytics-bento-grid', 'logo-cloud', 'integration-marquee',
-    'form-builder-templates'
+    'form-builder-templates', 'form-builder-mobile-voice'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -631,6 +632,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <IntegrationMarqueePropertyPanel section={section} onUpdate={onUpdate} />;
       case 'form-builder-templates':
         return <FormBuilderTemplatesPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'form-builder-mobile-voice':
+        return <FormBuilderMobileVoicePropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
         return (
           <>

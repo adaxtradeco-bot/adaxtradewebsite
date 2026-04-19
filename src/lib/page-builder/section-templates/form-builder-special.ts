@@ -176,6 +176,8 @@ export const FORM_BUILDER_SPECIAL_TEMPLATES: SectionTemplate[] = [
         title: 'Start Faster with Templates',
         description:
           'Download pre-built forms for HR, Finance, Sales, Ops and IT—or use them as blueprints.',
+        autoScroll: true,
+        scrollSpeed: 3000,
         templates: [
           {
             title: 'Employee Onboarding',
@@ -340,7 +342,7 @@ export const FORM_BUILDER_SPECIAL_TEMPLATES: SectionTemplate[] = [
     name: 'Form Builder Mobile & Voice',
     type: 'form-builder-mobile-voice',
     category: SECTION_CATEGORIES.CONTENT,
-    description: 'Mobile and voice capabilities',
+    description: 'Mobile and voice capabilities with icons & infographics',
     icon: '📱',
     defaultData: {
       id: '',
@@ -349,27 +351,60 @@ export const FORM_BUILDER_SPECIAL_TEMPLATES: SectionTemplate[] = [
       data: {
         title: 'Mobile & Voice — Forms Anywhere',
         description:
-          'Capture data on the go. Forms are responsive, can work offline.',
+          'Capture data on the go. Forms are responsive, can work offline, and integrate with voice systems.',
         features: [
           {
             title: 'Responsive by Default',
-            description: 'Optimized for phones and tablets.',
+            description: 'Optimized for phones and tablets with touch-friendly controls.',
+            icon: 'fas fa-mobile-alt',
+            infographic: {
+              type: 'stats',
+              data: {
+                metrics: [
+                  { label: 'Mobile Users', value: '78%', trend: 'up', change: '+12%' },
+                  { label: 'Completion', value: '94%', trend: 'up', change: '+8%' },
+                ],
+              },
+            },
           },
           {
             title: 'Offline Mode',
-            description: 'Fill forms offline and sync later.',
+            description: 'Fill forms offline and sync automatically when connection returns.',
+            icon: 'fas fa-wifi',
+            infographic: {
+              type: 'flow',
+              data: {
+                nodes: [
+                  { label: 'Fill Offline', type: 'start' },
+                  { label: 'Store Local', type: 'process' },
+                  { label: 'Detect Online', type: 'decision' },
+                  { label: 'Auto Sync', type: 'end' },
+                ],
+              },
+            },
           },
           {
             title: 'Voice Forms',
-            description: 'Automated call campaigns & capture.',
+            description: 'Automated call campaigns with IVR integration and voice capture.',
+            icon: 'fas fa-microphone',
+            infographic: {
+              type: 'timeline',
+              data: {
+                steps: [
+                  { title: 'Call', description: 'Initiate', time: '0s', status: 'completed' },
+                  { title: 'Capture', description: 'Voice input', time: '30s', status: 'active' },
+                  { title: 'Process', description: 'AI transcribe', time: '45s', status: 'pending' },
+                ],
+              },
+            },
           },
         ],
-        illustrationAlt: 'Mobile and voice illustration',
+        illustrationAlt: 'Mobile screens and voice flow illustration',
       },
       style: {
-        backgroundColor: 'bg-gradient-to-b from-cyan-500/8 to-transparent',
-        textColor: 'text-white',
-        padding: 'py-16',
+        backgroundColor: 'bg-gradient-to-b from-cyan-50/50 to-transparent',
+        textColor: 'text-slate-900',
+        padding: 'py-20',
       },
     },
     configSchema: {},
