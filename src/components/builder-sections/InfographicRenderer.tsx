@@ -592,14 +592,49 @@ export default function InfographicRenderer({
       );
 
     case 'media':
-      return (
-        <div
-          className={`mt-4 bg-indigo-500/5 border-2 border-dashed border-indigo-500/20 rounded-xl flex flex-col items-center justify-center p-6 gap-2 text-center min-h-[80px] ${className}`}
-        >
-          <div className="text-3xl opacity-40">🎬</div>
-          <div className="text-xs text-slate-500 font-medium">
-            {infographic.data?.placeholder || 'Media placeholder'}
+      const mediaData = infographic.data;
+      if (!mediaData?.src) {
+        return (
+          <div
+            className={`mt-4 bg-purple-500/5 border-2 border-dashed border-purple-500/20 rounded-xl flex flex-col items-center justify-center p-6 gap-2 text-center min-h-[80px] ${className}`}
+          >
+            <div className="text-3xl opacity-40">📷</div>
+            <div className="text-xs text-slate-500 font-medium">
+              No media selected
+            </div>
           </div>
+        );
+      }
+
+      const isVideo = mediaData.type === 'video' || mediaData.src?.match(/\.(mp4|webm|mov)$/i);
+      
+      return (
+        <div className={`mt-3 ${className}`}>
+          {isVideo ? (
+            <video
+              src={mediaData.src}
+              controls
+              className="w-full h-auto rounded-lg"
+              style={{
+                maxWidth: mediaData.maxWidth ? `${mediaData.maxWidth}px` : undefined,
+                maxHeight: mediaData.maxHeight ? `${mediaData.maxHeight}px` : undefined,
+                objectFit: mediaData.objectFit || 'cover'
+              }}
+            >
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <img
+              src={mediaData.src}
+              alt={mediaData.alt || 'Media'}
+              className="w-full h-auto rounded-lg"
+              style={{
+                maxWidth: mediaData.maxWidth ? `${mediaData.maxWidth}px` : undefined,
+                maxHeight: mediaData.maxHeight ? `${mediaData.maxHeight}px` : undefined,
+                objectFit: mediaData.objectFit || 'cover'
+              }}
+            />
+          )}
         </div>
       );
 

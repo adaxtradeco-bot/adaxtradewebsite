@@ -102,7 +102,12 @@ export const INFOGRAPHIC_DEFAULT_DATA: Record<string, any> = {
     ],
   },
   media: {
-    placeholder: 'Upload your media here',
+    type: 'image',
+    src: '',
+    alt: '',
+    maxWidth: null,
+    maxHeight: null,
+    objectFit: 'cover'
   },
   workflow: {
     title: 'Automated Workflow',
@@ -147,6 +152,7 @@ export function getInfographicStructurePreview(type: string): string {
 
 export const INFOGRAPHIC_TYPE_OPTIONS = [
   { value: '', label: 'None' },
+  { value: 'media', label: '🎬 Media (Image/Video)' },
   { value: 'audit', label: 'Audit Trail' },
   { value: 'stats', label: 'Stats Grid' },
   { value: 'flow', label: 'Flow Chart' },
@@ -164,5 +170,4 @@ export const INFOGRAPHIC_TYPE_OPTIONS = [
   { value: 'sla', label: 'SLA Bars' },
   { value: 'sla-bars', label: 'SLA Bars (custom color)' },
   { value: 'org', label: 'Org Chart' },
-  { value: 'media', label: 'Media Placeholder' },
 ];
