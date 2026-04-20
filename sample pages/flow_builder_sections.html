@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IVA Flow Builder — Section Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue: #4F7FFF;
+  --purple: #7B5CFF;
+  --blue-dim: rgba(79,127,255,0.12);
+  --purple-dim: rgba(123,92,255,0.10);
+  --ink: #0D0E14;
+  --ink-2: #3A3C4E;
+  --ink-3: #7B7D8E;
+  --surface: #F7F7FB;
+  --line: rgba(13,14,20,0.08);
+  --line-strong: rgba(13,14,20,0.14);
+  --white: #FFFFFF;
+  --radius: 16px;
+  --radius-sm: 8px;
+  --mono: 'DM Mono', monospace;
+  --serif: 'DM Serif Display', serif;
+  --sans: 'Instrument Sans', sans-serif;
+}
+
+body {
+  font-family: var(--sans);
+  background: #F0F1F8;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SECTION 1: VISUAL PROCESS DESIGNER ─── */
+.sec1 {
+  background: var(--white);
+  padding: 96px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.sec1::before {
+  content: '';
+  position: absolute;
+  top: -120px; right: -120px;
+  width: 480px; height: 480px;
+  background: radial-gradient(circle, rgba(79,127,255,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue);
+  background: var(--blue-dim);
+  padding: 6px 14px;
+  border-radius: 40px;
+  margin-bottom: 24px;
+}
+.eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex-shrink: 0;
+}
+
+.sec1 h2 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.12;
+  margin-bottom: 16px;
+  max-width: 600px;
+}
+
+.sec1-lead {
+  font-size: 17px;
+  color: var(--ink-3);
+  line-height: 1.65;
+  max-width: 560px;
+  margin-bottom: 56px;
+}
+
+/* Tab nav — horizontal scrollable rail */
+.tab-rail {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1.5px solid var(--line);
+  margin-bottom: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: relative;
+}
+.tab-rail::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  flex-shrink: 0;
+  position: relative;
+  padding: 14px 24px 18px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--blue); }
+
+.tab-btn .prog-bar {
+  position: absolute;
+  bottom: -1.5px; left: 0;
+  height: 2px;
+  background: var(--blue);
+  width: 0%;
+  transition: none;
+  border-radius: 2px;
+}
+.tab-btn.active .prog-bar {
+  transition: width linear;
+}
+.tab-btn .tab-num {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-3);
+  opacity: 0.6;
+  margin-right: 8px;
+}
+.tab-btn.active .tab-num { color: var(--blue); opacity: 0.8; }
+
+/* Tab content area */
+.tab-panels {
+  background: var(--surface);
+  border-radius: 0 0 24px 24px;
+  min-height: 380px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-panel {
+  position: absolute;
+  inset: 0;
+  padding: 48px 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+.tab-panel.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+  position: relative;
+}
+
+.panel-left .tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 12px;
+  display: block;
+}
+.panel-left h3 {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+.panel-left .panel-lead {
+  font-size: 14.5px;
+  line-height: 1.68;
+  color: var(--ink-2);
+  margin-bottom: 20px;
+}
+.panel-left .example-box {
+  background: var(--white);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--ink-3);
+  line-height: 1.6;
+}
+.panel-left .example-box strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Right side: workflow steps */
+.workflow-steps { display: flex; flex-direction: column; gap: 10px; }
+
+.wf-step {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 18px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.wf-step:hover { border-color: var(--blue); transform: translateX(4px); }
+
+.wf-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-3);
+  min-width: 20px;
+}
+.wf-label {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ink);
+  flex: 1;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+.badge-entry { background: #E8F5E9; color: #2E7D32; }
+.badge-process { background: #E3F2FD; color: #1565C0; }
+.badge-cond { background: #FFF3E0; color: #E65100; }
+.badge-parallel { background: #F3E5F5; color: #6A1B9A; }
+.badge-complete { background: #E8F5E9; color: #1B5E20; }
+.badge-ai { background: #F3E5F5; color: #6A1B9A; }
+.badge-auto { background: #E3F2FD; color: #1565C0; }
+.badge-trigger { background: #FFF8E1; color: #F57F17; }
+.badge-notify { background: #FCE4EC; color: #880E4F; }
+
+/* List style for condition/join/trigger panels */
+.feature-list { display: flex; flex-direction: column; gap: 8px; }
+.feat-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--white);
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+.feat-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.feat-text { font-size: 13.5px; color: var(--ink-2); line-height: 1.5; }
+.feat-text strong { color: var(--ink); font-weight: 600; }
+
+
+/* ─── SECTION 2: AUTOMATION & EVENTS ─── */
+.sec2 {
+  background: var(--ink);
+  padding: 96px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.sec2::before {
+  content: '';
+  position: absolute;
+  bottom: 0; left: -100px;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(123,92,255,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.sec2::after {
+  content: '';
+  position: absolute;
+  top: 60px; right: -60px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(79,127,255,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.sec2 .eyebrow {
+  color: var(--purple);
+  background: rgba(123,92,255,0.15);
+}
+.sec2 .eyebrow::before { background: var(--purple); }
+
+.sec2 h2 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.12;
+  margin-bottom: 16px;
+  max-width: 640px;
+}
+
+.sec2-lead {
+  font-size: 17px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.65;
+  max-width: 560px;
+  margin-bottom: 56px;
+}
+
+/* Dark tab rail */
+.tab-rail-dark {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1.5px solid rgba(255,255,255,0.1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tab-rail-dark::-webkit-scrollbar { display: none; }
+
+.tab-btn-dark {
+  flex-shrink: 0;
+  position: relative;
+  padding: 14px 24px 18px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.tab-btn-dark:hover { color: rgba(255,255,255,0.75); }
+.tab-btn-dark.active { color: var(--white); }
+
+.tab-btn-dark .prog-bar {
+  position: absolute;
+  bottom: -1.5px; left: 0;
+  height: 2px;
+  background: var(--purple);
+  width: 0%;
+  border-radius: 2px;
+}
+.tab-btn-dark.active .prog-bar { transition: width linear; }
+.tab-btn-dark .tab-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  opacity: 0.4;
+  margin-right: 8px;
+}
+.tab-btn-dark.active .tab-num { opacity: 0.6; }
+
+/* Dark panels */
+.tab-panels-dark {
+  min-height: 420px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-panel-dark {
+  position: absolute;
+  inset: 0;
+  padding: 56px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+.tab-panel-dark.active {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+  position: relative;
+}
+
+.dark-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 14px;
+  display: block;
+}
+.dark-panel-title {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.25;
+  margin-bottom: 16px;
+}
+.dark-panel-lead {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 24px;
+}
+
+/* Action card — right side of dark panels */
+.action-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.action-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+}
+
+.action-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.action-icon-blue { background: rgba(79,127,255,0.15); }
+.action-icon-purple { background: rgba(123,92,255,0.15); }
+.action-icon-green { background: rgba(52,199,89,0.12); }
+.action-icon-amber { background: rgba(255,159,10,0.12); }
+.action-icon-pink { background: rgba(255,55,95,0.12); }
+
+.action-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.event-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 16px;
+}
+.event-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+}
+.event-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.ev-blue { background: var(--blue); }
+.ev-purple { background: var(--purple); }
+.ev-green { background: #34C759; }
+.ev-amber { background: #FF9F0A; }
+.ev-pink { background: #FF375F; }
+
+.event-row span {
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.4;
+}
+.event-row span strong { color: rgba(255,255,255,0.9); font-weight: 500; }
+
+.dark-example {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-sm);
+  padding: 14px 18px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+  margin-top: 4px;
+}
+.dark-example strong { color: rgba(255,255,255,0.8); }
+
+/* Footer strip */
+.section-footer {
+  margin-top: 0;
+  padding: 32px 56px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.section-footer-dark {
+  margin-top: 0;
+  padding: 32px 56px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  background: rgba(255,255,255,0.02);
+}
+
+.footer-dots { display: flex; gap: 8px; align-items: center; }
+.fdot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+.fdot:hover { transform: scale(1.3); }
+.fdot.active { background: var(--blue); transform: scale(1.2); }
+.fdot-dark { background: rgba(255,255,255,0.2); }
+.fdot-dark.active { background: var(--purple); }
+
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--blue);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--sans);
+  transition: gap 0.2s;
+}
+.footer-cta:hover { gap: 12px; }
+.footer-cta-dark { color: var(--purple); }
+
+.footer-pause {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  letter-spacing: 0.05em;
+}
+.footer-pause-dark { color: rgba(255,255,255,0.3); }
+
+.pause-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+  color: var(--ink-2);
+  font-size: 10px;
+}
+.pause-btn:hover { background: var(--surface); }
+.pause-btn-dark {
+  border-color: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+}
+.pause-btn-dark:hover { background: rgba(255,255,255,0.06); }
+
+/* Spacer between sections */
+.section-spacer { height: 2px; background: var(--line); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tab-panel, .tab-panel-dark {
+    grid-template-columns: 1fr;
+    padding: 32px 24px;
+    gap: 32px;
+  }
+  .tab-panel { min-height: auto; }
+  .section-footer, .section-footer-dark { padding: 24px; }
+  .container { padding: 0 20px; }
+  .sec1, .sec2 { padding: 64px 0 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1: VISUAL PROCESS DESIGNER
+═══════════════════════════════════════════ -->
+<section class="sec1">
+  <div class="container">
+    <div class="eyebrow">Visual Process Designer</div>
+    <h2>Design workflows exactly<br><em>as they execute.</em></h2>
+    <p class="sec1-lead">Drag stages onto the canvas, connect them with transitions, define rules on each edge, and deploy from a web-based designer. The engine then executes the model deterministically — no glue code, no manual routing.</p>
+  </div>
+
+  <div class="container">
+    <div class="tab-rail" id="rail1" role="tablist">
+      <button class="tab-btn active" role="tab" aria-selected="true" data-tab="0" onclick="switchTab(1,0)">
+        <span class="tab-num">01</span>Stage Types
+        <div class="prog-bar" id="s1-prog-0"></div>
+      </button>
+      <button class="tab-btn" role="tab" data-tab="1" onclick="switchTab(1,1)">
+        <span class="tab-num">02</span>Conditions
+        <div class="prog-bar" id="s1-prog-1"></div>
+      </button>
+      <button class="tab-btn" role="tab" data-tab="2" onclick="switchTab(1,2)">
+        <span class="tab-num">03</span>Parallel Execution
+        <div class="prog-bar" id="s1-prog-2"></div>
+      </button>
+      <button class="tab-btn" role="tab" data-tab="3" onclick="switchTab(1,3)">
+        <span class="tab-num">04</span>Process Triggers
+        <div class="prog-bar" id="s1-prog-3"></div>
+      </button>
+      <button class="tab-btn" role="tab" data-tab="4" onclick="switchTab(1,4)">
+        <span class="tab-num">05</span>Governance
+        <div class="prog-bar" id="s1-prog-4"></div>
+      </button>
+    </div>
+
+    <div class="tab-panels" id="panels1">
+
+      <!-- TAB 1: Stage Types -->
+      <div class="tab-panel active" id="s1-panel-0">
+        <div class="panel-left">
+          <span class="tag">Stage Library</span>
+          <h3>Every process needs the right stage type</h3>
+          <p class="panel-lead">Initial stages capture requests. Standard stages route work through teams. Decision stages evaluate conditions. Parallel stages split execution. Final stages close and archive records. Each stage carries its own form, assignment logic, SLA, and action set.</p>
+          <div class="example-box"><strong>Example:</strong> An HR onboarding flow uses 1 initial stage, 6 standard stages (approvals, IT provisioning, payroll, training), and 1 final stage that closes and archives the record.</div>
+        </div>
+        <div class="workflow-steps">
+          <div class="wf-step"><span class="wf-num">1</span><span class="wf-label">Initial stage — capture submission</span><span class="badge badge-entry">Entry</span></div>
+          <div class="wf-step"><span class="wf-num">2</span><span class="wf-label">Standard stage — validate, assign, act</span><span class="badge badge-process">Process</span></div>
+          <div class="wf-step"><span class="wf-num">3</span><span class="wf-label">Decision stage — evaluate conditions</span><span class="badge badge-cond">Conditional</span></div>
+          <div class="wf-step"><span class="wf-num">4</span><span class="wf-label">Parallel stage — concurrent branches</span><span class="badge badge-parallel">Parallel</span></div>
+          <div class="wf-step"><span class="wf-num">5</span><span class="wf-label">Final stage — close, notify, archive</span><span class="badge badge-complete">Complete</span></div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Conditions -->
+      <div class="tab-panel" id="s1-panel-1">
+        <div class="panel-left">
+          <span class="tag">Conditional Branching</span>
+          <h3>Every transition can carry execution logic</h3>
+          <p class="panel-lead">Each connection between stages carries optional conditions. Use AND/OR groups to evaluate form fields, document state, ownership, time elapsed, org attributes, or external API results. The engine decides the path at runtime — not at design time.</p>
+          <div class="example-box"><strong>Example:</strong> After manager review — IF approved → finance stage. IF rejected → return with comments. IF no response in 48 hours → auto-escalate to department head.</div>
+        </div>
+        <div class="feature-list">
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Form field value</strong> — Equals, contains, greater than, less than, empty, regex</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Document status</strong> — In stage, approved, rejected, overdue</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Owner identity</strong> — Assigned role, user, department, previous executor</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Time elapsed</strong> — Since start, since stage entry, exact date, working hours only</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Org structure</strong> — Requester department, manager, org level</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>External data</strong> — API response value, webhook payload, lookup result</div></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Parallel -->
+      <div class="tab-panel" id="s1-panel-2">
+        <div class="panel-left">
+          <span class="tag">Parallel Tasks</span>
+          <h3>Run multiple branches simultaneously</h3>
+          <p class="panel-lead">Split one process into parallel branches and define how they converge. Choose from all-branches, first-complete, or N-of-M join logic to eliminate artificial sequencing and cut cycle time.</p>
+          <div class="example-box"><strong>Example:</strong> Leave approved → payroll update and employee notification run in parallel. Neither branch waits for the other. Both complete independently.</div>
+        </div>
+        <div class="feature-list">
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>All branches complete</strong> — Process advances only when every parallel branch has finished</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>First branch completes</strong> — Advance on the fastest outcome; remaining branches are cancelled</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>N-of-M branches complete</strong> — Define a threshold — e.g. 3 of 5 approvers must act</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Timed join with fallback</strong> — If not all branches complete within a deadline, advance with a fallback action</div></div>
+        </div>
+      </div>
+
+      <!-- TAB 4: Triggers -->
+      <div class="tab-panel" id="s1-panel-3">
+        <div class="panel-left">
+          <span class="tag">Start Triggers</span>
+          <h3>A process can start from six different event types</h3>
+          <p class="panel-lead">Launch workflows manually, on a schedule, from another process, from an inbound communication, from an API event, or from a field value change. This makes the orchestrator suitable for both human-centric and event-driven processes.</p>
+          <div class="example-box"><strong>Example:</strong> Every Monday at 8am, a weekly team checklist process starts automatically, assigns tasks to each lead, and escalates uncompleted items by Wednesday noon.</div>
+        </div>
+        <div class="feature-list">
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Manual form submission</strong> — User fills and submits a form to start the process</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Scheduled trigger</strong> — Cron-style schedule: daily, weekly, monthly</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Process-to-process</strong> — Child process starts when a parent stage completes</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Inbound communication</strong> — Email, SMS, IVR call, or WhatsApp message received</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>External API event</strong> — Webhook payload from any external system fires the trigger</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Field value change</strong> — A record update in another form or process triggers a new instance</div></div>
+        </div>
+      </div>
+
+      <!-- TAB 5: Governance -->
+      <div class="tab-panel" id="s1-panel-4">
+        <div class="panel-left">
+          <span class="tag">Organization & Access</span>
+          <h3>Keep every process organized, versioned, and access-controlled</h3>
+          <p class="panel-lead">Group workflows into folders by department. Control who can start, view, edit, or administer each process. Publish new versions without interrupting live instances — changes apply to new instances only.</p>
+          <div class="example-box"><strong>Example:</strong> Finance processes are in a locked folder. Only the Finance process owner can publish changes. Live expense approval cases continue on the previous version uninterrupted.</div>
+        </div>
+        <div class="feature-list">
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Folder-based organization</strong> — Group by department, use case, or business unit</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Process owner role</strong> — Designated owner with monitoring and publish rights</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Version control</strong> — New versions deploy to new instances only — live cases unaffected</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Role-based permissions</strong> — Separate start, view, edit, and admin rights per process</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Graph and list views</strong> — Visual canvas or tabular view per user preference</div></div>
+          <div class="feat-item"><div class="feat-dot"></div><div class="feat-text"><strong>Process health dashboard</strong> — Live status of all deployed processes across the org</div></div>
+        </div>
+      </div>
+
+    </div><!-- /tab-panels -->
+
+    <div class="section-footer">
+      <div class="footer-dots" id="dots1">
+        <div class="fdot active" onclick="switchTab(1,0)"></div>
+        <div class="fdot" onclick="switchTab(1,1)"></div>
+        <div class="fdot" onclick="switchTab(1,2)"></div>
+        <div class="fdot" onclick="switchTab(1,3)"></div>
+        <div class="fdot" onclick="switchTab(1,4)"></div>
+      </div>
+      <div class="footer-pause">
+        <button class="pause-btn" id="pause1" onclick="togglePause(1)" title="Pause / Resume">⏸</button>
+        <span id="pause1-label">Auto-rotating</span>
+      </div>
+      <button class="footer-cta">View all process templates →</button>
+    </div>
+  </div>
+</section>
+
+<div class="section-spacer"></div>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2: AUTOMATION & EVENTS
+═══════════════════════════════════════════ -->
+<section class="sec2">
+  <div class="container">
+    <div class="eyebrow">Events, Actions & Automation</div>
+    <h2>Define what the process<br><em>does automatically.</em></h2>
+    <p class="sec2-lead">Every significant runtime event can trigger one or more actions — stage entry, stage exit, condition match, timeout, inbound communication, or escalation threshold. No custom code. No external scheduler.</p>
+  </div>
+
+  <div class="container">
+    <div class="tab-rail-dark" id="rail2" role="tablist">
+      <button class="tab-btn-dark active" role="tab" data-tab="0" onclick="switchTab(2,0)">
+        <span class="tab-num">01</span>Notifications
+        <div class="prog-bar" id="s2-prog-0"></div>
+      </button>
+      <button class="tab-btn-dark" role="tab" data-tab="1" onclick="switchTab(2,1)">
+        <span class="tab-num">02</span>Process Chaining
+        <div class="prog-bar" id="s2-prog-1"></div>
+      </button>
+      <button class="tab-btn-dark" role="tab" data-tab="2" onclick="switchTab(2,2)">
+        <span class="tab-num">03</span>Scheduled Tasks
+        <div class="prog-bar" id="s2-prog-2"></div>
+      </button>
+      <button class="tab-btn-dark" role="tab" data-tab="3" onclick="switchTab(2,3)">
+        <span class="tab-num">04</span>API & Webhooks
+        <div class="prog-bar" id="s2-prog-3"></div>
+      </button>
+      <button class="tab-btn-dark" role="tab" data-tab="4" onclick="switchTab(2,4)">
+        <span class="tab-num">05</span>SLA & Escalation
+        <div class="prog-bar" id="s2-prog-4"></div>
+      </button>
+    </div>
+
+    <div class="tab-panels-dark" id="panels2">
+
+      <!-- TAB 1: Notifications -->
+      <div class="tab-panel-dark active" id="s2-panel-0">
+        <div>
+          <span class="dark-tag">Notification Actions</span>
+          <h3 class="dark-panel-title">Notify the right people at the right moment</h3>
+          <p class="dark-panel-lead">Send email, SMS, fax, or internal notifications when a stage is entered, approved, rejected, completed, or overdue. Use template variables to personalize messages with live form data and routing context.</p>
+          <div class="dark-example"><strong>Example:</strong> Leave request rejected → the requester receives an SMS with the rejection reason and a link to resubmit within 30 seconds. No manual follow-up.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-icon action-icon-blue">📣</div>
+          <h4>Notification channels available</h4>
+          <div class="event-flow">
+            <div class="event-row"><div class="event-dot ev-blue"></div><span><strong>Email</strong> — HTML template with form field variables</span></div>
+            <div class="event-row"><div class="event-dot ev-green"></div><span><strong>SMS</strong> — Instant delivery via native SMS module</span></div>
+            <div class="event-row"><div class="event-dot ev-purple"></div><span><strong>Internal notification</strong> — In-platform alert to any user or role</span></div>
+            <div class="event-row"><div class="event-dot ev-amber"></div><span><strong>Fax</strong> — Direct fax via native fax server integration</span></div>
+            <div class="event-row"><div class="event-dot ev-pink"></div><span><strong>Trigger: </strong>Stage entry / exit / approval / rejection / overdue</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Process Chaining -->
+      <div class="tab-panel-dark" id="s2-panel-1">
+        <div>
+          <span class="dark-tag">Process Chaining</span>
+          <h3 class="dark-panel-title">One workflow completion can start another automatically</h3>
+          <p class="dark-panel-lead">When a stage completes or a final outcome is reached, trigger a downstream process and pass form data between parent and child. Build multi-domain flows without monolithic processes.</p>
+          <div class="dark-example"><strong>Example:</strong> Sales process closes → onboarding starts automatically → on completion, billing setup starts. Three processes. Zero manual handoffs.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-icon action-icon-purple">🔗</div>
+          <h4>Process chain execution</h4>
+          <div class="event-flow">
+            <div class="event-row"><div class="event-dot ev-blue"></div><span><strong>Trigger point</strong> — Stage completion or final stage reached</span></div>
+            <div class="event-row"><div class="event-dot ev-purple"></div><span><strong>Data passing</strong> — Form fields mapped to child process input</span></div>
+            <div class="event-row"><div class="event-dot ev-green"></div><span><strong>Child process starts</strong> — Independently tracked instance created</span></div>
+            <div class="event-row"><div class="event-dot ev-amber"></div><span><strong>Parent status</strong> — Parent case remains linked for audit visibility</span></div>
+            <div class="event-row"><div class="event-dot ev-pink"></div><span><strong>Depth</strong> — Multi-level chains supported (A → B → C → ...)</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: Scheduled -->
+      <div class="tab-panel-dark" id="s2-panel-2">
+        <div>
+          <span class="dark-tag">Scheduled Automation</span>
+          <h3 class="dark-panel-title">Processes that start themselves — on a schedule</h3>
+          <p class="dark-panel-lead">Define recurring processes for weekly reviews, monthly compliance checks, quarterly cycles, or routine reminders. The schedule is managed inside the platform — no cron jobs, no external scripts, no developer.</p>
+          <div class="dark-example"><strong>Example:</strong> Every Monday at 8am, a weekly team checklist starts automatically. Tasks are assigned to each team lead. Uncompleted items escalate to the manager by Wednesday noon.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-icon action-icon-green">⏱</div>
+          <h4>Schedule configuration options</h4>
+          <div class="event-flow">
+            <div class="event-row"><div class="event-dot ev-blue"></div><span><strong>Daily</strong> — Fixed time, every day or on specific weekdays</span></div>
+            <div class="event-row"><div class="event-dot ev-purple"></div><span><strong>Weekly</strong> — Day of week + time, repeating</span></div>
+            <div class="event-row"><div class="event-dot ev-green"></div><span><strong>Monthly</strong> — Day of month + time, with end-of-month handling</span></div>
+            <div class="event-row"><div class="event-dot ev-amber"></div><span><strong>Custom interval</strong> — Every N hours or N days</span></div>
+            <div class="event-row"><div class="event-dot ev-pink"></div><span><strong>Calendar-aware</strong> — Skip weekends or public holidays</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: API & Webhooks -->
+      <div class="tab-panel-dark" id="s2-panel-3">
+        <div>
+          <span class="dark-tag">External System Actions</span>
+          <h3 class="dark-panel-title">Push and pull data across any connected system</h3>
+          <p class="dark-panel-lead">Fire REST calls or webhooks on any stage event. Send filtered payloads to external endpoints and write API responses back into workflow fields. True bi-directional orchestration — not one-way export.</p>
+          <div class="dark-example"><strong>Example:</strong> IT access request approved → API call provisions the account in Active Directory → response confirms provisioning → form field "Account Status" auto-updates to Active.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-icon action-icon-amber">🔌</div>
+          <h4>API action capabilities</h4>
+          <div class="event-flow">
+            <div class="event-row"><div class="event-dot ev-blue"></div><span><strong>REST POST/GET/PUT/PATCH</strong> — Any HTTPS endpoint</span></div>
+            <div class="event-row"><div class="event-dot ev-purple"></div><span><strong>Payload filtering</strong> — Send a subset of form fields, not the full document</span></div>
+            <div class="event-row"><div class="event-dot ev-green"></div><span><strong>Response mapping</strong> — Write API response values back into form fields</span></div>
+            <div class="event-row"><div class="event-dot ev-amber"></div><span><strong>Auth support</strong> — Bearer token, API key, Basic auth</span></div>
+            <div class="event-row"><div class="event-dot ev-pink"></div><span><strong>Retry policy</strong> — Configurable retry on failure with alert on final failure</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: SLA & Escalation -->
+      <div class="tab-panel-dark" id="s2-panel-4">
+        <div>
+          <span class="dark-tag">SLA & Escalation Engine</span>
+          <h3 class="dark-panel-title">Missed deadlines escalate automatically</h3>
+          <p class="dark-panel-lead">Define SLA timers on any stage and configure multi-level escalation chains. The engine reassigns tasks, notifies managers, increases priority, or logs compliance events when deadlines are missed — without any manual intervention.</p>
+          <div class="dark-example"><strong>Example:</strong> IT ticket not actioned in 4h → reminder sent. 8h → escalate to team lead. 24h → escalate to IT manager and flag for SLA breach report.</div>
+        </div>
+        <div class="action-card">
+          <div class="action-icon action-icon-pink">⚡</div>
+          <h4>Escalation chain levels</h4>
+          <div class="event-flow">
+            <div class="event-row"><div class="event-dot ev-blue"></div><span><strong>Level 0 — Reminder</strong> — Notify current assignee before deadline</span></div>
+            <div class="event-row"><div class="event-dot ev-amber"></div><span><strong>Level 1 — Reassign</strong> — Move task to backup assignee or team lead</span></div>
+            <div class="event-row"><div class="event-dot ev-pink"></div><span><strong>Level 2 — Escalate</strong> — Notify manager + change task priority</span></div>
+            <div class="event-row"><div class="event-dot ev-purple"></div><span><strong>Level 3 — Compliance event</strong> — Log SLA breach for audit + trigger corrective workflow</span></div>
+            <div class="event-row"><div class="event-dot ev-green"></div><span><strong>Calendar-aware SLA</strong> — Count only working hours, not calendar time</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /tab-panels-dark -->
+
+    <div class="section-footer-dark">
+      <div class="footer-dots" id="dots2">
+        <div class="fdot fdot-dark active" onclick="switchTab(2,0)"></div>
+        <div class="fdot fdot-dark" onclick="switchTab(2,1)"></div>
+        <div class="fdot fdot-dark" onclick="switchTab(2,2)"></div>
+        <div class="fdot fdot-dark" onclick="switchTab(2,3)"></div>
+        <div class="fdot fdot-dark" onclick="switchTab(2,4)"></div>
+      </div>
+      <div class="footer-pause footer-pause-dark">
+        <button class="pause-btn pause-btn-dark" id="pause2" onclick="togglePause(2)" title="Pause / Resume">⏸</button>
+        <span id="pause2-label">Auto-rotating</span>
+      </div>
+      <button class="footer-cta footer-cta-dark">See automation in action →</button>
+    </div>
+  </div>
+</section>
+
+<script>
+const INTERVAL = 4000;
+const state = {
+  1: { current: 0, total: 5, paused: false, timer: null, animFrame: null, startTime: null },
+  2: { current: 0, total: 5, paused: false, timer: null, animFrame: null, startTime: null }
+};
+
+function getEls(sec) {
+  const s = sec === 1 ? 's1' : 's2';
+  const btnClass = sec === 1 ? 'tab-btn' : 'tab-btn-dark';
+  const btns = document.querySelectorAll(`#rail${sec} .${btnClass}`);
+  const panels = document.querySelectorAll(`#panels${sec} .tab-panel${sec===2?'-dark':''}`);
+  const dots = document.querySelectorAll(`#dots${sec} .fdot`);
+  return { btns, panels, dots };
+}
+
+function setActive(sec, idx) {
+  const { btns, panels, dots } = getEls(sec);
+  btns.forEach((b,i) => {
+    b.classList.toggle('active', i === idx);
+    const pb = b.querySelector('.prog-bar');
+    if (pb) { pb.style.transition = 'none'; pb.style.width = '0%'; }
+  });
+  panels.forEach((p,i) => p.classList.toggle('active', i === idx));
+  dots.forEach((d,i) => d.classList.toggle('active', i === idx));
+  state[sec].current = idx;
+}
+
+function animateProgress(sec) {
+  const st = state[sec];
+  if (st.paused) return;
+  const btn = document.querySelectorAll(`#rail${sec} .${sec===1?'tab-btn':'tab-btn-dark'}`)[st.current];
+  if (!btn) return;
+  const pb = btn.querySelector('.prog-bar');
+  if (!pb) return;
+  cancelAnimationFrame(st.animFrame);
+  pb.style.transition = 'none';
+  pb.style.width = '0%';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      pb.style.transition = `width ${INTERVAL}ms linear`;
+      pb.style.width = '100%';
+    });
+  });
+  st.startTime = performance.now();
+  st.animFrame = requestAnimationFrame(function tick(now) {
+    if (st.paused) return;
+    if (now - st.startTime >= INTERVAL) {
+      const next = (st.current + 1) % st.total;
+      switchTab(sec, next);
+      return;
+    }
+    st.animFrame = requestAnimationFrame(tick);
+  });
+}
+
+function switchTab(sec, idx) {
+  const st = state[sec];
+  cancelAnimationFrame(st.animFrame);
+  clearTimeout(st.timer);
+  const { btns } = getEls(sec);
+  btns.forEach(b => {
+    const pb = b.querySelector('.prog-bar');
+    if (pb) { pb.style.transition = 'none'; pb.style.width = '0%'; }
+  });
+  setActive(sec, idx);
+  if (!st.paused) animateProgress(sec);
+}
+
+function togglePause(sec) {
+  const st = state[sec];
+  st.paused = !st.paused;
+  const btn = document.getElementById(`pause${sec}`);
+  const lbl = document.getElementById(`pause${sec}-label`);
+  if (st.paused) {
+    cancelAnimationFrame(st.animFrame);
+    const { btns } = getEls(sec);
+    btns.forEach(b => {
+      const pb = b.querySelector('.prog-bar');
+      if (pb) pb.style.transition = 'none';
+    });
+    btn.textContent = '▶';
+    lbl.textContent = 'Paused';
+  } else {
+    btn.textContent = '⏸';
+    lbl.textContent = 'Auto-rotating';
+    animateProgress(sec);
+  }
+}
+
+// Pause on hover
+[1,2].forEach(sec => {
+  const panels = document.getElementById(`panels${sec}`);
+  const rail = document.getElementById(`rail${sec}`);
+  [panels, rail].forEach(el => {
+    el.addEventListener('mouseenter', () => { if (!state[sec].paused) { cancelAnimationFrame(state[sec].animFrame); const { btns } = getEls(sec); btns.forEach(b => { const pb = b.querySelector('.prog-bar'); if (pb) pb.style.transition = 'none'; }); } });
+    el.addEventListener('mouseleave', () => { if (!state[sec].paused) animateProgress(sec); });
+  });
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') switchTab(1, (state[1].current+1)%5);
+  if (e.key === 'ArrowLeft') switchTab(1, (state[1].current+4)%5);
+});
+
+// Init
+switchTab(1, 0);
+switchTab(2, 0);
+</script>
+</body>
+</html>

@@ -125,6 +125,7 @@ import OmnichannelHubSection from '@/components/builder-sections/OmnichannelHubS
 import CompetitiveComparisonSection from '@/components/builder-sections/CompetitiveComparisonSection';
 import { IconDisplay } from '@/components/ui/IconPicker';
 import IntegrationMarqueeSection from '@/components/builder-sections/IntegrationMarqueeSection';
+import FlowBuilderSection from '@/components/builder-sections/FlowBuilderSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -938,6 +939,13 @@ export function SectionRenderer({
           return (
             <IntegrationMarqueeSection
               section={section}
+            />
+          );
+        case 'flow-builder':
+          return (
+            <FlowBuilderSection
+              data={(section as any).data}
+              style={(section as any).style}
             />
           );
         case 'showcase':
