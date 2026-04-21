@@ -354,7 +354,7 @@ export default function AutomationEventsSection({ data, style }: AutomationEvent
                   </p>
 
                   {/* Flow Visualization using InfographicRenderer */}
-                  {currentEvent.infographicType && currentEvent.infographicType !== '' ? (
+                  {currentEvent.infographicType && (
                     <div className="mt-2">
                       <InfographicRenderer
                         infographic={{
@@ -362,10 +362,6 @@ export default function AutomationEventsSection({ data, style }: AutomationEvent
                           ...(currentEvent.infographicData || {})
                         }}
                       />
-                    </div>
-                  ) : (
-                    <div className="mt-2 p-4 bg-white/[0.04] rounded-xl border border-white/10 text-center text-white/40 text-sm">
-                      No visualization selected
                     </div>
                   )}
 
