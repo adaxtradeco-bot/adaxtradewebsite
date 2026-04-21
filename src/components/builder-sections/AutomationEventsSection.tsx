@@ -359,7 +359,7 @@ export default function AutomationEventsSection({ data, style }: AutomationEvent
                       <InfographicRenderer
                         infographic={{
                           type: currentEvent.infographicType as any,
-                          ...(currentEvent.infographicData || {})
+                          data: currentEvent.infographicData
                         }}
                       />
                     </div>
