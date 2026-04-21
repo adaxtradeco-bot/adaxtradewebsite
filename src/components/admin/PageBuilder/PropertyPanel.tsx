@@ -43,6 +43,7 @@ import IntegrationMarqueePropertyPanel from './PropertyPanels/IntegrationMarquee
 import { FormBuilderTemplatesPropertyPanel } from './FormBuilderTemplatesPropertyPanel';
 import { FormBuilderMobileVoicePropertyPanel } from './FormBuilderMobileVoicePropertyPanel';
 import { FlowBuilderPropertyPanel } from './FlowBuilderPropertyPanel';
+import { AutomationEventsPropertyPanel } from './AutomationEventsPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -560,7 +561,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'fusion-teams-tabs', 'feature-video-tabs', 'platform-tabs',
     'hero-slider', 'hero-slider-nwm', 'metro-grid',
     'rotating-tabs', 'analytics-bento-grid', 'logo-cloud', 'integration-marquee',
-    'form-builder-templates', 'form-builder-mobile-voice', 'flow-builder'
+    'form-builder-templates', 'form-builder-mobile-voice', 'flow-builder', 'automation-events'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -637,6 +638,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <FormBuilderMobileVoicePropertyPanel section={section} onUpdate={onUpdate} />;
       case 'flow-builder':
         return <FlowBuilderPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'automation-events':
+        return <AutomationEventsPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
         return (
           <>

@@ -76,7 +76,7 @@ export function InteractiveFeatureWall({
   );
   const [isImageLoading, setIsImageLoading] = useState(false);
 
-  const activeFeatureData = features.find(f => f.key === activeFeature);
+  const activeFeatureData = features.find(f => f.key === activeFeature || f.id === activeFeature);
 
   useEffect(() => {
     if (!activeFeature && features.length > 0) {

@@ -126,6 +126,7 @@ import CompetitiveComparisonSection from '@/components/builder-sections/Competit
 import { IconDisplay } from '@/components/ui/IconPicker';
 import IntegrationMarqueeSection from '@/components/builder-sections/IntegrationMarqueeSection';
 import FlowBuilderSection from '@/components/builder-sections/FlowBuilderSection';
+import AutomationEventsSection from '@/components/builder-sections/AutomationEventsSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -944,6 +945,13 @@ export function SectionRenderer({
         case 'flow-builder':
           return (
             <FlowBuilderSection
+              data={(section as any).data}
+              style={(section as any).style}
+            />
+          );
+        case 'automation-events':
+          return (
+            <AutomationEventsSection
               data={(section as any).data}
               style={(section as any).style}
             />

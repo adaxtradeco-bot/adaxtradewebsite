@@ -141,6 +141,7 @@ export const BaseSectionSchema = z.object({
     'integration-marquee',
     'wall-of-fields',
     'flow-builder',
+    'automation-events',
   ]),
   order: z.number(),
   data: z.record(z.string(), z.any()),

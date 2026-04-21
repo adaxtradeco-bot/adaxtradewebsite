@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automation & Events — IVA Flow Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #08090D;
+  --surface: #0F1018;
+  --surface2: #151720;
+  --line: rgba(255,255,255,0.07);
+  --line2: rgba(255,255,255,0.12);
+  --blue: #4F7FFF;
+  --purple: #7B5CFF;
+  --green: #00D084;
+  --amber: #FFB340;
+  --pink: #FF3B6B;
+  --white: #FFFFFF;
+  --muted: rgba(255,255,255,0.38);
+  --mid: rgba(255,255,255,0.65);
+  --syne: 'Syne', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --body: 'Figtree', sans-serif;
+}
+
+body {
+  font-family: var(--body);
+  background: var(--bg);
+  color: var(--white);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── LAYOUT ── */
+.sec {
+  padding: 100px 0 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Noise grain overlay */
+.sec::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HEADER ── */
+.header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 72px;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.eyebrow::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--purple);
+}
+
+.main-title {
+  font-family: var(--syne);
+  font-size: clamp(42px, 5vw, 68px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: var(--white);
+}
+.main-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-right {
+  max-width: 320px;
+  flex-shrink: 0;
+}
+.header-lead {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+.header-stat {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  border-top: 1px solid var(--line2);
+  padding-top: 16px;
+  display: flex;
+  gap: 24px;
+}
+.stat-item strong {
+  display: block;
+  font-family: var(--syne);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+
+/* ── MAIN GRID: LEFT LIST + RIGHT PANEL ── */
+.main-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2px;
+  background: var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Left: event selector list */
+.event-list {
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+}
+
+.event-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 24px;
+  cursor: pointer;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+  transition: background 0.2s;
+  user-select: none;
+}
+.event-item:last-child { border-bottom: none; }
+.event-item:hover { background: rgba(255,255,255,0.03); }
+.event-item.active { background: var(--surface2); }
+
+.event-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+}
+.ev0.active::before { background: var(--blue); }
+.ev1.active::before { background: var(--purple); }
+.ev2.active::before { background: var(--green); }
+.ev3.active::before { background: var(--amber); }
+.ev4.active::before { background: var(--pink); }
+
+.ev-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.event-item.active .ev-icon { transform: scale(1.08); }
+.ev-icon-0 { background: rgba(79,127,255,0.15); }
+.ev-icon-1 { background: rgba(123,92,255,0.15); }
+.ev-icon-2 { background: rgba(0,208,132,0.12); }
+.ev-icon-3 { background: rgba(255,179,64,0.12); }
+.ev-icon-4 { background: rgba(255,59,107,0.12); }
+
+.ev-meta { flex: 1; min-width: 0; }
+.ev-name {
+  font-family: var(--syne);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.5);
+  transition: color 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event-item.active .ev-name { color: var(--white); }
+.ev-sub {
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.28);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Active indicator — timer arc */
+.ev-arc {
+  width: 24px; height: 24px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.event-item.active .ev-arc { opacity: 1; }
+.ev-arc svg { display: block; }
+.arc-track { stroke: rgba(255,255,255,0.1); fill: none; stroke-width: 2; }
+.arc-fill {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  transition: stroke-dashoffset linear;
+}
+
+/* Right: content panel */
+.content-panel {
+  background: var(--surface2);
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+/* Ambient glow per panel */
+.panel-glow {
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  pointer-events: none;
+  top: -100px; right: -100px;
+  opacity: 0;
+  transition: opacity 0.5s;
+  filter: blur(80px);
+}
+.panel-glow.visible { opacity: 0.12; }
+.glow-0 { background: var(--blue); }
+.glow-1 { background: var(--purple); }
+.glow-2 { background: var(--green); }
+.glow-3 { background: var(--amber); }
+.glow-4 { background: var(--pink); }
+
+.panel-content {
+  position: absolute;
+  inset: 0;
+  padding: 44px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  opacity: 0;
+  transform: translateX(16px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+.panel-content.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+  position: relative;
+}
+
+.panel-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+}
+.tag-0 { background: rgba(79,127,255,0.15); color: #7AABFF; }
+.tag-1 { background: rgba(123,92,255,0.15); color: #A58EFF; }
+.tag-2 { background: rgba(0,208,132,0.15); color: #00D084; }
+.tag-3 { background: rgba(255,179,64,0.15); color: #FFB340; }
+.tag-4 { background: rgba(255,59,107,0.15); color: #FF6B8A; }
+
+.panel-title {
+  font-family: var(--syne);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--white);
+  max-width: 480px;
+}
+
+.panel-desc {
+  font-size: 14.5px;
+  line-height: 1.72;
+  color: var(--muted);
+  max-width: 520px;
+}
+
+/* Flow visualization — the key creative element */
+.flow-viz {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 4px;
+}
+
+.flow-node {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  position: relative;
+}
+
+.node-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32px;
+  flex-shrink: 0;
+}
+.node-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+  background: var(--surface2);
+  flex-shrink: 0;
+  margin-top: 14px;
+  position: relative;
+  z-index: 1;
+}
+.node-line {
+  flex: 1;
+  width: 1px;
+  background: var(--line2);
+  margin-top: 2px;
+  margin-bottom: -2px;
+}
+.flow-node:last-child .node-line { display: none; }
+
+.node-dot-0 { border-color: var(--blue); }
+.node-dot-1 { border-color: var(--purple); }
+.node-dot-2 { border-color: var(--green); }
+.node-dot-3 { border-color: var(--amber); }
+.node-dot-4 { border-color: var(--pink); }
+
+.node-body {
+  flex: 1;
+  padding: 10px 16px 18px;
+}
+.node-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.nl-0 { color: rgba(79,127,255,0.7); }
+.nl-1 { color: rgba(123,92,255,0.7); }
+.nl-2 { color: rgba(0,208,132,0.7); }
+.nl-3 { color: rgba(255,179,64,0.7); }
+.nl-4 { color: rgba(255,59,107,0.7); }
+
+.node-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.5;
+}
+.node-text strong { color: var(--white); font-weight: 600; }
+
+/* Example callout — bottom of panel */
+.example-strip {
+  margin-top: auto;
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  border: 1px solid var(--line2);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.ex-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ex-text {
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.5);
+  line-height: 1.6;
+}
+.ex-text strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+
+/* ── BOTTOM ROW ── */
+.bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 32px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.nav-pills {
+  display: flex;
+  gap: 6px;
+}
+.nav-pill {
+  height: 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: width 0.3s, background 0.3s;
+  background: rgba(255,255,255,0.15);
+  width: 24px;
+}
+.nav-pill.active {
+  background: var(--purple);
+  width: 40px;
+}
+
+.bottom-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.ctrl-btn {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line2);
+  background: rgba(255,255,255,0.04);
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  font-family: var(--syne);
+}
+.ctrl-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--white);
+  border-color: var(--line2);
+}
+
+.count-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  min-width: 36px;
+  text-align: center;
+}
+
+.cta-link {
+  font-family: var(--syne);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--purple);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap 0.2s, color 0.2s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+}
+.cta-link:hover { gap: 12px; color: #A58EFF; }
+
+/* Ambient background orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(100px);
+  opacity: 0.06;
+}
+.orb1 { width: 600px; height: 600px; background: var(--purple); top: -200px; right: -200px; }
+.orb2 { width: 400px; height: 400px; background: var(--blue); bottom: -150px; left: -100px; }
+
+/* Responsive */
+@media (max-width: 860px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .event-list { flex-direction: row; overflow-x: auto; border-bottom: 1px solid var(--line); }
+  .event-item { border-bottom: none; border-right: 1px solid var(--line); flex-shrink: 0; padding: 16px 20px; }
+  .event-item.active::before { left: 0; top: auto; bottom: 0; right: 0; width: auto; height: 2px; }
+  .header-row { flex-direction: column; align-items: flex-start; }
+  .wrap { padding: 0 20px; }
+  .panel-content { padding: 32px 24px; }
+  .panel-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<section class="sec">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="wrap">
+
+    <!-- Header -->
+    <div class="header-row">
+      <div>
+        <div class="eyebrow">Events, Actions & Automation</div>
+        <h1 class="main-title">Define what the<br>process does <em>automatically.</em></h1>
+      </div>
+      <div class="header-right">
+        <p class="header-lead">Every significant runtime event can trigger one or more actions — stage entry, exit, condition match, timeout, inbound communication, or escalation threshold. No custom code.</p>
+        <div class="header-stat">
+          <div class="stat-item"><strong>6+</strong>action types</div>
+          <div class="stat-item"><strong>0</strong>lines of code</div>
+          <div class="stat-item"><strong>∞</strong>trigger depth</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main interactive grid -->
+    <div class="main-grid">
+
+      <!-- Left: event selector -->
+      <div class="event-list" role="tablist">
+
+        <div class="event-item ev0 active" onclick="selectEvent(0)" role="tab" aria-selected="true" tabindex="0">
+          <div class="ev-icon ev-icon-0">📣</div>
+          <div class="ev-meta">
+            <div class="ev-name">Notifications</div>
+            <div class="ev-sub">Email · SMS · Fax · Internal</div>
+          </div>
+          <svg class="ev-arc" viewBox="0 0 24 24">
+            <circle class="arc-track" cx="12" cy="12" r="9"/>
+            <circle class="arc-fill" id="arc0" cx="12" cy="12" r="9" stroke="#4F7FFF"
+              stroke-dasharray="56.5" stroke-dashoffset="56.5"/>
+          </svg>
+        </div>
+
+        <div class="event-item ev1" onclick="selectEvent(1)" role="tab" tabindex="0">
+          <div class="ev-icon ev-icon-1">🔗</div>
+          <div class="ev-meta">
+            <div class="ev-name">Process Chaining</div>
+            <div class="ev-sub">Parent → child workflows</div>
+          </div>
+          <svg class="ev-arc" viewBox="0 0 24 24">
+            <circle class="arc-track" cx="12" cy="12" r="9"/>
+            <circle class="arc-fill" id="arc1" cx="12" cy="12" r="9" stroke="#7B5CFF"
+              stroke-dasharray="56.5" stroke-dashoffset="56.5"/>
+          </svg>
+        </div>
+
+        <div class="event-item ev2" onclick="selectEvent(2)" role="tab" tabindex="0">
+          <div class="ev-icon ev-icon-2">⏱</div>
+          <div class="ev-meta">
+            <div class="ev-name">Scheduled Tasks</div>
+            <div class="ev-sub">Daily · Weekly · Monthly</div>
+          </div>
+          <svg class="ev-arc" viewBox="0 0 24 24">
+            <circle class="arc-track" cx="12" cy="12" r="9"/>
+            <circle class="arc-fill" id="arc2" cx="12" cy="12" r="9" stroke="#00D084"
+              stroke-dasharray="56.5" stroke-dashoffset="56.5"/>
+          </svg>
+        </div>
+
+        <div class="event-item ev3" onclick="selectEvent(3)" role="tab" tabindex="0">
+          <div class="ev-icon ev-icon-3">🔌</div>
+          <div class="ev-meta">
+            <div class="ev-name">API & Webhooks</div>
+            <div class="ev-sub">Push · Pull · Bi-directional</div>
+          </div>
+          <svg class="ev-arc" viewBox="0 0 24 24">
+            <circle class="arc-track" cx="12" cy="12" r="9"/>
+            <circle class="arc-fill" id="arc3" cx="12" cy="12" r="9" stroke="#FFB340"
+              stroke-dasharray="56.5" stroke-dashoffset="56.5"/>
+          </svg>
+        </div>
+
+        <div class="event-item ev4" onclick="selectEvent(4)" role="tab" tabindex="0">
+          <div class="ev-icon ev-icon-4">⚡</div>
+          <div class="ev-meta">
+            <div class="ev-name">SLA & Escalation</div>
+            <div class="ev-sub">Multi-level · Auto-escalate</div>
+          </div>
+          <svg class="ev-arc" viewBox="0 0 24 24">
+            <circle class="arc-track" cx="12" cy="12" r="9"/>
+            <circle class="arc-fill" id="arc4" cx="12" cy="12" r="9" stroke="#FF3B6B"
+              stroke-dasharray="56.5" stroke-dashoffset="56.5"/>
+          </svg>
+        </div>
+
+      </div>
+
+      <!-- Right: content panels -->
+      <div class="content-panel">
+        <div class="panel-glow glow-0 visible" id="glow0"></div>
+        <div class="panel-glow glow-1" id="glow1"></div>
+        <div class="panel-glow glow-2" id="glow2"></div>
+        <div class="panel-glow glow-3" id="glow3"></div>
+        <div class="panel-glow glow-4" id="glow4"></div>
+
+        <!-- Panel 0: Notifications -->
+        <div class="panel-content active" id="panel0">
+          <span class="panel-tag tag-0">Notification Actions</span>
+          <h2 class="panel-title">Notify the right people at the right moment</h2>
+          <p class="panel-desc">Send email, SMS, fax, or internal notifications when a stage is entered, approved, rejected, completed, or overdue. Use template variables to personalize messages with live form data.</p>
+          <div class="flow-viz">
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-0"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-0">Trigger</div><div class="node-text">Stage is <strong>entered, approved, rejected,</strong> or <strong>overdue</strong></div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-0"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-0">Channel</div><div class="node-text"><strong>Email</strong> · <strong>SMS</strong> · <strong>Fax</strong> · Internal notification</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-0"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-0">Content</div><div class="node-text">Template with live <strong>form field variables</strong> — name, amount, status, reason</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-0"></div></div>
+              <div class="node-body"><div class="node-label nl-0">Recipients</div><div class="node-text">Submitter · Assignee · Manager · Any role or specific user</div></div>
+            </div>
+          </div>
+          <div class="example-strip">
+            <span class="ex-label">eg.</span>
+            <p class="ex-text">Leave request rejected → submitter receives <strong>SMS with rejection reason</strong> within 30 seconds. No manual follow-up. No forgotten notification.</p>
+          </div>
+        </div>
+
+        <!-- Panel 1: Process Chaining -->
+        <div class="panel-content" id="panel1">
+          <span class="panel-tag tag-1">Process Chaining</span>
+          <h2 class="panel-title">One workflow completion can start another automatically</h2>
+          <p class="panel-desc">When a stage completes or a final outcome is reached, trigger a downstream process and pass form data between parent and child. Clean separation of business domains.</p>
+          <div class="flow-viz">
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-1"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-1">Trigger point</div><div class="node-text">Stage completion or <strong>final stage</strong> reached in parent process</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-1"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-1">Data mapping</div><div class="node-text">Form fields from parent <strong>mapped to child process input</strong> — no re-entry</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-1"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-1">Child instance</div><div class="node-text">Independent tracked instance created — <strong>linked to parent for audit</strong></div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-1"></div></div>
+              <div class="node-body"><div class="node-label nl-1">Chain depth</div><div class="node-text">Multi-level chains supported — <strong>A → B → C</strong> → unlimited depth</div></div>
+            </div>
+          </div>
+          <div class="example-strip">
+            <span class="ex-label">eg.</span>
+            <p class="ex-text">Sales process closes → <strong>onboarding starts</strong> → on completion, <strong>billing setup starts.</strong> Three separate processes. Zero manual handoffs.</p>
+          </div>
+        </div>
+
+        <!-- Panel 2: Scheduled -->
+        <div class="panel-content" id="panel2">
+          <span class="panel-tag tag-2">Scheduled Automation</span>
+          <h2 class="panel-title">Processes that start themselves — on a schedule</h2>
+          <p class="panel-desc">Create recurring workflows for weekly reviews, monthly compliance checks, or routine reminders. Managed entirely inside the platform — no cron jobs, no external scripts, no developer.</p>
+          <div class="flow-viz">
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-2"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-2">Frequency</div><div class="node-text"><strong>Daily · Weekly · Monthly</strong> · Custom interval · Calendar-aware</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-2"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-2">Calendar logic</div><div class="node-text">Skip <strong>weekends and public holidays</strong> — count only working days</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-2"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-2">Auto-assignment</div><div class="node-text">Tasks assigned to roles automatically <strong>at start time</strong></div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-2"></div></div>
+              <div class="node-body"><div class="node-label nl-2">No dev required</div><div class="node-text">Schedule configured visually inside the platform — <strong>no external scheduler</strong></div></div>
+            </div>
+          </div>
+          <div class="example-strip">
+            <span class="ex-label">eg.</span>
+            <p class="ex-text">Every <strong>Monday at 8am</strong>, a weekly team checklist starts. Tasks assigned to each lead. Uncompleted items <strong>escalate to manager by Wednesday noon.</strong></p>
+          </div>
+        </div>
+
+        <!-- Panel 3: API & Webhooks -->
+        <div class="panel-content" id="panel3">
+          <span class="panel-tag tag-3">External System Actions</span>
+          <h2 class="panel-title">Push and pull data across any connected system</h2>
+          <p class="panel-desc">Fire REST calls or webhooks on stage events, send filtered payloads, and write API responses back into workflow fields. True bi-directional orchestration — not one-way export.</p>
+          <div class="flow-viz">
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-3"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-3">Method</div><div class="node-text"><strong>REST POST · GET · PUT · PATCH</strong> to any HTTPS endpoint</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-3"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-3">Payload</div><div class="node-text">Send <strong>filtered fields</strong> — not the full document — to external systems</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-3"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-3">Response mapping</div><div class="node-text">Write <strong>API response values back</strong> into workflow form fields</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-3"></div></div>
+              <div class="node-body"><div class="node-label nl-3">Auth & retry</div><div class="node-text">Bearer · API key · Basic auth — <strong>configurable retry policy</strong> on failure</div></div>
+            </div>
+          </div>
+          <div class="example-strip">
+            <span class="ex-label">eg.</span>
+            <p class="ex-text">IT request approved → <strong>API provisions AD account</strong> → response confirms provisioning → form field "Account Status" <strong>auto-updates to Active.</strong></p>
+          </div>
+        </div>
+
+        <!-- Panel 4: SLA & Escalation -->
+        <div class="panel-content" id="panel4">
+          <span class="panel-tag tag-4">SLA & Escalation Engine</span>
+          <h2 class="panel-title">Missed deadlines escalate automatically</h2>
+          <p class="panel-desc">Define SLA timers on any stage and configure multi-level escalation chains. The engine reassigns, notifies managers, increases priority, or logs compliance events — without manual intervention.</p>
+          <div class="flow-viz">
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-4"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-4">Level 0 — Reminder</div><div class="node-text">Notify current assignee <strong>before deadline</strong> — configurable threshold</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-4"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-4">Level 1 — Reassign</div><div class="node-text">Move task to <strong>backup assignee</strong> or team lead automatically</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-4"></div><div class="node-line"></div></div>
+              <div class="node-body"><div class="node-label nl-4">Level 2 — Escalate</div><div class="node-text">Notify manager + <strong>change task priority</strong> to critical</div></div>
+            </div>
+            <div class="flow-node">
+              <div class="node-left"><div class="node-dot node-dot-4"></div></div>
+              <div class="node-body"><div class="node-label nl-4">Level 3 — Compliance</div><div class="node-text">Log <strong>SLA breach for audit</strong> + trigger corrective workflow automatically</div></div>
+            </div>
+          </div>
+          <div class="example-strip">
+            <span class="ex-label">eg.</span>
+            <p class="ex-text">IT ticket: reminder at <strong>4h</strong> → escalate to lead at <strong>8h</strong> → reach manager at <strong>24h</strong> → SLA breach logged for compliance report.</p>
+          </div>
+        </div>
+
+      </div><!-- /content-panel -->
+    </div><!-- /main-grid -->
+
+    <!-- Bottom controls -->
+    <div class="bottom-row">
+      <div class="nav-pills" id="navPills">
+        <div class="nav-pill active" onclick="selectEvent(0)"></div>
+        <div class="nav-pill" onclick="selectEvent(1)"></div>
+        <div class="nav-pill" onclick="selectEvent(2)"></div>
+        <div class="nav-pill" onclick="selectEvent(3)"></div>
+        <div class="nav-pill" onclick="selectEvent(4)"></div>
+      </div>
+      <div class="bottom-controls">
+        <button class="ctrl-btn" onclick="prevEvent()" aria-label="Previous">←</button>
+        <span class="count-label" id="countLabel">01 / 05</span>
+        <button class="ctrl-btn" onclick="nextEvent()" aria-label="Next">→</button>
+      </div>
+      <button class="cta-link">See automation in action →</button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+const DURATION = 5000;
+const CIRC = 56.5;
+let current = 0;
+let paused = false;
+let rafId = null;
+let startTs = null;
+
+const panels = document.querySelectorAll('.panel-content');
+const items = document.querySelectorAll('.event-item');
+const glows = document.querySelectorAll('.panel-glow');
+const pills = document.querySelectorAll('.nav-pill');
+const arcs = [0,1,2,3,4].map(i => document.getElementById('arc'+i));
+const countLabel = document.getElementById('countLabel');
+
+function pad(n) { return String(n+1).padStart(2,'0'); }
+
+function activate(idx) {
+  items.forEach((el,i) => el.classList.toggle('active', i===idx));
+  panels.forEach((el,i) => el.classList.toggle('active', i===idx));
+  glows.forEach((el,i) => el.classList.toggle('visible', i===idx));
+  pills.forEach((el,i) => el.classList.toggle('active', i===idx));
+  arcs.forEach((a,i) => { if(a){ a.style.transition='none'; a.style.strokeDashoffset=CIRC; }});
+  countLabel.textContent = pad(idx) + ' / 05';
+  current = idx;
+}
+
+function startArc(idx) {
+  const a = arcs[idx];
+  if (!a) return;
+  cancelAnimationFrame(rafId);
+  startTs = null;
+  function tick(ts) {
+    if (!startTs) startTs = ts;
+    if (paused) { rafId = requestAnimationFrame(tick); return; }
+    const elapsed = ts - startTs;
+    const progress = Math.min(elapsed / DURATION, 1);
+    const offset = CIRC * (1 - progress);
+    a.style.transition = 'none';
+    a.style.strokeDashoffset = offset;
+    if (progress >= 1) { nextEvent(); return; }
+    rafId = requestAnimationFrame(tick);
+  }
+  rafId = requestAnimationFrame(tick);
+}
+
+function selectEvent(idx) {
+  activate(idx);
+  startArc(idx);
+}
+
+function nextEvent() { selectEvent((current + 1) % 5); }
+function prevEvent() { selectEvent((current + 4) % 5); }
+
+// Pause on hover
+const grid = document.querySelector('.main-grid');
+grid.addEventListener('mouseenter', () => { paused = true; });
+grid.addEventListener('mouseleave', () => { paused = false; });
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nextEvent();
+  if (e.key === 'ArrowLeft') prevEvent();
+});
+
+// Item keyboard
+items.forEach((el, i) => {
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectEvent(i); }
+  });
+});
+
+selectEvent(0);
+</script>
+</body>
+</html>
