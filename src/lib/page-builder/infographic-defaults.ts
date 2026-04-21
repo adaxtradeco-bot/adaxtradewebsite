@@ -138,6 +138,15 @@ export const INFOGRAPHIC_DEFAULT_DATA: Record<string, any> = {
     root: 'CEO',
     children: ['Operations', 'Finance', 'Engineering', 'Sales'],
   },
+  'event-flow': {
+    color: '#4F7FFF',
+    steps: [
+      { id: '1', label: 'TRIGGER', text: 'Stage is <strong>entered, approved, rejected,</strong> or <strong>overdue</strong>' },
+      { id: '2', label: 'ACTION', text: '<strong>Email</strong> · <strong>SMS</strong> · <strong>Fax</strong> · Internal notification' },
+      { id: '3', label: 'CONTENT', text: 'Template with live <strong>form field variables</strong> — name, amount, status' },
+      { id: '4', label: 'RECIPIENTS', text: 'Submitter · Assignee · Manager · Any role or specific user' },
+    ],
+  },
 };
 
 /**
@@ -170,4 +179,5 @@ export const INFOGRAPHIC_TYPE_OPTIONS = [
   { value: 'sla', label: 'SLA Bars' },
   { value: 'sla-bars', label: 'SLA Bars (custom color)' },
   { value: 'org', label: 'Org Chart' },
+  { value: 'event-flow', label: 'Event Flow (Timeline with dots)' },
 ];

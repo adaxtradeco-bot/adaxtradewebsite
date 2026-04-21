@@ -42,8 +42,8 @@ export function AutomationEventsPropertyPanel({ section, onUpdate }: AutomationE
       tag: 'Event Type',
       title: 'Event Title',
       description: 'Event description text',
-      flowType: 'timeline',
-      flowSteps: [],
+      infographicType: 'workflow',
+      infographicData: INFOGRAPHIC_DEFAULT_DATA['workflow'],
       exampleLabel: 'eg.',
       exampleText: 'Example scenario text'
     };
@@ -67,38 +67,22 @@ export function AutomationEventsPropertyPanel({ section, onUpdate }: AutomationE
   };
 
   const addStep = (eventId: string) => {
-    const event = data.events.find((e: AutomationEvent) => e.id === eventId);
-    if (!event) return;
-
-    const newStep: FlowStep = {
-      id: `step-${Date.now()}`,
-      label: 'Step Label',
-      text: 'Step description with <strong>bold text</strong>'
-    };
-
-    updateEvent(eventId, { flowSteps: [...event.flowSteps, newStep] });
+    // Not used anymore - kept for backward compatibility
   };
 
   const updateStep = (eventId: string, stepId: string, updates: Partial<FlowStep>) => {
-    const event = data.events.find((e: AutomationEvent) => e.id === eventId);
-    if (!event) return;
-
-    const flowSteps = event.flowSteps.map((s: FlowStep) => s.id === stepId ? { ...s, ...updates } : s);
-    updateEvent(eventId, { flowSteps });
+    // Not used anymore - kept for backward compatibility
   };
 
   const removeStep = (eventId: string, stepId: string) => {
-    const event = data.events.find((e: AutomationEvent) => e.id === eventId);
-    if (!event) return;
-
-    updateEvent(eventId, { flowSteps: event.flowSteps.filter((s: FlowStep) => s.id !== stepId) });
+    // Not used anymore - kept for backward compatibility
   };
 
   const handleInfographicTypeChange = (eventId: string, type: string) => {
-    const defaultData = INFOGRAPHIC_DEFAULT_DATA[type] || {};
+    const defaultData = type ? INFOGRAPHIC_DEFAULT_DATA[type] || {} : {};
     updateEvent(eventId, {
-      flowType: 'infographic',
-      infographic: { type, data: defaultData }
+      infographicType: type,
+      infographicData: defaultData
     });
   };
 
@@ -324,113 +308,22 @@ export function AutomationEventsPropertyPanel({ section, onUpdate }: AutomationE
                     className="w-full px-2 py-1 border rounded text-sm bg-white dark:bg-gray-900"
                   />
 
-                  {/* Flow Type */}
+                  {/* Infographic Type Selector */}
                   <div>
-                    <label className="block text-xs font-medium mb-1">Flow Visualization Type</label>
+                    <label className="block text-xs font-medium mb-1">Visualization Type</label>
                     <select
-                      value={event.flowType}
-                      onChange={(e) => {
-                        const newType = e.target.value as any;
-                        if (newType === 'infographic') {
-                          handleInfographicTypeChange(event.id, 'workflow');
-                        } else {
-                          updateEvent(event.id, { flowType: newType, infographic: undefined });
-                        }
-                      }}
+                      value={event.infographicType || ''}
+                      onChange={(e) => handleInfographicTypeChange(event.id, e.target.value)}
                       className="w-full px-2 py-1 border rounded text-sm bg-white dark:bg-gray-900"
                     >
-                      <option value="timeline">Timeline (Steps)</option>
-                      <option value="workflow">Workflow</option>
-                      <option value="steps">Steps</option>
-                      <option value="infographic">Infographic (Advanced)</option>
+                      {INFOGRAPHIC_TYPE_OPTIONS.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
                     </select>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Select infographic type. Default data will be applied automatically.
+                    </p>
                   </div>
-
-                  {/* Infographic Type Selector */}
-                  {event.flowType === 'infographic' && (
-                    <div>
-                      <label className="block text-xs font-medium mb-1">Infographic Type</label>
-                      <select
-                        value={event.infographic?.type || 'workflow'}
-                        onChange={(e) => handleInfographicTypeChange(event.id, e.target.value)}
-                        className="w-full px-2 py-1 border rounded text-sm bg-white dark:bg-gray-900"
-                      >
-                        {INFOGRAPHIC_TYPE_OPTIONS.map(opt => (
-                          <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                      </select>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Infographic data will use defaults. Customize in JSON mode if needed.
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Flow Steps (only for non-infographic types) */}
-                  {event.flowType !== 'infographic' && (
-                    <div className="border-t pt-2">
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="text-xs font-medium">Flow Steps ({event.flowSteps.length})</label>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            addStep(event.id);
-                          }}
-                          className="px-2 py-0.5 bg-green-600 text-white rounded text-xs hover:bg-green-700"
-                        >
-                          + Step
-                        </button>
-                      </div>
-
-                      <div className="space-y-2">
-                        {event.flowSteps.map((step: FlowStep) => (
-                          <div key={step.id} className="border rounded p-2 bg-white dark:bg-gray-900">
-                            <div className="flex items-center justify-between mb-1">
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setExpandedStep(expandedStep === step.id ? null : step.id);
-                                }}
-                                className="text-xs flex-1 text-left"
-                              >
-                                {expandedStep === step.id ? '▼' : '▶'} {step.label}
-                              </button>
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  removeStep(event.id, step.id);
-                                }}
-                                className="px-1.5 py-0.5 text-xs bg-red-600 text-white rounded"
-                              >
-                                ✕
-                              </button>
-                            </div>
-
-                            {expandedStep === step.id && (
-                              <div className="space-y-2 mt-2">
-                                <input
-                                  type="text"
-                                  value={step.label}
-                                  onChange={(e) => updateStep(event.id, step.id, { label: e.target.value })}
-                                  placeholder="Step Label (e.g., TRIGGER)"
-                                  className="w-full px-2 py-1 border rounded text-xs bg-gray-50 dark:bg-gray-800"
-                                />
-                                <textarea
-                                  value={step.text}
-                                  onChange={(e) => updateStep(event.id, step.id, { text: e.target.value })}
-                                  placeholder="Step text (HTML allowed: <strong>bold</strong>)"
-                                  rows={2}
-                                  className="w-full px-2 py-1 border rounded text-xs bg-gray-50 dark:bg-gray-800"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
 
                   {/* Example */}
                   <div className="border-t pt-2">

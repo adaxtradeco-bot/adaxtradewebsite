@@ -360,6 +360,44 @@ export default function InfographicRenderer({
         </div>
       );
 
+    case 'event-flow':
+      return (
+        <div className={`flex flex-col gap-0 mt-1 ${className}`}>
+          {infographic.data?.steps?.map((step: any, idx: number) => (
+            <div key={step.id || idx} className="flex items-stretch gap-0">
+              {/* Left: dot + line */}
+              <div className="flex flex-col items-center w-8 flex-shrink-0">
+                <div
+                  className="w-2.5 h-2.5 rounded-full border-2 flex-shrink-0 mt-3.5 relative z-10"
+                  style={{
+                    borderColor: infographic.data?.color || '#4F7FFF',
+                    background: 'var(--bg-panel, #151720)'
+                  }}
+                />
+                {idx < (infographic.data?.steps?.length || 0) - 1 && (
+                  <div className="flex-1 w-px bg-white/10 mt-0.5 -mb-0.5" />
+                )}
+              </div>
+
+              {/* Right: content */}
+              <div className="flex-1 py-2.5 px-4 pb-4">
+                <div
+                  className="font-mono text-[10px] uppercase tracking-[0.08em] mb-1"
+                  style={{ color: `${infographic.data?.color || '#4F7FFF'}B3` }}
+                >
+                  {step.label}
+                </div>
+                <div
+                  className="text-[13px] leading-[1.5]"
+                  style={{ color: 'rgba(255,255,255,0.75)' }}
+                  dangerouslySetInnerHTML={{ __html: step.text }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+
     // ==================== ANALYTICS TYPES ====================
     case 'kpi':
       return (

@@ -31,14 +31,16 @@ export interface AutomationEvent {
   tag: string;
   title: string;
   description: string;
-  flowType: 'timeline' | 'workflow' | 'steps' | 'infographic';
-  flowSteps: FlowStep[];
-  infographic?: {
-    type: string;
-    data: any;
-  };
+  infographicType: string; // Type from INFOGRAPHIC_TYPE_OPTIONS
+  infographicData?: any; // Data matching the selected type
   exampleLabel?: string;
   exampleText?: string;
+}
+
+export interface FlowStep {
+  id: string;
+  label: string;
+  text: string;
 }
 
 export interface FlowStep {
@@ -351,46 +353,19 @@ export default function AutomationEventsSection({ data, style }: AutomationEvent
                     {currentEvent.description}
                   </p>
 
-                  {/* Flow Visualization */}
-                  {currentEvent.flowType === 'infographic' && currentEvent.infographic ? (
+                  {/* Flow Visualization using InfographicRenderer */}
+                  {currentEvent.infographicType && currentEvent.infographicType !== '' ? (
                     <div className="mt-2">
                       <InfographicRenderer
                         infographic={{
-                          type: currentEvent.infographic.type as any,
-                          ...currentEvent.infographic.data
+                          type: currentEvent.infographicType as any,
+                          ...(currentEvent.infographicData || {})
                         }}
                       />
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-0 mt-1">
-                      {currentEvent.flowSteps.map((step, idx) => (
-                        <div key={step.id} className="flex items-stretch gap-0">
-                          {/* Left: dot + line */}
-                          <div className="flex flex-col items-center w-8 flex-shrink-0">
-                            <div
-                              className="w-2.5 h-2.5 rounded-full border-2 bg-[#151720] flex-shrink-0 mt-3.5 relative z-10"
-                              style={{ borderColor: currentEvent.color }}
-                            />
-                            {idx < currentEvent.flowSteps.length - 1 && (
-                              <div className="flex-1 w-px bg-white/10 mt-0.5 -mb-0.5" />
-                            )}
-                          </div>
-
-                          {/* Right: content */}
-                          <div className="flex-1 py-2.5 px-4 pb-4">
-                            <div
-                              className="font-mono text-[10px] uppercase tracking-[0.08em] mb-1"
-                              style={{ color: `${currentEvent.color}B3` }}
-                            >
-                              {step.label}
-                            </div>
-                            <div
-                              className="text-[13px] text-white/75 leading-[1.5]"
-                              dangerouslySetInnerHTML={{ __html: step.text }}
-                            />
-                          </div>
-                        </div>
-                      ))}
+                    <div className="mt-2 p-4 bg-white/[0.04] rounded-xl border border-white/10 text-center text-white/40 text-sm">
+                      No visualization selected
                     </div>
                   )}
 
