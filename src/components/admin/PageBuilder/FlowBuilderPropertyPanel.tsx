@@ -91,21 +91,8 @@ export function FlowBuilderPropertyPanel({ section, onUpdate }: FlowBuilderPrope
 
   return (
     <div className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
-      {/* Theme */}
-      <div>
-        <label className="block text-sm font-medium mb-2">Theme</label>
-        <select
-          value={data.theme}
-          onChange={(e) => updateData({ theme: e.target.value as 'light' | 'dark' })}
-          className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800"
-        >
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-      </div>
-
       {/* Eyebrow */}
-      <div className="border-t pt-4">
+      <div>
         <label className="block text-sm font-medium mb-2">Eyebrow Badge</label>
         <input
           type="text"

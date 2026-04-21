@@ -560,7 +560,6 @@ export const HERO_TABS_FEATURE_WALLS_TEMPLATES: SectionTemplate[] = [
       type: 'flow-builder',
       order: 0,
       data: {
-        theme: 'light',
         eyebrow: {
           icon: '●',
           text: 'Visual Process Designer',
