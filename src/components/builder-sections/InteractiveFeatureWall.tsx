@@ -57,6 +57,8 @@ export interface InteractiveFeatureWallProps {
   previewAspectRatio?: 'square' | 'video' | 'wide';
   showDescriptions?: boolean;
   theme?: 'light' | 'dark' | 'gradient';
+  autoRotate?: boolean;
+  rotationInterval?: number;
   className?: string;
 }
 
@@ -69,12 +71,15 @@ export function InteractiveFeatureWall({
   previewAspectRatio = 'video',
   showDescriptions = false,
   theme = 'light',
+  autoRotate = false,
+  rotationInterval = 5000,
   className = '',
 }: InteractiveFeatureWallProps) {
   const [activeFeature, setActiveFeature] = useState<string>(
     defaultActiveFeature || features[0]?.key || ''
   );
   const [isImageLoading, setIsImageLoading] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   const activeFeatureData = features.find(f => f.key === activeFeature || f.id === activeFeature);
 
@@ -84,10 +89,30 @@ export function InteractiveFeatureWall({
     }
   }, [features, activeFeature]);
 
+  // Auto-rotation effect
+  useEffect(() => {
+    if (!autoRotate || isPaused || features.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setActiveFeature(current => {
+        const currentIndex = features.findIndex(f => f.key === current || f.id === current);
+        const nextIndex = (currentIndex + 1) % features.length;
+        return features[nextIndex].key;
+      });
+    }, rotationInterval);
+
+    return () => clearInterval(interval);
+  }, [autoRotate, isPaused, features, rotationInterval]);
+
   const handleFeatureClick = (featureKey: string) => {
     if (featureKey !== activeFeature) {
       setIsImageLoading(true);
       setActiveFeature(featureKey);
+      setIsPaused(true);
+      // Resume auto-rotation after 10 seconds of manual interaction
+      if (autoRotate) {
+        setTimeout(() => setIsPaused(false), 10000);
+      }
     }
   };
 
@@ -219,7 +244,11 @@ export function InteractiveFeatureWall({
           </div>
 
           {/* Preview Area */}
-          <div className="order-1 lg:order-2">
+          <div 
+            className="order-1 lg:order-2"
+            onMouseEnter={() => autoRotate && setIsPaused(true)}
+            onMouseLeave={() => autoRotate && setIsPaused(false)}
+          >
             <div className={`
               ${getPreviewAspect()} rounded-xl border-2 overflow-hidden relative
               ${themeClasses.preview}

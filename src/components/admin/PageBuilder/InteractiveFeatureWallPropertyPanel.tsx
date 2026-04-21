@@ -169,6 +169,38 @@ export function InteractiveFeatureWallPropertyPanel({
               Show Descriptions
             </label>
           </div>
+
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="autoRotate"
+              checked={data.autoRotate || false}
+              onChange={(e) => updateData({ autoRotate: e.target.checked })}
+              className="rounded"
+            />
+            <label htmlFor="autoRotate" className="text-sm font-medium">
+              Auto Rotate Features
+            </label>
+          </div>
+
+          {data.autoRotate && (
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Rotation Interval (seconds)
+              </label>
+              <input
+                type="number"
+                min="2"
+                max="30"
+                value={(data.rotationInterval || 5000) / 1000}
+                onChange={(e) => updateData({ rotationInterval: parseInt(e.target.value) * 1000 })}
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Features will automatically rotate every {(data.rotationInterval || 5000) / 1000} seconds
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -177,7 +209,12 @@ export function InteractiveFeatureWallPropertyPanel({
         <div className="flex items-center justify-between mb-4">
           <h4 className="font-medium">Feature Tiles</h4>
           <button
-            onClick={addFeature}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              addFeature();
+            }}
             className="flex items-center space-x-1 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm"
           >
             <Plus className="w-4 h-4" />
@@ -195,7 +232,12 @@ export function InteractiveFeatureWallPropertyPanel({
                 <span className="font-medium text-sm">Feature {index + 1}</span>
                 <div className="flex items-center space-x-1">
                   <button
-                    onClick={() => moveFeature(index, 'up')}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      moveFeature(index, 'up');
+                    }}
                     disabled={index === 0}
                     className="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-50"
                     title="Move Up"
@@ -203,7 +245,12 @@ export function InteractiveFeatureWallPropertyPanel({
                     ↑
                   </button>
                   <button
-                    onClick={() => moveFeature(index, 'down')}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      moveFeature(index, 'down');
+                    }}
                     disabled={index === features.length - 1}
                     className="p-1 text-gray-500 hover:text-gray-700 disabled:opacity-50"
                     title="Move Down"
@@ -211,7 +258,12 @@ export function InteractiveFeatureWallPropertyPanel({
                     ↓
                   </button>
                   <button
-                    onClick={() => removeFeature(index)}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      removeFeature(index);
+                    }}
                     className="p-1 text-red-500 hover:text-red-700"
                     title="Delete Feature"
                   >
@@ -271,6 +323,12 @@ export function InteractiveFeatureWallPropertyPanel({
                       placeholder="/images/features/feature.png"
                     />
                     <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        // TODO: Open media browser
+                      }}
                       className="px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300 dark:hover:bg-gray-500"
                       title="Upload Image"
                     >
