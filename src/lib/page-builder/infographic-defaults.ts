@@ -109,15 +109,7 @@ export const INFOGRAPHIC_DEFAULT_DATA: Record<string, any> = {
     maxHeight: null,
     objectFit: 'cover'
   },
-  workflow: {
-    title: 'Automated Workflow',
-    steps: [
-      { num: '1', label: 'Trigger Event', badge: 'Auto', type: 'auto' },
-      { num: '2', label: 'AI Classification', badge: 'AI', type: 'ai' },
-      { num: '3', label: 'Route Decision', badge: 'Conditional', type: 'conditional' },
-      { num: '4', label: 'Notify Team', badge: 'Action', type: 'action' },
-    ],
-  },
+
   sla: {
     title: 'SLA Compliance',
     bars: [
