@@ -1,0 +1,386 @@
+{
+  "pageTitle": "App Builder - Custom Workspace Builder",
+  "pageSlug": "app-builder",
+  "builderData": [
+    {
+      "id": "app-builder-hero-1",
+      "type": "product-hero",
+      "order": 1,
+      "data": {
+        "type": "product-hero",
+        "theme": "gradient",
+        "headline": "App Builder: Where Your IVAFlow Modules Become a Workspace",
+        "subtext": "You've built your forms, defined your workflows, connected your data. App Builder is where all of it becomes an interface — for your internal teams, your partners, or your customers. Role-aware, permission-scoped, and ready to deploy without a single line of frontend code.",
+        "primaryCTA": {
+          "text": "Explore the Builder",
+          "href": "#demo",
+          "variant": "primary"
+        },
+        "secondaryCTA": {
+          "text": "Book a Demo",
+          "href": "#contact",
+          "variant": "secondary"
+        },
+        "badges": [
+          "Connected to All IVAFlow Modules",
+          "No-Code Canvas",
+          "Multi-Workspace Architecture",
+          "SOC 2 / GDPR"
+        ],
+        "mediaType": "none"
+      },
+      "style": {
+        "backgroundColor": "bg-gradient-to-br from-blue-50 to-indigo-100",
+        "textColor": "text-slate-900",
+        "padding": "py-20 lg:py-32"
+      }
+    },
+    {
+      "id": "platform-position-1",
+      "type": "ContentSection",
+      "order": 2,
+      "data": {
+        "type": "ContentSection",
+        "content": "Most app builder tools ask you to start from scratch. App Builder works differently — it reads what's already in your IVAFlow environment and gives you a canvas to compose it into a workspace.\n\nThe forms you've structured in Form Builder, the processes you've mapped in Workflow Builder, the dashboards you've configured in Reports & Analytics, the agents you've deployed in AI Agent — all of it is available as embeddable components. You decide which role sees which piece of it, and how it's organized into pages.\n\nThe result isn't a prototype. It's a governed, production-ready workspace that inherits every permission, validation rule, and integration you've already configured."
+      },
+      "style": {
+        "backgroundColor": "bg-white",
+        "textColor": "text-slate-700",
+        "padding": "py-16",
+        "alignment": "center"
+      }
+    },
+    {
+      "id": "module-integration-1",
+      "type": "feature-cards",
+      "order": 3,
+      "data": {
+        "type": "feature-cards",
+        "headline": "Built on Every Module in Your IVAFlow Environment",
+        "subtext": "Nothing in App Builder is rebuilt from scratch. Each workspace draws live from the modules you've already configured — with no duplication, no re-mapping, and no separate maintenance cycle.",
+        "cards": [
+          {
+            "title": "Form Builder",
+            "headline": "Structured Data Collection, Embedded Directly",
+            "description": "Forms built in IVAFlow's Form Builder carry everything with them when embedded in a workspace: conditional logic, field-level validation, multi-step layouts, file upload handlers, and submission routing.\n\nA form assigned to the \"Vendor Intake\" workspace shows only the fields relevant to external users. The same form in your internal procurement workspace shows additional admin fields — because role visibility is inherited, not reconfigured.\n\n30+ field types, offline capability, voice form support, and pre-built templates across HR, Finance, IT, and Operations are all available to place on any workspace page.",
+            "link": "https://www.ivaflow.com/en/form-builder",
+            "icon": "form"
+          },
+          {
+            "title": "Workflow Builder",
+            "headline": "Process Steps That Users Can Act On",
+            "description": "Approval chains, SLA-triggered escalations, conditional branching, and multi-step task flows designed in Workflow Builder appear in workspace pages as interactive process panels.\n\nUsers don't need to know they're inside a workflow engine — they see a task queue, an approval button, or a status tracker. The underlying process logic stays in the builder where it belongs.\n\nWhen a form submission triggers a workflow, the submitter's workspace updates to reflect current status automatically. Assignees in a separate internal workspace see the task appear in their queue in real time.",
+            "link": "https://www.ivaflow.com/en/workflow-builder",
+            "icon": "workflow"
+          },
+          {
+            "title": "Reports & Analytics",
+            "headline": "Dashboards That Reflect Each Role's Data Scope",
+            "description": "Chart widgets, KPI panels, pivot tables, and live data views built in IVAFlow's Reports & Analytics module are placeable components in any workspace page.\n\nA department head's workspace shows cross-team performance data. A field user's workspace shows only their own submissions and pending tasks. Both pull from the same underlying data layer — filtered by role context at render time.\n\nScheduled report delivery and export to XLS, CSV, and PDF continue to function from within the workspace. Users don't need to navigate to a separate analytics tool.",
+            "link": "https://www.ivaflow.com/en/IVAFlow-Report-And-Analytics",
+            "icon": "analytics"
+          },
+          {
+            "title": "AI Agent",
+            "headline": "Automated Processing, Embedded Where It's Needed",
+            "description": "AI agents deployed in IVAFlow can surface inside workspace pages as embedded assistants, background processors, or trigger-based actions.\n\nAn agent can review a submitted form and flag incomplete sections before submission is finalized. Another can read a completed intake form and populate downstream workflow fields automatically. A third can monitor a dashboard metric and initiate an escalation workflow when a threshold is crossed.\n\nThe agent operates within the workspace's permission scope — it sees only what the role it's configured under is allowed to see.",
+            "link": "https://www.ivaflow.com/en/IVAFlow-Ai-Agent",
+            "icon": "ai"
+          },
+          {
+            "title": "External Portals",
+            "headline": "Controlled Environments for Users Outside Your Organization",
+            "description": "App Builder's multi-workspace architecture extends naturally to external audiences. The External Portals module provides the access layer: scoped credentials, white-label branding, time-bound access, and data isolation that ensures no external user can traverse into internal workspace data.\n\nPartners access the processes assigned to them. Customers access their own request history. Neither group sees anything else.",
+            "link": "https://www.ivaflow.com/en/external-portals",
+            "icon": "portal"
+          }
+        ]
+      },
+      "style": {
+        "backgroundColor": "bg-slate-50",
+        "textColor": "text-slate-900",
+        "padding": "py-20"
+      }
+    },
+    {
+      "id": "workspace-types-1",
+      "type": "features-compact",
+      "order": 4,
+      "data": {
+        "type": "features-compact",
+        "headline": "One Admin Panel. Three Distinct Environments.",
+        "subtext": "Each workspace operates in isolation — its own navigation, its own data scope, its own permission set. Changes to one don't propagate to others.",
+        "features": [
+          {
+            "title": "Internal Workspaces",
+            "description": "For operations, HR, finance, IT, and any internal function with a defined process. Role hierarchy inherited from your directory or IVAFlow's access layer. Full access to Workflow, Form, Report, and Agent components scoped to the team's permissions.",
+            "tagline": "Operations dashboards · IT request management · HR onboarding flows · Finance approval portals",
+            "icon": "building"
+          },
+          {
+            "title": "Partner Workspaces",
+            "description": "Controlled external access for vendors, contractors, and resellers. Each partner workspace exposes only the forms and workflow steps relevant to the collaboration. Audit trails, time-bound access options, and white-label theming available.",
+            "tagline": "Vendor onboarding portals · Shared procurement processes · Project collaboration environments",
+            "icon": "handshake"
+          },
+          {
+            "title": "Customer Portals",
+            "description": "Self-service environments for end customers — branded to your product or organization. Customers submit requests, track status, access documents, and interact with your team. Workflow updates on the internal side reflect automatically in the customer's view.",
+            "tagline": "Service request portals · Customer onboarding · Support ticket visibility · Account management",
+            "icon": "users"
+          }
+        ]
+      },
+      "style": {
+        "backgroundColor": "bg-white",
+        "textColor": "text-slate-900",
+        "padding": "py-20"
+      }
+    },
+    {
+      "id": "how-it-works-1",
+      "type": "process-steps",
+      "order": 5,
+      "data": {
+        "type": "process-steps",
+        "headline": "From Configured Modules to Live Workspace",
+        "steps": [
+          {
+            "number": 1,
+            "title": "Identify your audience",
+            "description": "Define who the workspace is for and assign the corresponding user groups and access roles.",
+            "icon": "users"
+          },
+          {
+            "number": 2,
+            "title": "Pull your components",
+            "description": "Select which forms, workflow panels, report widgets, and agent interfaces to include. These are read from your existing IVAFlow configuration — nothing is rebuilt.",
+            "icon": "components"
+          },
+          {
+            "number": 3,
+            "title": "Compose pages",
+            "description": "Drag components onto a page canvas. Set visibility conditions per role. Define navigation structure.",
+            "icon": "layout"
+          },
+          {
+            "number": 4,
+            "title": "Bind to data",
+            "description": "Connect page elements to IVAFlow data objects, external system records, or real-time API feeds from your existing integrations.",
+            "icon": "database"
+          },
+          {
+            "number": 5,
+            "title": "Apply access boundaries",
+            "description": "Confirm what each role can view, trigger, edit, and export. Permission logic flows from IVAFlow's central access layer — you're confirming scope, not starting from scratch.",
+            "icon": "shield"
+          },
+          {
+            "number": 6,
+            "title": "Publish",
+            "description": "Internal workspaces appear inside your IVAFlow environment. External workspaces generate a scoped, branded URL for partner or customer access.",
+            "icon": "rocket"
+          }
+        ]
+      },
+      "style": {
+        "backgroundColor": "bg-gradient-to-br from-slate-50 to-blue-50",
+        "textColor": "text-slate-900",
+        "padding": "py-20"
+      }
+    },
+    {
+      "id": "integrations-1",
+      "type": "integrations",
+      "order": 6,
+      "data": {
+        "type": "integrations",
+        "headline": "Connects to the Systems You're Already Running",
+        "subtext": "App Builder workspaces don't duplicate your existing stack — they give teams a clean interface to interact with it. Integration logic configured in IVAFlow's connector layer is shared across all workspaces that reference it.",
+        "categories": [
+          {
+            "title": "Identity & Access (SSO)",
+            "description": "SAML 2.0 and OAuth 2.0 support. Connect to Azure AD, Okta, Google Workspace, or LDAP. Internal users authenticate with existing credentials. External portal users receive scoped access without touching your internal directory.",
+            "integrations": ["Azure AD", "Okta", "Google Workspace", "LDAP"]
+          },
+          {
+            "title": "ERP & Business Systems",
+            "description": "Display records from SAP, Oracle, Microsoft Dynamics, and similar systems directly in workspace pages. Form submissions and workflow completions can write back to source systems via pre-configured connectors.",
+            "integrations": ["SAP", "Oracle", "Microsoft Dynamics", "NetSuite"]
+          },
+          {
+            "title": "CRM & Customer Data",
+            "description": "Surface relevant customer records in partner or customer workspaces. Actions taken in the workspace — approvals, document uploads, status changes — can sync back to your CRM based on rules set in the workflow layer.",
+            "integrations": ["Salesforce", "HubSpot", "Microsoft CRM", "Pipedrive"]
+          },
+          {
+            "title": "Communication & Notification",
+            "description": "Route workspace events to your existing channels — email, Slack, Microsoft Teams, or custom webhooks. Notification logic is defined in the Workflow Builder, not rebuilt per workspace.",
+            "integrations": ["Slack", "Microsoft Teams", "Email", "Webhooks"]
+          },
+          {
+            "title": "Custom APIs & Webhooks",
+            "description": "Any system with a REST API can be connected. IVAFlow's integration layer handles authentication and data mapping. A connector built once is reusable across any workspace that needs it.",
+            "integrations": ["REST APIs", "GraphQL", "Webhooks", "Custom Connectors"]
+          }
+        ]
+      },
+      "style": {
+        "backgroundColor": "bg-white",
+        "textColor": "text-slate-900",
+        "padding": "py-20"
+      }
+    },
+    {
+      "id": "use-cases-1",
+      "type": "simple-cards",
+      "order": 7,
+      "data": {
+        "type": "simple-cards",
+        "headline": "What Teams Actually Deploy",
+        "cards": [
+          {
+            "title": "Vendor Onboarding Portal",
+            "description": "Procurement team builds a partner-facing workspace using Form Builder intake forms, a Workflow Builder qualification process, and a status dashboard from Reports & Analytics. Vendors complete their onboarding steps from a single branded URL — no email chains, no spreadsheet tracking."
+          },
+          {
+            "title": "IT Service Management",
+            "description": "IT builds an internal workspace combining ticket submission forms, SLA monitoring dashboards, and automated routing workflows. An AI agent reviews incoming requests and pre-populates assignment fields based on issue type."
+          },
+          {
+            "title": "HR Onboarding",
+            "description": "HR composes a role-specific onboarding workspace per job function. Document collection forms, task checklists, manager approval steps, and a completion tracker — all pulled from existing Form Builder and Workflow Builder configurations."
+          },
+          {
+            "title": "Customer Request Portal",
+            "description": "External-facing workspace built on the External Portals module. Customers submit service requests via structured forms, track status in real time, and receive notifications as the internal workflow progresses. Internal teams see the same data from their own workspace view."
+          },
+          {
+            "title": "Finance Approvals",
+            "description": "Expense claim forms, multi-level approval chains, and a budget utilization dashboard assembled into a single internal workspace. Submission, approval, and reporting are on the same page — no navigation outside the workspace required."
+          },
+          {
+            "title": "Cross-Org Project Collaboration",
+            "description": "A shared workspace for projects involving both internal staff and external partners. Each group sees the components relevant to their role. A shared status dashboard provides joint visibility without exposing internal data to external users."
+          }
+        ]
+      },
+      "style": {
+        "backgroundColor": "bg-slate-50",
+        "textColor": "text-slate-900",
+        "padding": "py-20"
+      }
+    },
+    {
+      "id": "enterprise-security-1",
+      "type": "benefits-grid",
+      "order": 8,
+      "data": {
+        "type": "benefits-grid",
+        "headline": "Governance Built Into the Architecture",
+        "subtext": "App Builder inherits IVAFlow's enterprise security and compliance layer. Nothing is added per-workspace — the controls are already in place.",
+        "benefits": [
+          {
+            "title": "Data Isolation",
+            "description": "Each workspace operates within a defined data scope. Cross-workspace access requires explicit rule-based configuration. External portal users operate in fully isolated environments."
+          },
+          {
+            "title": "Authentication",
+            "description": "SAML 2.0 and OAuth 2.0. Internal users authenticate via your existing identity provider. External users onboard with scoped credentials, independent of your internal directory."
+          },
+          {
+            "title": "Audit Trail",
+            "description": "All user actions across all workspace types — form submissions, approvals, data edits, workflow triggers — are logged at the platform level. Filterable, exportable, and available to compliance teams on request."
+          },
+          {
+            "title": "Compliance",
+            "description": "SOC 2 Type II, GDPR, and HIPAA-aligned controls apply across all workspaces. Documentation available for procurement and InfoSec review."
+          },
+          {
+            "title": "Deployment",
+            "description": "Cloud-hosted (EU, US, or custom region) or private cloud for organizations with data sovereignty requirements."
+          },
+          {
+            "title": "Custom Extensibility",
+            "description": "Visual builder covers the majority of workspace configurations. Server-side scripting hooks and a custom component SDK are available to dev teams for edge cases."
+          }
+        ]
+      },
+      "style": {
+        "backgroundColor": "bg-white",
+        "textColor": "text-slate-900",
+        "padding": "py-20"
+      }
+    },
+    {
+      "id": "social-proof-1",
+      "type": "metrics-testimonials",
+      "order": 9,
+      "data": {
+        "type": "metrics-testimonials",
+        "headline": "Deployed Across Industries and Departments",
+        "metrics": [
+          {
+            "number": "5",
+            "label": "IVAFlow modules embeddable as workspace components"
+          },
+          {
+            "number": "3",
+            "label": "Workspace types — internal, partner, customer — one admin panel"
+          },
+          {
+            "number": "0",
+            "label": "Reconfiguration needed — roles and integrations defined once, applied everywhere"
+          },
+          {
+            "number": "Days",
+            "label": "Typical time from configuration to first live workspace"
+          }
+        ],
+        "testimonials": [
+          {
+            "quote": "The vendor portal went live in under a week. The forms and approval flows were already in IVAFlow — we just organized them into a workspace and set the access scope.",
+            "author": "Procurement Lead",
+            "company": "Industrial Manufacturing"
+          },
+          {
+            "quote": "Our operations team has one workspace. Finance has another. Customers have their own portal. All managed from the same admin panel, with no data bleeding between environments.",
+            "author": "IT Director",
+            "company": "Financial Services Group"
+          }
+        ]
+      },
+      "style": {
+        "backgroundColor": "bg-gradient-to-br from-blue-50 to-indigo-50",
+        "textColor": "text-slate-900",
+        "padding": "py-20"
+      }
+    },
+    {
+      "id": "final-cta-1",
+      "type": "cta",
+      "order": 10,
+      "data": {
+        "type": "cta",
+        "headline": "Start With a Template or Build From What You Have",
+        "description": "If you're already using IVAFlow modules, your workspace components are ready to assemble. If you're starting fresh, pre-built templates for common use cases — service portals, onboarding flows, approval dashboards — give you a working starting point.\n\nEither way, what you deploy is production-grade from day one: governed, permission-scoped, and connected to the rest of your environment.",
+        "primaryCTA": {
+          "text": "Try App Builder Free",
+          "href": "#signup",
+          "note": "Full canvas access. No credit card required. Template library included."
+        },
+        "secondaryCTA": {
+          "text": "Talk to the Team",
+          "href": "#contact",
+          "note": "Bring your use case. We'll map it to App Builder live — using your existing process."
+        },
+        "trustStrip": "SOC 2  ·  GDPR  ·  HIPAA-Aligned  ·  Hosted in EU / US / Custom Region  ·  No Vendor Lock-in"
+      },
+      "style": {
+        "backgroundColor": "bg-slate-900",
+        "textColor": "text-white",
+        "padding": "py-20"
+      }
+    }
+  ]
+}

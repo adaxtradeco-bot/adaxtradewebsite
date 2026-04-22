@@ -127,6 +127,7 @@ import { IconDisplay } from '@/components/ui/IconPicker';
 import IntegrationMarqueeSection from '@/components/builder-sections/IntegrationMarqueeSection';
 import FlowBuilderSection from '@/components/builder-sections/FlowBuilderSection';
 import AutomationEventsSection from '@/components/builder-sections/AutomationEventsSection';
+import MetricsTestimonialsSection from '@/components/builder-sections/MetricsTestimonialsSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -952,6 +953,13 @@ export function SectionRenderer({
         case 'automation-events':
           return (
             <AutomationEventsSection
+              data={(section as any).data}
+              style={(section as any).style}
+            />
+          );
+        case 'metrics-testimonials':
+          return (
+            <MetricsTestimonialsSection
               data={(section as any).data}
               style={(section as any).style}
             />

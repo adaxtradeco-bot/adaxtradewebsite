@@ -142,6 +142,7 @@ export const BaseSectionSchema = z.object({
     'wall-of-fields',
     'flow-builder',
     'automation-events',
+    'metrics-testimonials',
   ]),
   order: z.number(),
   data: z.record(z.string(), z.any()),

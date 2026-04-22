@@ -516,4 +516,57 @@ export const MEDIA_PROOF_CORE_TEMPLATES: SectionTemplate[] = [
     },
     configSchema: {},
   },
+
+  {
+    id: 'metrics-testimonials',
+    name: 'Metrics & Testimonials',
+    type: 'metrics-testimonials',
+    category: SECTION_CATEGORIES.SOCIAL,
+    description: 'Social proof section with metrics strip and testimonial cards',
+    icon: '📊',
+    defaultData: {
+      id: '',
+      type: 'metrics-testimonials',
+      order: 0,
+      data: {
+        headline: 'Deployed Across Industries and Departments',
+        metrics: [
+          {
+            number: '5',
+            label: 'IVAFlow modules embeddable as workspace components'
+          },
+          {
+            number: '3',
+            label: 'Workspace types — internal, partner, customer — one admin panel'
+          },
+          {
+            number: '0',
+            label: 'Reconfiguration needed — roles and integrations defined once, applied everywhere'
+          },
+          {
+            number: 'Days',
+            label: 'Typical time from configuration to first live workspace'
+          }
+        ],
+        testimonials: [
+          {
+            quote: 'The vendor portal went live in under a week. The forms and approval flows were already in IVAFlow — we just organized them into a workspace and set the access scope.',
+            author: 'Procurement Lead',
+            company: 'Industrial Manufacturing'
+          },
+          {
+            quote: 'Our operations team has one workspace. Finance has another. Customers have their own portal. All managed from the same admin panel, with no data bleeding between environments.',
+            author: 'IT Director',
+            company: 'Financial Services Group'
+          }
+        ]
+      },
+      style: {
+        backgroundColor: 'bg-gradient-to-br from-blue-50 to-indigo-50',
+        textColor: 'text-slate-900',
+        padding: 'py-20'
+      }
+    },
+    configSchema: {}
+  },
 ];
