@@ -39,52 +39,70 @@ export default function MetricsTestimonialsSection({
   style = {} 
 }: MetricsTestimonialsSectionProps) {
   const {
-    backgroundColor = 'bg-gradient-to-br from-blue-50 to-indigo-50',
-    textColor = 'text-slate-900',
-    padding = 'py-20'
+    backgroundColor = 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800',
+    textColor = 'text-slate-900 dark:text-white',
+    padding = 'py-20 lg:py-24'
   } = style;
 
   return (
-    <section className={`${backgroundColor} ${padding}`}>
+    <section className={`${backgroundColor} ${padding} transition-colors duration-300`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Headline */}
-        <div className="text-center mb-16">
-          <h2 className={`text-3xl lg:text-4xl font-bold ${textColor} mb-4`}>
+        <div className="text-center mb-16 lg:mb-20">
+          <h2 className={`text-3xl sm:text-4xl lg:text-5xl font-bold ${textColor} mb-4 tracking-tight leading-tight`}>
             {data.headline}
           </h2>
         </div>
 
         {/* Metrics Strip */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
-          {data.metrics.map((metric, index) => (
-            <div key={index} className="text-center">
-              <div className={`text-4xl lg:text-5xl font-bold ${textColor} mb-2`}>
-                {metric.number}
+        {data.metrics && data.metrics.length > 0 && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 mb-16 lg:mb-20">
+            {data.metrics.map((metric, index) => (
+              <div key={index} className="text-center group">
+                <div className={`text-4xl sm:text-5xl lg:text-6xl font-bold ${textColor} mb-3 lg:mb-4 transition-transform duration-300 group-hover:scale-105`}>
+                  {metric.number}
+                </div>
+                <div className="text-sm sm:text-base lg:text-lg text-slate-600 dark:text-slate-300 leading-tight px-2 font-medium">
+                  {metric.label}
+                </div>
               </div>
-              <div className={`text-sm lg:text-base ${textColor.replace('text-', 'text-').replace('-900', '-600')} leading-tight`}>
-                {metric.label}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Testimonials */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {data.testimonials.map((testimonial, index) => (
-            <div 
-              key={index} 
-              className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-sm border border-white/20"
-            >
-              <blockquote className={`text-lg ${textColor} mb-6 leading-relaxed`}>
-                "{testimonial.quote}"
-              </blockquote>
-              <div className={`${textColor.replace('text-', 'text-').replace('-900', '-600')}`}>
-                <div className="font-semibold">{testimonial.author}</div>
-                <div className="text-sm">{testimonial.company}</div>
+        {data.testimonials && data.testimonials.length > 0 && (
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
+            {data.testimonials.map((testimonial, index) => (
+              <div 
+                key={index} 
+                className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-2xl p-6 lg:p-8 shadow-lg dark:shadow-slate-900/20 border border-white/30 dark:border-slate-700/50 hover:shadow-xl dark:hover:shadow-slate-900/30 transition-all duration-300 hover:-translate-y-1"
+              >
+                {/* Quote Icon */}
+                <div className="text-blue-500 dark:text-blue-400 mb-4">
+                  <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h4v10h-10z"/>
+                  </svg>
+                </div>
+                
+                {/* Quote */}
+                <blockquote className={`text-lg lg:text-xl ${textColor} mb-6 lg:mb-8 leading-relaxed font-medium italic`}>
+                  "{testimonial.quote}"
+                </blockquote>
+                
+                {/* Attribution */}
+                <div className="border-t border-slate-200 dark:border-slate-600 pt-4">
+                  <div className={`font-semibold text-base lg:text-lg ${textColor} mb-1`}>
+                    {testimonial.author}
+                  </div>
+                  <div className="text-sm lg:text-base text-slate-500 dark:text-slate-400 font-medium">
+                    {testimonial.company}
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

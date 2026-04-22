@@ -562,9 +562,9 @@ export const MEDIA_PROOF_CORE_TEMPLATES: SectionTemplate[] = [
         ]
       },
       style: {
-        backgroundColor: 'bg-gradient-to-br from-blue-50 to-indigo-50',
-        textColor: 'text-slate-900',
-        padding: 'py-20'
+        backgroundColor: 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800',
+        textColor: 'text-slate-900 dark:text-white',
+        padding: 'py-20 lg:py-24'
       }
     },
     configSchema: {}
