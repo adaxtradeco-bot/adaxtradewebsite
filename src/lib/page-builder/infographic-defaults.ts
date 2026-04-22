@@ -139,6 +139,14 @@ export const INFOGRAPHIC_DEFAULT_DATA: Record<string, any> = {
       { label: 'Conditional Logic ✓', type: 'advanced' }
     ],
   },
+  flowchart: {
+    nodes: [
+      { label: 'Request Submitted', type: 'start' },
+      { label: 'Auto Validation', type: 'process' },
+      { label: 'Manager Approval', type: 'decision' },
+      { label: 'Completed', type: 'end' },
+    ],
+  },
   ai: {
     title: 'AI Processing',
     actions: [
@@ -219,5 +227,6 @@ export const INFOGRAPHIC_TYPE_OPTIONS = [
   { value: 'ai', label: '🤖 AI Actions' },
   { value: 'analytics', label: '📊 Analytics Widgets' },
   { value: 'portal', label: '🔒 Portal Features' },
+  { value: 'flowchart', label: '🔄 Flow Chart (Visual Process)' },
   { value: 'event-flow', label: 'Event Flow (Timeline with dots)' },
 ];

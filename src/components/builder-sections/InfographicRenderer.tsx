@@ -328,6 +328,57 @@ export default function InfographicRenderer({
         </div>
       );
 
+    case 'flowchart':
+      return (
+        <div className={`mt-3 ${className}`}>
+          <div className="flex flex-col gap-2">
+            {infographic.data?.nodes?.map((node: any, i: number) => {
+              const isLast = i === (infographic.data?.nodes?.length || 0) - 1;
+              
+              return (
+                <div key={i} className="flex flex-col items-center">
+                  {/* Node */}
+                  <div className="flex items-center justify-center relative">
+                    <div
+                      className={`px-3 py-2 rounded-lg text-xs font-medium border-2 min-w-[120px] text-center ${
+                        node.type === 'start'
+                          ? 'bg-green-500/10 border-green-500/30 text-green-700 dark:text-green-300'
+                          : node.type === 'end'
+                            ? 'bg-red-500/10 border-red-500/30 text-red-700 dark:text-red-300'
+                            : node.type === 'decision'
+                              ? 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300 transform rotate-45'
+                              : 'bg-blue-500/10 border-blue-500/30 text-blue-700 dark:text-blue-300'
+                      }`}
+                      style={{
+                        ...(node.type === 'decision' && {
+                          width: '80px',
+                          height: '80px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        })
+                      }}
+                    >
+                      <span className={node.type === 'decision' ? 'transform -rotate-45' : ''}>
+                        {node.label}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Arrow */}
+                  {!isLast && (
+                    <div className="flex flex-col items-center py-1">
+                      <div className="w-px h-3 bg-slate-300 dark:bg-slate-600" />
+                      <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[6px] border-l-transparent border-r-transparent border-t-slate-400 dark:border-t-slate-500" />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+
     case 'timeline':
       return (
         <div className={`mt-3 flex flex-col gap-1.5 ${className}`}>
