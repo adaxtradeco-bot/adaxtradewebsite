@@ -802,6 +802,116 @@ export default function InfographicRenderer({
       );
 
     // ==================== METRO GRID TYPES ====================
+    case 'form':
+      return (
+        <div className={className}>
+          {infographic.data?.title && (
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+              {infographic.data.title}
+            </div>
+          )}
+          <div className="flex flex-col gap-1.5 mt-3">
+            {infographic.data?.fields?.map((field: any, i: number) => (
+              <div
+                key={i}
+                className="flex items-center gap-2 p-1.5 bg-indigo-500/8 rounded-md border border-indigo-500/15"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
+                <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                  {typeof field === 'string' ? field : field.label}
+                </span>
+                {field.type && (
+                  <span className="ml-auto text-[9px] text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded-full">
+                    {field.type}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case 'ai':
+      return (
+        <div className={className}>
+          {infographic.data?.title && (
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+              {infographic.data.title}
+            </div>
+          )}
+          <div className="flex flex-col gap-1.5 mt-3">
+            {infographic.data?.actions?.map((action: any, i: number) => (
+              <div
+                key={i}
+                className="flex items-center gap-2 p-1.5 bg-violet-500/8 rounded-md border border-violet-500/15"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-violet-500 flex-shrink-0" />
+                <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                  {typeof action === 'string' ? action : action.action}
+                </span>
+                {action.status && (
+                  <span className="ml-auto text-[9px] text-violet-600 dark:text-violet-400 bg-violet-500/10 px-1.5 py-0.5 rounded-full">
+                    {action.status}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case 'analytics':
+      return (
+        <div className={className}>
+          {infographic.data?.title && (
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+              {infographic.data.title}
+            </div>
+          )}
+          <div className="grid grid-cols-2 gap-1.5 mt-3">
+            {infographic.data?.widgets?.map((widget: any, i: number) => (
+              <div key={i} className="bg-green-500/8 border border-green-500/15 rounded-md p-2 text-center">
+                <div className="text-xs font-bold text-green-700 dark:text-green-400">
+                  {typeof widget === 'string' ? widget : widget.name}
+                </div>
+                {widget.status && (
+                  <div className="text-[10px] text-slate-500">{widget.status}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
+    case 'portal':
+      return (
+        <div className={className}>
+          {infographic.data?.title && (
+            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+              {infographic.data.title}
+            </div>
+          )}
+          <div className="flex flex-col gap-1.5 mt-3">
+            {infographic.data?.features?.map((feature: any, i: number) => (
+              <div
+                key={i}
+                className="flex items-center gap-2 p-1.5 bg-amber-500/8 rounded-md border border-amber-500/15"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
+                <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                  {typeof feature === 'string' ? feature : feature.feature}
+                </span>
+                {feature.level && (
+                  <span className="ml-auto text-[9px] text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded-full">
+                    {feature.level}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+
     case 'org':
       return (
         <div className={`flex flex-col items-center gap-1.5 mt-3 ${className}`}>

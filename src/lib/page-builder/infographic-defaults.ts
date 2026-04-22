@@ -138,6 +138,50 @@ export const INFOGRAPHIC_DEFAULT_DATA: Record<string, any> = {
     root: 'CEO',
     children: ['Operations', 'Finance', 'Engineering', 'Sales'],
   },
+  form: {
+    title: 'Form Components',
+    fields: [
+      { label: 'Text Input', type: 'basic' },
+      { label: 'Dropdown', type: 'selection' },
+      { label: 'File Upload', type: 'media' },
+      { label: 'Conditional Logic ✓', type: 'advanced' }
+    ],
+  },
+  ai: {
+    title: 'AI Processing',
+    actions: [
+      { action: 'Review Form', status: 'auto', type: 'validation' },
+      { action: 'Flag Issues', status: 'alert', type: 'detection' },
+      { action: 'Auto-populate', status: 'processing', type: 'automation' },
+      { action: 'Process ✓', status: 'complete', type: 'finalization' }
+    ],
+  },
+  analytics: {
+    title: 'Dashboard Widgets',
+    widgets: [
+      { name: 'Charts', type: 'visualization', status: 'active' },
+      { name: 'KPIs', type: 'metrics', status: 'live' },
+      { name: 'Tables', type: 'data', status: 'filtered' },
+      { name: 'Export', type: 'output', status: 'ready' }
+    ],
+  },
+  portal: {
+    title: 'Access Control',
+    features: [
+      { feature: 'Scoped Access', level: 'security', status: 'enabled' },
+      { feature: 'White-label', level: 'branding', status: 'customizable' },
+      { feature: 'Data Isolation', level: 'privacy', status: 'enforced' }
+    ],
+  },
+  workflow: {
+    title: 'Automated Workflow',
+    steps: [
+      { num: '1', label: 'Submit', badge: 'Auto', type: 'auto' },
+      { num: '2', label: 'Review', badge: 'Manual', type: 'manual' },
+      { num: '3', label: 'Approve', badge: 'Decision', type: 'decision' },
+      { num: '4', label: 'Complete ✓', badge: 'Done', type: 'complete' },
+    ],
+  },
   'event-flow': {
     color: '#4F7FFF',
     steps: [
@@ -179,5 +223,9 @@ export const INFOGRAPHIC_TYPE_OPTIONS = [
   { value: 'sla', label: 'SLA Bars' },
   { value: 'sla-bars', label: 'SLA Bars (custom color)' },
   { value: 'org', label: 'Org Chart' },
+  { value: 'form', label: '📝 Form Fields' },
+  { value: 'ai', label: '🤖 AI Actions' },
+  { value: 'analytics', label: '📊 Analytics Widgets' },
+  { value: 'portal', label: '🔒 Portal Features' },
   { value: 'event-flow', label: 'Event Flow (Timeline with dots)' },
 ];
