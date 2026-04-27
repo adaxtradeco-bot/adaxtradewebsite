@@ -1,8 +1,21 @@
+/**
+ * Features Grid NWM Section
+ * Author: Amazon Q
+ * Created: 2024-12-XX
+ * Updated: 2025-01-XX - Added IconFieldEditor support and image position
+ */
+
 'use client';
+
+import React from 'react';
+import { IconConfig, IconDisplay } from '@/components/ui/IconPicker';
 
 interface FeatureCard {
   title: string;
   description: string;
+  icon?: string | IconConfig;
+  image?: string;
+  imagePosition?: 'top' | 'bottom';
 }
 
 interface FeaturesGridNWMSectionProps {
@@ -46,8 +59,37 @@ export default function FeaturesGridNWMSection({
               {/* Glass gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-violet-500/0 md:group-hover:from-cyan-500/5 md:group-hover:to-violet-500/5 transition-all duration-500" />
               
-              <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white mb-2 relative z-10 group-hover:text-cyan-400 dark:group-hover:text-cyan-400 transition-colors duration-300">{feature.title}</h3>
+              {/* Image at top */}
+              {feature.image && feature.imagePosition === 'top' && (
+                <div className="mb-3 relative z-10">
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    className="w-full h-24 object-cover rounded-lg"
+                  />
+                </div>
+              )}
+              
+              <div className="flex items-start gap-3 mb-2 relative z-10">
+                {feature.icon && (
+                  <span className="text-2xl flex-shrink-0">
+                    {typeof feature.icon === 'string' ? feature.icon : <IconDisplay icon={feature.icon} className="w-6 h-6" />}
+                  </span>
+                )}
+                <h3 className="text-base md:text-lg font-bold text-slate-900 dark:text-white group-hover:text-cyan-400 dark:group-hover:text-cyan-400 transition-colors duration-300 flex-1">{feature.title}</h3>
+              </div>
               <p className="text-xs md:text-sm text-slate-700 dark:text-slate-300 relative z-10">{feature.description}</p>
+              
+              {/* Image at bottom */}
+              {feature.image && feature.imagePosition === 'bottom' && (
+                <div className="mt-3 relative z-10">
+                  <img
+                    src={feature.image}
+                    alt={feature.title}
+                    className="w-full h-24 object-cover rounded-lg"
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
