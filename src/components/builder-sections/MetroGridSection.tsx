@@ -2,19 +2,24 @@
  * Metro Grid Section - AI Agent Phase Display
  * Author: Amazon Q
  * Created: 2024-01-20
+ * Updated: 2025-01-XX - Added IconFieldEditor support and image position
  */
+
 'use client';
 
 import React from 'react';
 import InfographicRenderer from './InfographicRenderer';
+import { IconConfig, IconDisplay } from '@/components/ui/IconPicker';
 
 interface MetroCard {
   number: string;
-  icon: string;
+  icon: string | IconConfig;
   tag: string;
   title: string;
   description: string;
   example?: string;
+  image?: string;
+  imagePosition?: 'top' | 'bottom';
   infographic?: {
     type: string;
     data?: any;
@@ -120,7 +125,9 @@ export default function MetroGridSection({
                 {card.number}
               </div>
 
-              <div className="text-3xl mb-4">{card.icon}</div>
+              <div className="text-3xl mb-4">
+                {typeof card.icon === 'string' ? card.icon : <IconDisplay icon={card.icon} className="w-8 h-8" />}
+              </div>
               <div className="text-[10px] font-semibold tracking-widest uppercase text-slate-500 mb-2">
                 {card.tag}
               </div>
@@ -129,9 +136,31 @@ export default function MetroGridSection({
                 {card.description}
               </p>
 
+              {/* Image at top */}
+              {card.image && card.imagePosition === 'top' && (
+                <div className="mt-3">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="w-full h-24 object-cover rounded"
+                  />
+                </div>
+              )}
+
               {card.example && (
                 <div className="mt-4 text-xs text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-white/5 border-l-2 border-indigo-500/30 pl-3 pr-2 py-2 rounded-r-md italic">
                   {card.example}
+                </div>
+              )}
+
+              {/* Image at bottom */}
+              {card.image && card.imagePosition === 'bottom' && (
+                <div className="mt-3">
+                  <img
+                    src={card.image}
+                    alt={card.title}
+                    className="w-full h-24 object-cover rounded"
+                  />
                 </div>
               )}
 

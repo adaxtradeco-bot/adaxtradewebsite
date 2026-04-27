@@ -2,6 +2,7 @@
  * Metro Grid Property Panel
  * Author: Amazon Q
  * Created: 2024-01-20
+ * Updated: 2025-01-XX - Added IconFieldEditor support and image position
  */
 'use client';
 
@@ -10,6 +11,8 @@ import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { InlineFieldHelper } from './InlineFieldHelper';
 import { INFOGRAPHIC_DEFAULT_DATA, INFOGRAPHIC_TYPE_OPTIONS, getInfographicStructurePreview } from '@/lib/page-builder/infographic-defaults';
 import { ImageUploader } from './ImageUploader';
+import { IconFieldEditor } from './IconFieldEditor';
+import { IconConfig } from '@/components/ui/IconPicker';
 
 interface MetroGridPropertyPanelProps {
   section: SectionConfig;
@@ -149,13 +152,15 @@ export function MetroGridPropertyPanel({
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                      Icon (Emoji)
+                      Icon
                     </label>
-                    <input
-                      type="text"
-                      value={card.icon || ''}
-                      onChange={(e) => updateCard(index, { icon: e.target.value })}
-                      className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    <IconFieldEditor
+                      emoji={typeof card.icon === 'string' ? card.icon : ''}
+                      faConfig={typeof card.icon === 'object' ? card.icon as IconConfig : undefined}
+                      onChange={(emoji, faConfig) => {
+                        updateCard(index, { icon: faConfig || emoji });
+                      }}
+                      label=""
                     />
                   </div>
                 </div>
@@ -194,6 +199,35 @@ export function MetroGridPropertyPanel({
                     rows={2}
                     className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   />
+                </div>
+
+                {/* Image URL */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Image URL (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={card.image || ''}
+                    onChange={(e) => updateCard(index, { image: e.target.value })}
+                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    placeholder="/images/feature.png"
+                  />
+                </div>
+
+                {/* Image Position */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Image Position
+                  </label>
+                  <select
+                    value={card.imagePosition || 'top'}
+                    onChange={(e) => updateCard(index, { imagePosition: e.target.value as 'top' | 'bottom' })}
+                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  >
+                    <option value="top">Top (Above title)</option>
+                    <option value="bottom">Bottom (Below description)</option>
+                  </select>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
