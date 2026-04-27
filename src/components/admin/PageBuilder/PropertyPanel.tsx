@@ -44,6 +44,7 @@ import { FormBuilderTemplatesPropertyPanel } from './FormBuilderTemplatesPropert
 import { FormBuilderMobileVoicePropertyPanel } from './FormBuilderMobileVoicePropertyPanel';
 import { FlowBuilderPropertyPanel } from './FlowBuilderPropertyPanel';
 import { AutomationEventsPropertyPanel } from './AutomationEventsPropertyPanel';
+import { FeaturesGridNWMPropertyPanel } from './FeaturesGridNWMPropertyPanel';
 
 interface PropertyPanelProps {
   section: SectionConfig;
@@ -561,7 +562,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'fusion-teams-tabs', 'feature-video-tabs', 'platform-tabs',
     'hero-slider', 'hero-slider-nwm', 'metro-grid',
     'rotating-tabs', 'analytics-bento-grid', 'logo-cloud', 'integration-marquee',
-    'form-builder-templates', 'form-builder-mobile-voice', 'flow-builder', 'automation-events'
+    'form-builder-templates', 'form-builder-mobile-voice', 'flow-builder', 'automation-events',
+    'features-grid-nwm'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -640,6 +642,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <FlowBuilderPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'automation-events':
         return <AutomationEventsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'features-grid-nwm':
+        return <FeaturesGridNWMPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
         return (
           <>
