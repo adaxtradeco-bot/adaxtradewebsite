@@ -2,6 +2,7 @@
  * Flow Builder Section - Dynamic Tabbed Process Designer
  * Author: Amazon Q
  * Created: 2025-01-XX
+ * Updated: 2025-01-XX - Added IconConfig type support for icon field
  * 
  * Features:
  * - Dynamic tabs with auto-rotation
@@ -16,6 +17,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { IconConfig, IconDisplay } from '@/components/ui/IconPicker';
 
 export interface FlowBuilderTab {
   id: string;
@@ -36,7 +38,7 @@ export interface FlowBuilderTab {
 
 export interface FlowBuilderItem {
   id: string;
-  icon?: string;
+  icon?: string | IconConfig;
   number?: string;
   label: string;
   badge?: {
@@ -48,7 +50,7 @@ export interface FlowBuilderItem {
 
 export interface FlowBuilderSectionData {
   eyebrow?: {
-    icon?: string;
+    icon?: string | IconConfig;
     text: string;
   };
   title: string;
@@ -206,6 +208,11 @@ export default function FlowBuilderSection({ data, style }: FlowBuilderSectionPr
                 <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#4F7FFF]">
                   {data.eyebrow.text}
                 </span>
+                {data.eyebrow.icon && (
+                  <span className="text-lg">
+                    {typeof data.eyebrow.icon === 'string' ? data.eyebrow.icon : <IconDisplay icon={data.eyebrow.icon} />}
+                  </span>
+                )}
               </div>
             )}
 
@@ -354,7 +361,11 @@ export default function FlowBuilderSection({ data, style }: FlowBuilderSectionPr
                           transition={{ delay: idx * (data.animations?.stagger || 0.05) }}
                           className="flex items-center gap-4 p-4 rounded-xl border transition-all hover:scale-[1.02] bg-white dark:bg-[#0E1014] border-slate-200 dark:border-white/[0.07] hover:border-[#4F7FFF] hover:shadow-[0_8px_30px_rgba(79,127,255,0.15)]"
                         >
-                          {item.icon && <span className="text-2xl flex-shrink-0">{item.icon}</span>}
+                          {item.icon && (
+                            <span className="text-2xl flex-shrink-0">
+                              {typeof item.icon === 'string' ? item.icon : <IconDisplay icon={item.icon} />}
+                            </span>
+                          )}
                           {item.number && (
                             <span className="font-mono text-xs flex-shrink-0 text-slate-400 dark:text-[#6B7280]">
                               {item.number}

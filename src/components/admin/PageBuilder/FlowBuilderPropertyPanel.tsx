@@ -2,6 +2,7 @@
  * Flow Builder Property Panel
  * Author: Amazon Q
  * Created: 2025-01-XX
+ * Updated: 2025-01-XX - Added IconFieldEditor support
  * 
  * Full dynamic editor for FlowBuilderSection
  */
@@ -11,6 +12,8 @@
 import React, { useState } from 'react';
 import { FlowBuilderSectionData, FlowBuilderTab, FlowBuilderItem } from '../../builder-sections/FlowBuilderSection';
 import { ImageUploader } from './ImageUploader';
+import { IconFieldEditor } from './IconFieldEditor';
+import { IconConfig } from '@/components/ui/IconPicker';
 
 interface FlowBuilderPropertyPanelProps {
   section: any;
@@ -101,12 +104,18 @@ export function FlowBuilderPropertyPanel({ section, onUpdate }: FlowBuilderPrope
           placeholder="e.g., Visual Process Designer"
           className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800 mb-2"
         />
-        <input
-          type="text"
-          value={data.eyebrow?.icon || ''}
-          onChange={(e) => updateData({ eyebrow: { text: data.eyebrow?.text || '', icon: e.target.value } })}
-          placeholder="Icon (emoji or text)"
-          className="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-800"
+        <IconFieldEditor
+          emoji={typeof data.eyebrow?.icon === 'string' ? data.eyebrow.icon : ''}
+          faConfig={typeof data.eyebrow?.icon === 'object' ? data.eyebrow.icon as IconConfig : undefined}
+          onChange={(emoji, faConfig) => {
+            updateData({ 
+              eyebrow: { 
+                text: data.eyebrow?.text || '', 
+                icon: faConfig || emoji 
+              } 
+            });
+          }}
+          label="Eyebrow Icon"
         />
       </div>
 
@@ -391,12 +400,13 @@ export function FlowBuilderPropertyPanel({ section, onUpdate }: FlowBuilderPrope
 
                             {expandedItem === item.id && (
                               <div className="space-y-2 mt-2">
-                                <input
-                                  type="text"
-                                  value={item.icon || ''}
-                                  onChange={(e) => updateItem(tab.id, item.id, { icon: e.target.value })}
-                                  placeholder="Icon (emoji)"
-                                  className="w-full px-2 py-1 border rounded text-xs bg-gray-50 dark:bg-gray-800"
+                                <IconFieldEditor
+                                  emoji={typeof item.icon === 'string' ? item.icon : ''}
+                                  faConfig={typeof item.icon === 'object' ? item.icon as IconConfig : undefined}
+                                  onChange={(emoji, faConfig) => {
+                                    updateItem(tab.id, item.id, { icon: faConfig || emoji });
+                                  }}
+                                  label="Item Icon"
                                 />
                                 <input
                                   type="text"
