@@ -25,6 +25,11 @@ import {
   BorderRadius,
   THEME_PRESETS,
   ColorPalette,
+  getHoverEffectClasses,
+  getBackgroundEffectStyles,
+  getBorderStyleProperties,
+  BORDER_RADIUS_MAP,
+  DISPLAY_MODE_SCALES,
 } from '@/lib/infographic-themes';
 
 interface InfographicSettingsProps {
@@ -517,6 +522,72 @@ export default function InfographicSettings({
             </div>
           )}
 
+          {/* Custom Background Color Picker */}
+          {(style?.backgroundEffect === 'solid' || style?.backgroundEffect === 'gradient') && (
+            <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-md">
+              <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
+                Background Colors
+              </h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs text-slate-600 dark:text-slate-400 mb-1">
+                    Primary Color
+                  </label>
+                  <input
+                    type="color"
+                    value={style?.customBackgroundColor || '#6366f1'}
+                    onChange={(e) => handleStyleChange({ customBackgroundColor: e.target.value })}
+                    className="w-full h-8 rounded border border-slate-300 dark:border-slate-600"
+                  />
+                </div>
+                {style?.backgroundEffect === 'gradient' && (
+                  <div>
+                    <label className="block text-xs text-slate-600 dark:text-slate-400 mb-1">
+                      Secondary Color
+                    </label>
+                    <input
+                      type="color"
+                      value={style?.customBackgroundColorSecondary || '#8b5cf6'}
+                      onChange={(e) => handleStyleChange({ customBackgroundColorSecondary: e.target.value })}
+                      className="w-full h-8 rounded border border-slate-300 dark:border-slate-600"
+                    />
+                  </div>
+                )}
+              </div>
+              {style?.backgroundEffect === 'gradient' && (
+                <div className="mt-3">
+                  <label className="block text-xs text-slate-600 dark:text-slate-400 mb-1">
+                    Gradient Direction
+                  </label>
+                  <select
+                    value={style?.gradientDirection || '135deg'}
+                    onChange={(e) => handleStyleChange({ gradientDirection: e.target.value })}
+                    className="w-full px-2 py-1 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded text-xs"
+                  >
+                    <option value="135deg">Diagonal (↘)</option>
+                    <option value="90deg">Vertical (↓)</option>
+                    <option value="0deg">Horizontal (→)</option>
+                    <option value="45deg">Diagonal (↗)</option>
+                    <option value="180deg">Horizontal (←)</option>
+                    <option value="270deg">Vertical (↑)</option>
+                  </select>
+                </div>
+              )}
+              {/* Preview */}
+              <div className="mt-3">
+                <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">Preview</div>
+                <div 
+                  className="w-full h-8 rounded border border-slate-300 dark:border-slate-600"
+                  style={{
+                    background: style?.backgroundEffect === 'gradient' 
+                      ? `linear-gradient(${style?.gradientDirection || '135deg'}, ${style?.customBackgroundColor || '#6366f1'}, ${style?.customBackgroundColorSecondary || '#8b5cf6'})`
+                      : style?.customBackgroundColor || '#6366f1'
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Border Radius
@@ -532,6 +603,47 @@ export default function InfographicSettings({
                 </option>
               ))}
             </select>
+          </div>
+
+          {/* Style Preview */}
+          <div className="mt-4 p-4 rounded-lg border-2 border-slate-200 dark:border-slate-700">
+            <div className="text-xs font-semibold mb-2 text-slate-700 dark:text-slate-300">
+              Style Preview
+            </div>
+            <div 
+              className={`p-4 ${getHoverEffectClasses(style?.hoverEffect)}`}
+              style={{
+                ...getBackgroundEffectStyles(
+                  style?.backgroundEffect || 'transparent',
+                  style?.backgroundPattern,
+                  THEME_PRESETS[theme?.preset || 'corporate'],
+                  style
+                ),
+                ...getBorderStyleProperties(
+                  style?.borderStyle || 'solid',
+                  THEME_PRESETS[theme?.preset || 'corporate']
+                ),
+                borderRadius: BORDER_RADIUS_MAP[style?.borderRadius || 'lg'],
+                transform: `scale(${DISPLAY_MODE_SCALES[style?.displayMode || 'normal']})`,
+                transformOrigin: 'top left',
+                minHeight: '60px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <div className="text-xs text-center" style={{ 
+                color: THEME_PRESETS[theme?.preset || 'corporate'].text 
+              }}>
+                Sample Infographic Content
+                <br />
+                <span className="text-[10px] opacity-70">
+                  Hover: {style?.hoverEffect || 'none'} | 
+                  Size: {style?.displayMode || 'normal'} | 
+                  Background: {style?.backgroundEffect || 'transparent'}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -66,6 +66,9 @@ export interface InfographicStyle {
   backgroundPattern?: BackgroundPattern;
   iconStyle?: IconStyle;
   borderRadius: BorderRadius;
+  customBackgroundColor?: string;
+  customBackgroundColorSecondary?: string;
+  gradientDirection?: string;
 }
 
 // Theme Presets Configuration
@@ -368,23 +371,35 @@ export function getHoverEffectClasses(hoverEffect: HoverEffect | undefined): str
   }
 }
 
-// Helper function to generate border style classes
-export function getBorderStyleClasses(
+// Helper function to generate border style properties
+export function getBorderStyleProperties(
   borderStyle: BorderStyle | undefined,
   colors: ColorPalette
-): string {
+): React.CSSProperties {
   switch (borderStyle) {
     case 'solid':
-      return `border border-[${colors.border}]`;
+      return {
+        border: `1px solid ${colors.border}`,
+      };
     case 'gradient':
-      return `border-2 border-transparent bg-gradient-to-r from-[${colors.primary}] to-[${colors.secondary}] bg-clip-border`;
+      return {
+        border: '2px solid transparent',
+        backgroundImage: `linear-gradient(white, white), linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`,
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'content-box, border-box',
+      };
     case 'dashed':
-      return `border-2 border-dashed border-[${colors.border}]`;
+      return {
+        border: `2px dashed ${colors.border}`,
+      };
     case 'glow':
-      return `border border-[${colors.border}] shadow-[0_0_10px_${colors.border}]`;
+      return {
+        border: `1px solid ${colors.border}`,
+        boxShadow: `0 0 10px ${colors.border}50`,
+      };
     case 'none':
     default:
-      return '';
+      return {};
   }
 }
 
@@ -392,7 +407,8 @@ export function getBorderStyleClasses(
 export function getBackgroundEffectStyles(
   backgroundEffect: BackgroundEffect | undefined,
   backgroundPattern: BackgroundPattern | undefined,
-  colors: ColorPalette
+  colors: ColorPalette,
+  style?: InfographicStyle
 ): React.CSSProperties {
   const baseStyle: React.CSSProperties = {};
 
@@ -404,9 +420,12 @@ export function getBackgroundEffectStyles(
         backdropFilter: 'blur(10px)',
       };
     case 'gradient':
+      const primaryColor = style?.customBackgroundColor || colors.primary;
+      const secondaryColor = style?.customBackgroundColorSecondary || colors.secondary;
+      const direction = style?.gradientDirection || '135deg';
       return {
         ...baseStyle,
-        background: `linear-gradient(135deg, ${colors.primary}15, ${colors.secondary}15)`,
+        background: `linear-gradient(${direction}, ${primaryColor}15, ${secondaryColor}15)`,
       };
     case 'pattern':
       const patterns = {
@@ -421,9 +440,10 @@ export function getBackgroundEffectStyles(
         backgroundSize: backgroundPattern === 'grid' ? '20px 20px' : '10px 10px',
       };
     case 'solid':
+      const solidColor = style?.customBackgroundColor || colors.background;
       return {
         ...baseStyle,
-        backgroundColor: colors.background,
+        backgroundColor: `${solidColor}20`, // Add transparency
       };
     case 'transparent':
     default:

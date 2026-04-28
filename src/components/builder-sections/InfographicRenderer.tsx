@@ -20,6 +20,7 @@ import {
   getStaggerContainerVariants,
   getHoverEffectClasses,
   getBackgroundEffectStyles,
+  getBorderStyleProperties,
   applyThemeToInfographicData,
   getThemeCSSVariables,
   BORDER_RADIUS_MAP,
@@ -168,8 +169,10 @@ export default function InfographicRenderer({
   const backgroundStyles = getBackgroundEffectStyles(
     style.backgroundEffect,
     style.backgroundPattern,
-    colors
+    colors,
+    style
   );
+  const borderStyles = getBorderStyleProperties(style.borderStyle, colors);
   const borderRadius = BORDER_RADIUS_MAP[style.borderRadius];
   const scale = DISPLAY_MODE_SCALES[style.displayMode];
 
@@ -177,12 +180,13 @@ export default function InfographicRenderer({
   const InfographicWrapper = ({ children }: { children: React.ReactNode }) => {
     const wrapperStyle: React.CSSProperties = {
       ...backgroundStyles,
+      ...borderStyles,
       ...cssVariables,
       borderRadius,
       transform: `scale(${scale})`,
       transformOrigin: 'top left',
       color: colors.text,
-      borderColor: colors.border,
+      padding: '12px',
     };
 
     if (animation.type === 'stagger') {
