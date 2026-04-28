@@ -226,11 +226,11 @@ export function InteractiveFeatureWall({
                         p-3 rounded-lg transition-colors
                         ${isActive ? 'bg-white/20' : 'bg-blue-100 dark:bg-blue-900/30'}
                       `}>
-                        {typeof feature.icon === 'string' && !iconMap[feature.icon as keyof typeof iconMap] ? (
+                        {feature.icon && typeof feature.icon === 'string' && !iconMap[feature.icon as keyof typeof iconMap] ? (
                           <span className="text-2xl">
                             {feature.icon}
                           </span>
-                        ) : typeof feature.icon === 'object' ? (
+                        ) : feature.icon && typeof feature.icon === 'object' ? (
                           <IconDisplay icon={feature.icon} className="w-6 h-6" />
                         ) : (
                           <IconComponent 

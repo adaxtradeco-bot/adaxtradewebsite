@@ -1,18 +1,45 @@
 /**
  * Infographic Renderer - Centralized Infographic System
- * Author: Amazon Q
+ * Author: Amazon Q / Kiro AI
  * Created: 2024-01-20
+ * Updated: 2025-01-XX - Added advanced theme and animation system
  * 
  * Purpose: Universal infographic renderer for all section types
- * Supports: All infographic types + image/video fallback
+ * Supports: All infographic types + image/video fallback + themes + animations
  */
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  InfographicTheme,
+  InfographicAnimation,
+  InfographicStyle,
+  getThemeColors,
+  getAnimationVariants,
+  getStaggerContainerVariants,
+  getHoverEffectClasses,
+  getBackgroundEffectStyles,
+  BORDER_RADIUS_MAP,
+  DISPLAY_MODE_SCALES,
+  DEFAULT_THEME,
+  DEFAULT_ANIMATION,
+  DEFAULT_STYLE,
+} from '@/lib/infographic-themes';
 
 export interface InfographicData {
   type: string;
   data?: any;
+  
+  // Theme configuration
+  theme?: InfographicTheme;
+  
+  // Animation configuration
+  animation?: InfographicAnimation;
+  
+  // Style configuration
+  style?: InfographicStyle;
+  
   // Optional: Override with image or video
   mediaOverride?: {
     type: 'image' | 'video';
@@ -30,30 +57,125 @@ export default function InfographicRenderer({
   infographic,
   className = '',
 }: InfographicRendererProps) {
+  // Detect dark mode
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    // Check initial theme
+    const checkTheme = () => {
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      setIsDark(isDarkMode);
+    };
+
+    checkTheme();
+
+    // Watch for theme changes
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Get theme colors based on current mode
+  const theme = infographic.theme || DEFAULT_THEME;
+  const animation = infographic.animation || DEFAULT_ANIMATION;
+  const style = infographic.style || DEFAULT_STYLE;
+  const colors = getThemeColors(theme, isDark);
+
+  // Get animation variants
+  const variants = getAnimationVariants(animation);
+  const containerVariants = getStaggerContainerVariants(animation);
+
+  // Get style classes and properties
+  const hoverClasses = getHoverEffectClasses(style.hoverEffect);
+  const backgroundStyles = getBackgroundEffectStyles(
+    style.backgroundEffect,
+    style.backgroundPattern,
+    colors
+  );
+  const borderRadius = BORDER_RADIUS_MAP[style.borderRadius];
+  const scale = DISPLAY_MODE_SCALES[style.displayMode];
+
+  // Wrapper component with theme and animation
+  const InfographicWrapper = ({ children }: { children: React.ReactNode }) => {
+    const wrapperStyle: React.CSSProperties = {
+      ...backgroundStyles,
+      borderRadius,
+      transform: `scale(${scale})`,
+      transformOrigin: 'top left',
+      color: colors.text,
+      borderColor: colors.border,
+    };
+
+    if (animation.type === 'stagger') {
+      return (
+        <motion.div
+          className={`infographic-wrapper ${hoverClasses} ${className}`}
+          style={wrapperStyle}
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {children}
+        </motion.div>
+      );
+    }
+
+    return (
+      <motion.div
+        className={`infographic-wrapper ${hoverClasses} ${className}`}
+        style={wrapperStyle}
+        variants={variants}
+        initial="hidden"
+        animate="visible"
+      >
+        {children}
+      </motion.div>
+    );
+  };
+
+  // Item wrapper for stagger animation
+  const ItemWrapper = ({ children, index }: { children: React.ReactNode; index?: number }) => {
+    if (animation.type === 'stagger') {
+      return (
+        <motion.div variants={variants}>
+          {children}
+        </motion.div>
+      );
+    }
+    return <>{children}</>;
+  };
   // If media override exists, render image/video instead
   if (infographic.mediaOverride) {
     if (infographic.mediaOverride.type === 'image') {
       return (
-        <div className={`mt-3 ${className}`}>
-          <img
-            src={infographic.mediaOverride.src}
-            alt={infographic.mediaOverride.alt || 'Infographic'}
-            className="w-full h-auto rounded-lg"
-          />
-        </div>
+        <InfographicWrapper>
+          <div className="mt-3">
+            <img
+              src={infographic.mediaOverride.src}
+              alt={infographic.mediaOverride.alt || 'Infographic'}
+              className="w-full h-auto rounded-lg"
+            />
+          </div>
+        </InfographicWrapper>
       );
     }
     if (infographic.mediaOverride.type === 'video') {
       return (
-        <div className={`mt-3 ${className}`}>
-          <video
-            src={infographic.mediaOverride.src}
-            controls
-            className="w-full h-auto rounded-lg"
-          >
-            Your browser does not support the video tag.
-          </video>
-        </div>
+        <InfographicWrapper>
+          <div className="mt-3">
+            <video
+              src={infographic.mediaOverride.src}
+              controls
+              className="w-full h-auto rounded-lg"
+            >
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </InfographicWrapper>
       );
     }
   }
@@ -63,62 +185,61 @@ export default function InfographicRenderer({
     // ==================== GOVERNANCE TYPES ====================
     case 'audit':
       return (
-        <div className={`mt-3 flex flex-col gap-1.5 ${className}`}>
-          {infographic.data?.trail?.map((item: any, i: number) => (
-            <div key={i} className="flex items-center gap-2 text-xs">
-              <div
-                className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                  item.type === 'success'
-                    ? 'bg-green-500'
-                    : item.type === 'ai'
-                      ? 'bg-indigo-400'
-                      : item.type === 'warning'
-                        ? 'bg-amber-500'
-                        : item.type === 'error'
-                          ? 'bg-red-500'
-                          : 'bg-cyan-500'
-                }`}
-              />
-              <span className="flex-1 text-slate-600 dark:text-slate-300">
-                {item.action}
-              </span>
-              <span className="text-[10px] text-slate-500">{item.time}</span>
-            </div>
-          ))}
-        </div>
+        <InfographicWrapper>
+          <div className="mt-3 flex flex-col gap-1.5">
+            {infographic.data?.trail?.map((item: any, i: number) => (
+              <ItemWrapper key={i} index={i}>
+                <div className="flex items-center gap-2 text-xs">
+                  <div
+                    className={`w-2 h-2 rounded-full flex-shrink-0`}
+                    style={{
+                      backgroundColor:
+                        item.type === 'success'
+                          ? colors.primary
+                          : item.type === 'ai'
+                            ? colors.accent
+                            : item.type === 'warning'
+                              ? colors.secondary
+                              : item.type === 'error'
+                                ? '#ef4444'
+                                : colors.primary,
+                    }}
+                  />
+                  <span className="flex-1" style={{ color: colors.text }}>
+                    {item.action}
+                  </span>
+                  <span className="text-[10px] opacity-60">{item.time}</span>
+                </div>
+              </ItemWrapper>
+            ))}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'roles':
       return (
-        <div className={`mt-3 flex flex-col gap-1.5 ${className}`}>
-          {infographic.data?.roles?.map((role: any, i: number) => (
-            <div
-              key={i}
-              className={`flex items-center gap-2 p-2 rounded-lg border ${
-                role.level === 'admin'
-                  ? 'bg-indigo-500/7 border-indigo-500/15'
-                  : role.level === 'manager'
-                    ? 'bg-cyan-500/7 border-cyan-500/15'
-                    : 'bg-green-500/7 border-green-500/15'
-              }`}
-            >
-              <span
-                className={`text-xs font-semibold ${
-                  role.level === 'admin'
-                    ? 'text-indigo-600 dark:text-indigo-300'
-                    : role.level === 'manager'
-                      ? 'text-cyan-700 dark:text-cyan-400'
-                      : 'text-green-700 dark:text-green-400'
-                }`}
-              >
-                {role.name}
-              </span>
-              <span className="text-xs text-slate-500 dark:text-slate-400">
-                {role.access}
-              </span>
-            </div>
-          ))}
-        </div>
+        <InfographicWrapper>
+          <div className="mt-3 flex flex-col gap-1.5">
+            {infographic.data?.roles?.map((role: any, i: number) => (
+              <ItemWrapper key={i} index={i}>
+                <div
+                  className="flex items-center gap-2 p-2 rounded-lg border"
+                  style={{
+                    backgroundColor: colors.background,
+                    borderColor: colors.border,
+                  }}
+                >
+                  <span className="text-xs font-semibold" style={{ color: colors.primary }}>
+                    {role.name}
+                  </span>
+                  <span className="text-xs opacity-70">
+                    {role.access}
+                  </span>
+                </div>
+              </ItemWrapper>
+            ))}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'exception':
@@ -271,35 +392,44 @@ export default function InfographicRenderer({
 
     case 'stats':
       return (
-        <div className={`mt-3 grid grid-cols-2 gap-2 ${className}`}>
-          {infographic.data?.metrics?.map((metric: any, i: number) => (
-            <div
-              key={i}
-              className="p-2 bg-slate-100/50 dark:bg-slate-800/30 rounded-lg border border-slate-200/50 dark:border-white/5"
-            >
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 mb-0.5">
-                {metric.label}
-              </div>
-              <div className="text-sm font-bold text-slate-900 dark:text-white">
-                {metric.value}
-              </div>
-              <div
-                className={`text-[10px] flex items-center gap-1 ${
-                  metric.trend === 'up'
-                    ? 'text-green-600 dark:text-green-400'
-                    : metric.trend === 'down'
-                      ? 'text-red-600 dark:text-red-400'
-                      : 'text-slate-500 dark:text-slate-400'
-                }`}
-              >
-                {metric.trend === 'up' && '↑'}
-                {metric.trend === 'down' && '↓'}
-                {metric.trend === 'neutral' && '→'}
-                <span>{metric.change}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <InfographicWrapper>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            {infographic.data?.metrics?.map((metric: any, i: number) => (
+              <ItemWrapper key={i} index={i}>
+                <div
+                  className="p-2 rounded-lg border"
+                  style={{
+                    backgroundColor: colors.background,
+                    borderColor: colors.border,
+                  }}
+                >
+                  <div className="text-[10px] opacity-70 mb-0.5">
+                    {metric.label}
+                  </div>
+                  <div className="text-sm font-bold" style={{ color: colors.primary }}>
+                    {metric.value}
+                  </div>
+                  <div
+                    className="text-[10px] flex items-center gap-1"
+                    style={{
+                      color:
+                        metric.trend === 'up'
+                          ? '#10b981'
+                          : metric.trend === 'down'
+                            ? '#ef4444'
+                            : colors.text,
+                    }}
+                  >
+                    {metric.trend === 'up' && '↑'}
+                    {metric.trend === 'down' && '↓'}
+                    {metric.trend === 'neutral' && '→'}
+                    <span>{metric.change}</span>
+                  </div>
+                </div>
+              </ItemWrapper>
+            ))}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'flow':
@@ -381,34 +511,41 @@ export default function InfographicRenderer({
 
     case 'timeline':
       return (
-        <div className={`mt-3 flex flex-col gap-1.5 ${className}`}>
-          {infographic.data?.steps?.map((step: any, i: number) => (
-            <div key={i} className="flex items-start gap-2">
-              <div
-                className={`w-2 h-2 rounded-full mt-1 flex-shrink-0 ${
-                  step.status === 'completed'
-                    ? 'bg-green-500'
-                    : step.status === 'active'
-                      ? 'bg-blue-500 animate-pulse'
-                      : 'bg-slate-300 dark:bg-slate-600'
-                }`}
-              />
-              <div className="flex-1">
-                <div className="text-xs font-semibold text-slate-900 dark:text-white">
-                  {step.title}
-                </div>
-                {step.description && (
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400">
-                    {step.description}
+        <InfographicWrapper>
+          <div className="mt-3 flex flex-col gap-1.5">
+            {infographic.data?.steps?.map((step: any, i: number) => (
+              <ItemWrapper key={i} index={i}>
+                <div className="flex items-start gap-2">
+                  <div
+                    className="w-2 h-2 rounded-full mt-1 flex-shrink-0"
+                    style={{
+                      backgroundColor:
+                        step.status === 'completed'
+                          ? colors.primary
+                          : step.status === 'active'
+                            ? colors.accent
+                            : colors.border,
+                      animation: step.status === 'active' ? 'pulse 2s infinite' : 'none',
+                    }}
+                  />
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold" style={{ color: colors.text }}>
+                      {step.title}
+                    </div>
+                    {step.description && (
+                      <div className="text-[10px] opacity-70">
+                        {step.description}
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400">
-                {step.time}
-              </span>
-            </div>
-          ))}
-        </div>
+                  <span className="text-[10px] opacity-60">
+                    {step.time}
+                  </span>
+                </div>
+              </ItemWrapper>
+            ))}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'event-flow':

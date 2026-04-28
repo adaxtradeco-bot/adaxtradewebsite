@@ -126,7 +126,7 @@ export default function MetroGridSection({
               </div>
 
               <div className="text-3xl mb-4">
-                {typeof card.icon === 'string' ? card.icon : <IconDisplay icon={card.icon} className="w-8 h-8" />}
+                {card.icon && (typeof card.icon === 'string' ? card.icon : <IconDisplay icon={card.icon} className="w-8 h-8" />)}
               </div>
               <div className="text-[10px] font-semibold tracking-widest uppercase text-slate-500 mb-2">
                 {card.tag}

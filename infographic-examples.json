@@ -1,0 +1,252 @@
+{
+  "examples": [
+    {
+      "name": "Neon Stats with Stagger Animation",
+      "infographic": {
+        "type": "stats",
+        "data": {
+          "metrics": [
+            { "label": "Active Users", "value": "10.5K", "trend": "up", "change": "+12%" },
+            { "label": "Revenue", "value": "$50K", "trend": "up", "change": "+8%" },
+            { "label": "Conversion", "value": "3.2%", "trend": "down", "change": "-2%" },
+            { "label": "Satisfaction", "value": "98%", "trend": "up", "change": "+5%" }
+          ]
+        },
+        "theme": {
+          "preset": "neon",
+          "lightModeTheme": "ocean",
+          "darkModeTheme": "neon"
+        },
+        "animation": {
+          "type": "stagger",
+          "speed": "normal",
+          "staggerDelay": 100,
+          "easing": "ease-out"
+        },
+        "style": {
+          "displayMode": "normal",
+          "hoverEffect": "lift",
+          "borderStyle": "gradient",
+          "backgroundEffect": "blur",
+          "borderRadius": "lg"
+        }
+      }
+    },
+    {
+      "name": "Ocean Timeline with Slide Animation",
+      "infographic": {
+        "type": "timeline",
+        "data": {
+          "steps": [
+            { "title": "Project Initiated", "description": "Kickoff meeting completed", "time": "2h ago", "status": "completed" },
+            { "title": "Design Phase", "description": "UI/UX design in progress", "time": "Now", "status": "active" },
+            { "title": "Development", "description": "Pending", "time": "Tomorrow", "status": "pending" },
+            { "title": "Testing", "description": "Pending", "time": "Next week", "status": "pending" }
+          ]
+        },
+        "theme": {
+          "preset": "ocean"
+        },
+        "animation": {
+          "type": "slideIn",
+          "direction": "left",
+          "speed": "normal",
+          "easing": "ease-out"
+        },
+        "style": {
+          "displayMode": "normal",
+          "hoverEffect": "glow",
+          "borderStyle": "solid",
+          "backgroundEffect": "gradient",
+          "borderRadius": "md"
+        }
+      }
+    },
+    {
+      "name": "Sunset Audit Trail with Bounce",
+      "infographic": {
+        "type": "audit",
+        "data": {
+          "trail": [
+            { "action": "User logged in", "time": "10:30 AM", "type": "success" },
+            { "action": "AI suggestion applied", "time": "10:32 AM", "type": "ai" },
+            { "action": "Warning: High CPU usage", "time": "10:35 AM", "type": "warning" },
+            { "action": "Data exported", "time": "10:40 AM", "type": "success" }
+          ]
+        },
+        "theme": {
+          "preset": "sunset"
+        },
+        "animation": {
+          "type": "bounce",
+          "speed": "fast",
+          "easing": "bounce"
+        },
+        "style": {
+          "displayMode": "compact",
+          "hoverEffect": "pulse",
+          "borderStyle": "dashed",
+          "backgroundEffect": "pattern",
+          "backgroundPattern": "dots",
+          "borderRadius": "xl"
+        }
+      }
+    },
+    {
+      "name": "Forest KPI with Scale Animation",
+      "infographic": {
+        "type": "kpi",
+        "data": {
+          "kpis": [
+            { "value": "99.9%", "label": "Uptime", "color": "green" },
+            { "value": "< 100ms", "label": "Response Time", "color": "cyan" },
+            { "value": "500K", "label": "Requests/day", "color": "indigo" },
+            { "value": "A+", "label": "Security Score", "color": "amber" }
+          ]
+        },
+        "theme": {
+          "preset": "forest"
+        },
+        "animation": {
+          "type": "scaleUp",
+          "speed": "normal",
+          "easing": "ease-in-out"
+        },
+        "style": {
+          "displayMode": "expanded",
+          "hoverEffect": "lift",
+          "borderStyle": "glow",
+          "backgroundEffect": "solid",
+          "borderRadius": "lg"
+        }
+      }
+    },
+    {
+      "name": "Corporate Performance Bars",
+      "infographic": {
+        "type": "performance-bars",
+        "data": {
+          "performers": [
+            { "name": "API", "score": 95, "color": "green" },
+            { "name": "Database", "score": 88, "color": "cyan" },
+            { "name": "Cache", "score": 92, "color": "indigo" },
+            { "name": "CDN", "score": 97, "color": "violet" }
+          ]
+        },
+        "theme": {
+          "preset": "corporate"
+        },
+        "animation": {
+          "type": "fadeIn",
+          "speed": "slow",
+          "easing": "ease-in"
+        },
+        "style": {
+          "displayMode": "normal",
+          "hoverEffect": "none",
+          "borderStyle": "solid",
+          "backgroundEffect": "transparent",
+          "borderRadius": "md"
+        }
+      }
+    },
+    {
+      "name": "Midnight Workflow with Rotate",
+      "infographic": {
+        "type": "workflow",
+        "data": {
+          "title": "Automation Pipeline",
+          "steps": [
+            { "num": "1", "label": "Trigger Event", "type": "auto", "badge": "Auto" },
+            { "num": "2", "label": "AI Analysis", "type": "ai", "badge": "AI" },
+            { "num": "3", "label": "Decision Point", "type": "conditional", "badge": "If/Else" },
+            { "num": "4", "label": "Execute Action", "type": "manual", "badge": "Manual" }
+          ]
+        },
+        "theme": {
+          "preset": "midnight"
+        },
+        "animation": {
+          "type": "rotateIn",
+          "speed": "normal",
+          "easing": "ease-out"
+        },
+        "style": {
+          "displayMode": "normal",
+          "hoverEffect": "glow",
+          "borderStyle": "gradient",
+          "backgroundEffect": "blur",
+          "borderRadius": "full"
+        }
+      }
+    },
+    {
+      "name": "Custom Colors with Pattern Background",
+      "infographic": {
+        "type": "stats",
+        "data": {
+          "metrics": [
+            { "label": "Projects", "value": "42", "trend": "up", "change": "+7" },
+            { "label": "Team Size", "value": "15", "trend": "neutral", "change": "0" }
+          ]
+        },
+        "theme": {
+          "preset": "custom",
+          "customColors": {
+            "primary": "#ff6b6b",
+            "secondary": "#4ecdc4",
+            "accent": "#ffe66d",
+            "background": "rgba(255, 107, 107, 0.05)",
+            "text": "#ff6b6b",
+            "border": "#ff6b6b"
+          }
+        },
+        "animation": {
+          "type": "stagger",
+          "speed": "fast",
+          "staggerDelay": 150,
+          "easing": "bounce"
+        },
+        "style": {
+          "displayMode": "normal",
+          "hoverEffect": "lift",
+          "borderStyle": "solid",
+          "backgroundEffect": "pattern",
+          "backgroundPattern": "grid",
+          "borderRadius": "xl"
+        }
+      }
+    },
+    {
+      "name": "Monochrome Flowchart",
+      "infographic": {
+        "type": "flowchart",
+        "data": {
+          "nodes": [
+            { "label": "Start", "type": "start" },
+            { "label": "Process Data", "type": "process" },
+            { "label": "Valid?", "type": "decision" },
+            { "label": "Save", "type": "process" },
+            { "label": "End", "type": "end" }
+          ]
+        },
+        "theme": {
+          "preset": "monochrome"
+        },
+        "animation": {
+          "type": "slideIn",
+          "direction": "top",
+          "speed": "normal",
+          "easing": "ease-in-out"
+        },
+        "style": {
+          "displayMode": "normal",
+          "hoverEffect": "none",
+          "borderStyle": "none",
+          "backgroundEffect": "transparent",
+          "borderRadius": "sm"
+        }
+      }
+    }
+  ]
+}
