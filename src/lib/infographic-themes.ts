@@ -69,6 +69,7 @@ export interface InfographicStyle {
   customBackgroundColor?: string;
   customBackgroundColorSecondary?: string;
   gradientDirection?: string;
+  backgroundOpacity?: number; // 0-100
 }
 
 // Theme Presets Configuration
@@ -411,12 +412,14 @@ export function getBackgroundEffectStyles(
   style?: InfographicStyle
 ): React.CSSProperties {
   const baseStyle: React.CSSProperties = {};
+  const opacity = style?.backgroundOpacity || 50; // Default 50%
+  const opacityHex = Math.round((opacity / 100) * 255).toString(16).padStart(2, '0');
 
   switch (backgroundEffect) {
     case 'blur':
       return {
         ...baseStyle,
-        backgroundColor: colors.background,
+        backgroundColor: `${colors.background}${opacityHex}`,
         backdropFilter: 'blur(10px)',
       };
     case 'gradient':
@@ -425,17 +428,18 @@ export function getBackgroundEffectStyles(
       const direction = style?.gradientDirection || '135deg';
       return {
         ...baseStyle,
-        background: `linear-gradient(${direction}, ${primaryColor}15, ${secondaryColor}15)`,
+        background: `linear-gradient(${direction}, ${primaryColor}${opacityHex}, ${secondaryColor}${opacityHex})`,
       };
     case 'pattern':
+      const patternOpacity = Math.round((opacity / 100) * 0.3 * 255).toString(16).padStart(2, '0'); // 30% of selected opacity
       const patterns = {
-        dots: `radial-gradient(circle, ${colors.primary}20 1px, transparent 1px)`,
-        lines: `repeating-linear-gradient(45deg, ${colors.primary}10, ${colors.primary}10 10px, transparent 10px, transparent 20px)`,
-        grid: `linear-gradient(${colors.primary}15 1px, transparent 1px), linear-gradient(90deg, ${colors.primary}15 1px, transparent 1px)`,
+        dots: `radial-gradient(circle, ${colors.primary}${patternOpacity} 1px, transparent 1px)`,
+        lines: `repeating-linear-gradient(45deg, ${colors.primary}${patternOpacity}, ${colors.primary}${patternOpacity} 10px, transparent 10px, transparent 20px)`,
+        grid: `linear-gradient(${colors.primary}${patternOpacity} 1px, transparent 1px), linear-gradient(90deg, ${colors.primary}${patternOpacity} 1px, transparent 1px)`,
       };
       return {
         ...baseStyle,
-        backgroundColor: colors.background,
+        backgroundColor: `${colors.background}${Math.round((opacity / 100) * 0.1 * 255).toString(16).padStart(2, '0')}`, // 10% of selected opacity
         backgroundImage: patterns[backgroundPattern || 'dots'],
         backgroundSize: backgroundPattern === 'grid' ? '20px 20px' : '10px 10px',
       };
@@ -443,7 +447,7 @@ export function getBackgroundEffectStyles(
       const solidColor = style?.customBackgroundColor || colors.background;
       return {
         ...baseStyle,
-        backgroundColor: `${solidColor}20`, // Add transparency
+        backgroundColor: `${solidColor}${opacityHex}`,
       };
     case 'transparent':
     default:

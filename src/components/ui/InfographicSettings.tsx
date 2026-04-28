@@ -588,6 +588,29 @@ export default function InfographicSettings({
             </div>
           )}
 
+          {/* Background Opacity Control */}
+          {(style?.backgroundEffect && style?.backgroundEffect !== 'transparent') && (
+            <div>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                Background Opacity: {style?.backgroundOpacity || 50}%
+              </label>
+              <input
+                type="range"
+                min="10"
+                max="100"
+                step="5"
+                value={style?.backgroundOpacity || 50}
+                onChange={(e) => handleStyleChange({ backgroundOpacity: parseInt(e.target.value) })}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-slate-500 mt-1">
+                <span>10%</span>
+                <span>50%</span>
+                <span>100%</span>
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Border Radius
