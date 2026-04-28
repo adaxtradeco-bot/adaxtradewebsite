@@ -10,7 +10,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   InfographicTheme,
   InfographicAnimation,
@@ -120,6 +120,42 @@ export default function InfographicRenderer({
     data: themedData,
   };
 
+  // Helper function to get dynamic color based on index
+  const getDynamicColor = (index: number, type: 'primary' | 'background' | 'border' = 'primary') => {
+    const colorKeys = [colors.primary, colors.secondary, colors.accent, colors.success, colors.warning, colors.danger];
+    const baseColor = colorKeys[index % 6];
+    
+    switch (type) {
+      case 'background':
+        return `${baseColor}12`; // 12 = ~7% opacity
+      case 'border':
+        return `${baseColor}33`; // 33 = ~20% opacity
+      default:
+        return baseColor;
+    }
+  };
+
+  // Helper function to replace common hard-coded colors
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'success':
+      case 'green':
+        return colors.success;
+      case 'warning':
+      case 'amber':
+        return colors.warning;
+      case 'error':
+      case 'danger':
+      case 'red':
+        return colors.danger;
+      case 'info':
+      case 'cyan':
+        return colors.accent;
+      default:
+        return colors.primary;
+    }
+  };
+
   // Get CSS variables for theme
   const cssVariables = getThemeCSSVariables(colors);
 
@@ -177,7 +213,7 @@ export default function InfographicRenderer({
   };
 
   // Item wrapper for stagger animation
-  const ItemWrapper = ({ children, index }: { children: React.ReactNode; index?: number }) => {
+  const ItemWrapper = ({ children }: { children: React.ReactNode }) => {
     if (animation.type === 'stagger') {
       return (
         <motion.div variants={variants}>
@@ -227,7 +263,7 @@ export default function InfographicRenderer({
         <InfographicWrapper>
           <div className="mt-3 flex flex-col gap-1.5">
             {infographic.data?.trail?.map((item: any, i: number) => (
-              <ItemWrapper key={i} index={i}>
+              <ItemWrapper key={i}>
                 <div className="flex items-center gap-2 text-xs">
                   <div
                     className={`w-2 h-2 rounded-full flex-shrink-0`}
@@ -260,7 +296,7 @@ export default function InfographicRenderer({
         <InfographicWrapper>
           <div className="mt-3 flex flex-col gap-1.5">
             {infographic.data?.roles?.map((role: any, i: number) => (
-              <ItemWrapper key={i} index={i}>
+              <ItemWrapper key={i}>
                 <div
                   className="flex items-center gap-2 p-2 rounded-lg border"
                   style={{
@@ -284,17 +320,29 @@ export default function InfographicRenderer({
     case 'exception':
       return (
         <div className={`mt-3 ${className}`}>
-          <div className="flex items-center gap-2 p-2 bg-red-500/7 border border-red-500/20 rounded-lg">
+          <div 
+            className="flex items-center gap-2 p-2 rounded-lg border"
+            style={{
+              backgroundColor: `${colors.danger}12`, // 12 = 7% opacity
+              borderColor: `${colors.danger}33`, // 33 = 20% opacity
+            }}
+          >
             <span className="text-base">⚠</span>
             <div>
-              <div className="text-xs font-semibold text-red-400">
+              <div className="text-xs font-semibold" style={{ color: colors.danger }}>
                 {infographic.data?.title}
               </div>
-              <div className="text-[10px] text-slate-500 dark:text-slate-400">
+              <div className="text-[10px]" style={{ color: colors.text }}>
                 {infographic.data?.description}
               </div>
             </div>
-            <span className="ml-auto text-[10px] font-semibold text-amber-700 dark:text-amber-400 bg-amber-500/12 px-2 py-0.5 rounded-full">
+            <span 
+              className="ml-auto text-[10px] font-semibold px-2 py-0.5 rounded-full"
+              style={{
+                color: colors.warning,
+                backgroundColor: `${colors.warning}20`,
+              }}
+            >
               {infographic.data?.badge}
             </span>
           </div>
@@ -310,8 +358,8 @@ export default function InfographicRenderer({
               alignItems: 'center',
               gap: '8px',
               padding: '8px 12px',
-              background: 'rgba(239,68,68,.07)',
-              border: '1px solid rgba(239,68,68,.2)',
+              background: `${colors.danger}12`,
+              border: `1px solid ${colors.danger}33`,
               borderRadius: '8px',
             }}
           >
@@ -321,15 +369,12 @@ export default function InfographicRenderer({
                 style={{
                   fontSize: '11px',
                   fontWeight: 600,
-                  color:
-                    infographic.data?.statusColor === 'red'
-                      ? 'var(--red, #ef4444)'
-                      : 'var(--amber, #f59e0b)',
+                  color: infographic.data?.statusColor === 'red' ? colors.danger : colors.warning,
                 }}
               >
                 {infographic.data?.status}
               </div>
-              <div style={{ fontSize: '10px', color: 'var(--text3, #94a3b8)' }}>
+              <div style={{ fontSize: '10px', color: colors.text }}>
                 {infographic.data?.detail}
               </div>
             </div>
@@ -340,16 +385,16 @@ export default function InfographicRenderer({
                 fontWeight: 600,
                 color:
                   infographic.data?.badgeColor === 'amber'
-                    ? 'var(--amber, #f59e0b)'
+                    ? colors.warning
                     : infographic.data?.badgeColor === 'green'
-                      ? 'var(--green, #10b981)'
-                      : 'var(--cyan, #06b6d4)',
+                      ? colors.success
+                      : colors.accent,
                 background:
                   infographic.data?.badgeColor === 'amber'
-                    ? 'rgba(245,158,11,.12)'
+                    ? `${colors.warning}20`
                     : infographic.data?.badgeColor === 'green'
-                      ? 'rgba(16,185,129,.12)'
-                      : 'rgba(6,182,212,.12)',
+                      ? `${colors.success}20`
+                      : `${colors.accent}20`,
                 padding: '2px 8px',
                 borderRadius: '100px',
               }}
@@ -372,35 +417,10 @@ export default function InfographicRenderer({
           className={className}
         >
           {infographic.data?.roles?.map((role: any, i: number) => {
-            const colorMap = {
-              indigo: {
-                bg: 'rgba(99,102,241,.07)',
-                border: 'rgba(99,102,241,.15)',
-                text: 'var(--accent2, #6366f1)',
-              },
-              cyan: {
-                bg: 'rgba(6,182,212,.07)',
-                border: 'rgba(6,182,212,.15)',
-                text: 'var(--cyan, #06b6d4)',
-              },
-              green: {
-                bg: 'rgba(16,185,129,.07)',
-                border: 'rgba(16,185,129,.15)',
-                text: 'var(--green, #10b981)',
-              },
-              amber: {
-                bg: 'rgba(245,158,11,.07)',
-                border: 'rgba(245,158,11,.15)',
-                text: 'var(--amber, #f59e0b)',
-              },
-              violet: {
-                bg: 'rgba(139,92,246,.07)',
-                border: 'rgba(139,92,246,.15)',
-                text: 'var(--violet, #8b5cf6)',
-              },
-            };
-            const colors =
-              colorMap[role.color as keyof typeof colorMap] || colorMap.indigo;
+            // Use theme colors dynamically
+            const colorIndex = i % 6;
+            const themeColors = [colors.primary, colors.secondary, colors.accent, colors.success, colors.warning, colors.danger];
+            const roleColor = themeColors[colorIndex];
 
             return (
               <div
@@ -410,17 +430,17 @@ export default function InfographicRenderer({
                   alignItems: 'center',
                   gap: '8px',
                   padding: '7px 10px',
-                  background: colors.bg,
-                  border: `1px solid ${colors.border}`,
+                  background: `${roleColor}12`,
+                  border: `1px solid ${roleColor}25`,
                   borderRadius: '6px',
                 }}
               >
                 <span
-                  style={{ fontSize: '11px', color: colors.text, fontWeight: 600 }}
+                  style={{ fontSize: '11px', color: roleColor, fontWeight: 600 }}
                 >
                   {role.role}
                 </span>
-                <span style={{ fontSize: '11px', color: 'var(--text3, #94a3b8)' }}>
+                <span style={{ fontSize: '11px', color: colors.text }}>
                   {role.description}
                 </span>
               </div>
@@ -434,7 +454,7 @@ export default function InfographicRenderer({
         <InfographicWrapper>
           <div className="mt-3 grid grid-cols-2 gap-2">
             {infographic.data?.metrics?.map((metric: any, i: number) => (
-              <ItemWrapper key={i} index={i}>
+              <ItemWrapper key={i}>
                 <div
                   className="p-2 rounded-lg border"
                   style={{
@@ -442,7 +462,7 @@ export default function InfographicRenderer({
                     borderColor: colors.border,
                   }}
                 >
-                  <div className="text-[10px] opacity-70 mb-0.5">
+                  <div className="text-[10px] opacity-70 mb-0.5" style={{ color: colors.text }}>
                     {metric.label}
                   </div>
                   <div className="text-sm font-bold" style={{ color: colors.primary }}>
@@ -453,9 +473,9 @@ export default function InfographicRenderer({
                     style={{
                       color:
                         metric.trend === 'up'
-                          ? '#10b981'
+                          ? colors.success
                           : metric.trend === 'down'
-                            ? '#ef4444'
+                            ? colors.danger
                             : colors.text,
                     }}
                   >
@@ -474,78 +494,99 @@ export default function InfographicRenderer({
     case 'flow':
       return (
         <div className={`mt-3 flex flex-col gap-1 ${className}`}>
-          {infographic.data?.nodes?.map((node: any, i: number) => (
-            <div key={i} className="flex items-center gap-2">
-              <div
-                className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
-                  node.type === 'start'
-                    ? 'bg-green-500/20 text-green-700 dark:text-green-300'
-                    : node.type === 'end'
-                      ? 'bg-red-500/20 text-red-700 dark:text-red-300'
-                      : node.type === 'decision'
-                        ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300'
-                        : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
-                }`}
-              >
-                {i + 1}
+          {infographic.data?.nodes?.map((node: any, i: number) => {
+            const nodeColor = getDynamicColor(i);
+            const bgColor = getDynamicColor(i, 'background');
+            
+            return (
+              <div key={i} className="flex items-center gap-2">
+                <div
+                  className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0"
+                  style={{
+                    backgroundColor: bgColor,
+                    color: nodeColor,
+                  }}
+                >
+                  {i + 1}
+                </div>
+                <span className="text-xs" style={{ color: colors.text }}>
+                  {node.label}
+                </span>
               </div>
-              <span className="text-xs text-slate-600 dark:text-slate-300">
-                {node.label}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       );
 
     case 'flowchart':
       return (
-        <div className={`mt-3 ${className}`}>
-          <div className="flex flex-col gap-2">
+        <InfographicWrapper>
+          <div className="mt-3 flex flex-col gap-2">
             {infographic.data?.nodes?.map((node: any, i: number) => {
               const isLast = i === (infographic.data?.nodes?.length || 0) - 1;
               
               return (
-                <div key={i} className="flex flex-col items-center">
-                  {/* Node */}
-                  <div className="flex items-center justify-center relative">
-                    <div
-                      className={`px-3 py-2 rounded-lg text-xs font-medium border-2 min-w-[120px] text-center ${
-                        node.type === 'start'
-                          ? 'bg-green-500/10 border-green-500/30 text-green-700 dark:text-green-300'
-                          : node.type === 'end'
-                            ? 'bg-red-500/10 border-red-500/30 text-red-700 dark:text-red-300'
-                            : node.type === 'decision'
-                              ? 'bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-300 transform rotate-45'
-                              : 'bg-blue-500/10 border-blue-500/30 text-blue-700 dark:text-blue-300'
-                      }`}
-                      style={{
-                        ...(node.type === 'decision' && {
-                          width: '80px',
-                          height: '80px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center'
-                        })
-                      }}
-                    >
-                      <span className={node.type === 'decision' ? 'transform -rotate-45' : ''}>
-                        {node.label}
-                      </span>
+                <ItemWrapper key={i}>
+                  <div className="flex flex-col items-center">
+                    {/* Node */}
+                    <div className="flex items-center justify-center relative">
+                      <div
+                        className={`px-3 py-2 rounded-lg text-xs font-medium border-2 min-w-[120px] text-center ${
+                          node.type === 'decision' ? 'transform rotate-45' : ''
+                        }`}
+                        style={{
+                          backgroundColor: node.type === 'start'
+                            ? `${colors.success}10`
+                            : node.type === 'end'
+                              ? `${colors.danger}10`
+                              : node.type === 'decision'
+                                ? `${colors.warning}10`
+                                : `${colors.primary}10`,
+                          borderColor: node.type === 'start'
+                            ? `${colors.success}30`
+                            : node.type === 'end'
+                              ? `${colors.danger}30`
+                              : node.type === 'decision'
+                                ? `${colors.warning}30`
+                                : `${colors.primary}30`,
+                          color: node.type === 'start'
+                            ? colors.success
+                            : node.type === 'end'
+                              ? colors.danger
+                              : node.type === 'decision'
+                                ? colors.warning
+                                : colors.primary,
+                          ...(node.type === 'decision' && {
+                            width: '80px',
+                            height: '80px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          })
+                        }}
+                      >
+                        <span className={node.type === 'decision' ? 'transform -rotate-45' : ''}>
+                          {node.label}
+                        </span>
+                      </div>
                     </div>
+                    
+                    {/* Arrow */}
+                    {!isLast && (
+                      <div className="flex flex-col items-center py-1">
+                        <div className="w-px h-3" style={{ backgroundColor: colors.border }} />
+                        <div 
+                          className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[6px] border-l-transparent border-r-transparent"
+                          style={{ borderTopColor: colors.border }}
+                        />
+                      </div>
+                    )}
                   </div>
-                  
-                  {/* Arrow */}
-                  {!isLast && (
-                    <div className="flex flex-col items-center py-1">
-                      <div className="w-px h-3 bg-slate-300 dark:bg-slate-600" />
-                      <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[6px] border-l-transparent border-r-transparent border-t-slate-400 dark:border-t-slate-500" />
-                    </div>
-                  )}
-                </div>
+                </ItemWrapper>
               );
             })}
           </div>
-        </div>
+        </InfographicWrapper>
       );
 
     case 'timeline':
@@ -553,7 +594,7 @@ export default function InfographicRenderer({
         <InfographicWrapper>
           <div className="mt-3 flex flex-col gap-1.5">
             {infographic.data?.steps?.map((step: any, i: number) => (
-              <ItemWrapper key={i} index={i}>
+              <ItemWrapper key={i}>
                 <div className="flex items-start gap-2">
                   <div
                     className="w-2 h-2 rounded-full mt-1 flex-shrink-0"
@@ -597,8 +638,8 @@ export default function InfographicRenderer({
                 <div
                   className="w-2.5 h-2.5 rounded-full border-2 flex-shrink-0 mt-3.5 relative z-10"
                   style={{
-                    borderColor: infographic.data?.color || '#4F7FFF',
-                    background: 'var(--bg-panel, #151720)'
+                    borderColor: colors.primary,
+                    background: colors.background
                   }}
                 />
                 {idx < (infographic.data?.steps?.length || 0) - 1 && (
@@ -628,232 +669,212 @@ export default function InfographicRenderer({
     // ==================== ANALYTICS TYPES ====================
     case 'kpi':
       return (
-        <div className={`grid grid-cols-2 gap-1.5 mt-3 ${className}`}>
-          {infographic.data?.kpis?.map((kpi: any, i: number) => (
-            <div
-              key={i}
-              className="bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-lg p-2.5 text-center"
-            >
-              <div
-                className={`text-xl font-extrabold ${
-                  kpi.color === 'indigo'
-                    ? 'text-indigo-600 dark:text-indigo-300'
-                    : kpi.color === 'green'
-                      ? 'text-green-700 dark:text-green-400'
-                      : kpi.color === 'amber'
-                        ? 'text-amber-700 dark:text-amber-400'
-                        : 'text-cyan-700 dark:text-cyan-400'
-                }`}
-              >
-                {kpi.value}
-              </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">{kpi.label}</div>
-            </div>
-          ))}
-        </div>
+        <InfographicWrapper>
+          <div className="grid grid-cols-2 gap-1.5 mt-3">
+            {infographic.data?.kpis?.map((kpi: any, i: number) => (
+              <ItemWrapper key={i}>
+                <div
+                  className="border rounded-lg p-2.5 text-center"
+                  style={{
+                    backgroundColor: colors.background,
+                    borderColor: colors.border,
+                  }}
+                >
+                  <div
+                    className="text-xl font-extrabold"
+                    style={{
+                      color: kpi.color === 'indigo'
+                        ? colors.primary
+                        : kpi.color === 'green'
+                          ? colors.success
+                          : kpi.color === 'amber'
+                            ? colors.warning
+                            : colors.accent,
+                    }}
+                  >
+                    {kpi.value}
+                  </div>
+                  <div className="text-[10px] mt-0.5" style={{ color: colors.text }}>
+                    {kpi.label}
+                  </div>
+                </div>
+              </ItemWrapper>
+            ))}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'performance':
       return (
-        <div className={`mt-3 flex flex-col gap-1.5 ${className}`}>
-          {infographic.data?.performers?.map((perf: any, i: number) => (
-            <div key={i} className="flex items-center gap-2">
-              <div className="text-xs text-slate-600 dark:text-slate-300 w-16 flex-shrink-0">
-                {perf.name}
-              </div>
-              <div className="flex-1 h-1.5 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${
-                    perf.score >= 90
-                      ? 'bg-green-500'
-                      : perf.score >= 70
-                        ? 'bg-cyan-500'
-                        : 'bg-amber-500'
-                  }`}
-                  style={{ width: `${perf.score}%` }}
-                />
-              </div>
-              <div
-                className={`text-xs font-bold ${
-                  perf.score >= 90
-                    ? 'text-green-700 dark:text-green-400'
-                    : perf.score >= 70
-                      ? 'text-cyan-700 dark:text-cyan-400'
-                      : 'text-amber-700 dark:text-amber-400'
-                }`}
-              >
-                {perf.score}
-              </div>
-            </div>
-          ))}
-        </div>
+        <InfographicWrapper>
+          <div className="mt-3 flex flex-col gap-1.5">
+            {infographic.data?.performers?.map((perf: any, i: number) => (
+              <ItemWrapper key={i}>
+                <div className="flex items-center gap-2">
+                  <div className="text-xs w-16 flex-shrink-0" style={{ color: colors.text }}>
+                    {perf.name}
+                  </div>
+                  <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: colors.background }}>
+                    <div
+                      className="h-full rounded-full"
+                      style={{
+                        width: `${perf.score}%`,
+                        backgroundColor: perf.score >= 90
+                          ? colors.success
+                          : perf.score >= 70
+                            ? colors.accent
+                            : colors.warning,
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="text-xs font-bold"
+                    style={{
+                      color: perf.score >= 90
+                        ? colors.success
+                        : perf.score >= 70
+                          ? colors.accent
+                          : colors.warning,
+                    }}
+                  >
+                    {perf.score}
+                  </div>
+                </div>
+              </ItemWrapper>
+            ))}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'performance-bars':
       return (
-        <div
-          style={{
-            marginTop: '.75rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '5px',
-          }}
-          className={className}
-        >
-          {infographic.data?.performers?.map((perf: any, i: number) => {
-            const colorMap = {
-              green: 'var(--green, #10b981)',
-              cyan: 'var(--cyan, #06b6d4)',
-              amber: 'var(--amber, #f59e0b)',
-              indigo: 'var(--indigo, #6366f1)',
-              violet: 'var(--violet, #8b5cf6)',
-            };
-            const barColor =
-              colorMap[perf.color as keyof typeof colorMap] || colorMap.green;
+        <InfographicWrapper>
+          <div className="mt-3 flex flex-col gap-1.5">
+            {infographic.data?.performers?.map((perf: any, i: number) => {
+              // Use theme colors dynamically
+              const colorIndex = i % 6;
+              const themeColors = [colors.primary, colors.secondary, colors.accent, colors.success, colors.warning, colors.danger];
+              const barColor = themeColors[colorIndex];
 
-            return (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div
-                  style={{
-                    fontSize: '11px',
-                    color: 'var(--text2, #64748b)',
-                    width: '60px',
-                  }}
-                >
-                  {perf.name}
-                </div>
-                <div
-                  style={{
-                    flex: 1,
-                    height: '6px',
-                    background: 'rgba(255,255,255,.06)',
-                    borderRadius: '3px',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <div
-                    style={{
-                      height: '100%',
-                      width: `${perf.score}%`,
-                      background: barColor,
-                      borderRadius: '3px',
-                    }}
-                  />
-                </div>
-                <div style={{ fontSize: '11px', fontWeight: 700, color: barColor }}>
-                  {perf.score}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              return (
+                <ItemWrapper key={i}>
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="text-xs w-16 flex-shrink-0"
+                      style={{ color: colors.text }}
+                    >
+                      {perf.name}
+                    </div>
+                    <div
+                      className="flex-1 h-1.5 rounded-full overflow-hidden"
+                      style={{ backgroundColor: `${barColor}20` }}
+                    >
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${perf.score}%`,
+                          backgroundColor: barColor,
+                        }}
+                      />
+                    </div>
+                    <div className="text-xs font-bold" style={{ color: barColor }}>
+                      {perf.score}
+                    </div>
+                  </div>
+                </ItemWrapper>
+              );
+            })}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'prediction':
       return (
-        <div className={`mt-3 flex flex-col gap-1.5 ${className}`}>
-          {infographic.data?.predictions?.map((pred: any, i: number) => (
-            <div
-              key={i}
-              className={`flex items-center gap-2 p-2 rounded-lg border ${
-                pred.status === 'ok'
-                  ? 'bg-green-500/6 border-green-500/20'
-                  : pred.status === 'warn'
-                    ? 'bg-amber-500/6 border-amber-500/20'
-                    : 'bg-red-500/6 border-red-500/20'
-              }`}
-            >
-              <span className="text-xs font-medium flex-1">{pred.label}</span>
-              <span
-                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                  pred.status === 'ok'
-                    ? 'bg-green-500/15 text-green-700 dark:text-green-400'
-                    : pred.status === 'warn'
-                      ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400'
-                      : 'bg-red-500/15 text-red-400'
-                }`}
-              >
-                {pred.badge}
-              </span>
-            </div>
-          ))}
-        </div>
+        <InfographicWrapper>
+          <div className="mt-3 flex flex-col gap-1.5">
+            {infographic.data?.predictions?.map((pred: any, i: number) => (
+              <ItemWrapper key={i}>
+                <div
+                  className="flex items-center gap-2 p-2 rounded-lg border"
+                  style={{
+                    backgroundColor: pred.status === 'ok'
+                      ? `${colors.success}06`
+                      : pred.status === 'warn'
+                        ? `${colors.warning}06`
+                        : `${colors.danger}06`,
+                    borderColor: pred.status === 'ok'
+                      ? `${colors.success}20`
+                      : pred.status === 'warn'
+                        ? `${colors.warning}20`
+                        : `${colors.danger}20`,
+                  }}
+                >
+                  <span className="text-xs font-medium flex-1" style={{ color: colors.text }}>
+                    {pred.label}
+                  </span>
+                  <span
+                    className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                    style={{
+                      backgroundColor: pred.status === 'ok'
+                        ? `${colors.success}15`
+                        : pred.status === 'warn'
+                          ? `${colors.warning}15`
+                          : `${colors.danger}15`,
+                      color: pred.status === 'ok'
+                        ? colors.success
+                        : pred.status === 'warn'
+                          ? colors.warning
+                          : colors.danger,
+                    }}
+                  >
+                    {pred.badge}
+                  </span>
+                </div>
+              </ItemWrapper>
+            ))}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'status-list':
       return (
-        <div
-          style={{
-            marginTop: '.75rem',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '4px',
-          }}
-          className={className}
-        >
-          {infographic.data?.items?.map((item: any, i: number) => {
-            const colorMap = {
-              red: {
-                bg: 'rgba(239,68,68,.07)',
-                border: 'rgba(239,68,68,.2)',
-                dot: 'var(--red, #ef4444)',
-                text: 'var(--red, #ef4444)',
-              },
-              amber: {
-                bg: 'rgba(245,158,11,.07)',
-                border: 'rgba(245,158,11,.2)',
-                dot: 'var(--amber, #f59e0b)',
-                text: 'var(--amber, #f59e0b)',
-              },
-              green: {
-                bg: 'rgba(16,185,129,.07)',
-                border: 'rgba(16,185,129,.2)',
-                dot: 'var(--green, #10b981)',
-                text: 'var(--green, #10b981)',
-              },
-            };
-            const colors =
-              colorMap[item.color as keyof typeof colorMap] || colorMap.green;
+        <InfographicWrapper>
+          <div className="mt-3 flex flex-col gap-1">
+            {infographic.data?.items?.map((item: any, i: number) => {
+              const statusColor = item.color === 'red'
+                ? colors.danger
+                : item.color === 'amber'
+                  ? colors.warning
+                  : colors.success;
 
-            return (
-              <div
-                key={i}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  padding: '6px 10px',
-                  background: colors.bg,
-                  border: `1px solid ${colors.border}`,
-                  borderRadius: '6px',
-                }}
-              >
-                <span
-                  style={{
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    background: colors.dot,
-                    flexShrink: 0,
-                  }}
-                />
-                <span style={{ fontSize: '11px', color: 'var(--text2, #64748b)' }}>
-                  {item.label}
-                </span>
-                <span
-                  style={{
-                    marginLeft: 'auto',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    color: colors.text,
-                  }}
-                >
-                  {item.status}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+              return (
+                <ItemWrapper key={i}>
+                  <div
+                    className="flex items-center gap-2 p-1.5 rounded-md border"
+                    style={{
+                      backgroundColor: `${statusColor}07`,
+                      borderColor: `${statusColor}20`,
+                    }}
+                  >
+                    <span
+                      className="w-2 h-2 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: statusColor }}
+                    />
+                    <span className="text-xs flex-1" style={{ color: colors.text }}>
+                      {item.label}
+                    </span>
+                    <span
+                      className="ml-auto text-[10px] font-semibold"
+                      style={{ color: statusColor }}
+                    >
+                      {item.status}
+                    </span>
+                  </div>
+                </ItemWrapper>
+              );
+            })}
+          </div>
+        </InfographicWrapper>
       );
 
     case 'media':
@@ -906,257 +927,329 @@ export default function InfographicRenderer({
     // ==================== ROTATING TABS TYPES ====================
     case 'workflow':
       return (
-        <div className={className}>
-          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+        <InfographicWrapper>
+          <div className="text-xs font-semibold mb-3" style={{ color: colors.text }}>
             {infographic.data?.title}
           </div>
           <div className="flex flex-col gap-1.5">
             {infographic.data?.steps?.map((step: any, i: number) => (
-              <div
-                key={i}
-                className="flex items-center gap-2.5 p-2 bg-indigo-500/8 rounded-lg border border-indigo-500/15"
-              >
-                <div className="w-5.5 h-5.5 rounded-full bg-indigo-500 flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0">
-                  {step.num}
-                </div>
-                <div className="text-xs font-medium flex-1">{step.label}</div>
-                <span
-                  className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                    step.type === 'auto'
-                      ? 'bg-green-500/15 text-green-700 dark:text-green-400'
-                      : step.type === 'ai'
-                        ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-300'
-                        : step.type === 'conditional'
-                          ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400'
-                          : 'bg-cyan-500/15 text-cyan-700 dark:text-cyan-400'
-                  }`}
+              <ItemWrapper key={i}>
+                <div
+                  className="flex items-center gap-2.5 p-2 rounded-lg border"
+                  style={{
+                    backgroundColor: `${colors.primary}08`,
+                    borderColor: `${colors.primary}15`,
+                  }}
                 >
-                  {step.badge}
-                </span>
-              </div>
+                  <div 
+                    className="w-5.5 h-5.5 rounded-full flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0"
+                    style={{ backgroundColor: colors.primary }}
+                  >
+                    {step.num}
+                  </div>
+                  <div className="text-xs font-medium flex-1" style={{ color: colors.text }}>
+                    {step.label}
+                  </div>
+                  <span
+                    className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                    style={{
+                      backgroundColor: step.type === 'auto'
+                        ? `${colors.success}15`
+                        : step.type === 'ai'
+                          ? `${colors.primary}15`
+                          : step.type === 'conditional'
+                            ? `${colors.warning}15`
+                            : `${colors.accent}15`,
+                      color: step.type === 'auto'
+                        ? colors.success
+                        : step.type === 'ai'
+                          ? colors.primary
+                          : step.type === 'conditional'
+                            ? colors.warning
+                            : colors.accent,
+                    }}
+                  >
+                    {step.badge}
+                  </span>
+                </div>
+              </ItemWrapper>
             ))}
           </div>
-        </div>
+        </InfographicWrapper>
       );
 
     case 'sla':
       return (
-        <div className={className}>
-          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+        <InfographicWrapper>
+          <div className="text-xs font-semibold mb-3" style={{ color: colors.text }}>
             {infographic.data?.title}
           </div>
           <div className="flex flex-col gap-2">
             {infographic.data?.bars?.map((bar: any, i: number) => (
-              <div key={i} className="flex items-center gap-2.5">
-                <span className="text-xs text-slate-600 dark:text-slate-300 w-20 flex-shrink-0">
-                  {bar.label}
-                </span>
-                <div className="flex-1 h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full rounded-full transition-all duration-1000 ${
-                      bar.value >= 90
-                        ? 'bg-green-500'
-                        : bar.value >= 70
-                          ? 'bg-amber-500'
-                          : 'bg-red-500'
-                    }`}
-                    style={{ width: `${bar.value}%` }}
-                  />
-                </div>
-                <span
-                  className={`text-[10px] font-semibold w-8 text-right ${
-                    bar.value >= 90
-                      ? 'text-green-700 dark:text-green-400'
-                      : bar.value >= 70
-                        ? 'text-amber-700 dark:text-amber-400'
-                        : 'text-red-400'
-                  }`}
-                >
-                  {bar.value}%
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      );
-
-    case 'sla-bars':
-      return (
-        <div className={`tpc-infographic ${className}`}>
-          <div
-            style={{
-              fontSize: '11px',
-              fontWeight: 600,
-              color: 'var(--text3)',
-              marginBottom: '.75rem',
-            }}
-          >
-            {infographic.data?.title}
-          </div>
-          <div className="sla-bars flex flex-col gap-2">
-            {infographic.data?.bars?.map((bar: any, i: number) => {
-              const statusColors = {
-                green: 'var(--green, #10b981)',
-                amber: 'var(--amber, #f59e0b)',
-                red: 'var(--red, #ef4444)',
-              };
-              const barColor =
-                statusColors[bar.status as keyof typeof statusColors] ||
-                statusColors.green;
-
-              return (
-                <div key={i} className="sla-row flex items-center gap-2">
-                  <span className="sla-label text-xs text-slate-600 dark:text-slate-300 w-24 flex-shrink-0">
+              <ItemWrapper key={i}>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xs w-20 flex-shrink-0" style={{ color: colors.text }}>
                     {bar.label}
                   </span>
-                  <div className="sla-bar-wrap flex-1 h-2 bg-slate-200 dark:bg-white/10 rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: colors.background }}>
                     <div
-                      className="sla-bar h-full rounded-full transition-all duration-1000"
-                      style={{ width: `${bar.value}%`, background: barColor }}
+                      className="h-full rounded-full transition-all duration-1000"
+                      style={{
+                        width: `${bar.value}%`,
+                        backgroundColor: bar.value >= 90
+                          ? colors.success
+                          : bar.value >= 70
+                            ? colors.warning
+                            : colors.danger,
+                      }}
                     />
                   </div>
                   <span
-                    className="sla-val text-xs font-semibold w-10 text-right"
-                    style={{ color: barColor }}
+                    className="text-[10px] font-semibold w-8 text-right"
+                    style={{
+                      color: bar.value >= 90
+                        ? colors.success
+                        : bar.value >= 70
+                          ? colors.warning
+                          : colors.danger,
+                    }}
                   >
                     {bar.value}%
                   </span>
                 </div>
+              </ItemWrapper>
+            ))}
+          </div>
+        </InfographicWrapper>
+      );
+
+    case 'sla-bars':
+      return (
+        <InfographicWrapper>
+          <div className="text-xs font-semibold mb-3" style={{ color: colors.text }}>
+            {infographic.data?.title}
+          </div>
+          <div className="sla-bars flex flex-col gap-2">
+            {infographic.data?.bars?.map((bar: any, i: number) => {
+              const barColor = bar.status === 'green'
+                ? colors.success
+                : bar.status === 'amber'
+                  ? colors.warning
+                  : colors.danger;
+
+              return (
+                <ItemWrapper key={i}>
+                  <div className="sla-row flex items-center gap-2">
+                    <span className="sla-label text-xs w-24 flex-shrink-0" style={{ color: colors.text }}>
+                      {bar.label}
+                    </span>
+                    <div className="sla-bar-wrap flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: colors.background }}>
+                      <div
+                        className="sla-bar h-full rounded-full transition-all duration-1000"
+                        style={{ width: `${bar.value}%`, backgroundColor: barColor }}
+                      />
+                    </div>
+                    <span
+                      className="sla-val text-xs font-semibold w-10 text-right"
+                      style={{ color: barColor }}
+                    >
+                      {bar.value}%
+                    </span>
+                  </div>
+                </ItemWrapper>
               );
             })}
           </div>
-        </div>
+        </InfographicWrapper>
       );
 
     // ==================== METRO GRID TYPES ====================
     case 'form':
       return (
-        <div className={className}>
+        <InfographicWrapper>
           {infographic.data?.title && (
-            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+            <div className="text-xs font-semibold mb-3" style={{ color: colors.text }}>
               {infographic.data.title}
             </div>
           )}
           <div className="flex flex-col gap-1.5 mt-3">
             {infographic.data?.fields?.map((field: any, i: number) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 p-1.5 bg-indigo-500/8 rounded-md border border-indigo-500/15"
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 flex-shrink-0" />
-                <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                  {typeof field === 'string' ? field : field.label}
-                </span>
-                {field.type && (
-                  <span className="ml-auto text-[9px] text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 px-1.5 py-0.5 rounded-full">
-                    {field.type}
+              <ItemWrapper key={i}>
+                <div
+                  className="flex items-center gap-2 p-1.5 rounded-md border"
+                  style={{
+                    backgroundColor: `${colors.primary}08`,
+                    borderColor: `${colors.primary}15`,
+                  }}
+                >
+                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: colors.primary }} />
+                  <span className="text-[10px] font-medium" style={{ color: colors.text }}>
+                    {typeof field === 'string' ? field : field.label}
                   </span>
-                )}
-              </div>
+                  {field.type && (
+                    <span 
+                      className="ml-auto text-[9px] px-1.5 py-0.5 rounded-full"
+                      style={{
+                        color: colors.primary,
+                        backgroundColor: `${colors.primary}10`,
+                      }}
+                    >
+                      {field.type}
+                    </span>
+                  )}
+                </div>
+              </ItemWrapper>
             ))}
           </div>
-        </div>
+        </InfographicWrapper>
       );
 
     case 'ai':
       return (
-        <div className={className}>
+        <InfographicWrapper>
           {infographic.data?.title && (
-            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+            <div className="text-xs font-semibold mb-3" style={{ color: colors.text }}>
               {infographic.data.title}
             </div>
           )}
           <div className="flex flex-col gap-1.5 mt-3">
             {infographic.data?.actions?.map((action: any, i: number) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 p-1.5 bg-violet-500/8 rounded-md border border-violet-500/15"
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-violet-500 flex-shrink-0" />
-                <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                  {typeof action === 'string' ? action : action.action}
-                </span>
-                {action.status && (
-                  <span className="ml-auto text-[9px] text-violet-600 dark:text-violet-400 bg-violet-500/10 px-1.5 py-0.5 rounded-full">
-                    {action.status}
+              <ItemWrapper key={i}>
+                <div
+                  className="flex items-center gap-2 p-1.5 rounded-md border"
+                  style={{
+                    backgroundColor: `${colors.secondary}08`,
+                    borderColor: `${colors.secondary}15`,
+                  }}
+                >
+                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: colors.secondary }} />
+                  <span className="text-[10px] font-medium" style={{ color: colors.text }}>
+                    {typeof action === 'string' ? action : action.action}
                   </span>
-                )}
-              </div>
+                  {action.status && (
+                    <span 
+                      className="ml-auto text-[9px] px-1.5 py-0.5 rounded-full"
+                      style={{
+                        color: colors.secondary,
+                        backgroundColor: `${colors.secondary}10`,
+                      }}
+                    >
+                      {action.status}
+                    </span>
+                  )}
+                </div>
+              </ItemWrapper>
             ))}
           </div>
-        </div>
+        </InfographicWrapper>
       );
 
     case 'analytics':
       return (
-        <div className={className}>
+        <InfographicWrapper>
           {infographic.data?.title && (
-            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+            <div className="text-xs font-semibold mb-3" style={{ color: colors.text }}>
               {infographic.data.title}
             </div>
           )}
           <div className="grid grid-cols-2 gap-1.5 mt-3">
             {infographic.data?.widgets?.map((widget: any, i: number) => (
-              <div key={i} className="bg-green-500/8 border border-green-500/15 rounded-md p-2 text-center">
-                <div className="text-xs font-bold text-green-700 dark:text-green-400">
-                  {typeof widget === 'string' ? widget : widget.name}
+              <ItemWrapper key={i}>
+                <div 
+                  className="border rounded-md p-2 text-center"
+                  style={{
+                    backgroundColor: `${colors.success}08`,
+                    borderColor: `${colors.success}15`,
+                  }}
+                >
+                  <div className="text-xs font-bold" style={{ color: colors.success }}>
+                    {typeof widget === 'string' ? widget : widget.name}
+                  </div>
+                  {widget.status && (
+                    <div className="text-[10px]" style={{ color: colors.text }}>
+                      {widget.status}
+                    </div>
+                  )}
                 </div>
-                {widget.status && (
-                  <div className="text-[10px] text-slate-500">{widget.status}</div>
-                )}
-              </div>
+              </ItemWrapper>
             ))}
           </div>
-        </div>
+        </InfographicWrapper>
       );
 
     case 'portal':
       return (
-        <div className={className}>
+        <InfographicWrapper>
           {infographic.data?.title && (
-            <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3">
+            <div className="text-xs font-semibold mb-3" style={{ color: colors.text }}>
               {infographic.data.title}
             </div>
           )}
           <div className="flex flex-col gap-1.5 mt-3">
             {infographic.data?.features?.map((feature: any, i: number) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 p-1.5 bg-amber-500/8 rounded-md border border-amber-500/15"
-              >
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0" />
-                <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                  {typeof feature === 'string' ? feature : feature.feature}
-                </span>
-                {feature.level && (
-                  <span className="ml-auto text-[9px] text-amber-600 dark:text-amber-400 bg-amber-500/10 px-1.5 py-0.5 rounded-full">
-                    {feature.level}
+              <ItemWrapper key={i}>
+                <div
+                  className="flex items-center gap-2 p-1.5 rounded-md border"
+                  style={{
+                    backgroundColor: `${colors.warning}08`,
+                    borderColor: `${colors.warning}15`,
+                  }}
+                >
+                  <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: colors.warning }} />
+                  <span className="text-[10px] font-medium" style={{ color: colors.text }}>
+                    {typeof feature === 'string' ? feature : feature.feature}
                   </span>
-                )}
-              </div>
+                  {feature.level && (
+                    <span 
+                      className="ml-auto text-[9px] px-1.5 py-0.5 rounded-full"
+                      style={{
+                        color: colors.warning,
+                        backgroundColor: `${colors.warning}10`,
+                      }}
+                    >
+                      {feature.level}
+                    </span>
+                  )}
+                </div>
+              </ItemWrapper>
             ))}
           </div>
-        </div>
+        </InfographicWrapper>
       );
 
     case 'org':
       return (
-        <div className={`flex flex-col items-center gap-1.5 mt-3 ${className}`}>
-          <div className="bg-indigo-500/15 border border-indigo-500/30 rounded-md px-2.5 py-1 text-[10px] font-semibold text-indigo-600 dark:text-indigo-300">
-            {infographic.data?.root}
+        <InfographicWrapper>
+          <div className="flex flex-col items-center gap-1.5 mt-3">
+            <div 
+              className="border rounded-md px-2.5 py-1 text-[10px] font-semibold"
+              style={{
+                backgroundColor: `${colors.primary}15`,
+                borderColor: `${colors.primary}30`,
+                color: colors.primary,
+              }}
+            >
+              {infographic.data?.root}
+            </div>
+            <div className="w-px h-3" style={{ backgroundColor: colors.border }} />
+            <div className="flex gap-1.5">
+              {infographic.data?.children?.map((child: string, i: number) => (
+                <ItemWrapper key={i}>
+                  <div
+                    className="border rounded-md px-2.5 py-1 text-[10px] font-semibold text-center"
+                    style={{
+                      backgroundColor: `${colors.accent}12`,
+                      borderColor: `${colors.accent}25`,
+                      color: colors.accent,
+                    }}
+                  >
+                    {child}
+                  </div>
+                </ItemWrapper>
+              ))}
+            </div>
           </div>
-          <div className="w-px h-3 bg-slate-300 dark:bg-white/10" />
-          <div className="flex gap-1.5">
-            {infographic.data?.children?.map((child: string, i: number) => (
-              <div
-                key={i}
-                className="bg-cyan-500/12 border border-cyan-500/25 rounded-md px-2.5 py-1 text-[10px] font-semibold text-cyan-700 dark:text-cyan-400 text-center"
-              >
-                {child}
-              </div>
-            ))}
-          </div>
-        </div>
+        </InfographicWrapper>
       );
 
     // Default: Unknown type
