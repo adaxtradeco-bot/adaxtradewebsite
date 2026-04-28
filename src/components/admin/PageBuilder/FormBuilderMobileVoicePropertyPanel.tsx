@@ -9,6 +9,7 @@
 import React from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { INFOGRAPHIC_TYPE_OPTIONS, INFOGRAPHIC_DEFAULT_DATA } from '@/lib/page-builder/infographic-defaults';
+import InfographicFieldEditor from './InfographicFieldEditor';
 
 interface FormBuilderMobileVoicePropertyPanelProps {
   section: SectionConfig;
@@ -33,14 +34,11 @@ export function FormBuilderMobileVoicePropertyPanel({ section, onUpdate }: FormB
     updateField('features', features);
   };
 
-  const updateFeatureInfographic = (index: number, type: string) => {
+  const updateFeatureInfographic = (index: number, infographicConfig: any) => {
     const features = [...(data.features || [])];
     features[index] = {
       ...features[index],
-      infographic: type ? {
-        type,
-        data: INFOGRAPHIC_DEFAULT_DATA[type] || {}
-      } : undefined
+      infographic: infographicConfig
     };
     updateField('features', features);
   };
@@ -174,27 +172,13 @@ export function FormBuilderMobileVoicePropertyPanel({ section, onUpdate }: FormB
                   </p>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Infographic Type
-                  </label>
-                  <select
-                    value={feature.infographic?.type || ''}
-                    onChange={(e) => updateFeatureInfographic(index, e.target.value)}
-                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  >
-                    {INFOGRAPHIC_TYPE_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  {feature.infographic?.type && (
-                    <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-                      ✓ Using default data for {feature.infographic.type}
-                    </p>
-                  )}
-                </div>
+                {/* Enhanced Infographic with Theme/Animation/Style */}
+                <InfographicFieldEditor
+                  value={feature.infographic}
+                  onChange={(config) => updateFeatureInfographic(index, config)}
+                  label="Infographic"
+                  showAdvancedSettings={true}
+                />
               </div>
             </div>
           ))}

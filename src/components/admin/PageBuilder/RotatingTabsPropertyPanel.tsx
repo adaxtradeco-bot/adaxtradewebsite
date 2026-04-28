@@ -10,6 +10,7 @@ import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { InlineFieldHelper } from './InlineFieldHelper';
 import { INFOGRAPHIC_DEFAULT_DATA, INFOGRAPHIC_TYPE_OPTIONS, getInfographicStructurePreview } from '@/lib/page-builder/infographic-defaults';
 import { ImageUploader } from './ImageUploader';
+import InfographicFieldEditor from './InfographicFieldEditor';
 
 interface RotatingTabsPropertyPanelProps {
   section: SectionConfig;
@@ -221,59 +222,13 @@ export function RotatingTabsPropertyPanel({ section, onUpdate }: RotatingTabsPro
                   className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 />
 
-                {/* Infographic */}
-                <div className="border-t border-gray-300 dark:border-gray-600 pt-2">
-                  <label className="flex items-center text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
-                    Infographic
-                    <InlineFieldHelper
-                      label="Infographic Type"
-                      description="Visual data shown in the content panel"
-                      note="Use JSON Editor to configure infographic data"
-                    />
-                  </label>
-                  <select
-                    value={tab.content?.infographic?.type || ''}
-                    onChange={(e) => {
-                      const type = e.target.value;
-                      updateTabContent(index, {
-                        infographic: type ? { type, data: INFOGRAPHIC_DEFAULT_DATA[type] || {} } : undefined,
-                      });
-                    }}
-                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  >
-                    {INFOGRAPHIC_TYPES.map((t) => (
-                      <option key={t.value} value={t.value}>{t.label}</option>
-                    ))}
-                  </select>
-                  {tab.content?.infographic?.type && tab.content.infographic.type !== 'media' && (
-                    <div className="mt-1 space-y-1">
-                      <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-[10px] text-blue-800 dark:text-blue-200">
-                        💡 Switch to <strong>JSON Editor</strong> to edit data
-                      </div>
-                      <pre className="p-2 bg-slate-900 text-green-400 rounded text-[9px] leading-relaxed overflow-x-auto max-h-40 overflow-y-auto">{getInfographicStructurePreview(tab.content.infographic.type)}</pre>
-                    </div>
-                  )}
-
-                  {tab.content?.infographic?.type === 'media' && (
-                    <div className="mt-2">
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Select Media
-                      </label>
-                      <ImageUploader
-                        value={tab.content.infographic.data || ''}
-                        onChange={(value) => {
-                          updateTabContent(index, {
-                            infographic: {
-                              type: 'media',
-                              data: typeof value === 'object' ? value : { src: value, type: 'image', alt: '', maxWidth: null, maxHeight: null, objectFit: 'cover' }
-                            }
-                          });
-                        }}
-                        acceptTypes={['image/*', 'video/*']}
-                      />
-                    </div>
-                  )}
-                </div>
+                {/* Enhanced Infographic with Theme/Animation/Style */}
+                <InfographicFieldEditor
+                  value={tab.content?.infographic}
+                  onChange={(config) => updateTabContent(index, { infographic: config })}
+                  label="Infographic"
+                  showAdvancedSettings={true}
+                />
               </div>
             </div>
           ))}

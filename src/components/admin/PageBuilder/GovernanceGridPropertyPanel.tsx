@@ -10,6 +10,7 @@ import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { InlineFieldHelper } from './InlineFieldHelper';
 import { INFOGRAPHIC_DEFAULT_DATA, INFOGRAPHIC_TYPE_OPTIONS, getInfographicStructurePreview } from '@/lib/page-builder/infographic-defaults';
 import { ImageUploader } from './ImageUploader';
+import InfographicFieldEditor from './InfographicFieldEditor';
 
 interface GovernanceGridPropertyPanelProps {
   section: SectionConfig;
@@ -224,73 +225,13 @@ export function GovernanceGridPropertyPanel({
                   </select>
                 </div>
 
-                {/* Infographic Section */}
-                <div className="border-t border-gray-300 dark:border-gray-600 pt-2 mt-2">
-                  <label className="flex items-center text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                    Infographic
-                    <InlineFieldHelper
-                      label="Infographic Type"
-                      description="Visual data representation below the card"
-                      values={[
-                        { value: 'audit', label: 'Audit Trail - Timeline with icons' },
-                        { value: 'stats', label: 'Stats - Metrics grid' },
-                        { value: 'flow', label: 'Flow - Process nodes' },
-                        { value: 'timeline', label: 'Timeline - Sequential steps' },
-                        { value: 'roles', label: 'Roles - User access cards' },
-                        { value: 'exception', label: 'Exception - Warning display' },
-                      ]}
-                      note="Use JSON editor for detailed infographic data configuration"
-                    />
-                  </label>
-
-                  <select
-                    value={card.infographic?.type || ''}
-                    onChange={(e) => {
-                      const type = e.target.value;
-                      if (!type) {
-                        updateCard(index, { infographic: undefined });
-                      } else {
-                        updateCard(index, {
-                          infographic: { type, data: INFOGRAPHIC_DEFAULT_DATA[type] || {} },
-                        });
-                      }
-                    }}
-                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  >
-                    {INFOGRAPHIC_TYPE_OPTIONS.map((t) => (
-                      <option key={t.value} value={t.value}>{t.label}</option>
-                    ))}
-                  </select>
-
-                  {card.infographic?.type && card.infographic.type !== 'media' && (
-                    <div className="mt-2 space-y-1">
-                      <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-[10px] text-blue-800 dark:text-blue-200">
-                        💡 Switch to <strong>JSON Editor</strong> to edit data
-                      </div>
-                      <pre className="p-2 bg-slate-900 text-green-400 rounded text-[9px] leading-relaxed overflow-x-auto max-h-40 overflow-y-auto">{getInfographicStructurePreview(card.infographic.type)}</pre>
-                    </div>
-                  )}
-
-                  {card.infographic?.type === 'media' && (
-                    <div className="mt-2">
-                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Select Media
-                      </label>
-                      <ImageUploader
-                        value={card.infographic.data || ''}
-                        onChange={(value) => {
-                          updateCard(index, {
-                            infographic: {
-                              type: 'media',
-                              data: typeof value === 'object' ? value : { src: value, type: 'image', alt: '', maxWidth: null, maxHeight: null, objectFit: 'cover' }
-                            }
-                          });
-                        }}
-                        acceptTypes={['image/*', 'video/*']}
-                      />
-                    </div>
-                  )}
-                </div>
+                {/* Enhanced Infographic with Theme/Animation/Style */}
+                <InfographicFieldEditor
+                  value={card.infographic}
+                  onChange={(config) => updateCard(index, { infographic: config })}
+                  label="Infographic"
+                  showAdvancedSettings={true}
+                />
               </div>
             </div>
           ))}

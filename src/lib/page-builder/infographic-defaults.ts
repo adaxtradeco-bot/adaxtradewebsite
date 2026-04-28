@@ -1,9 +1,32 @@
 /**
  * Infographic Default Data
- * Author: Amazon Q
+ * Author: Amazon Q / Kiro AI
  * Created: 2024-01-20
+ * Updated: 2025-01-XX - Added support for theme, animation, and style
  * Purpose: Default data for each infographic type used in PropertyPanels
  */
+
+import { InfographicTheme, InfographicAnimation, InfographicStyle, DEFAULT_THEME, DEFAULT_ANIMATION, DEFAULT_STYLE } from '@/lib/infographic-themes';
+
+// Extended interface for infographic configuration
+export interface InfographicConfig {
+  type: string;
+  data?: any;
+  theme?: InfographicTheme;
+  animation?: InfographicAnimation;
+  style?: InfographicStyle;
+}
+
+// Helper function to create default infographic config
+export function createDefaultInfographicConfig(type: string, data?: any): InfographicConfig {
+  return {
+    type,
+    data: data || INFOGRAPHIC_DEFAULT_DATA[type] || {},
+    theme: DEFAULT_THEME,
+    animation: DEFAULT_ANIMATION,
+    style: DEFAULT_STYLE,
+  };
+}
 
 export const INFOGRAPHIC_DEFAULT_DATA: Record<string, any> = {
   audit: {

@@ -9,6 +9,7 @@
 import React from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { INFOGRAPHIC_TYPE_OPTIONS, INFOGRAPHIC_DEFAULT_DATA } from '@/lib/page-builder/infographic-defaults';
+import InfographicFieldEditor from './InfographicFieldEditor';
 
 interface FormBuilderTemplatesPropertyPanelProps {
   section: SectionConfig;
@@ -33,14 +34,11 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
     updateField('templates', templates);
   };
 
-  const updateTemplateInfographic = (index: number, type: string) => {
+  const updateTemplateInfographic = (index: number, infographicConfig: any) => {
     const templates = [...(data.templates || [])];
     templates[index] = {
       ...templates[index],
-      infographic: type ? {
-        type,
-        data: INFOGRAPHIC_DEFAULT_DATA[type] || {}
-      } : undefined
+      infographic: infographicConfig
     };
     updateField('templates', templates);
   };
@@ -205,27 +203,13 @@ export function FormBuilderTemplatesPropertyPanel({ section, onUpdate }: FormBui
                   </p>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Infographic Type
-                  </label>
-                  <select
-                    value={template.infographic?.type || ''}
-                    onChange={(e) => updateTemplateInfographic(index, e.target.value)}
-                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                  >
-                    {INFOGRAPHIC_TYPE_OPTIONS.map((opt) => (
-                      <option key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </option>
-                    ))}
-                  </select>
-                  {template.infographic?.type && (
-                    <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-                      ✓ Using default data for {template.infographic.type}
-                    </p>
-                  )}
-                </div>
+                {/* Enhanced Infographic with Theme/Animation/Style */}
+                <InfographicFieldEditor
+                  value={template.infographic}
+                  onChange={(config) => updateTemplateInfographic(index, config)}
+                  label="Infographic"
+                  showAdvancedSettings={true}
+                />
               </div>
             </div>
           ))}

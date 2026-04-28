@@ -31,8 +31,9 @@ export interface AutomationEvent {
   tag: string;
   title: string;
   description: string;
-  infographicType: string; // Type from INFOGRAPHIC_TYPE_OPTIONS
-  infographicData?: any; // Data matching the selected type
+  infographicType: string; // Type from INFOGRAPHIC_TYPE_OPTIONS (legacy)
+  infographicData?: any; // Data matching the selected type (legacy)
+  infographic?: any; // Modern infographic config with theme/animation/style
   exampleLabel?: string;
   exampleText?: string;
 }

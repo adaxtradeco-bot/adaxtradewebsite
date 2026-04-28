@@ -11,6 +11,7 @@ import { AutomationEventsSectionData, AutomationEvent, FlowStep } from '../../bu
 import { ImageUploader } from './ImageUploader';
 import { IconPicker, IconDisplay } from '@/components/ui/IconPicker';
 import { INFOGRAPHIC_TYPE_OPTIONS, INFOGRAPHIC_DEFAULT_DATA } from '@/lib/page-builder/infographic-defaults';
+import InfographicFieldEditor from './InfographicFieldEditor';
 
 interface AutomationEventsPropertyPanelProps {
   section: any;
@@ -78,12 +79,22 @@ export function AutomationEventsPropertyPanel({ section, onUpdate }: AutomationE
     // Not used anymore - kept for backward compatibility
   };
 
-  const handleInfographicTypeChange = (eventId: string, type: string) => {
-    const defaultData = type ? INFOGRAPHIC_DEFAULT_DATA[type] || {} : {};
-    updateEvent(eventId, {
-      infographicType: type,
-      infographicData: defaultData
-    });
+  const handleInfographicChange = (eventId: string, infographicConfig: any) => {
+    // Handle both legacy and modern formats
+    if (infographicConfig) {
+      updateEvent(eventId, {
+        infographic: infographicConfig,
+        // Keep legacy fields for backward compatibility
+        infographicType: infographicConfig.type,
+        infographicData: infographicConfig.data
+      });
+    } else {
+      updateEvent(eventId, {
+        infographic: undefined,
+        infographicType: '',
+        infographicData: {}
+      });
+    }
   };
 
   return (
@@ -308,22 +319,16 @@ export function AutomationEventsPropertyPanel({ section, onUpdate }: AutomationE
                     className="w-full px-2 py-1 border rounded text-sm bg-white dark:bg-gray-900"
                   />
 
-                  {/* Infographic Type Selector */}
-                  <div>
-                    <label className="block text-xs font-medium mb-1">Visualization Type</label>
-                    <select
-                      value={event.infographicType || ''}
-                      onChange={(e) => handleInfographicTypeChange(event.id, e.target.value)}
-                      className="w-full px-2 py-1 border rounded text-sm bg-white dark:bg-gray-900"
-                    >
-                      {INFOGRAPHIC_TYPE_OPTIONS.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      ))}
-                    </select>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Select infographic type. Default data will be applied automatically.
-                    </p>
-                  </div>
+                  {/* Enhanced Infographic with Theme/Animation/Style */}
+                  <InfographicFieldEditor
+                    value={event.infographic || (event.infographicType ? {
+                      type: event.infographicType,
+                      data: event.infographicData || INFOGRAPHIC_DEFAULT_DATA[event.infographicType] || {}
+                    } : undefined)}
+                    onChange={(config) => handleInfographicChange(event.id, config)}
+                    label="Visualization"
+                    showAdvancedSettings={true}
+                  />
 
                   {/* Example */}
                   <div className="border-t pt-2">

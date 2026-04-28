@@ -57,6 +57,26 @@ export default function InfographicRenderer({
   infographic,
   className = '',
 }: InfographicRendererProps) {
+  // Migrate legacy infographic format
+  const migratedInfographic = React.useMemo(() => {
+    if (!infographic) return infographic;
+    
+    // If already has theme/animation/style, return as is
+    if (infographic.theme || infographic.animation || infographic.style) {
+      return infographic;
+    }
+    
+    // Migrate legacy format by adding default theme/animation/style
+    return {
+      ...infographic,
+      theme: DEFAULT_THEME,
+      animation: DEFAULT_ANIMATION,
+      style: DEFAULT_STYLE,
+    };
+  }, [infographic]);
+
+  // Use migrated infographic for the rest of the component
+  const processedInfographic = migratedInfographic;
   // Detect dark mode
   const [isDark, setIsDark] = useState(false);
 
@@ -80,9 +100,9 @@ export default function InfographicRenderer({
   }, []);
 
   // Get theme colors based on current mode
-  const theme = infographic.theme || DEFAULT_THEME;
-  const animation = infographic.animation || DEFAULT_ANIMATION;
-  const style = infographic.style || DEFAULT_STYLE;
+  const theme = processedInfographic.theme || DEFAULT_THEME;
+  const animation = processedInfographic.animation || DEFAULT_ANIMATION;
+  const style = processedInfographic.style || DEFAULT_STYLE;
   const colors = getThemeColors(theme, isDark);
 
   // Get animation variants
@@ -149,26 +169,26 @@ export default function InfographicRenderer({
     return <>{children}</>;
   };
   // If media override exists, render image/video instead
-  if (infographic.mediaOverride) {
-    if (infographic.mediaOverride.type === 'image') {
+  if (processedInfographic.mediaOverride) {
+    if (processedInfographic.mediaOverride.type === 'image') {
       return (
         <InfographicWrapper>
           <div className="mt-3">
             <img
-              src={infographic.mediaOverride.src}
-              alt={infographic.mediaOverride.alt || 'Infographic'}
+              src={infographic.mediaOverride?.src || ''}
+              alt={infographic.mediaOverride?.alt || 'Infographic'}
               className="w-full h-auto rounded-lg"
             />
           </div>
         </InfographicWrapper>
       );
     }
-    if (infographic.mediaOverride.type === 'video') {
+    if (infographic.mediaOverride?.type === 'video') {
       return (
         <InfographicWrapper>
           <div className="mt-3">
             <video
-              src={infographic.mediaOverride.src}
+              src={infographic.mediaOverride?.src || ''}
               controls
               className="w-full h-auto rounded-lg"
             >
