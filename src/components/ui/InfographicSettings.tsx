@@ -139,6 +139,7 @@ export default function InfographicSettings({
       {/* Tabs */}
       <div className="flex gap-2 mb-4 border-b border-slate-200 dark:border-slate-700">
         <button
+          type="button"
           onClick={() => setActiveTab('theme')}
           className={`px-4 py-2 text-sm font-medium transition-colors ${
             activeTab === 'theme'
@@ -149,6 +150,7 @@ export default function InfographicSettings({
           🎨 Theme
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab('animation')}
           className={`px-4 py-2 text-sm font-medium transition-colors ${
             activeTab === 'animation'
@@ -159,6 +161,7 @@ export default function InfographicSettings({
           ✨ Animation
         </button>
         <button
+          type="button"
           onClick={() => setActiveTab('style')}
           className={`px-4 py-2 text-sm font-medium transition-colors ${
             activeTab === 'style'
@@ -241,8 +244,25 @@ export default function InfographicSettings({
               <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">
                 Custom Colors
               </h4>
-              <div className="grid grid-cols-2 gap-3">
-                {(['primary', 'secondary', 'accent', 'background', 'text', 'border'] as const).map(
+              <div className="grid grid-cols-3 gap-3">
+                {(['primary', 'secondary', 'accent', 'success', 'warning', 'danger'] as const).map(
+                  (colorKey) => (
+                    <div key={colorKey}>
+                      <label className="block text-xs text-slate-600 dark:text-slate-400 mb-1 capitalize">
+                        {colorKey}
+                      </label>
+                      <input
+                        type="color"
+                        value={theme?.customColors?.[colorKey] || THEME_PRESETS.custom[colorKey]}
+                        onChange={(e) => handleCustomColorChange(colorKey, e.target.value)}
+                        className="w-full h-8 rounded border border-slate-300 dark:border-slate-600"
+                      />
+                    </div>
+                  )
+                )}
+              </div>
+              <div className="grid grid-cols-3 gap-3 mt-3">
+                {(['background', 'text', 'border'] as const).map(
                   (colorKey) => (
                     <div key={colorKey}>
                       <label className="block text-xs text-slate-600 dark:text-slate-400 mb-1 capitalize">
@@ -271,17 +291,34 @@ export default function InfographicSettings({
             }}>
               Theme Preview
             </div>
-            <div className="flex gap-2">
-              <div className="w-8 h-8 rounded" style={{
+            <div className="flex gap-2 flex-wrap">
+              <div className="w-6 h-6 rounded" style={{
                 backgroundColor: THEME_PRESETS[theme?.preset || 'corporate'].primary,
-              }} />
-              <div className="w-8 h-8 rounded" style={{
+              }} title="Primary" />
+              <div className="w-6 h-6 rounded" style={{
                 backgroundColor: THEME_PRESETS[theme?.preset || 'corporate'].secondary,
-              }} />
-              <div className="w-8 h-8 rounded" style={{
+              }} title="Secondary" />
+              <div className="w-6 h-6 rounded" style={{
                 backgroundColor: THEME_PRESETS[theme?.preset || 'corporate'].accent,
-              }} />
+              }} title="Accent" />
+              <div className="w-6 h-6 rounded" style={{
+                backgroundColor: THEME_PRESETS[theme?.preset || 'corporate'].success,
+              }} title="Success" />
+              <div className="w-6 h-6 rounded" style={{
+                backgroundColor: THEME_PRESETS[theme?.preset || 'corporate'].warning,
+              }} title="Warning" />
+              <div className="w-6 h-6 rounded" style={{
+                backgroundColor: THEME_PRESETS[theme?.preset || 'corporate'].danger,
+              }} title="Danger" />
             </div>
+            {THEME_PRESETS[theme?.preset || 'corporate'].gradient && (
+              <div className="mt-2">
+                <div className="text-xs text-slate-600 dark:text-slate-400 mb-1">Gradient</div>
+                <div className="w-full h-4 rounded" style={{
+                  background: THEME_PRESETS[theme?.preset || 'corporate'].gradient,
+                }} />
+              </div>
+            )}
           </div>
         </div>
       )}

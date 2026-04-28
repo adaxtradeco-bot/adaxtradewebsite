@@ -20,6 +20,8 @@ import {
   getStaggerContainerVariants,
   getHoverEffectClasses,
   getBackgroundEffectStyles,
+  applyThemeToInfographicData,
+  getThemeCSSVariables,
   BORDER_RADIUS_MAP,
   DISPLAY_MODE_SCALES,
   DEFAULT_THEME,
@@ -54,26 +56,26 @@ interface InfographicRendererProps {
 }
 
 export default function InfographicRenderer({
-  infographic,
+  infographic: infographicProp,
   className = '',
 }: InfographicRendererProps) {
   // Migrate legacy infographic format
   const migratedInfographic = React.useMemo(() => {
-    if (!infographic) return infographic;
+    if (!infographicProp) return infographicProp;
     
     // If already has theme/animation/style, return as is
-    if (infographic.theme || infographic.animation || infographic.style) {
-      return infographic;
+    if (infographicProp.theme || infographicProp.animation || infographicProp.style) {
+      return infographicProp;
     }
     
     // Migrate legacy format by adding default theme/animation/style
     return {
-      ...infographic,
+      ...infographicProp,
       theme: DEFAULT_THEME,
       animation: DEFAULT_ANIMATION,
       style: DEFAULT_STYLE,
     };
-  }, [infographic]);
+  }, [infographicProp]);
 
   // Use migrated infographic for the rest of the component
   const processedInfographic = migratedInfographic;
@@ -105,6 +107,22 @@ export default function InfographicRenderer({
   const style = processedInfographic.style || DEFAULT_STYLE;
   const colors = getThemeColors(theme, isDark);
 
+  // Apply theme colors to infographic data
+  const themedData = applyThemeToInfographicData(
+    processedInfographic.data,
+    colors,
+    processedInfographic.type
+  );
+
+  // Update infographic data with themed colors
+  const infographic = {
+    ...processedInfographic,
+    data: themedData,
+  };
+
+  // Get CSS variables for theme
+  const cssVariables = getThemeCSSVariables(colors);
+
   // Get animation variants
   const variants = getAnimationVariants(animation);
   const containerVariants = getStaggerContainerVariants(animation);
@@ -123,6 +141,7 @@ export default function InfographicRenderer({
   const InfographicWrapper = ({ children }: { children: React.ReactNode }) => {
     const wrapperStyle: React.CSSProperties = {
       ...backgroundStyles,
+      ...cssVariables,
       borderRadius,
       transform: `scale(${scale})`,
       transformOrigin: 'top left',
@@ -169,8 +188,8 @@ export default function InfographicRenderer({
     return <>{children}</>;
   };
   // If media override exists, render image/video instead
-  if (processedInfographic.mediaOverride) {
-    if (processedInfographic.mediaOverride.type === 'image') {
+  if (infographic.mediaOverride) {
+    if (infographic.mediaOverride.type === 'image') {
       return (
         <InfographicWrapper>
           <div className="mt-3">
