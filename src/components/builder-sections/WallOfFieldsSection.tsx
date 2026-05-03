@@ -107,25 +107,32 @@ export function WallOfFieldsSection({ data, isBuilder = false, onEdit }: Props) 
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+        <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4">
           {allFields.map((field) => (
             <div
               key={field.id}
-              className="group relative bg-white dark:bg-slate-800 rounded-xl p-6 
+              className="group relative bg-white dark:bg-slate-800 rounded-xl p-3 sm:p-6 
                 border border-gray-200 dark:border-slate-700
                 hover:border-blue-400 dark:hover:border-blue-500
                 hover:shadow-lg dark:hover:shadow-blue-500/20
                 transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="flex flex-col items-center text-center space-y-3">
-                <div className="text-3xl transition-transform duration-300 group-hover:scale-110">
+              <div className="flex flex-col items-center text-center space-y-2 sm:space-y-3">
+                <div className="text-xl sm:text-3xl transition-transform duration-300 group-hover:scale-110">
                   {field.faIcon ? (
-                    <IconDisplay icon={field.faIcon} enableHover={true} />
+                    <div className="sm:hidden">
+                      <IconDisplay icon={{...field.faIcon, size: 'sm'}} enableHover={true} />
+                    </div>
+                  ) : null}
+                  {field.faIcon ? (
+                    <div className="hidden sm:block">
+                      <IconDisplay icon={field.faIcon} enableHover={true} />
+                    </div>
                   ) : (
                     '📋'
                   )}
                 </div>
-                <div className="text-sm font-semibold text-gray-700 dark:text-gray-200 
+                <div className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 
                   group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                   {field.title}
                 </div>
