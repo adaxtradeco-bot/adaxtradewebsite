@@ -41,6 +41,8 @@ export function MediaUpload({
 }: MediaUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [previewSrc, setPreviewSrc] = useState(src);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   // Update preview when src prop changes
   React.useEffect(() => {
@@ -61,33 +63,91 @@ export function MediaUpload({
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Check file size before upload
+    const maxSize = file.type.startsWith('video/') ? 100 * 1024 * 1024 : 5 * 1024 * 1024;
+    if (file.size > maxSize) {
+      const maxSizeText = file.type.startsWith('video/') ? '100MB' : '5MB';
+      setError(`File size too large. Maximum allowed: ${maxSizeText}`);
+      return;
+    }
+
     setIsUploading(true);
+    setError(null);
+    setUploadProgress(0);
 
     try {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('type', 'media'); // Add required type parameter
+      formData.append('type', 'media');
 
-      const response = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData,
+      // Create XMLHttpRequest for progress tracking
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = Math.round((e.loaded / e.total) * 100);
+          setUploadProgress(percentComplete);
+        }
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      // Handle completion
+      const uploadPromise = new Promise<{ success: boolean; url?: string; error?: string }>((resolve, reject) => {
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              resolve(data);
+            } catch (e) {
+              reject(new Error('Invalid response from server'));
+            }
+          } else {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              reject(new Error(data.error || `Upload failed with status ${xhr.status}`));
+            } catch (e) {
+              reject(new Error(`Upload failed with status ${xhr.status}`));
+            }
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Network error occurred'));
+        });
+
+        xhr.addEventListener('timeout', () => {
+          reject(new Error('Upload timeout - file may be too large'));
+        });
+
+        xhr.open('POST', '/api/admin/upload');
+        xhr.timeout = 120000; // 2 minutes timeout
+        xhr.send(formData);
+      });
+
+      const data = await uploadPromise;
+
+      if (data.success && data.url) {
         const newSrc = data.url;
         setPreviewSrc(newSrc);
         onMediaChange?.(newSrc);
+        setUploadProgress(100);
       } else {
-        const errorData = await response.json();
-        console.error('Upload failed:', errorData.error);
-        alert(`Upload failed: ${errorData.error}`);
+        throw new Error(data.error || 'Upload failed');
       }
     } catch (error) {
       console.error('Upload error:', error);
-      alert('Upload failed. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Upload failed';
+      setError(errorMessage);
+      
+      if (errorMessage.includes('Failed to fetch') || errorMessage.includes('Network error')) {
+        setError('Network error or file too large. Please check your connection and try a smaller file.');
+      }
     } finally {
       setIsUploading(false);
+      // Reset input to allow re-uploading the same file
+      event.target.value = '';
+      // Clear progress after a delay
+      setTimeout(() => setUploadProgress(0), 2000);
     }
   };
 
@@ -160,6 +220,29 @@ export function MediaUpload({
     <div className="space-y-2">
       {renderMedia()}
       
+      {/* Error Message */}
+      {error && (
+        <div className="p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-xs text-red-600 dark:text-red-400">
+          {error}
+        </div>
+      )}
+      
+      {/* Upload Progress */}
+      {isUploading && uploadProgress > 0 && (
+        <div className="space-y-1">
+          <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400">
+            <span>Uploading...</span>
+            <span>{uploadProgress}%</span>
+          </div>
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+            <div 
+              className="bg-blue-600 h-full transition-all duration-300 ease-out"
+              style={{ width: `${uploadProgress}%` }}
+            />
+          </div>
+        </div>
+      )}
+      
       {showObjectFitControls && previewSrc && (
         <div className="space-y-2">
           <label className="block text-xs font-medium text-gray-600 dark:text-gray-400">
@@ -193,7 +276,7 @@ export function MediaUpload({
               isUploading ? 'opacity-50 cursor-not-allowed' : ''
             }`}>
               <Upload className="w-4 h-4" />
-              {isUploading ? 'Uploading...' : uploadButtonText}
+              {isUploading ? `Uploading... ${uploadProgress}%` : uploadButtonText}
             </div>
           </label>
           
@@ -201,6 +284,7 @@ export function MediaUpload({
             <button
               onClick={handleRemove}
               className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+              disabled={isUploading}
             >
               Remove
             </button>

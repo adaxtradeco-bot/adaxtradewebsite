@@ -1,5 +1,31 @@
 {
-  "buildCommand": "npm run build:push",
-  "installCommand": "npm install",
-  "framework": "nextjs"
+  "functions": {
+    "src/app/api/admin/media/route.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    },
+    "src/app/api/admin/upload/route.ts": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/admin/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
 }

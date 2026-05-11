@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { put, list, del } from '@vercel/blob';
 import { verifyToken } from '@/lib/auth';
 
+// Configure route for large file uploads
+export const runtime = 'nodejs';
+export const maxDuration = 60; // Maximum execution time in seconds (for Vercel Pro)
+export const dynamic = 'force-dynamic';
+
 // GET - List all media files
 export async function GET(request: NextRequest) {
   try {
@@ -45,17 +50,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const formData = await request.formData();
+    let formData;
+    try {
+      formData = await request.formData();
+    } catch (parseError) {
+      console.error('FormData parse error:', parseError);
+      return NextResponse.json({ 
+        error: 'Failed to parse upload data. File may be too large or request was interrupted.' 
+      }, { status: 400 });
+    }
+
     const file = formData.get('file') as File;
     
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
-    // Validate file size (max 50MB for videos, 10MB for images)
-    const maxSize = file.type.startsWith('video/') ? 50 * 1024 * 1024 : 10 * 1024 * 1024;
+    // Validate file size (max 100MB for videos, 10MB for images)
+    const maxSize = file.type.startsWith('video/') ? 100 * 1024 * 1024 : 10 * 1024 * 1024;
     if (file.size > maxSize) {
-      const maxSizeText = file.type.startsWith('video/') ? '50MB' : '10MB';
+      const maxSizeText = file.type.startsWith('video/') ? '100MB' : '10MB';
       return NextResponse.json(
         { error: `File size too large (max ${maxSizeText})` },
         { status: 400 }
@@ -78,16 +92,24 @@ export async function POST(request: NextRequest) {
 
     const filename = `media/${Date.now()}-${file.name.replace(/\s/g, '-')}`;
     
-    const blob = await put(filename, file, {
-      access: 'public',
-    });
+    try {
+      const blob = await put(filename, file, {
+        access: 'public',
+        addRandomSuffix: false,
+      });
 
-    return NextResponse.json({ 
-      url: blob.url,
-      filename: blob.pathname,
-      size: file.size,
-      type: file.type
-    });
+      return NextResponse.json({ 
+        url: blob.url,
+        filename: blob.pathname,
+        size: file.size,
+        type: file.type
+      });
+    } catch (uploadError) {
+      console.error('Vercel Blob upload error:', uploadError);
+      return NextResponse.json({ 
+        error: uploadError instanceof Error ? uploadError.message : 'Failed to upload to storage' 
+      }, { status: 500 });
+    }
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json({ 

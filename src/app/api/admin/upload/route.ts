@@ -7,9 +7,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
 
+// Configure route for large file uploads
+export const runtime = 'nodejs';
+export const maxDuration = 60; // Maximum execution time in seconds
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   try {
-    const formData = await request.formData();
+    let formData;
+    try {
+      formData = await request.formData();
+    } catch (parseError) {
+      console.error('FormData parse error:', parseError);
+      return NextResponse.json(
+        { success: false, error: 'Failed to parse upload data. File may be too large or request was interrupted.' },
+        { status: 400 }
+      );
+    }
+
     const file = formData.get('file') as File;
     const type = formData.get('type') as string;
 
@@ -27,10 +42,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file size (max 10MB for videos, 5MB for images)
-    const maxSize = file.type.startsWith('video/') ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
+    // Validate file size (max 100MB for videos, 5MB for images)
+    const maxSize = file.type.startsWith('video/') ? 100 * 1024 * 1024 : 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      const maxSizeText = file.type.startsWith('video/') ? '10MB' : '5MB';
+      const maxSizeText = file.type.startsWith('video/') ? '100MB' : '5MB';
       return NextResponse.json(
         { success: false, error: `File size too large (max ${maxSizeText})` },
         { status: 400 }
@@ -61,21 +76,30 @@ export async function POST(request: NextRequest) {
     const extension = file.name.split('.').pop();
     const filename = `settings/${type}-${timestamp}.${extension}`;
 
-    // Upload to Vercel Blob
-    const blob = await put(filename, file, {
-      access: 'public',
-    });
+    try {
+      // Upload to Vercel Blob
+      const blob = await put(filename, file, {
+        access: 'public',
+        addRandomSuffix: false,
+      });
 
-    // Return public URL
-    const publicUrl = blob.url;
+      // Return public URL
+      const publicUrl = blob.url;
 
-    return NextResponse.json({
-      success: true,
-      url: publicUrl,
-      filename,
-      size: file.size,
-      type: file.type
-    });
+      return NextResponse.json({
+        success: true,
+        url: publicUrl,
+        filename,
+        size: file.size,
+        type: file.type
+      });
+    } catch (uploadError) {
+      console.error('Vercel Blob upload error:', uploadError);
+      return NextResponse.json(
+        { success: false, error: uploadError instanceof Error ? uploadError.message : 'Failed to upload to storage' },
+        { status: 500 }
+      );
+    }
 
   } catch (error) {
     console.error('Upload error:', error);
