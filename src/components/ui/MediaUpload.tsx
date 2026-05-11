@@ -9,6 +9,7 @@
 
 import React, { useState } from 'react';
 import { Upload, X, Play } from 'lucide-react';
+import { uploadLargeFile } from '@/lib/upload-helper';
 
 interface MediaUploadProps {
   src?: string;
@@ -64,9 +65,9 @@ export function MediaUpload({
     if (!file) return;
 
     // Check file size before upload
-    const maxSize = file.type.startsWith('video/') ? 100 * 1024 * 1024 : 5 * 1024 * 1024;
+    const maxSize = file.type.startsWith('video/') ? 100 * 1024 * 1024 : 10 * 1024 * 1024;
     if (file.size > maxSize) {
-      const maxSizeText = file.type.startsWith('video/') ? '100MB' : '5MB';
+      const maxSizeText = file.type.startsWith('video/') ? '100MB' : '10MB';
       setError(`File size too large. Maximum allowed: ${maxSizeText}`);
       return;
     }
@@ -76,77 +77,26 @@ export function MediaUpload({
     setUploadProgress(0);
 
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', 'media');
-
-      // Create XMLHttpRequest for progress tracking
-      const xhr = new XMLHttpRequest();
-
-      // Track upload progress
-      xhr.upload.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-          const percentComplete = Math.round((e.loaded / e.total) * 100);
-          setUploadProgress(percentComplete);
-        }
+      const result = await uploadLargeFile(file, (progress) => {
+        setUploadProgress(progress);
       });
 
-      // Handle completion
-      const uploadPromise = new Promise<{ success: boolean; url?: string; error?: string }>((resolve, reject) => {
-        xhr.addEventListener('load', () => {
-          if (xhr.status >= 200 && xhr.status < 300) {
-            try {
-              const data = JSON.parse(xhr.responseText);
-              resolve(data);
-            } catch (e) {
-              reject(new Error('Invalid response from server'));
-            }
-          } else {
-            try {
-              const data = JSON.parse(xhr.responseText);
-              reject(new Error(data.error || `Upload failed with status ${xhr.status}`));
-            } catch (e) {
-              reject(new Error(`Upload failed with status ${xhr.status}`));
-            }
-          }
-        });
+      if (result.error) {
+        throw new Error(result.error);
+      }
 
-        xhr.addEventListener('error', () => {
-          reject(new Error('Network error occurred'));
-        });
-
-        xhr.addEventListener('timeout', () => {
-          reject(new Error('Upload timeout - file may be too large'));
-        });
-
-        xhr.open('POST', '/api/admin/upload');
-        xhr.timeout = 120000; // 2 minutes timeout
-        xhr.send(formData);
-      });
-
-      const data = await uploadPromise;
-
-      if (data.success && data.url) {
-        const newSrc = data.url;
-        setPreviewSrc(newSrc);
-        onMediaChange?.(newSrc);
+      if (result.url) {
+        setPreviewSrc(result.url);
+        onMediaChange?.(result.url);
         setUploadProgress(100);
-      } else {
-        throw new Error(data.error || 'Upload failed');
       }
     } catch (error) {
       console.error('Upload error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Upload failed';
       setError(errorMessage);
-      
-      if (errorMessage.includes('Failed to fetch') || errorMessage.includes('Network error')) {
-        setError('Network error or file too large. Please check your connection and try a smaller file.');
-      }
     } finally {
       setIsUploading(false);
-      // Reset input to allow re-uploading the same file
       event.target.value = '';
-      // Clear progress after a delay
       setTimeout(() => setUploadProgress(0), 2000);
     }
   };

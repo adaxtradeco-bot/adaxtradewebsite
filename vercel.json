@@ -27,5 +27,15 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/admin/media",
+      "destination": "/api/admin/media"
+    },
+    {
+      "source": "/api/admin/upload",
+      "destination": "/api/admin/upload"
+    }
   ]
 }
