@@ -1,11 +1,11 @@
 {
   "functions": {
     "src/app/api/admin/media/route.ts": {
-      "maxDuration": 60,
+      "maxDuration": 10,
       "memory": 1024
     },
     "src/app/api/admin/upload/route.ts": {
-      "maxDuration": 60,
+      "maxDuration": 10,
       "memory": 1024
     }
   },

@@ -1,6 +1,6 @@
 /**
  * Upload Helper for Large Files
- * Uses client-side upload to bypass server body size limits
+ * Uses chunked upload to bypass server body size limits
  */
 
 export async function uploadLargeFile(
@@ -14,9 +14,9 @@ export async function uploadLargeFile(
       throw new Error('Authentication required');
     }
 
-    // For files larger than 4MB, use client-side upload
-    if (file.size > 4 * 1024 * 1024) {
-      return await clientSideUpload(file, token, onProgress);
+    // For files larger than 5MB, use chunked upload
+    if (file.size > 5 * 1024 * 1024) {
+      return await chunkedUpload(file, token, onProgress);
     }
 
     // For smaller files, use regular server upload
@@ -81,29 +81,77 @@ async function serverSideUpload(
   });
 }
 
-async function clientSideUpload(
+async function chunkedUpload(
   file: File,
   token: string,
   onProgress?: (progress: number) => void
 ): Promise<{ url: string; error?: string }> {
   try {
-    // Import the upload function from @vercel/blob/client
-    const { upload } = await import('@vercel/blob/client');
+    // Create a simple chunked upload by splitting the file
+    const chunkSize = 2 * 1024 * 1024; // 2MB chunks
+    const totalChunks = Math.ceil(file.size / chunkSize);
+    let uploadedChunks = 0;
 
-    const blob = await upload(file.name, file, {
-      access: 'public',
-      handleUploadUrl: '/api/admin/media/upload-url',
-      clientPayload: JSON.stringify({ token }),
-      onUploadProgress: (progressEvent) => {
-        if (onProgress && progressEvent.percentage) {
-          onProgress(Math.round(progressEvent.percentage));
-        }
+    // Create a unique filename
+    const timestamp = Date.now();
+    const extension = file.name.split('.').pop();
+    const baseFilename = `media/${timestamp}-${file.name.replace(/\s/g, '-')}`;
+
+    // Upload each chunk
+    for (let i = 0; i < totalChunks; i++) {
+      const start = i * chunkSize;
+      const end = Math.min(start + chunkSize, file.size);
+      const chunk = file.slice(start, end);
+
+      const formData = new FormData();
+      formData.append('chunk', chunk);
+      formData.append('filename', `${baseFilename}-chunk-${i}`);
+      formData.append('totalChunks', totalChunks.toString());
+      formData.append('chunkIndex', i.toString());
+      formData.append('originalName', file.name);
+
+      const response = await fetch('/api/admin/media/chunk', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Chunk ${i + 1} upload failed`);
+      }
+
+      uploadedChunks++;
+      if (onProgress) {
+        onProgress(Math.round((uploadedChunks / totalChunks) * 100));
+      }
+    }
+
+    // Combine chunks
+    const combineResponse = await fetch('/api/admin/media/combine', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        filename: baseFilename,
+        totalChunks,
+        originalName: file.name,
+      }),
     });
 
-    return { url: blob.url };
+    if (!combineResponse.ok) {
+      const errorData = await combineResponse.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Failed to combine chunks');
+    }
+
+    const data = await combineResponse.json();
+    return { url: data.url };
   } catch (error) {
-    console.error('Client-side upload error:', error);
+    console.error('Chunked upload error:', error);
     throw error;
   }
 }

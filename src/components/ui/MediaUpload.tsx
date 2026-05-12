@@ -65,10 +65,10 @@ export function MediaUpload({
     if (!file) return;
 
     // Check file size before upload
-    const maxSize = file.type.startsWith('video/') ? 100 * 1024 * 1024 : 10 * 1024 * 1024;
+    const maxSize = file.type.startsWith('video/') ? 5 * 1024 * 1024 : 5 * 1024 * 1024; // 5MB max for Hobby Plan
     if (file.size > maxSize) {
-      const maxSizeText = file.type.startsWith('video/') ? '100MB' : '10MB';
-      setError(`File size too large. Maximum allowed: ${maxSizeText}`);
+      const maxSizeText = '5MB';
+      setError(`File size too large. Maximum allowed: ${maxSizeText} (Vercel Hobby Plan limit). Please compress the file or upgrade to Pro Plan.`);
       return;
     }
 
@@ -77,23 +77,64 @@ export function MediaUpload({
     setUploadProgress(0);
 
     try {
-      const result = await uploadLargeFile(file, (progress) => {
-        setUploadProgress(progress);
-      });
-
-      if (result.error) {
-        throw new Error(result.error);
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        throw new Error('Authentication required. Please login again.');
       }
 
-      if (result.url) {
-        setPreviewSrc(result.url);
-        onMediaChange?.(result.url);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Use fetch with AbortController for timeout
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      const response = await fetch('/api/admin/media', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Upload failed:', response.status, errorText);
+        
+        // Try to parse as JSON, otherwise use raw text
+        try {
+          const errorData = JSON.parse(errorText);
+          throw new Error(errorData.error || `Upload failed with status ${response.status}`);
+        } catch {
+          throw new Error(`Upload failed: ${errorText.substring(0, 100)}`);
+        }
+      }
+
+      const data = await response.json();
+      
+      if (data.url) {
+        setPreviewSrc(data.url);
+        onMediaChange?.(data.url);
         setUploadProgress(100);
+      } else {
+        throw new Error(data.error || 'Upload failed');
       }
     } catch (error) {
       console.error('Upload error:', error);
       const errorMessage = error instanceof Error ? error.message : 'Upload failed';
-      setError(errorMessage);
+      
+      if (errorMessage.includes('aborted')) {
+        setError('Upload timeout. File may be too large for Vercel Hobby Plan. Please try a smaller file (<5MB) or upgrade to Pro Plan.');
+      } else if (errorMessage.includes('Failed to fetch')) {
+        setError('Network error. Please check your connection and try again.');
+      } else if (errorMessage.includes('Unexpected token')) {
+        setError('Server error. Vercel cannot handle large files on Hobby Plan. Please upgrade to Pro Plan or use files under 5MB.');
+      } else {
+        setError(errorMessage);
+      }
     } finally {
       setIsUploading(false);
       event.target.value = '';
@@ -213,32 +254,44 @@ export function MediaUpload({
       )}
       
       {showUploadButton && (
-        <div className="flex items-center gap-2">
-          <label className="cursor-pointer">
-            <input
-              type="file"
-              accept={acceptedTypes}
-              onChange={handleFileUpload}
-              className="hidden"
-              disabled={isUploading}
-            />
-            <div className={`flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm ${
-              isUploading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}>
-              <Upload className="w-4 h-4" />
-              {isUploading ? `Uploading... ${uploadProgress}%` : uploadButtonText}
-            </div>
-          </label>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                accept={acceptedTypes}
+                onChange={handleFileUpload}
+                className="hidden"
+                disabled={isUploading}
+              />
+              <div className={`flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-sm ${
+                isUploading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}>
+                <Upload className="w-4 h-4" />
+                {isUploading ? `Uploading... ${uploadProgress}%` : uploadButtonText}
+              </div>
+            </label>
+            
+            {previewSrc && (
+              <button
+                onClick={handleRemove}
+                className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+                disabled={isUploading}
+              >
+                Remove
+              </button>
+            )}
+          </div>
           
-          {previewSrc && (
-            <button
-              onClick={handleRemove}
-              className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
-              disabled={isUploading}
-            >
-              Remove
-            </button>
-          )}
+          <div className="text-xs text-gray-500 dark:text-gray-400">
+            <p>⚠️ <strong>Vercel Hobby Plan Limit:</strong> Maximum file size is 5MB</p>
+            <p>For larger files, please:</p>
+            <ul className="list-disc list-inside ml-2 mt-1">
+              <li>Compress videos to under 5MB</li>
+              <li>Upgrade to <a href="https://vercel.com/pricing" target="_blank" className="text-blue-500 hover:underline">Vercel Pro Plan</a> (100MB limit)</li>
+              <li>Use external storage like Cloudinary or AWS S3</li>
+            </ul>
+          </div>
         </div>
       )}
     </div>
