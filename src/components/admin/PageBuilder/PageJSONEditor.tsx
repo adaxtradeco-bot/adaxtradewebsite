@@ -29,13 +29,46 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
   const [isSaving, setIsSaving] = useState(false);
   const [highlightedLine, setHighlightedLine] = useState<number | null>(null);
   const [copied, setCopied] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<number[]>([]);
+  const [currentSearchIndex, setCurrentSearchIndex] = useState(0);
+  const [showSearch, setShowSearch] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [collapsedSections, setCollapsedSections] = useState<Set<number>>(new Set());
+  const [showDiff, setShowDiff] = useState(false);
+  const [originalJson, setOriginalJson] = useState('');
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [autocompletePosition, setAutocompletePosition] = useState({ top: 0, left: 0 });
+  const [autocompleteSuggestions, setAutocompleteSuggestions] = useState<string[]>([]);
+  const [showQuickActions, setShowQuickActions] = useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  // Common section types for autocomplete
+  const sectionTypes = [
+    'hero', 'hero-video', 'hero-animated', 'hero-slider', 'hero-slider-nwm',
+    'features', 'features-compact', 'features-minimal', 'features-grid-nwm',
+    'tabs', 'platform-tabs', 'experience-tabs', 'fusion-teams-tabs',
+    'cta', 'final-cta-nwm', 'faq',
+    'testimonials', 'testimonial',
+    'why', 'why-nwm', 'why-ivaflow-new-version',
+    'metrics', 'stats',
+    'process', 'process-steps', 'workflow',
+    'integrations', 'partners-nwm',
+    'video', 'video-preview-nwm',
+    'product-hero', 'partnership-hero',
+    'wall-of-features', 'interactive-feature-wall',
+    'form-builder-features', 'field-types'
+  ];
 
   // Initialize JSON text from sections
   useEffect(() => {
     try {
       const formatted = JSON.stringify(sections, null, 2);
       setJsonText(formatted);
+      setOriginalJson(formatted); // Save original for diff
+      setHistory([formatted]);
+      setHistoryIndex(0);
       setErrors([]);
       setIsValid(true);
     } catch (error) {
@@ -48,6 +81,17 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
   // Validate JSON on change
   const handleJsonChange = (value: string) => {
     setJsonText(value);
+    
+    // Add to history for undo/redo
+    if (value !== history[historyIndex]) {
+      const newHistory = history.slice(0, historyIndex + 1);
+      newHistory.push(value);
+      setHistory(newHistory);
+      setHistoryIndex(newHistory.length - 1);
+    }
+    
+    // Check for autocomplete trigger
+    checkAutocomplete(value);
     
     const validationErrors: ValidationError[] = [];
     
@@ -214,7 +258,11 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
       // Escape: Close
       if (e.key === 'Escape') {
         e.preventDefault();
-        onClose();
+        if (showSearch) {
+          setShowSearch(false);
+        } else {
+          onClose();
+        }
       }
       
       // Ctrl+Shift+F or Cmd+Shift+F: Format
@@ -222,14 +270,249 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
         e.preventDefault();
         handleFormat();
       }
+      
+      // Ctrl+F or Cmd+F: Search
+      if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        setShowSearch(true);
+      }
+      
+      // Ctrl+Z or Cmd+Z: Undo
+      if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === 'z') {
+        e.preventDefault();
+        handleUndo();
+      }
+      
+      // Ctrl+Y or Cmd+Shift+Z: Redo
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.shiftKey && e.key === 'z'))) {
+        e.preventDefault();
+        handleRedo();
+      }
     };
     
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isValid, jsonText, onClose]);
+  }, [isValid, jsonText, onClose, showSearch, historyIndex]);
+
+  // Undo
+  const handleUndo = () => {
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1;
+      setHistoryIndex(newIndex);
+      setJsonText(history[newIndex]);
+    }
+  };
+
+  // Redo
+  const handleRedo = () => {
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1;
+      setHistoryIndex(newIndex);
+      setJsonText(history[newIndex]);
+    }
+  };
+
+  // Search functionality
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    
+    if (!term) {
+      setSearchResults([]);
+      setCurrentSearchIndex(0);
+      return;
+    }
+    
+    const lines = jsonText.split('\n');
+    const results: number[] = [];
+    
+    lines.forEach((line, index) => {
+      if (line.toLowerCase().includes(term.toLowerCase())) {
+        results.push(index + 1);
+      }
+    });
+    
+    setSearchResults(results);
+    setCurrentSearchIndex(0);
+    
+    if (results.length > 0) {
+      jumpToLine(results[0]);
+    }
+  };
+
+  // Next search result
+  const handleNextSearch = () => {
+    if (searchResults.length === 0) return;
+    
+    const nextIndex = (currentSearchIndex + 1) % searchResults.length;
+    setCurrentSearchIndex(nextIndex);
+    jumpToLine(searchResults[nextIndex]);
+  };
+
+  // Previous search result
+  const handlePrevSearch = () => {
+    if (searchResults.length === 0) return;
+    
+    const prevIndex = currentSearchIndex === 0 ? searchResults.length - 1 : currentSearchIndex - 1;
+    setCurrentSearchIndex(prevIndex);
+    jumpToLine(searchResults[prevIndex]);
+  };
+
+  // Apply syntax highlighting
+  const getSyntaxHighlightedLine = (line: string): React.ReactNode => {
+    // Simple JSON syntax highlighting
+    const parts: React.ReactNode[] = [];
+    let currentIndex = 0;
+    
+    // Match strings
+    const stringRegex = /"([^"\\]|\\.)*"/g;
+    const matches = [...line.matchAll(stringRegex)];
+    
+    matches.forEach((match, i) => {
+      const matchIndex = match.index!;
+      
+      // Add text before match
+      if (matchIndex > currentIndex) {
+        const beforeText = line.substring(currentIndex, matchIndex);
+        parts.push(
+          <span key={`before-${i}`} className="text-gray-700 dark:text-gray-300">
+            {beforeText}
+          </span>
+        );
+      }
+      
+      // Check if it's a key (followed by :) or a value
+      const afterMatch = line.substring(matchIndex + match[0].length).trim();
+      const isKey = afterMatch.startsWith(':');
+      
+      parts.push(
+        <span 
+          key={`match-${i}`} 
+          className={isKey 
+            ? 'text-blue-600 dark:text-blue-400 font-semibold' 
+            : 'text-green-600 dark:text-green-400'
+          }
+        >
+          {match[0]}
+        </span>
+      );
+      
+      currentIndex = matchIndex + match[0].length;
+    });
+    
+    // Add remaining text
+    if (currentIndex < line.length) {
+      const remaining = line.substring(currentIndex);
+      // Highlight numbers
+      const withNumbers = remaining.replace(/\b(\d+)\b/g, '<span class="text-orange-600 dark:text-orange-400">$1</span>');
+      // Highlight booleans
+      const withBooleans = withNumbers.replace(/\b(true|false|null)\b/g, '<span class="text-purple-600 dark:text-purple-400">$1</span>');
+      
+      parts.push(
+        <span 
+          key="remaining" 
+          className="text-gray-700 dark:text-gray-300"
+          dangerouslySetInnerHTML={{ __html: withBooleans }}
+        />
+      );
+    }
+    
+    return parts.length > 0 ? parts : line;
+  };
 
   // Calculate line numbers
   const lineCount = jsonText.split('\n').length;
+
+  // Check for autocomplete
+  const checkAutocomplete = (text: string) => {
+    if (!textareaRef.current) return;
+    
+    const cursorPos = textareaRef.current.selectionStart;
+    const textBeforeCursor = text.substring(0, cursorPos);
+    const currentLine = textBeforeCursor.split('\n').pop() || '';
+    
+    // Check if typing after "type": "
+    const typeMatch = currentLine.match(/"type"\s*:\s*"([^"]*)$/);
+    
+    if (typeMatch) {
+      const partial = typeMatch[1];
+      const suggestions = sectionTypes.filter(type => 
+        type.toLowerCase().includes(partial.toLowerCase())
+      );
+      
+      if (suggestions.length > 0) {
+        setAutocompleteSuggestions(suggestions);
+        setShowAutocomplete(true);
+        
+        // Calculate position (simplified)
+        const rect = textareaRef.current.getBoundingClientRect();
+        setAutocompletePosition({
+          top: rect.top + 100, // approximate
+          left: rect.left + 200
+        });
+      } else {
+        setShowAutocomplete(false);
+      }
+    } else {
+      setShowAutocomplete(false);
+    }
+  };
+
+  // Insert autocomplete suggestion
+  const insertSuggestion = (suggestion: string) => {
+    if (!textareaRef.current) return;
+    
+    const cursorPos = textareaRef.current.selectionStart;
+    const textBeforeCursor = jsonText.substring(0, cursorPos);
+    const textAfterCursor = jsonText.substring(cursorPos);
+    
+    // Find the start of the current word
+    const match = textBeforeCursor.match(/"type"\s*:\s*"([^"]*)$/);
+    if (match) {
+      const startPos = cursorPos - match[1].length;
+      const newText = jsonText.substring(0, startPos) + suggestion + textAfterCursor;
+      setJsonText(newText);
+      setShowAutocomplete(false);
+      
+      // Set cursor position after insertion
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.selectionStart = startPos + suggestion.length;
+          textareaRef.current.selectionEnd = startPos + suggestion.length;
+          textareaRef.current.focus();
+        }
+      }, 0);
+    }
+  };
+
+  // Add new section template
+  const addSectionTemplate = (type: string) => {
+    try {
+      const parsed = JSON.parse(jsonText);
+      if (!Array.isArray(parsed)) return;
+      
+      const newSection = {
+        id: `section-${Date.now()}`,
+        type: type,
+        order: parsed.length,
+        data: {
+          title: `New ${type} Section`,
+          description: 'Add your content here'
+        },
+        style: {
+          backgroundColor: 'bg-white',
+          textColor: 'text-gray-900',
+          padding: 'py-16'
+        }
+      };
+      
+      parsed.push(newSection);
+      const formatted = JSON.stringify(parsed, null, 2);
+      setJsonText(formatted);
+      setShowQuickActions(false);
+    } catch (error) {
+      alert('Cannot add section: Invalid JSON. Please fix errors first.');
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
@@ -260,40 +543,159 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
         </div>
 
         {/* Toolbar */}
-        <div className="flex items-center gap-2 px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-          <button
-            onClick={handleFormat}
-            className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
-            title="Format JSON (Ctrl+Shift+F)"
-          >
-            Format
-          </button>
-          <button
-            onClick={handleMinify}
-            className="px-3 py-1.5 text-sm bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
-          >
-            Minify
-          </button>
-          <button
-            onClick={handleCopy}
-            className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-              copied 
-                ? 'bg-green-600 text-white' 
-                : 'bg-indigo-600 hover:bg-indigo-700 text-white'
-            }`}
-          >
-            {copied ? '✓ Copied!' : 'Copy JSON'}
-          </button>
-          <div className="flex-1" />
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {lineCount} lines • {jsonText.length} characters
+        <div className="flex flex-col gap-2 px-6 py-3 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
+          {/* Main Toolbar */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleFormat}
+              className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              title="Format JSON (Ctrl+Shift+F)"
+            >
+              Format
+            </button>
+            <button
+              onClick={handleMinify}
+              className="px-3 py-1.5 text-sm bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+            >
+              Minify
+            </button>
+            <button
+              onClick={handleCopy}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                copied 
+                  ? 'bg-green-600 text-white' 
+                  : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+              }`}
+            >
+              {copied ? '✓ Copied!' : 'Copy'}
+            </button>
+            
+            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+            
+            <button
+              onClick={handleUndo}
+              disabled={historyIndex <= 0}
+              className="px-3 py-1.5 text-sm bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+              title="Undo (Ctrl+Z)"
+            >
+              ↶ Undo
+            </button>
+            <button
+              onClick={handleRedo}
+              disabled={historyIndex >= history.length - 1}
+              className="px-3 py-1.5 text-sm bg-gray-600 hover:bg-gray-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white rounded-lg transition-colors"
+              title="Redo (Ctrl+Y)"
+            >
+              ↷ Redo
+            </button>
+            
+            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+            
+            <button
+              onClick={() => setShowSearch(!showSearch)}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                showSearch
+                  ? 'bg-yellow-600 text-white'
+                  : 'bg-gray-600 hover:bg-gray-700 text-white'
+              }`}
+              title="Search (Ctrl+F)"
+            >
+              🔍 Search
+            </button>
+            
+            <button
+              onClick={() => setShowDiff(!showDiff)}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                showDiff
+                  ? 'bg-orange-600 text-white'
+                  : 'bg-gray-600 hover:bg-gray-700 text-white'
+              }`}
+              title="Show Diff"
+            >
+              📊 Diff
+            </button>
+            
+            <button
+              onClick={() => setShowQuickActions(!showQuickActions)}
+              className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+                showQuickActions
+                  ? 'bg-green-600 text-white'
+                  : 'bg-green-600 hover:bg-green-700 text-white'
+              }`}
+              title="Quick Actions"
+            >
+              ⚡ Add Section
+            </button>
+            
+            <div className="flex-1" />
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {lineCount} lines • {jsonText.length} chars
+            </div>
           </div>
+          
+          {/* Search Bar */}
+          {showSearch && (
+            <div className="flex items-center gap-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Search in JSON..."
+                className="flex-1 px-3 py-1.5 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                autoFocus
+              />
+              {searchResults.length > 0 && (
+                <>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {currentSearchIndex + 1} / {searchResults.length}
+                  </span>
+                  <button
+                    onClick={handlePrevSearch}
+                    className="px-2 py-1 text-sm bg-yellow-600 hover:bg-yellow-700 text-white rounded transition-colors"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    onClick={handleNextSearch}
+                    className="px-2 py-1 text-sm bg-yellow-600 hover:bg-yellow-700 text-white rounded transition-colors"
+                  >
+                    ↓
+                  </button>
+                </>
+              )}
+              <button
+                onClick={() => setShowSearch(false)}
+                className="px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Main Content */}
         <div className="flex-1 flex overflow-hidden">
+          {/* Diff View */}
+          {showDiff && (
+            <div className="w-1/2 border-r border-gray-300 dark:border-gray-600 flex flex-col">
+              <div className="px-4 py-2 bg-gray-100 dark:bg-gray-800 border-b border-gray-300 dark:border-gray-600 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Original (Saved)
+              </div>
+              <div className="flex-1 overflow-auto">
+                <pre className="p-4 text-sm font-mono text-gray-700 dark:text-gray-300 whitespace-pre">
+                  {originalJson}
+                </pre>
+              </div>
+            </div>
+          )}
+          
           {/* Editor with Line Numbers */}
-          <div className="flex-1 flex flex-col">
+          <div className={`${showDiff ? 'w-1/2' : 'flex-1'} flex flex-col`}>
+            {showDiff && (
+              <div className="px-4 py-2 bg-orange-100 dark:bg-orange-900/20 border-b border-orange-300 dark:border-orange-600 text-sm font-semibold text-orange-700 dark:text-orange-300">
+                Current (Modified)
+              </div>
+            )}
             <div className="flex-1 flex overflow-hidden">
               {/* Line Numbers */}
               <div className="flex-shrink-0 bg-gray-100 dark:bg-gray-800 border-r border-gray-300 dark:border-gray-600 overflow-hidden">
@@ -379,7 +781,7 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
               )}
             </div>
             <div className="text-xs text-gray-500 dark:text-gray-500">
-              Shortcuts: Ctrl+S (Save) • Ctrl+Shift+F (Format) • Esc (Close)
+              Shortcuts: Ctrl+S (Save) • Ctrl+F (Search) • Ctrl+Z (Undo) • Ctrl+Y (Redo) • Ctrl+Shift+F (Format) • Esc (Close)
             </div>
           </div>
           
@@ -409,6 +811,81 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
             </button>
           </div>
         </div>
+
+        {/* Autocomplete Dropdown */}
+        {showAutocomplete && (
+          <div 
+            className="fixed z-50 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-xl max-h-60 overflow-y-auto"
+            style={{
+              top: `${autocompletePosition.top}px`,
+              left: `${autocompletePosition.left}px`,
+              minWidth: '200px'
+            }}
+          >
+            {autocompleteSuggestions.map((suggestion, index) => (
+              <button
+                key={suggestion}
+                onClick={() => insertSuggestion(suggestion)}
+                className="w-full px-4 py-2 text-left text-sm hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors flex items-center gap-2"
+              >
+                <span className="text-blue-600 dark:text-blue-400">📄</span>
+                <span className="font-mono">{suggestion}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Quick Actions Panel */}
+        {showQuickActions && (
+          <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Add New Section
+                </h3>
+                <button
+                  onClick={() => setShowQuickActions(false)}
+                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                >
+                  <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="flex-1 overflow-y-auto p-6">
+                <div className="grid grid-cols-2 gap-3">
+                  {['hero', 'features', 'cta', 'testimonials', 'why', 'tabs', 'metrics', 'process', 'video', 'faq'].map(type => (
+                    <button
+                      key={type}
+                      onClick={() => addSectionTemplate(type)}
+                      className="p-4 text-left border-2 border-gray-200 dark:border-gray-700 rounded-lg hover:border-green-500 dark:hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-all"
+                    >
+                      <div className="text-2xl mb-2">
+                        {type === 'hero' && '🎯'}
+                        {type === 'features' && '⭐'}
+                        {type === 'cta' && '📢'}
+                        {type === 'testimonials' && '💬'}
+                        {type === 'why' && '❓'}
+                        {type === 'tabs' && '📑'}
+                        {type === 'metrics' && '📊'}
+                        {type === 'process' && '🔄'}
+                        {type === 'video' && '🎥'}
+                        {type === 'faq' && '❔'}
+                      </div>
+                      <div className="font-semibold text-gray-900 dark:text-white capitalize">
+                        {type}
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Add {type} section
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
