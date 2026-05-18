@@ -365,7 +365,7 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
     
     // Match strings
     const stringRegex = /"([^"\\]|\\.)*"/g;
-    const matches = [...line.matchAll(stringRegex)];
+    const matches = Array.from(line.matchAll(stringRegex));
     
     matches.forEach((match, i) => {
       const matchIndex = match.index!;

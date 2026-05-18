@@ -8,7 +8,10 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Eye } from 'lucide-react';
 import { SECTION_TEMPLATES, SECTION_CATEGORIES } from '@/lib/page-builder/section-registry';
+import { SectionPreviewModal } from '@/components/section-preview/SectionPreviewModal';
+import { getSectionPreviewData } from '@/lib/section-preview-data';
 
 interface SectionLibraryProps {
   onAddSection: (templateType: string) => void;
@@ -20,6 +23,11 @@ export function SectionLibrary({ onAddSection }: SectionLibraryProps) {
     SECTION_CATEGORIES.HEADERS,
     SECTION_CATEGORIES.CONTENT,
   ]);
+  const [previewSection, setPreviewSection] = useState<{
+    type: string;
+    name: string;
+    description: string;
+  } | null>(null);
 
   const toggleCategory = (category: string) => {
     setExpandedCategories(prev =>
@@ -80,28 +88,45 @@ export function SectionLibrary({ onAddSection }: SectionLibraryProps) {
             {expandedCategories.includes(category) && (
               <div className="space-y-2 ml-2">
                 {templates.map((template) => (
-                  <button
-                    key={template.id}
-                    onClick={() => onAddSection(template.type)}
-                    className="w-full text-left p-3 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all group"
-                  >
-                    <div className="flex items-start space-x-3">
-                      {/* Icon */}
-                      <div className="text-2xl group-hover:scale-110 transition-transform">
-                        {template.icon}
+                  <div key={template.id} className="relative group/card">
+                    <button
+                      onClick={() => onAddSection(template.type)}
+                      className="w-full text-left p-3 rounded-lg border border-gray-200 dark:border-gray-600 hover:border-blue-300 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
+                    >
+                      <div className="flex items-start space-x-3">
+                        {/* Icon */}
+                        <div className="text-2xl group-hover/card:scale-110 transition-transform">
+                          {template.icon}
+                        </div>
+                        
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-medium text-gray-900 dark:text-white text-sm mb-1">
+                            {template.name}
+                          </h3>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
+                            {template.description}
+                          </p>
+                        </div>
                       </div>
-                      
-                      {/* Content */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-gray-900 dark:text-white text-sm mb-1">
-                          {template.name}
-                        </h3>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
-                          {template.description}
-                        </p>
-                      </div>
-                    </div>
-                  </button>
+                    </button>
+                    
+                    {/* Preview Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPreviewSection({
+                          type: template.type,
+                          name: template.name,
+                          description: template.description,
+                        });
+                      }}
+                      className="absolute top-2 right-2 p-1.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md opacity-0 group-hover/card:opacity-100 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-400 transition-all shadow-sm"
+                      title="Preview Section"
+                    >
+                      <Eye className="w-3.5 h-3.5 text-gray-600 dark:text-gray-400" />
+                    </button>
+                  </div>
                 ))}
                 
                 {templates.length === 0 && (
@@ -121,6 +146,34 @@ export function SectionLibrary({ onAddSection }: SectionLibraryProps) {
           Click any section to add it to your page
         </p>
       </div>
+
+      {/* Preview Modal */}
+      {previewSection && (() => {
+        const previewData = getSectionPreviewData(previewSection.type);
+        const templateData = SECTION_TEMPLATES.find((t) => t.type === previewSection.type)?.defaultData;
+        const fallbackData = templateData || {
+          id: 'preview-fallback',
+          type: previewSection.type as any,
+          order: 0,
+          data: {},
+          style: {},
+        };
+        
+        return (
+          <SectionPreviewModal
+            isOpen={true}
+            sectionType={previewSection.type}
+            sectionName={previewSection.name}
+            sectionDescription={previewSection.description}
+            sampleData={previewData || fallbackData}
+            onClose={() => setPreviewSection(null)}
+            onAddSection={() => {
+              onAddSection(previewSection.type);
+              setPreviewSection(null);
+            }}
+          />
+        );
+      })()}
     </div>
   );
 }

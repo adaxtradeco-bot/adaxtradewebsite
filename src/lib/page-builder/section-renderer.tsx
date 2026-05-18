@@ -132,6 +132,7 @@ import MetricsTestimonialsSection from '@/components/builder-sections/MetricsTes
 interface SectionRendererProps {
   section: SectionConfig;
   isBuilder?: boolean;
+  isPreview?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
   adminMode?: boolean;
@@ -140,6 +141,7 @@ interface SectionRendererProps {
 export function SectionRenderer({
   section,
   isBuilder = false,
+  isPreview = false,
   isSelected = false,
   onSelect,
   adminMode = false,
@@ -151,9 +153,9 @@ export function SectionRenderer({
     onSelect,
   };
 
-  // Wrapper for builder mode
-  const WrapperComponent = isBuilder ? BuilderSectionWrapper : React.Fragment;
-  const wrapperProps = isBuilder ? { isSelected, onSelect } : {};
+  // Wrapper for builder mode (but not for preview mode)
+  const WrapperComponent = (isBuilder && !isPreview) ? BuilderSectionWrapper : React.Fragment;
+  const wrapperProps = (isBuilder && !isPreview) ? { isSelected, onSelect } : {};
 
   const renderSection = () => {
     // Debug: Log section type
