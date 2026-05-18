@@ -21,6 +21,7 @@ interface ToolbarProps {
   onPublish?: () => Promise<void>;
   isSectionLibraryVisible?: boolean;
   onToggleSectionLibrary?: () => void;
+  onOpenJSONEditor?: () => void;
 }
 
 export function Toolbar({
@@ -35,6 +36,7 @@ export function Toolbar({
   onPublish,
   isSectionLibraryVisible = true,
   onToggleSectionLibrary,
+  onOpenJSONEditor,
 }: ToolbarProps) {
   const [isPublishing, setIsPublishing] = React.useState(false);
 
@@ -128,6 +130,20 @@ export function Toolbar({
 
       {/* Right Section - Actions */}
       <div className="flex items-center space-x-2 sm:space-x-3">
+        {/* JSON Editor Button */}
+        {onOpenJSONEditor && !isPreviewMode && (
+          <button
+            onClick={onOpenJSONEditor}
+            className="px-3 sm:px-4 py-1.5 sm:py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center"
+            title="Edit Page JSON"
+          >
+            <svg className="w-4 h-4 mr-1 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+            </svg>
+            <span className="hidden sm:inline">JSON</span>
+          </button>
+        )}
+
         {/* Preview Toggle */}
         <button
           onClick={onTogglePreview}

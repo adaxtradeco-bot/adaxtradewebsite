@@ -16,6 +16,7 @@ import { Toolbar } from './Toolbar';
 import { PreviewModes } from './PreviewModes';
 import { InlineCSSEditor } from '@/components/ui/InlineCSSEditor';
 import { MediaBrowser } from './MediaBrowser';
+import { PageJSONEditor } from './PageJSONEditor';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { SECTION_TEMPLATES } from '@/lib/page-builder/section-registry';
 
@@ -50,6 +51,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
     onSelect: (url: string) => void;
     acceptTypes?: string[];
   }>({ isOpen: false, onSelect: () => {}, acceptTypes: ['image/*', 'video/*'] });
+  const [isJSONEditorOpen, setIsJSONEditorOpen] = useState(false);
 
   const selectedSection = Array.isArray(sections) ? sections.find(s => s.id === selectedSectionId) : null;
 
@@ -186,6 +188,12 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
     }
   };
 
+  // Handle JSON Editor save
+  const handleJSONSave = (newSections: SectionConfig[]) => {
+    setSections(newSections);
+    setSelectedSectionId(null);
+  };
+
   return (
     <div className="h-screen w-full flex flex-col bg-gray-50 dark:bg-gray-900 overflow-x-hidden">
       {/* Toolbar */}
@@ -200,6 +208,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
         pageStatus={pageStatus}
         isSectionLibraryVisible={isSectionLibraryVisible}
         onToggleSectionLibrary={() => setIsSectionLibraryVisible(!isSectionLibraryVisible)}
+        onOpenJSONEditor={() => setIsJSONEditorOpen(true)}
       />
 
       <div className="flex-1 flex overflow-hidden relative">
@@ -321,6 +330,15 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
         }}
         acceptTypes={mediaBrowser.acceptTypes}
       />
+
+      {/* Page JSON Editor */}
+      {isJSONEditorOpen && (
+        <PageJSONEditor
+          sections={sections}
+          onSave={handleJSONSave}
+          onClose={() => setIsJSONEditorOpen(false)}
+        />
+      )}
     </div>
   );
 }
