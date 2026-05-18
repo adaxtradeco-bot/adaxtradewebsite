@@ -27,6 +27,9 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [isValid, setIsValid] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [highlightedLine, setHighlightedLine] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   // Initialize JSON text from sections
   useEffect(() => {
@@ -169,6 +172,65 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
     }
   };
 
+  // Copy JSON to clipboard
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(jsonText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      alert('Failed to copy to clipboard');
+    }
+  };
+
+  // Jump to specific line
+  const jumpToLine = (lineNumber: number) => {
+    if (!textareaRef.current) return;
+    
+    const lines = jsonText.split('\n');
+    let charCount = 0;
+    
+    for (let i = 0; i < lineNumber - 1 && i < lines.length; i++) {
+      charCount += lines[i].length + 1; // +1 for newline
+    }
+    
+    textareaRef.current.focus();
+    textareaRef.current.setSelectionRange(charCount, charCount + (lines[lineNumber - 1]?.length || 0));
+    textareaRef.current.scrollTop = (lineNumber - 1) * 21; // approximate line height
+    
+    setHighlightedLine(lineNumber);
+    setTimeout(() => setHighlightedLine(null), 2000);
+  };
+
+  // Keyboard shortcuts
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ctrl+S or Cmd+S: Save
+      if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (isValid) handleSave();
+      }
+      
+      // Escape: Close
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      }
+      
+      // Ctrl+Shift+F or Cmd+Shift+F: Format
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'F') {
+        e.preventDefault();
+        handleFormat();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isValid, jsonText, onClose]);
+
+  // Calculate line numbers
+  const lineCount = jsonText.split('\n').length;
+
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-7xl h-[90vh] flex flex-col">
@@ -202,6 +264,7 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
           <button
             onClick={handleFormat}
             className="px-3 py-1.5 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            title="Format JSON (Ctrl+Shift+F)"
           >
             Format
           </button>
@@ -211,26 +274,58 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
           >
             Minify
           </button>
+          <button
+            onClick={handleCopy}
+            className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
+              copied 
+                ? 'bg-green-600 text-white' 
+                : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+            }`}
+          >
+            {copied ? '✓ Copied!' : 'Copy JSON'}
+          </button>
           <div className="flex-1" />
           <div className="text-sm text-gray-600 dark:text-gray-400">
-            {jsonText.split('\n').length} lines • {jsonText.length} characters
+            {lineCount} lines • {jsonText.length} characters
           </div>
         </div>
 
         {/* Main Content */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Editor */}
+          {/* Editor with Line Numbers */}
           <div className="flex-1 flex flex-col">
-            <textarea
-              value={jsonText}
-              onChange={(e) => handleJsonChange(e.target.value)}
-              className="flex-1 w-full p-4 font-mono text-sm bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-0 focus:outline-none resize-none"
-              style={{
-                tabSize: 2,
-                lineHeight: '1.5'
-              }}
-              spellCheck={false}
-            />
+            <div className="flex-1 flex overflow-hidden">
+              {/* Line Numbers */}
+              <div className="flex-shrink-0 bg-gray-100 dark:bg-gray-800 border-r border-gray-300 dark:border-gray-600 overflow-hidden">
+                <div className="py-4 px-3 font-mono text-sm text-gray-500 dark:text-gray-400 text-right select-none" style={{ lineHeight: '1.5' }}>
+                  {Array.from({ length: lineCount }, (_, i) => (
+                    <div
+                      key={i + 1}
+                      className={`${
+                        highlightedLine === i + 1 
+                          ? 'bg-yellow-200 dark:bg-yellow-900/50 text-gray-900 dark:text-yellow-400 font-bold' 
+                          : ''
+                      }`}
+                    >
+                      {i + 1}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Text Editor */}
+              <textarea
+                ref={textareaRef}
+                value={jsonText}
+                onChange={(e) => handleJsonChange(e.target.value)}
+                className="flex-1 w-full p-4 font-mono text-sm bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-0 focus:outline-none resize-none"
+                style={{
+                  tabSize: 2,
+                  lineHeight: '1.5'
+                }}
+                spellCheck={false}
+              />
+            </div>
           </div>
 
           {/* Error Panel */}
@@ -244,11 +339,13 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
                   {errors.map((error, index) => (
                     <div
                       key={index}
-                      className="p-3 bg-white dark:bg-gray-800 rounded-lg border border-red-200 dark:border-red-800"
+                      className="p-3 bg-white dark:bg-gray-800 rounded-lg border border-red-200 dark:border-red-800 cursor-pointer hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      onClick={() => error.line && jumpToLine(error.line)}
                     >
                       {error.line && (
-                        <div className="text-xs font-mono text-red-600 dark:text-red-400 mb-1">
-                          Line {error.line}
+                        <div className="text-xs font-mono text-red-600 dark:text-red-400 mb-1 flex items-center gap-1">
+                          <span>Line {error.line}</span>
+                          <span className="text-gray-400">→ Click to jump</span>
                         </div>
                       )}
                       {error.path && (
@@ -269,16 +366,21 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
 
         {/* Footer */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900">
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {isValid ? (
-              <span className="text-green-600 dark:text-green-400">
-                ✓ Ready to save
-              </span>
-            ) : (
-              <span className="text-red-600 dark:text-red-400">
-                ✗ Fix errors before saving
-              </span>
-            )}
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              {isValid ? (
+                <span className="text-green-600 dark:text-green-400">
+                  ✓ Ready to save
+                </span>
+              ) : (
+                <span className="text-red-600 dark:text-red-400">
+                  ✗ Fix errors before saving
+                </span>
+              )}
+            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-500">
+              Shortcuts: Ctrl+S (Save) • Ctrl+Shift+F (Format) • Esc (Close)
+            </div>
           </div>
           
           <div className="flex items-center gap-3">
