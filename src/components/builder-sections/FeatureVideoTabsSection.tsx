@@ -38,7 +38,7 @@ export default function FeatureVideoTabsSection({
   tabs = [],
   showFullscreenButton = true,
   autoplay = true,
-  maxWidth = '1920px',
+  maxWidth = '1280px',
   paddingY = '0',
   paddingX = '0',
 }: FeatureVideoTabsSectionProps) {
@@ -139,7 +139,7 @@ export default function FeatureVideoTabsSection({
           )}
 
           {/* Desktop Tabs */}
-          <div className="hidden md:flex items-center justify-center gap-2 lg:gap-4 py-4 lg:py-6 bg-slate-50/80 dark:bg-slate-800/80 backdrop-blur-sm border border-slate-200 dark:border-slate-700 mb-0">
+          <div className="hidden md:flex items-center justify-center gap-2 lg:gap-4 py-4 lg:py-6 mb-0">
             {tabs.map((tab, index) => (
               <button
                 key={tab.id}
@@ -185,7 +185,7 @@ export default function FeatureVideoTabsSection({
                 </button>
                 {openAccordion === index && (
                   <div className="px-4 pb-4">
-                    <div className="relative aspect-video rounded-lg overflow-hidden bg-black">
+                    <div className="relative aspect-video rounded-lg overflow-hidden bg-black" style={{ borderRadius: '20px' }}>
                       {(() => {
                         const videoSrc = tab.videoSrcMobile || tab.videoSrc;
                         const videoSrcString = typeof videoSrc === 'string' ? videoSrc : (videoSrc as any)?.src || '';
@@ -230,7 +230,7 @@ export default function FeatureVideoTabsSection({
                 key={tab.id}
                 className={`${activeTab === index ? 'block' : 'hidden'}`}
               >
-                <div className="relative aspect-video bg-black overflow-hidden">
+                <div className="relative aspect-video bg-black overflow-hidden" style={{ borderRadius: '20px' }}>
                   {(() => {
                     const videoSrc = tab.videoSrc;
                     const videoSrcString = typeof videoSrc === 'string' ? videoSrc : (videoSrc as any)?.src || '';
