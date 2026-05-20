@@ -38,7 +38,7 @@ export default function FeatureVideoTabsSection({
   tabs = [],
   showFullscreenButton = true,
   autoplay = true,
-  maxWidth = '1280px',
+  maxWidth = '1920px',
   paddingY = '0',
   paddingX = '0',
 }: FeatureVideoTabsSectionProps) {
@@ -224,7 +224,7 @@ export default function FeatureVideoTabsSection({
           </div>
 
           {/* Desktop Video Display */}
-          <div className="hidden md:block relative">
+          <div className="hidden md:block relative mx-auto" style={{ maxWidth: '1280px' }}>
             {tabs.map((tab, index) => (
               <div
                 key={tab.id}
