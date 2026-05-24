@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 type Theme = 'blue' | 'purple' | 'green' | 'amber' | 'coral';
 type BadgeVariant = 'blue' | 'purple' | 'green' | 'amber' | 'coral';
@@ -84,7 +84,103 @@ const badgeClass: Record<BadgeVariant, string> = {
   coral: 'text-[#FF9494] bg-[rgba(255,107,107,0.08)] border-[rgba(255,107,107,0.25)]',
 };
 
-const isVideoUrl = (url?: string) => !!url && /\.(mp4|webm|ogg|mov)$/i.test(url);
+const isVideoUrl = (url?: string) => {
+  if (!url) return false;
+  // Check file extension
+  if (/\.(mp4|webm|ogg|mov|avi|mkv|flv|wmv|m4v)$/i.test(url)) return true;
+  // Check common video hosting patterns
+  if (url.includes('video') || url.includes('.mp4') || url.includes('.webm')) return true;
+  return false;
+};
+
+// Video Player Component with error handling
+function VideoPlayer({ src, theme }: { src: string; theme: Theme }) {
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    setHasError(false);
+    setIsLoading(true);
+  }, [src]);
+
+  const handleLoadedData = () => {
+    setIsLoading(false);
+  };
+
+  const handleError = () => {
+    console.error('Video failed to load:', src);
+    setHasError(true);
+    setIsLoading(false);
+  };
+
+  if (hasError) {
+    return null; // Return null to show fallback
+  }
+
+  return (
+    <>
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-[#1A1D24] z-[1]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-current opacity-30"></div>
+        </div>
+      )}
+      <video
+        ref={videoRef}
+        className="relative z-[1] w-full h-full object-cover"
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        onLoadedData={handleLoadedData}
+        onError={handleError}
+      />
+    </>
+  );
+}
+
+// Image Component with error handling
+function ImageDisplay({ src, alt, theme }: { src: string; alt: string; theme: Theme }) {
+  const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setHasError(false);
+    setIsLoading(true);
+  }, [src]);
+
+  const handleLoad = () => {
+    setIsLoading(false);
+  };
+
+  const handleError = () => {
+    console.error('Image failed to load:', src);
+    setHasError(true);
+    setIsLoading(false);
+  };
+
+  if (hasError) {
+    return null; // Return null to show fallback
+  }
+
+  return (
+    <>
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-[#1A1D24] z-[1]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-current opacity-30"></div>
+        </div>
+      )}
+      <img
+        className="relative z-[1] w-full h-full object-cover"
+        src={src}
+        alt={alt}
+        onLoad={handleLoad}
+        onError={handleError}
+      />
+    </>
+  );
+}
 
 export default function PlatformCapabilitiesSection({ data }: PlatformCapabilitiesSectionProps) {
   const accentColor = data?.accentColor || '#4F7FFF';
@@ -172,11 +268,26 @@ export default function PlatformCapabilitiesSection({ data }: PlatformCapabiliti
                         </div>
 
                         {feature.visualMedia ? (
-                          isVideoUrl(feature.visualMedia) ? (
-                            <video className="relative z-[1] w-full h-full object-cover" src={feature.visualMedia} autoPlay muted loop playsInline />
-                          ) : (
-                            <img className="relative z-[1] w-full h-full object-cover" src={feature.visualMedia} alt={feature.visualMediaAlt || feature.visualLabel} />
-                          )
+                          <>
+                            {isVideoUrl(feature.visualMedia) ? (
+                              <VideoPlayer src={feature.visualMedia} theme={feature.theme} />
+                            ) : (
+                              <ImageDisplay 
+                                src={feature.visualMedia} 
+                                alt={feature.visualMediaAlt || feature.visualLabel}
+                                theme={feature.theme}
+                              />
+                            )}
+                            {/* Fallback placeholder - shown when media fails to load */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3.5 pointer-events-none [&:has(+video)]:hidden [&:has(+img)]:hidden">
+                              <div className={`relative z-[1] w-[60px] h-[60px] rounded-[18px] border flex items-center justify-center text-[28px] ${theme.iconBox}`}>
+                                {feature.visualIcon}
+                              </div>
+                              <span className="relative z-[1] text-xs text-slate-500 dark:text-[#4A4F65] text-center px-6">
+                                {feature.visualLabel}
+                              </span>
+                            </div>
+                          </>
                         ) : (
                           <>
                             <div className={`relative z-[1] w-[60px] h-[60px] rounded-[18px] border flex items-center justify-center text-[28px] ${theme.iconBox}`}>
