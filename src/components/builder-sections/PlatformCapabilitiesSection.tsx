@@ -17,6 +17,9 @@ interface FeatureItem {
   visualLabel: string;
   visualMedia?: string;
   visualMediaAlt?: string;
+  showPlaceholder?: boolean; // Option to show/hide the placeholder badge
+  placeholderIcon?: string; // Custom icon for placeholder
+  placeholderText?: string; // Custom text for placeholder
 }
 
 interface ModuleGroup {
@@ -279,23 +282,29 @@ export default function PlatformCapabilitiesSection({ data }: PlatformCapabiliti
                               />
                             )}
                             {/* Fallback placeholder - shown when media fails to load */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3.5 pointer-events-none [&:has(+video)]:hidden [&:has(+img)]:hidden">
-                              <div className={`relative z-[1] w-[60px] h-[60px] rounded-[18px] border flex items-center justify-center text-[28px] ${theme.iconBox}`}>
-                                {feature.visualIcon}
+                            {feature.showPlaceholder !== false && (
+                              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3.5 pointer-events-none [&:has(+video)]:hidden [&:has(+img)]:hidden">
+                                <div className={`relative z-[1] w-[60px] h-[60px] rounded-[18px] border flex items-center justify-center text-[28px] ${theme.iconBox}`}>
+                                  {feature.placeholderIcon || feature.visualIcon}
+                                </div>
+                                <span className="relative z-[1] text-xs text-slate-500 dark:text-[#4A4F65] text-center px-6">
+                                  {feature.placeholderText || feature.visualLabel}
+                                </span>
                               </div>
-                              <span className="relative z-[1] text-xs text-slate-500 dark:text-[#4A4F65] text-center px-6">
-                                {feature.visualLabel}
-                              </span>
-                            </div>
+                            )}
                           </>
                         ) : (
                           <>
-                            <div className={`relative z-[1] w-[60px] h-[60px] rounded-[18px] border flex items-center justify-center text-[28px] ${theme.iconBox}`}>
-                              {feature.visualIcon}
-                            </div>
-                            <span className="relative z-[1] text-xs text-slate-500 dark:text-[#4A4F65] text-center px-6">
-                              {feature.visualLabel}
-                            </span>
+                            {feature.showPlaceholder !== false && (
+                              <>
+                                <div className={`relative z-[1] w-[60px] h-[60px] rounded-[18px] border flex items-center justify-center text-[28px] ${theme.iconBox}`}>
+                                  {feature.placeholderIcon || feature.visualIcon}
+                                </div>
+                                <span className="relative z-[1] text-xs text-slate-500 dark:text-[#4A4F65] text-center px-6">
+                                  {feature.placeholderText || feature.visualLabel}
+                                </span>
+                              </>
+                            )}
                           </>
                         )}
                       </div>

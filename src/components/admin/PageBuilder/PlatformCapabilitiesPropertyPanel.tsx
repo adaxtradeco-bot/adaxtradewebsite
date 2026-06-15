@@ -300,6 +300,42 @@ export function PlatformCapabilitiesPropertyPanel({ section, onUpdate }: Props) 
                 <Field label="Media Alt">
                   <input className={inputCls} value={feature.visualMediaAlt || ''} onChange={e => updateFeature(mIdx, fIdx, { visualMediaAlt: e.target.value })} />
                 </Field>
+                
+                <Collapsible title="Placeholder Badge Settings" defaultOpen={false}>
+                  <Field label="Show Placeholder Badge">
+                    <div className="flex items-center gap-2">
+                      <input 
+                        type="checkbox" 
+                        checked={feature.showPlaceholder !== false} 
+                        onChange={e => updateFeature(mIdx, fIdx, { showPlaceholder: e.target.checked })}
+                        className="w-4 h-4 rounded border-gray-300 dark:border-gray-600"
+                      />
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        Display placeholder when no media or media fails to load
+                      </span>
+                    </div>
+                  </Field>
+                  {feature.showPlaceholder !== false && (
+                    <>
+                      <Field label="Placeholder Icon (emoji)">
+                        <input 
+                          className={inputCls} 
+                          value={feature.placeholderIcon || feature.visualIcon || ''} 
+                          onChange={e => updateFeature(mIdx, fIdx, { placeholderIcon: e.target.value })}
+                          placeholder="Leave empty to use Visual Icon"
+                        />
+                      </Field>
+                      <Field label="Placeholder Text">
+                        <input 
+                          className={inputCls} 
+                          value={feature.placeholderText || feature.visualLabel || ''} 
+                          onChange={e => updateFeature(mIdx, fIdx, { placeholderText: e.target.value })}
+                          placeholder="Leave empty to use Visual Label"
+                        />
+                      </Field>
+                    </>
+                  )}
+                </Collapsible>
               </Collapsible>
             ))}
           </Collapsible>
