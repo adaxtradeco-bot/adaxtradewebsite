@@ -28,7 +28,8 @@ const languageFlags: Record<string, string> = {
   tr: '🇹🇷',
   fr: '🇫🇷',
   de: '🇩🇪',
-  es: '🇪🇸'
+  es: '🇪🇸',
+  fa: '🇮🇷'
 };
 
 const languageNames: Record<string, string> = {
@@ -37,7 +38,8 @@ const languageNames: Record<string, string> = {
   tr: 'Türkçe',
   fr: 'Français',
   de: 'Deutsch',
-  es: 'Español'
+  es: 'Español',
+  fa: 'فارسی'
 };
 
 export default function FootersPage() {

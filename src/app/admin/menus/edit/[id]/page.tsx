@@ -861,6 +861,7 @@ export default function MenuEditor() {
                 <option value="fr">🇫🇷 Français (French)</option>
                 <option value="de">🇩🇪 Deutsch (German)</option>
                 <option value="es">🇪🇸 Español (Spanish)</option>
+                <option value="fa">🇮🇷 فارسی (Persian)</option>
               </select>
             </div>
             <div className="flex gap-3">
