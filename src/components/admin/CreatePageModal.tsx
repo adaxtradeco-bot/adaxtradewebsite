@@ -27,9 +27,11 @@ export function CreatePageModal({ isOpen, onClose, onSuccess }: CreatePageModalP
   const languages = [
     { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'ar', name: 'Arabic', flag: '🇸🇦' },
+    { code: 'tr', name: 'Turkish', flag: '🇹🇷' },
     { code: 'fr', name: 'French', flag: '🇫🇷' },
     { code: 'de', name: 'German', flag: '🇩🇪' },
-    { code: 'es', name: 'Spanish', flag: '🇪🇸' }
+    { code: 'es', name: 'Spanish', flag: '🇪🇸' },
+    { code: 'fa', name: 'Persian', flag: '🇮🇷' }
   ];
 
   useEffect(() => {

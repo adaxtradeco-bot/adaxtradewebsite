@@ -100,7 +100,7 @@ const defaultSettings: SiteSettings = {
   languages: {
     showInHeader: true,
     defaultLanguage: 'en',
-    enabledLanguages: ['en', 'ar', 'tr', 'fr', 'de', 'es']
+    enabledLanguages: ['en', 'ar', 'tr', 'fr', 'de', 'es', 'fa']
   },
   contactSales: {
     show: true,

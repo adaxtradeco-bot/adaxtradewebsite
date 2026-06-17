@@ -84,7 +84,8 @@ export function PageListFlat({ onAddTranslation }: PageListFlatProps) {
       tr: '🇹🇷',
       fr: '🇫🇷',
       de: '🇩🇪',
-      es: '🇪🇸'
+      es: '🇪🇸',
+      fa: '🇮🇷'
     };
     return flags[lang] || '🌐';
   };

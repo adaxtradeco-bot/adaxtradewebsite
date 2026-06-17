@@ -42,7 +42,8 @@ export function AddTranslationModal({
     { code: 'tr', name: 'Turkish', flag: '🇹🇷' },
     { code: 'fr', name: 'French', flag: '🇫🇷' },
     { code: 'de', name: 'German', flag: '🇩🇪' },
-    { code: 'es', name: 'Spanish', flag: '🇪🇸' }
+    { code: 'es', name: 'Spanish', flag: '🇪🇸' },
+    { code: 'fa', name: 'Persian', flag: '🇮🇷' }
   ].filter(lang => !existingLanguages.includes(lang.code));
 
   useEffect(() => {
