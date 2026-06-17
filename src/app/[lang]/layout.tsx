@@ -5,7 +5,6 @@
  */
 
 import { Inter } from 'next/font/google';
-import localFont from 'next/font/local';
 import { ModernNavbar } from '@/components/ModernNavbar';
 import { Footer } from '@/components/Footer';
 import { LanguageProvider } from '@/lib/i18n/context';
@@ -13,20 +12,6 @@ import { supportedLanguages, languages, SupportedLanguage } from '@/lib/i18n/con
 import { notFound } from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'] });
-
-const yekanBakh = localFont({
-  src: [
-    { path: '../../fonts/yekan bakh/woff2/YekanBakhFaNum-Thin.woff2',       weight: '100', style: 'normal' },
-    { path: '../../fonts/yekan bakh/woff2/YekanBakhFaNum-Light.woff2',      weight: '300', style: 'normal' },
-    { path: '../../fonts/yekan bakh/woff2/YekanBakhFaNum-Regular.woff2',    weight: '400', style: 'normal' },
-    { path: '../../fonts/yekan bakh/woff2/YekanBakhFaNum-SemiBold.woff2',   weight: '600', style: 'normal' },
-    { path: '../../fonts/yekan bakh/woff2/YekanBakhFaNum-Bold.woff2',       weight: '700', style: 'normal' },
-    { path: '../../fonts/yekan bakh/woff2/YekanBakhFaNum-ExtraBold.woff2',  weight: '800', style: 'normal' },
-    { path: '../../fonts/yekan bakh/woff2/YekanBakhFaNum-Black.woff2',      weight: '900', style: 'normal' },
-    { path: '../../fonts/yekan bakh/woff2/YekanBakhFaNum-ExtraBlack.woff2', weight: '950', style: 'normal' },
-  ],
-  display: 'swap',
-});
 
 interface LangLayoutProps {
   children: React.ReactNode;
@@ -46,11 +31,9 @@ export default function LangLayout({ children, params }: LangLayoutProps) {
 
   const currentLang = languages[lang];
 
-  const fontClass = currentLang.dir === 'rtl' ? yekanBakh.className : inter.className;
-
   return (
     <html lang={lang} dir={currentLang.dir} suppressHydrationWarning>
-      <body className={fontClass}>
+      <body className={currentLang.dir === 'ltr' ? inter.className : undefined}>
         <LanguageProvider initialLanguage={lang}>
           <div className="min-h-screen flex flex-col">
             <ModernNavbar />

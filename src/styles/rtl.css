@@ -136,8 +136,4 @@
   animation: slideInFromRight 0.3s ease-out;
 }
 
-/* Disable ligatures for Arabic and Persian — font handles shaping natively */
-[dir="rtl"][lang="ar"],
-[dir="rtl"][lang="fa"] {
-  font-feature-settings: "liga" off;
-}
+/* Font family and feature settings for RTL languages are defined in styles/fonts.css */

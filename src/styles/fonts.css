@@ -1,0 +1,102 @@
+/*
+ * Font Registry
+ *
+ * Structure:
+ *   1. @font-face blocks — one section per font family
+ *   2. Language assignments — maps [lang] selectors to font families
+ *
+ * To add a font for a new language:
+ *   a. Add an @font-face section below for the new font family
+ *   b. Add a [lang="xx"] rule in the "Language assignments" section at the bottom
+ */
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Yekan Bakh FaNum — Arabic & Persian
+   Files: /public/fonts/yekanbakh/
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url('/fonts/yekanbakh/YekanBakhFaNum-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/yekanbakh/YekanBakhFaNum-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/yekanbakh/YekanBakhFaNum-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/yekanbakh/YekanBakhFaNum-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/yekanbakh/YekanBakhFaNum-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/yekanbakh/YekanBakhFaNum-ExtraBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fonts/yekanbakh/YekanBakhFaNum-Black.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Yekan Bakh';
+  font-style: normal;
+  font-weight: 950;
+  font-display: swap;
+  src: url('/fonts/yekanbakh/YekanBakhFaNum-ExtraBlack.woff2') format('woff2');
+}
+
+/*
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ * Language → Font assignments
+ *
+ * Pattern:
+ *   [lang="xx"] { font-family: 'Font Name', <fallbacks>; }
+ *
+ * Add a new block here for each language that needs a custom font.
+ * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ */
+
+/* Arabic */
+[lang="ar"] {
+  font-family: 'Yekan Bakh', Tahoma, Arial, sans-serif;
+  font-feature-settings: "liga" off;
+}
+
+/* Persian */
+[lang="fa"] {
+  font-family: 'Yekan Bakh', Tahoma, Arial, sans-serif;
+  font-feature-settings: "liga" off;
+}
