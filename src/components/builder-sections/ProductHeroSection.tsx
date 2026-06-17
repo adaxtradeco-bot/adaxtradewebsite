@@ -33,17 +33,24 @@ interface ProductHeroData {
   secondaryButton: { text: string; href: string };
   footerText?: string;
   badges?: string[];
-  
+
   // Typography
   titleFontSize?: string;
   descriptionFontSize?: string;
-  
+
   // Theme
   themeId?: string;
   customBackground?: string;
   customTitleGradientFrom?: string;
   customTitleGradientTo?: string;
-  
+
+  // Section background (image or video covering the whole section)
+  sectionBackgroundType?: 'tailwind' | 'image' | 'video';
+  sectionBackgroundUrl?: string;
+  overlayEnabled?: boolean;
+  overlayColor?: string;   // hex color e.g. '#000000'
+  overlayOpacity?: number; // 0-100
+
   rightContentType: 'cards' | 'image' | 'video' | 'placeholder';
   cards?: CardItem[];
   mediaUrl?: string;
@@ -54,16 +61,16 @@ interface ProductHeroData {
   placeholderIconConfig?: IconConfig;
   placeholderText?: string;
   features?: FeatureItem[];
-  
+
   // New options
   showMediaBackground?: boolean;
   mediaContainerPadding?: string;
-  
+
   // Layout options
-  leftColumnWidth?: string; // e.g., 'lg:w-1/2', 'lg:w-7/12'
-  rightColumnWidth?: string; // e.g., 'lg:w-1/2', 'lg:w-5/12'
-  columnGap?: string; // e.g., 'gap-8', 'gap-12', 'gap-16'
-  mediaScale?: string; // e.g., 'scale-90', 'scale-100', 'scale-110'
+  leftColumnWidth?: string;
+  rightColumnWidth?: string;
+  columnGap?: string;
+  mediaScale?: string;
 }
 
 interface ProductHeroSectionProps {
@@ -90,6 +97,11 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
     customBackground,
     customTitleGradientFrom,
     customTitleGradientTo,
+    sectionBackgroundType = 'tailwind',
+    sectionBackgroundUrl = '',
+    overlayEnabled = true,
+    overlayColor = '#000000',
+    overlayOpacity = 40,
     rightContentType = 'cards',
     cards = [],
     mediaUrl,
@@ -108,7 +120,10 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
     mediaScale = 'scale-100'
   } = data;
 
-  const backgroundColor = customBackground || theme?.background || style.backgroundColor || 'bg-gradient-to-br from-indigo-50 via-slate-50 to-cyan-50 dark:from-indigo-950 dark:via-slate-900 dark:to-cyan-950';
+  const hasMediaBackground = (sectionBackgroundType === 'image' || sectionBackgroundType === 'video') && sectionBackgroundUrl;
+  const backgroundColor = hasMediaBackground
+    ? ''
+    : (customBackground || theme?.background || style.backgroundColor || 'bg-gradient-to-br from-indigo-50 via-slate-50 to-cyan-50 dark:from-indigo-950 dark:via-slate-900 dark:to-cyan-950');
   const gradientFrom = customTitleGradientFrom || theme?.titleGradient.from || 'from-indigo-400';
   const gradientTo = customTitleGradientTo || theme?.titleGradient.to || 'to-cyan-400';
   const textColor = style.textColor || 'text-slate-900 dark:text-white';
@@ -224,6 +239,37 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
 
   return (
     <section className={`relative ${backgroundColor} ${textColor} overflow-hidden`}>
+      {/* Full-section video background */}
+      {sectionBackgroundType === 'video' && sectionBackgroundUrl && (
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          src={sectionBackgroundUrl}
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
+      )}
+
+      {/* Full-section image background */}
+      {sectionBackgroundType === 'image' && sectionBackgroundUrl && (
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${sectionBackgroundUrl})` }}
+        />
+      )}
+
+      {/* Color overlay for image/video backgrounds */}
+      {hasMediaBackground && overlayEnabled && (
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundColor: overlayColor,
+            opacity: overlayOpacity / 100,
+          }}
+        />
+      )}
+
       <div className="absolute inset-0 bg-gradient-to-r from-indigo-200/30 via-transparent to-cyan-200/30 dark:from-indigo-600/20 dark:via-transparent dark:to-cyan-500/20" />
       
       <div className={`relative max-w-7xl mx-auto px-6 ${padding}`}>

@@ -487,6 +487,126 @@ export function ProductHeroPropertyPanel({ section, onUpdate }: ProductHeroPrope
 
   return (
     <div className="space-y-6">
+      {/* Section Background (Image / Video) */}
+      <div className="bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900/20 dark:to-gray-900/20 border border-slate-200 dark:border-slate-700 rounded-lg p-4">
+        <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center">
+          <span className="mr-2">🌅</span>
+          Section Background
+        </h3>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Background Type
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {(['tailwind', 'image', 'video'] as const).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  onClick={() => updateData({ sectionBackgroundType: type })}
+                  className={`px-2 py-2 rounded text-xs font-medium transition-colors ${
+                    (data.sectionBackgroundType || 'tailwind') === type
+                      ? 'bg-slate-700 text-white'
+                      : 'bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                  }`}
+                >
+                  {type === 'tailwind' ? '🎨 Color' : type === 'image' ? '🖼️ Image' : '🎬 Video'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {(data.sectionBackgroundType === 'image' || data.sectionBackgroundType === 'video') && (
+            <>
+              <div>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                  {data.sectionBackgroundType === 'video' ? 'Video' : 'Image'} URL
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={data.sectionBackgroundUrl || ''}
+                    onChange={(e) => updateData({ sectionBackgroundUrl: e.target.value })}
+                    placeholder={data.sectionBackgroundType === 'video' ? 'https://example.com/video.mp4' : 'https://example.com/image.jpg'}
+                    className="flex-1 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+                {data.sectionBackgroundType === 'video' && (
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    ویدئو به صورت autoplay، بی‌صدا و loop پخش می‌شود.
+                  </p>
+                )}
+              </div>
+
+              {/* Overlay */}
+              <div className="border-t border-gray-200 dark:border-gray-600 pt-3 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                    Color Overlay
+                  </label>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={data.overlayEnabled !== false}
+                      onChange={(e) => updateData({ overlayEnabled: e.target.checked })}
+                      className="sr-only peer"
+                    />
+                    <div className="w-8 h-4 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600" />
+                  </label>
+                </div>
+
+                {data.overlayEnabled !== false && (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Overlay Color
+                      </label>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="color"
+                          value={data.overlayColor || '#000000'}
+                          onChange={(e) => updateData({ overlayColor: e.target.value })}
+                          className="w-10 h-8 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
+                        />
+                        <input
+                          type="text"
+                          value={data.overlayColor || '#000000'}
+                          onChange={(e) => updateData({ overlayColor: e.target.value })}
+                          className="flex-1 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                          placeholder="#000000"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Opacity: {data.overlayOpacity ?? 40}%
+                      </label>
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        value={data.overlayOpacity ?? 40}
+                        onChange={(e) => updateData({ overlayOpacity: Number(e.target.value) })}
+                        className="w-full h-2 accent-blue-600"
+                      />
+                      <div className="flex justify-between text-xs text-gray-400 mt-1">
+                        <span>شفاف</span>
+                        <span>تیره</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-gray-100 dark:bg-gray-800 rounded p-2 text-xs text-gray-500 dark:text-gray-400">
+                  💡 برای تیره کردن: رنگ مشکی + opacity بیشتر. برای روشن: رنگ سفید. برای رنگی: رنگ دلخواه انتخاب کنید.
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
       {/* Theme Selection */}
       <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4">
         <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center">
