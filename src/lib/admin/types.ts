@@ -11,7 +11,7 @@ export interface Page {
   metaTitle?: string;
   metaDescription?: string;
   status: 'published' | 'draft';
-  language: 'en' | 'ar';
+  language: 'en' | 'ar' | 'tr' | 'fr' | 'de' | 'es' | 'fa';
   sections: PageSection[];
   createdAt: string;
   updatedAt: string;
@@ -90,7 +90,7 @@ export interface SectionTemplate {
 export interface Translation {
   id: string;
   key: string;
-  language: 'en' | 'ar';
+  language: 'en' | 'ar' | 'tr' | 'fr' | 'de' | 'es' | 'fa';
   value: string;
   namespace?: string;
   createdAt: string;
@@ -109,8 +109,8 @@ export interface User {
 export interface AdminSettings {
   siteName: string;
   siteDescription: string;
-  defaultLanguage: 'en' | 'ar';
-  enabledLanguages: ('en' | 'ar')[];
+  defaultLanguage: 'en' | 'ar' | 'tr' | 'fr' | 'de' | 'es' | 'fa';
+  enabledLanguages: ('en' | 'ar' | 'tr' | 'fr' | 'de' | 'es' | 'fa')[];
   seoSettings: {
     defaultMetaTitle: string;
     defaultMetaDescription: string;

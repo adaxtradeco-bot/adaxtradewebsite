@@ -587,6 +587,7 @@ export default function SettingsPage() {
                     <SelectItem value="fr">🇫🇷 Français (French)</SelectItem>
                     <SelectItem value="de">🇩🇪 Deutsch (German)</SelectItem>
                     <SelectItem value="es">🇪🇸 Español (Spanish)</SelectItem>
+                    <SelectItem value="fa">🇮🇷 فارسی (Persian)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -603,7 +604,8 @@ export default function SettingsPage() {
                     { code: 'tr', name: 'Türkçe (Turkish)', flag: '🇹🇷' },
                     { code: 'fr', name: 'Français (French)', flag: '🇫🇷' },
                     { code: 'de', name: 'Deutsch (German)', flag: '🇩🇪' },
-                    { code: 'es', name: 'Español (Spanish)', flag: '🇪🇸' }
+                    { code: 'es', name: 'Español (Spanish)', flag: '🇪🇸' },
+                    { code: 'fa', name: 'فارسی (Persian)', flag: '🇮🇷' }
                   ].map((lang) => (
                     <label
                       key={lang.code}

@@ -67,9 +67,11 @@ export function LanguageSwitcher({
     const flags: Record<string, string> = {
       en: '🇺🇸',
       ar: '🇸🇦',
+      tr: '🇹🇷',
       fr: '🇫🇷',
       de: '🇩🇪',
-      es: '🇪🇸'
+      es: '🇪🇸',
+      fa: '🇮🇷'
     };
     return flags[lang] || '🌐';
   };
