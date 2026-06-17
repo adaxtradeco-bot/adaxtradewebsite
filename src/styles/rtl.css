@@ -136,17 +136,8 @@
   animation: slideInFromRight 0.3s ease-out;
 }
 
-/* Typography RTL */
-[dir="rtl"] {
-  font-family: 'Inter', 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
-}
-
-/* Arabic font support */
-[dir="rtl"][lang="ar"] {
-  font-family: 'Inter', 'Segoe UI', 'Tahoma', 'Arial', 'Noto Sans Arabic', sans-serif;
-}
-
-/* Ensure proper text rendering for Arabic */
-[dir="rtl"][lang="ar"] * {
+/* Disable ligatures for Arabic and Persian — font handles shaping natively */
+[dir="rtl"][lang="ar"],
+[dir="rtl"][lang="fa"] {
   font-feature-settings: "liga" off;
 }
