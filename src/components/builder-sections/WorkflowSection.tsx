@@ -25,29 +25,49 @@ interface WorkflowSectionProps {
 
 export default function WorkflowSection({ data, style }: WorkflowSectionProps) {
   return (
-    <section className={`${style.backgroundColor} ${style.textColor} ${style.padding}`}>
+    <section className={`bg-white ${style.padding}`}>
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className={`text-${style.alignment} mb-12`}>
-          <h2 className="text-4xl font-bold mb-4">{data.title}</h2>
-          {data.subtitle && <p className="text-lg opacity-80">{data.subtitle}</p>}
+        <div className={`text-${style.alignment} mb-14`}>
+          <h2 className="text-4xl font-bold text-slate-900 mb-4">{data.title}</h2>
+          {data.subtitle && (
+            <p className="text-lg text-slate-500 max-w-3xl mx-auto">{data.subtitle}</p>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.workflows.map((workflow, index) => (
-            <div key={index} className="bg-white dark:bg-slate-800 rounded-xl p-8 shadow-lg">
-              <div className="text-5xl mb-4">{workflow.icon}</div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-3">
-                {workflow.title}
-              </h3>
-              <p className="text-slate-600 dark:text-slate-400 mb-6">{workflow.description}</p>
-              
-              <div className="space-y-3">
+            <div
+              key={index}
+              className="group bg-slate-50 hover:bg-white rounded-2xl p-7 border border-slate-100 hover:border-blue-100 hover:shadow-xl transition-all duration-300"
+            >
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-13 h-13 min-w-[52px] min-h-[52px] rounded-xl bg-blue-50 group-hover:bg-blue-100 flex items-center justify-center text-3xl transition-colors duration-200">
+                  {workflow.icon}
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                    {workflow.title}
+                  </h3>
+                  <p className="text-sm text-slate-500 mt-1 leading-relaxed">
+                    {workflow.description}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-0">
                 {workflow.steps.map((step, idx) => (
-                  <div key={idx} className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 flex items-center justify-center font-semibold text-sm">
-                      {idx + 1}
+                  <div key={idx} className="flex items-stretch gap-3">
+                    <div className="flex flex-col items-center">
+                      <div className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-sm">
+                        {idx + 1}
+                      </div>
+                      {idx < workflow.steps.length - 1 && (
+                        <div className="w-px flex-1 bg-blue-100 my-1" />
+                      )}
                     </div>
-                    <span className="text-slate-700 dark:text-slate-300">{step}</span>
+                    <div className={`text-sm text-slate-700 font-medium ${idx < workflow.steps.length - 1 ? 'pb-3' : ''}`}>
+                      {step}
+                    </div>
                   </div>
                 ))}
               </div>
