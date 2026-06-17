@@ -66,6 +66,9 @@ interface ProductHeroData {
   showMediaBackground?: boolean;
   mediaContainerPadding?: string;
 
+  // Text color override when media background is active
+  sectionTextColorOverride?: string;
+
   // Layout options
   leftColumnWidth?: string;
   rightColumnWidth?: string;
@@ -102,6 +105,7 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
     overlayEnabled = true,
     overlayColor = '#000000',
     overlayOpacity = 40,
+    sectionTextColorOverride = '',
     rightContentType = 'cards',
     cards = [],
     mediaUrl,
@@ -126,7 +130,9 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
     : (customBackground || theme?.background || style.backgroundColor || 'bg-gradient-to-br from-indigo-50 via-slate-50 to-cyan-50 dark:from-indigo-950 dark:via-slate-900 dark:to-cyan-950');
   const gradientFrom = customTitleGradientFrom || theme?.titleGradient.from || 'from-indigo-400';
   const gradientTo = customTitleGradientTo || theme?.titleGradient.to || 'to-cyan-400';
-  const textColor = style.textColor || 'text-slate-900 dark:text-white';
+  const textColor = hasMediaBackground && sectionTextColorOverride
+    ? sectionTextColorOverride
+    : (style.textColor || 'text-slate-900 dark:text-white');
   const padding = style.padding || 'py-20 lg:py-32';
 
   const renderIcon = (icon?: string, iconConfig?: IconConfig) => {

@@ -13,6 +13,17 @@ import { PRODUCT_HERO_THEMES } from '@/lib/themes/product-hero-themes';
 import { IconPicker, IconConfig, IconButton } from '@/components/ui/IconPicker';
 import { MediaBrowser } from './MediaBrowser';
 
+const TEXT_COLOR_PRESETS = [
+  { label: 'Pure White',       value: 'text-white',      preview: '#ffffff', desc: 'Best for dark videos' },
+  { label: 'Soft White',       value: 'text-gray-100',   preview: '#f3f4f6', desc: 'Slightly warmer than pure white' },
+  { label: 'Warm Gold',        value: 'text-yellow-100', preview: '#fef9c3', desc: 'Warm and luxurious feel' },
+  { label: 'Icy Blue',         value: 'text-cyan-100',   preview: '#cffafe', desc: 'Tech and modern look' },
+  { label: 'Soft Purple',      value: 'text-purple-100', preview: '#f3e8ff', desc: 'Creative and distinctive' },
+  { label: 'Mint Green',       value: 'text-emerald-100',preview: '#d1fae5', desc: 'Natural and fresh' },
+  { label: 'Dark (light bg)',  value: 'text-gray-900',   preview: '#111827', desc: 'For bright/light videos' },
+  { label: 'Custom Tailwind',  value: '__custom__',      preview: null,      desc: 'Enter any Tailwind class' },
+];
+
 interface ProductHeroPropertyPanelProps {
   section: SectionConfig;
   onUpdate: (updates: Partial<SectionConfig>) => void;
@@ -534,7 +545,7 @@ export function ProductHeroPropertyPanel({ section, onUpdate }: ProductHeroPrope
                 </div>
                 {data.sectionBackgroundType === 'video' && (
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                    ویدئو به صورت autoplay، بی‌صدا و loop پخش می‌شود.
+                    Video plays as autoplay, muted, and looped.
                   </p>
                 )}
               </div>
@@ -591,15 +602,70 @@ export function ProductHeroPropertyPanel({ section, onUpdate }: ProductHeroPrope
                         className="w-full h-2 accent-blue-600"
                       />
                       <div className="flex justify-between text-xs text-gray-400 mt-1">
-                        <span>شفاف</span>
-                        <span>تیره</span>
+                        <span>Transparent</span>
+                        <span>Opaque</span>
                       </div>
                     </div>
                   </div>
                 )}
 
                 <div className="bg-gray-100 dark:bg-gray-800 rounded p-2 text-xs text-gray-500 dark:text-gray-400">
-                  💡 برای تیره کردن: رنگ مشکی + opacity بیشتر. برای روشن: رنگ سفید. برای رنگی: رنگ دلخواه انتخاب کنید.
+                  💡 Darken: black + higher opacity. Lighten: white color. Tint: pick any color.
+                </div>
+              </div>
+
+              {/* Text Color Override */}
+              <div className="border-t border-gray-200 dark:border-gray-600 pt-3 space-y-2">
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                  Text Color on Background
+                </label>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Override theme text color to ensure contrast on image/video backgrounds.
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {TEXT_COLOR_PRESETS.filter(p => p.value !== '__custom__').map((preset) => {
+                    const currentVal = data.sectionTextColorOverride || 'text-white';
+                    const isActive = currentVal === preset.value;
+                    return (
+                      <button
+                        key={preset.value}
+                        type="button"
+                        onClick={() => updateData({ sectionTextColorOverride: preset.value })}
+                        title={preset.desc}
+                        className={`flex items-center gap-2 px-2 py-2 rounded text-xs font-medium transition-colors text-left ${
+                          isActive
+                            ? 'bg-slate-700 text-white ring-2 ring-slate-500'
+                            : 'bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+                        }`}
+                      >
+                        {preset.preview && (
+                          <span
+                            className="w-4 h-4 rounded-full border border-gray-400 flex-shrink-0"
+                            style={{ backgroundColor: preset.preview }}
+                          />
+                        )}
+                        <span className="truncate">{preset.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Custom Tailwind input */}
+                <div className="pt-1">
+                  <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">
+                    Custom Tailwind class
+                  </label>
+                  <input
+                    type="text"
+                    value={
+                      TEXT_COLOR_PRESETS.some(p => p.value === data.sectionTextColorOverride && p.value !== '__custom__')
+                        ? ''
+                        : (data.sectionTextColorOverride || '')
+                    }
+                    onChange={(e) => updateData({ sectionTextColorOverride: e.target.value })}
+                    placeholder="e.g. text-rose-100"
+                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
                 </div>
               </div>
             </>
