@@ -12,24 +12,28 @@ export const WORKFLOW_SECTION = {
     data: {
       title: 'Automated Workflows',
       subtitle: 'Streamline your operations',
+      cardTheme: 'default',
       workflows: [
         {
           title: 'Lease Management',
           description: 'Automate lease agreements, renewals, and tenant onboarding',
           icon: '📄',
           steps: ['Application', 'Approval', 'Contract', 'Move-in'],
+          link: { href: '', label: 'Learn more', style: 'text-icon' },
         },
         {
           title: 'Maintenance Requests',
           description: 'Track and manage property maintenance from request to completion',
           icon: '🔧',
           steps: ['Request', 'Assignment', 'Execution', 'Verification'],
+          link: { href: '', label: 'Learn more', style: 'text-icon' },
         },
         {
           title: 'Payment Processing',
           description: 'Automated rent collection and payment tracking',
           icon: '💳',
           steps: ['Invoice', 'Payment', 'Reconciliation', 'Receipt'],
+          link: { href: '', label: 'Learn more', style: 'text-icon' },
         },
       ],
     },
