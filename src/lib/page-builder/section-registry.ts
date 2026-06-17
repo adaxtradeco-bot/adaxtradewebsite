@@ -22,11 +22,13 @@ import { PLATFORM_CAPABILITIES_TEMPLATES } from './section-templates/platform-ca
 import { REPORTS_SHOWCASE_CORE_TEMPLATES } from './section-templates/reports-showcase-core';
 import { REPORTS_SHOWCASE_ADVANCED_TEMPLATES } from './section-templates/reports-showcase-advanced';
 import { EXTERNAL_PORTALS_TEMPLATES } from './section-templates/external-portals';
+import { NAVIGATION_UI_TEMPLATES } from './section-templates/navigation-ui';
 
 export { SECTION_CATEGORIES };
 export type { SectionTemplate };
 
 export const SECTION_TEMPLATES: SectionTemplate[] = [
+  ...NAVIGATION_UI_TEMPLATES,
   ...FORM_BUILDER_SPECIAL_TEMPLATES,
   ...AI_AGENT_PAGE_CORE_TEMPLATES,
   ...AI_AGENT_PAGE_EXTENDED_TEMPLATES,

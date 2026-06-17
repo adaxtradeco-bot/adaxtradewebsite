@@ -128,6 +128,7 @@ import IntegrationMarqueeSection from '@/components/builder-sections/Integration
 import FlowBuilderSection from '@/components/builder-sections/FlowBuilderSection';
 import AutomationEventsSection from '@/components/builder-sections/AutomationEventsSection';
 import MetricsTestimonialsSection from '@/components/builder-sections/MetricsTestimonialsSection';
+import TopStripSection from '@/components/builder-sections/TopStripSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -964,6 +965,14 @@ export function SectionRenderer({
             <MetricsTestimonialsSection
               data={(section as any).data}
               style={(section as any).style}
+            />
+          );
+        case 'top-strip':
+          return (
+            <TopStripSection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
             />
           );
         case 'showcase':
