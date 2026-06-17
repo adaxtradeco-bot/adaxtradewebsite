@@ -143,6 +143,7 @@ export const BaseSectionSchema = z.object({
     'flow-builder',
     'automation-events',
     'metrics-testimonials',
+    'top-strip',
   ]),
   order: z.number(),
   data: z.record(z.string(), z.any()),

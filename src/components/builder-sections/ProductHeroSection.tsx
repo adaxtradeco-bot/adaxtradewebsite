@@ -66,8 +66,12 @@ interface ProductHeroData {
   showMediaBackground?: boolean;
   mediaContainerPadding?: string;
 
-  // Text color override when media background is active
+  // Element color overrides when media background is active
   sectionTextColorOverride?: string;
+  descriptionColorOverride?: string;
+  primaryButtonOverride?: string;
+  secondaryButtonOverride?: string;
+  badgeColorOverride?: string;
 
   // Layout options
   leftColumnWidth?: string;
@@ -106,6 +110,10 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
     overlayColor = '#000000',
     overlayOpacity = 40,
     sectionTextColorOverride = '',
+    descriptionColorOverride = '',
+    primaryButtonOverride = '',
+    secondaryButtonOverride = '',
+    badgeColorOverride = '',
     rightContentType = 'cards',
     cards = [],
     mediaUrl,
@@ -282,7 +290,11 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
         <div className={`flex flex-col lg:flex-row ${columnGap} items-center`}>
           <div className={`space-y-8 w-full ${leftColumnWidth}`}>
             {badge && (
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 dark:bg-white/10 border border-white/10 dark:border-white/10 text-xs">
+              <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs ${
+                hasMediaBackground && badgeColorOverride
+                  ? badgeColorOverride
+                  : 'bg-white/10 dark:bg-white/10 border border-white/10 dark:border-white/10'
+              }`}>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 {badge}
               </div>
@@ -297,15 +309,27 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
               )}
             </h1>
             
-            <p className={`${descriptionFontSize} text-slate-600 dark:text-slate-300 max-w-xl leading-relaxed`}>
+            <p className={`${descriptionFontSize} max-w-xl leading-relaxed ${
+              hasMediaBackground && descriptionColorOverride
+                ? descriptionColorOverride
+                : 'text-slate-600 dark:text-slate-300'
+            }`}>
               {description}
             </p>
             
             <div className="flex flex-wrap gap-4">
-              <a href={primaryButton.href} className="px-6 py-3 text-base font-semibold bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-700 hover:to-cyan-600 text-white border-0 rounded-lg transition-all">
+              <a href={primaryButton.href} className={`px-6 py-3 text-base font-semibold rounded-lg transition-all ${
+                hasMediaBackground && primaryButtonOverride
+                  ? primaryButtonOverride
+                  : 'bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-700 hover:to-cyan-600 text-white border-0'
+              }`}>
                 {primaryButton.text}
               </a>
-              <a href={secondaryButton.href} className="px-6 py-3 text-base font-semibold border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all">
+              <a href={secondaryButton.href} className={`px-6 py-3 text-base font-semibold rounded-lg transition-all ${
+                hasMediaBackground && secondaryButtonOverride
+                  ? secondaryButtonOverride
+                  : 'border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
+              }`}>
                 {secondaryButton.text}
               </a>
             </div>
@@ -313,7 +337,11 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
             {badges.length > 0 && (
               <div className="flex gap-3 flex-wrap">
                 {badges.map((badgeText, index) => (
-                  <span key={index} className="px-3 py-1 text-xs rounded-full bg-white/10 dark:bg-white/10 border border-white/15 dark:border-white/15 text-slate-600 dark:text-slate-300">
+                  <span key={index} className={`px-3 py-1 text-xs rounded-full ${
+                    hasMediaBackground && badgeColorOverride
+                      ? badgeColorOverride
+                      : 'bg-white/10 dark:bg-white/10 border border-white/15 dark:border-white/15 text-slate-600 dark:text-slate-300'
+                  }`}>
                     {badgeText}
                   </span>
                 ))}
@@ -321,7 +349,11 @@ export function ProductHeroSection({ section }: ProductHeroSectionProps) {
             )}
             
             {footerText && (
-              <div className="text-xs text-slate-500 dark:text-slate-400">
+              <div className={`text-xs ${
+                hasMediaBackground && descriptionColorOverride
+                  ? descriptionColorOverride
+                  : 'text-slate-500 dark:text-slate-400'
+              }`}>
                 {footerText}
               </div>
             )}

@@ -14,19 +14,99 @@ import { IconPicker, IconConfig, IconButton } from '@/components/ui/IconPicker';
 import { MediaBrowser } from './MediaBrowser';
 
 const TEXT_COLOR_PRESETS = [
-  { label: 'Pure White',       value: 'text-white',      preview: '#ffffff', desc: 'Best for dark videos' },
-  { label: 'Soft White',       value: 'text-gray-100',   preview: '#f3f4f6', desc: 'Slightly warmer than pure white' },
-  { label: 'Warm Gold',        value: 'text-yellow-100', preview: '#fef9c3', desc: 'Warm and luxurious feel' },
-  { label: 'Icy Blue',         value: 'text-cyan-100',   preview: '#cffafe', desc: 'Tech and modern look' },
-  { label: 'Soft Purple',      value: 'text-purple-100', preview: '#f3e8ff', desc: 'Creative and distinctive' },
-  { label: 'Mint Green',       value: 'text-emerald-100',preview: '#d1fae5', desc: 'Natural and fresh' },
-  { label: 'Dark (light bg)',  value: 'text-gray-900',   preview: '#111827', desc: 'For bright/light videos' },
-  { label: 'Custom Tailwind',  value: '__custom__',      preview: null,      desc: 'Enter any Tailwind class' },
+  { label: 'Pure White',      value: 'text-white',       preview: '#ffffff', desc: 'Best for dark videos' },
+  { label: 'Soft White',      value: 'text-gray-100',    preview: '#f3f4f6', desc: 'Slightly warmer than pure white' },
+  { label: 'Warm Gold',       value: 'text-yellow-100',  preview: '#fef9c3', desc: 'Warm and luxurious feel' },
+  { label: 'Icy Blue',        value: 'text-cyan-100',    preview: '#cffafe', desc: 'Tech and modern look' },
+  { label: 'Soft Purple',     value: 'text-purple-100',  preview: '#f3e8ff', desc: 'Creative and distinctive' },
+  { label: 'Mint Green',      value: 'text-emerald-100', preview: '#d1fae5', desc: 'Natural and fresh' },
+  { label: 'Dark (light bg)', value: 'text-gray-900',    preview: '#111827', desc: 'For bright/light videos' },
+];
+
+const DESCRIPTION_COLOR_PRESETS = [
+  { label: 'White / 90%',     value: 'text-white/90',    preview: '#ffffffe6', desc: 'Near white, soft' },
+  { label: 'Gray 200',        value: 'text-gray-200',    preview: '#e5e7eb',   desc: 'Light muted gray' },
+  { label: 'Gray 300',        value: 'text-gray-300',    preview: '#d1d5db',   desc: 'Slightly darker muted' },
+  { label: 'Cyan 100',        value: 'text-cyan-100',    preview: '#cffafe',   desc: 'Cool blue tone' },
+  { label: 'Yellow 200',      value: 'text-yellow-200',  preview: '#fef08a',   desc: 'Warm golden' },
+  { label: 'Dark (light bg)', value: 'text-gray-700',    preview: '#374151',   desc: 'For bright videos' },
+];
+
+const PRIMARY_BUTTON_PRESETS = [
+  { label: 'Default Gradient', value: 'bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-700 hover:to-cyan-600 text-white border-0', preview: '#6366f1' },
+  { label: 'White',            value: 'bg-white text-gray-900 hover:bg-gray-100 border-0',                                                          preview: '#ffffff' },
+  { label: 'Gold',             value: 'bg-yellow-400 text-gray-900 hover:bg-yellow-300 border-0',                                                   preview: '#facc15' },
+  { label: 'Ghost White',      value: 'bg-transparent border-2 border-white text-white hover:bg-white/20',                                          preview: null      },
+  { label: 'Cyan Solid',       value: 'bg-cyan-500 text-white hover:bg-cyan-400 border-0',                                                          preview: '#06b6d4' },
+  { label: 'Rose',             value: 'bg-rose-500 text-white hover:bg-rose-400 border-0',                                                          preview: '#f43f5e' },
+];
+
+const SECONDARY_BUTTON_PRESETS = [
+  { label: 'Ghost White',      value: 'border border-white/60 text-white hover:bg-white/15',                                                        preview: null      },
+  { label: 'Frosted White',    value: 'bg-white/20 border border-white/40 text-white hover:bg-white/30',                                            preview: '#ffffff33'},
+  { label: 'Default',          value: 'border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800', preview: '#94a3b8' },
+  { label: 'Dark (light bg)',  value: 'border border-gray-800 text-gray-900 hover:bg-gray-100',                                                     preview: '#1f2937' },
+];
+
+const BADGE_COLOR_PRESETS = [
+  { label: 'Transparent White', value: 'bg-white/10 border border-white/25 text-white',    preview: '#ffffff1a' },
+  { label: 'Frosted White',     value: 'bg-white/20 border border-white/40 text-white',    preview: '#ffffff33' },
+  { label: 'Dark Glass',        value: 'bg-black/25 border border-black/15 text-gray-100', preview: '#00000040' },
+  { label: 'Default',           value: 'bg-white/10 border border-white/15 text-slate-600 dark:text-slate-300', preview: '#94a3b8' },
 ];
 
 interface ProductHeroPropertyPanelProps {
   section: SectionConfig;
   onUpdate: (updates: Partial<SectionConfig>) => void;
+}
+
+function PresetPicker({
+  label,
+  presets,
+  value,
+  onChange,
+}: {
+  label: string;
+  presets: { label: string; value: string; preview?: string | null }[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const isCustom = value && !presets.some(p => p.value === value);
+  return (
+    <div className="space-y-2">
+      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">{label}</label>
+      <div className="grid grid-cols-2 gap-1.5">
+        {presets.map((p) => (
+          <button
+            key={p.value}
+            type="button"
+            title={p.value}
+            onClick={() => onChange(p.value)}
+            className={`flex items-center gap-2 px-2 py-1.5 rounded text-xs font-medium transition-colors text-left ${
+              value === p.value
+                ? 'bg-slate-700 text-white ring-2 ring-slate-500'
+                : 'bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
+            }`}
+          >
+            {p.preview !== null && p.preview !== undefined && (
+              <span
+                className="w-3.5 h-3.5 rounded-full border border-gray-400 flex-shrink-0"
+                style={{ backgroundColor: p.preview }}
+              />
+            )}
+            <span className="truncate leading-tight">{p.label}</span>
+          </button>
+        ))}
+      </div>
+      <input
+        type="text"
+        value={isCustom ? value : ''}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="Custom Tailwind class…"
+        className="w-full px-2 py-1 border border-dashed border-gray-400 dark:border-gray-500 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+      />
+    </div>
+  );
 }
 
 function ImageUploader({ value, onChange, field, onSettingsChange }: { 
@@ -614,59 +694,46 @@ export function ProductHeroPropertyPanel({ section, onUpdate }: ProductHeroPrope
                 </div>
               </div>
 
-              {/* Text Color Override */}
-              <div className="border-t border-gray-200 dark:border-gray-600 pt-3 space-y-2">
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
-                  Text Color on Background
-                </label>
+              {/* Element Color Overrides */}
+              <div className="border-t border-gray-200 dark:border-gray-600 pt-3 space-y-4">
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Override theme text color to ensure contrast on image/video backgrounds.
+                  Override element colors to ensure contrast on image/video backgrounds.
                 </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {TEXT_COLOR_PRESETS.filter(p => p.value !== '__custom__').map((preset) => {
-                    const currentVal = data.sectionTextColorOverride || 'text-white';
-                    const isActive = currentVal === preset.value;
-                    return (
-                      <button
-                        key={preset.value}
-                        type="button"
-                        onClick={() => updateData({ sectionTextColorOverride: preset.value })}
-                        title={preset.desc}
-                        className={`flex items-center gap-2 px-2 py-2 rounded text-xs font-medium transition-colors text-left ${
-                          isActive
-                            ? 'bg-slate-700 text-white ring-2 ring-slate-500'
-                            : 'bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600'
-                        }`}
-                      >
-                        {preset.preview && (
-                          <span
-                            className="w-4 h-4 rounded-full border border-gray-400 flex-shrink-0"
-                            style={{ backgroundColor: preset.preview }}
-                          />
-                        )}
-                        <span className="truncate">{preset.label}</span>
-                      </button>
-                    );
-                  })}
-                </div>
 
-                {/* Custom Tailwind input */}
-                <div className="pt-1">
-                  <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">
-                    Custom Tailwind class
-                  </label>
-                  <input
-                    type="text"
-                    value={
-                      TEXT_COLOR_PRESETS.some(p => p.value === data.sectionTextColorOverride && p.value !== '__custom__')
-                        ? ''
-                        : (data.sectionTextColorOverride || '')
-                    }
-                    onChange={(e) => updateData({ sectionTextColorOverride: e.target.value })}
-                    placeholder="e.g. text-rose-100"
-                    className="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                  />
-                </div>
+                <PresetPicker
+                  label="Title Text Color"
+                  presets={TEXT_COLOR_PRESETS}
+                  value={data.sectionTextColorOverride || 'text-white'}
+                  onChange={(v) => updateData({ sectionTextColorOverride: v })}
+                />
+
+                <PresetPicker
+                  label="Description & Footer Color"
+                  presets={DESCRIPTION_COLOR_PRESETS}
+                  value={data.descriptionColorOverride || 'text-gray-200'}
+                  onChange={(v) => updateData({ descriptionColorOverride: v })}
+                />
+
+                <PresetPicker
+                  label="Primary Button"
+                  presets={PRIMARY_BUTTON_PRESETS}
+                  value={data.primaryButtonOverride || PRIMARY_BUTTON_PRESETS[0].value}
+                  onChange={(v) => updateData({ primaryButtonOverride: v })}
+                />
+
+                <PresetPicker
+                  label="Secondary Button"
+                  presets={SECONDARY_BUTTON_PRESETS}
+                  value={data.secondaryButtonOverride || SECONDARY_BUTTON_PRESETS[0].value}
+                  onChange={(v) => updateData({ secondaryButtonOverride: v })}
+                />
+
+                <PresetPicker
+                  label="Badges Color"
+                  presets={BADGE_COLOR_PRESETS}
+                  value={data.badgeColorOverride || BADGE_COLOR_PRESETS[0].value}
+                  onChange={(v) => updateData({ badgeColorOverride: v })}
+                />
               </div>
             </>
           )}
