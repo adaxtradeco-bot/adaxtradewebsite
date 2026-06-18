@@ -154,12 +154,21 @@ export default function BuilderPage() {
               {pageData.slug}
             </span>
             <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-              pageData.status === 'published' 
+              pageData.status === 'published'
                 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
                 : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
             }`}>
               {pageData.status}
             </span>
+            {pageData.language && (
+              <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                pageData.language === 'fa'
+                  ? 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400'
+                  : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400'
+              }`}>
+                {pageData.language === 'fa' ? 'فارسی' : pageData.language.toUpperCase()}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -171,6 +180,7 @@ export default function BuilderPage() {
         onSave={handleSave}
         adminMode={customStylesMode}
         pageStatus={pageData.status}
+        language={pageData.language}
       />
     </div>
   );

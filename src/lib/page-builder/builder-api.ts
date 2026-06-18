@@ -11,7 +11,7 @@ export interface BuilderPageData {
   title: string;
   slug: string;
   status: 'published' | 'draft';
-  language: 'en' | 'ar';
+  language: 'en' | 'ar' | 'fa';
   builderData: SectionConfig[];
   isBuilderPage: boolean;
   builderVersion?: string;

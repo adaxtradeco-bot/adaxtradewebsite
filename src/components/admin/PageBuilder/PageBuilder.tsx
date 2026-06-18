@@ -26,9 +26,10 @@ interface PageBuilderProps {
   onSave?: (sections: SectionConfig[]) => Promise<void>;
   adminMode?: boolean;
   pageStatus?: string;
+  language?: string;
 }
 
-export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus }: PageBuilderProps) {
+export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus, language }: PageBuilderProps) {
   const [sections, setSections] = useState<SectionConfig[]>(Array.isArray(initialSections) ? initialSections : []);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -243,6 +244,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
                     onSectionDuplicate={handleDuplicateSection}
                     previewMode={previewMode}
                     adminMode={adminMode}
+                    language={language}
                   />
                 </SortableContext>
                 
@@ -288,6 +290,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
               onSectionDuplicate={() => {}}
               previewMode={previewMode}
               isPreview={true}
+              language={language}
             />
           </div>
         )}

@@ -23,6 +23,7 @@ interface CanvasProps {
   previewMode: 'desktop' | 'tablet' | 'mobile';
   isPreview?: boolean;
   adminMode?: boolean;
+  language?: string;
 }
 
 export const Canvas = memo(function Canvas({
@@ -34,6 +35,7 @@ export const Canvas = memo(function Canvas({
   previewMode,
   isPreview = false,
   adminMode = false,
+  language,
 }: CanvasProps) {
   const getCanvasWidth = useCallback(() => {
     switch (previewMode) {
@@ -66,7 +68,10 @@ export const Canvas = memo(function Canvas({
   return (
     <div className="flex-1 overflow-auto bg-gray-50 dark:bg-gray-900 p-2 sm:p-4 lg:p-6">
       <SectionCSSLoader sections={sections} />
-      <div className={`${getCanvasWidth()} bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden transition-all duration-300 border border-gray-200 dark:border-gray-700`}>
+      <div
+        className={`${getCanvasWidth()} bg-white dark:bg-gray-800 shadow-2xl rounded-2xl overflow-hidden transition-all duration-300 border border-gray-200 dark:border-gray-700`}
+        {...(language === 'fa' ? { lang: 'fa', dir: 'rtl' } : {})}
+      >
         {sections.length === 0 ? (
           <EmptyCanvas />
         ) : (
