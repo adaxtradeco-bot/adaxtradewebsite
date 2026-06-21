@@ -23,6 +23,7 @@ import { REPORTS_SHOWCASE_CORE_TEMPLATES } from './section-templates/reports-sho
 import { REPORTS_SHOWCASE_ADVANCED_TEMPLATES } from './section-templates/reports-showcase-advanced';
 import { EXTERNAL_PORTALS_TEMPLATES } from './section-templates/external-portals';
 import { NAVIGATION_UI_TEMPLATES } from './section-templates/navigation-ui';
+import { FORMS_ACTIONS_TEMPLATES } from './section-templates/forms-actions';
 
 export { SECTION_CATEGORIES };
 export type { SectionTemplate };
@@ -44,6 +45,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
   ...PLATFORM_CAPABILITIES_TEMPLATES,
   ...REPORTS_SHOWCASE_CORE_TEMPLATES,
   ...REPORTS_SHOWCASE_ADVANCED_TEMPLATES,
+  ...FORMS_ACTIONS_TEMPLATES,
 ];
 
 export function getSectionTemplate(type: string): SectionTemplate | undefined {

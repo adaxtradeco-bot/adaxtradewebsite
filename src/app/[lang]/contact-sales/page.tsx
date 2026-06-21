@@ -61,6 +61,9 @@ export default function ContactSalesPage() {
       <div id="contact">
         <ContactFormSection
           data={{
+            formType: 'demo',
+            destinationEmail: 'sales@ivaflow.com',
+            theme: 'standard',
             title: 'Get in Touch with Our Sales Team',
             subtitle: 'Contact Sales',
             description: 'Fill out the form below and our team will get back to you within 24 hours to discuss your needs and show you how IVAFlow can help.',

@@ -129,6 +129,7 @@ import FlowBuilderSection from '@/components/builder-sections/FlowBuilderSection
 import AutomationEventsSection from '@/components/builder-sections/AutomationEventsSection';
 import MetricsTestimonialsSection from '@/components/builder-sections/MetricsTestimonialsSection';
 import TopStripSection from '@/components/builder-sections/TopStripSection';
+import { ContactFormSection } from '@/components/builder-sections/ContactFormSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -972,6 +973,13 @@ export function SectionRenderer({
             <TopStripSection
               data={(section as any).data}
               style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'contact-form':
+          return (
+            <ContactFormSection
+              data={(section as any).data}
               isBuilder={isBuilder}
             />
           );

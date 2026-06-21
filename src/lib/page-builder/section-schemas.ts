@@ -144,6 +144,7 @@ export const BaseSectionSchema = z.object({
     'automation-events',
     'metrics-testimonials',
     'top-strip',
+    'contact-form',
   ]),
   order: z.number(),
   data: z.record(z.string(), z.any()),
