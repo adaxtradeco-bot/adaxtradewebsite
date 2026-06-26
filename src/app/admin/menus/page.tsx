@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Globe, Copy } from 'lucide-react';
+import { Globe, Copy, Trash2 } from 'lucide-react';
 
 interface MenuItem {
   id: string;
@@ -46,6 +46,7 @@ export default function MenusPage() {
   const [loading, setLoading] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
   const [selectedLocation, setSelectedLocation] = useState<string>('all');
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchMenus();
@@ -65,6 +66,32 @@ export default function MenusPage() {
       console.error('Failed to fetch menus:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete "${name}" menu? This action cannot be undone.`)) {
+      return;
+    }
+
+    setDeletingId(id);
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`/api/admin/menus/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+
+      if (response.ok) {
+        setMenus(menus.filter(menu => menu.id !== id));
+      } else {
+        alert('Failed to delete menu');
+      }
+    } catch (error) {
+      console.error('Failed to delete menu:', error);
+      alert('Failed to delete menu');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -190,6 +217,18 @@ export default function MenusPage() {
                   title="Copy for Translation"
                 >
                   <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleDelete(menu.id, menu.name)}
+                  disabled={deletingId === menu.id}
+                  className="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Delete Menu"
+                >
+                  {deletingId === menu.id ? (
+                    <div className="w-4 h-4 border-2 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <Trash2 className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
