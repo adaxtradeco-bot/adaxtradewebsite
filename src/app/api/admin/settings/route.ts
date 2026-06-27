@@ -43,7 +43,12 @@ export async function GET() {
         }
       };
       
-      return NextResponse.json(defaultSettings);
+      const response = NextResponse.json(defaultSettings);
+      response.cookies.set('defaultLanguage', defaultSettings.languages.defaultLanguage, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 365 // 1 year
+      });
+      return response;
     }
 
     const saved = JSON.parse(settings.data);
@@ -68,7 +73,12 @@ export async function GET() {
       }
     };
 
-    return NextResponse.json(merged);
+    const response = NextResponse.json(merged);
+    response.cookies.set('defaultLanguage', merged.languages?.defaultLanguage || 'en', {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365 // 1 year
+    });
+    return response;
   } catch (error) {
     console.error('Failed to fetch settings:', error);
     return NextResponse.json(
@@ -111,7 +121,12 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    return NextResponse.json({ success: true });
+    const response = NextResponse.json({ success: true });
+    response.cookies.set('defaultLanguage', settingsData.languages.defaultLanguage, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365 // 1 year
+    });
+    return response;
   } catch (error) {
     console.error('Failed to save settings:', error);
     return NextResponse.json(

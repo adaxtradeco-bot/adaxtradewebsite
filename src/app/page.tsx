@@ -5,8 +5,21 @@
  */
 
 import { redirect } from 'next/navigation';
-import { defaultLanguage } from '@/lib/i18n/config';
+import { prisma } from '@/lib/prisma';
 
-export default function RootPage() {
+export default async function RootPage() {
+  // Try to get default language from database
+  let defaultLanguage = 'fa';
+  
+  try {
+    const settings = await prisma.siteSettings.findFirst();
+    if (settings) {
+      const saved = JSON.parse(settings.data);
+      defaultLanguage = saved?.languages?.defaultLanguage || 'fa';
+    }
+  } catch (error) {
+    console.error('Failed to fetch default language:', error);
+  }
+
   redirect(`/${defaultLanguage}`);
 }
