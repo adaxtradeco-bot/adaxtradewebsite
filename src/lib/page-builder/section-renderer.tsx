@@ -130,6 +130,8 @@ import AutomationEventsSection from '@/components/builder-sections/AutomationEve
 import MetricsTestimonialsSection from '@/components/builder-sections/MetricsTestimonialsSection';
 import TopStripSection from '@/components/builder-sections/TopStripSection';
 import { ContactFormSection } from '@/components/builder-sections/ContactFormSection';
+import HomeCoverSection from '@/components/builder-sections/HomeCoverSection';
+import HomeInnovationSection from '@/components/builder-sections/HomeInnovationSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -980,6 +982,22 @@ export function SectionRenderer({
           return (
             <ContactFormSection
               data={(section as any).data}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'home-cover':
+          return (
+            <HomeCoverSection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'home-innovation':
+          return (
+            <HomeInnovationSection
+              data={(section as any).data}
+              style={(section as any).style}
               isBuilder={isBuilder}
             />
           );

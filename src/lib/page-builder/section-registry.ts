@@ -24,6 +24,7 @@ import { REPORTS_SHOWCASE_ADVANCED_TEMPLATES } from './section-templates/reports
 import { EXTERNAL_PORTALS_TEMPLATES } from './section-templates/external-portals';
 import { NAVIGATION_UI_TEMPLATES } from './section-templates/navigation-ui';
 import { FORMS_ACTIONS_TEMPLATES } from './section-templates/forms-actions';
+import { HOME_SHOWCASE_TEMPLATES } from './section-templates/home-showcase';
 
 export { SECTION_CATEGORIES };
 export type { SectionTemplate };
@@ -46,6 +47,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
   ...REPORTS_SHOWCASE_CORE_TEMPLATES,
   ...REPORTS_SHOWCASE_ADVANCED_TEMPLATES,
   ...FORMS_ACTIONS_TEMPLATES,
+  ...HOME_SHOWCASE_TEMPLATES,
 ];
 
 export function getSectionTemplate(type: string): SectionTemplate | undefined {
