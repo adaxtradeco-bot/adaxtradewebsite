@@ -285,10 +285,25 @@ export function HomeCoverPropertyPanel({ section, onUpdate }: Props) {
               />
             </Field>
             <ColorField
-              label="Panel Background"
+              label="Panel Background Color"
               value={opening.backgroundColor ?? '#fafafa'}
               onChange={(v) => updateNested('opening', { backgroundColor: v })}
             />
+            <Field label="Panel Background Image (optional, full-bleed)">
+              <MediaUpload
+                src={opening.backgroundImageUrl ?? ''}
+                width={200}
+                height={112}
+                objectFit="cover"
+                onMediaChange={(src) => updateNested('opening', { backgroundImageUrl: src })}
+                uploadButtonText="Upload Image"
+                acceptedTypes="image/*"
+              />
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Covers the whole opening panel behind the logo, on top of the color above. Leave empty to use a plain
+                color backdrop.
+              </p>
+            </Field>
             <Field label={`Backdrop Opacity — ${Math.round((opening.backgroundOpacity ?? 1) * 100)}%`}>
               <input
                 type="range"

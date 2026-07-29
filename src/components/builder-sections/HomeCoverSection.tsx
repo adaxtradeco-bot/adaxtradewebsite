@@ -16,12 +16,14 @@ export interface HomeCoverOpening {
   enabled: boolean;
   logoUrl?: string;
   logoAlt?: string;
-  backgroundColor?: string; // opening-panel background, e.g. "#fafafa"
+  backgroundColor?: string; // opening-panel background, e.g. "#fafafa" — shows while backgroundImageUrl loads, or alone if unset
+  /** Optional full-bleed image for the opening backdrop, in place of (or under) the solid color. */
+  backgroundImageUrl?: string;
   /**
    * Opacity of the opening panel's backdrop only (0-1, default 1 = fully solid).
    * Below 1 the background media stays visible behind the brand mark during the
    * opening, matching the reference site's effect. Applied to the backdrop layer
-   * alone, so the logo itself always renders at full opacity.
+   * (color and/or image) alone, so the logo itself always renders at full opacity.
    */
   backgroundOpacity?: number;
   durationMs?: number; // how long the opening stays before fading, default 1200
@@ -296,7 +298,16 @@ export default function HomeCoverSection({ data, style, isBuilder = false }: Pro
                   backgroundColor: opening.backgroundColor ?? '#fafafa',
                   opacity: clamp(opening.backgroundOpacity ?? 1, 0, 1),
                 }}
-              />
+              >
+                {opening.backgroundImageUrl && (
+                  <img
+                    src={opening.backgroundImageUrl}
+                    alt=""
+                    aria-hidden
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                )}
+              </div>
             );
             const logo = opening.logoUrl ? (
               <img

@@ -147,6 +147,48 @@ describe('HomeCoverSection', () => {
     expect(logoImg.style.opacity).toBe('');
   });
 
+  it('renders a full-bleed opening backdrop image when opening.backgroundImageUrl is set', () => {
+    const { container } = render(
+      <HomeCoverSection
+        data={{
+          ...baseData,
+          opening: {
+            enabled: true,
+            logoUrl: 'https://picsum.photos/seed/logo/200/200',
+            logoAlt: 'Brand logo',
+            backgroundColor: '#fafafa',
+            backgroundImageUrl: 'https://picsum.photos/seed/opening-bg/1600/900',
+          },
+        }}
+      />
+    );
+    const logoImg = container.querySelector('img[alt="Brand logo"]') as HTMLElement;
+    const panel = logoImg.parentElement as HTMLElement;
+    const backdrop = panel.querySelector('div') as HTMLElement;
+    const backdropImg = backdrop.querySelector('img') as HTMLImageElement;
+
+    expect(backdropImg).toBeTruthy();
+    expect(backdropImg.src).toContain('opening-bg');
+    expect(backdropImg.className).toContain('object-cover');
+    // The image lives inside the same backdrop div, so backgroundOpacity dims it too, never the logo.
+    expect(backdropImg).not.toBe(logoImg);
+  });
+
+  it('omits the opening backdrop image when opening.backgroundImageUrl is unset', () => {
+    const { container } = render(
+      <HomeCoverSection
+        data={{
+          ...baseData,
+          opening: { enabled: true, logoUrl: 'https://picsum.photos/seed/logo/200/200', logoAlt: 'Brand logo' },
+        }}
+      />
+    );
+    const logoImg = container.querySelector('img[alt="Brand logo"]') as HTMLElement;
+    const panel = logoImg.parentElement as HTMLElement;
+    const backdrop = panel.querySelector('div') as HTMLElement;
+    expect(backdrop.querySelector('img')).toBeNull();
+  });
+
   it('defaults the opening backdrop to fully solid when backgroundOpacity is unset', () => {
     const { container } = render(
       <HomeCoverSection
