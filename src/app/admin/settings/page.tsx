@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/Label';
 import { Switch } from '@/components/ui/Switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { Upload, Save, RotateCcw, Settings, Image, Globe, Phone, Palette, Star, Layout, Plus, Trash2, GripVertical, ExternalLink } from 'lucide-react';
+import { Upload, Save, RotateCcw, Settings, Image, Globe, Phone, Palette, Star, Layout, Plus, Trash2, GripVertical, ExternalLink, PanelTop } from 'lucide-react';
 import { useImageUpload } from '@/hooks/useImageUpload';
 
 interface SiteSettings {
@@ -71,6 +71,28 @@ interface SiteSettings {
       padding: string;
     };
   };
+  header: HeaderSettings;
+}
+
+interface HeaderChromeState {
+  background: string;
+  backgroundOpacity: number;
+  backdropBlur: boolean;
+  textColor: string;
+  linkHoverColor: string;
+  logoVariant: 'light' | 'dark' | 'custom';
+  logoUrlOverride: string;
+  showBorder: boolean;
+  showShadow: boolean;
+}
+
+interface HeaderSettings {
+  mode: 'solid' | 'floating';
+  transitionDurationMs: number;
+  floatingState: HeaderChromeState;
+  solidState: HeaderChromeState;
+  autoHide: { enabled: boolean };
+  height: { desktop: number; mobile: number };
 }
 
 interface FooterLink {
@@ -162,6 +184,34 @@ const defaultSettings: SiteSettings = {
       borderColor: '',
       padding: 'py-12'
     }
+  },
+  header: {
+    mode: 'solid',
+    transitionDurationMs: 250,
+    floatingState: {
+      background: 'transparent',
+      backgroundOpacity: 0,
+      backdropBlur: false,
+      textColor: '#ffffff',
+      linkHoverColor: '#ffffff',
+      logoVariant: 'light',
+      logoUrlOverride: '',
+      showBorder: false,
+      showShadow: false
+    },
+    solidState: {
+      background: '',
+      backgroundOpacity: 0.9,
+      backdropBlur: true,
+      textColor: '',
+      linkHoverColor: '',
+      logoVariant: 'dark',
+      logoUrlOverride: '',
+      showBorder: false,
+      showShadow: false
+    },
+    autoHide: { enabled: false },
+    height: { desktop: 64, mobile: 56 }
   }
 };
 
@@ -212,6 +262,34 @@ export default function SettingsPage() {
     }
   });
 
+  const floatingLogoUpload = useImageUpload({
+    type: 'media',
+    onSuccess: (url) => {
+      setSettings(prev => ({
+        ...prev,
+        header: { ...prev.header, floatingState: { ...prev.header.floatingState, logoUrlOverride: url } }
+      }));
+    },
+    onError: (error) => {
+      console.error('Floating logo upload failed:', error);
+      alert(`Failed to upload logo: ${error}`);
+    }
+  });
+
+  const solidLogoUpload = useImageUpload({
+    type: 'media',
+    onSuccess: (url) => {
+      setSettings(prev => ({
+        ...prev,
+        header: { ...prev.header, solidState: { ...prev.header.solidState, logoUrlOverride: url } }
+      }));
+    },
+    onError: (error) => {
+      console.error('Solid logo upload failed:', error);
+      alert(`Failed to upload logo: ${error}`);
+    }
+  });
+
   useEffect(() => {
     loadSettings();
   }, []);
@@ -235,6 +313,14 @@ export default function SettingsPage() {
         
         if (mergedSettings.favicon?.url) {
           faviconUpload.setPreview(mergedSettings.favicon.url);
+        }
+
+        if (mergedSettings.header?.floatingState?.logoUrlOverride) {
+          floatingLogoUpload.setPreview(mergedSettings.header.floatingState.logoUrlOverride);
+        }
+
+        if (mergedSettings.header?.solidState?.logoUrlOverride) {
+          solidLogoUpload.setPreview(mergedSettings.header.solidState.logoUrlOverride);
         }
       } else {
         console.error('Failed to load settings:', response.statusText);
@@ -275,6 +361,8 @@ export default function SettingsPage() {
       lightLogoUpload.clearPreview();
       darkLogoUpload.clearPreview();
       faviconUpload.clearPreview();
+      floatingLogoUpload.clearPreview();
+      solidLogoUpload.clearPreview();
       // Also clear the URLs in settings
       setSettings(prev => ({
         ...prev,
@@ -324,6 +412,32 @@ export default function SettingsPage() {
     }
   };
 
+  const handleFloatingLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        await floatingLogoUpload.uploadImage(file);
+        event.target.value = '';
+      } catch (error) {
+        console.error('Floating logo upload error:', error);
+        event.target.value = '';
+      }
+    }
+  };
+
+  const handleSolidLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        await solidLogoUpload.uploadImage(file);
+        event.target.value = '';
+      } catch (error) {
+        console.error('Solid logo upload error:', error);
+        event.target.value = '';
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -352,7 +466,7 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="logo" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="logo" className="flex items-center gap-2">
             <Image className="h-4 w-4" />
             Logo
@@ -376,6 +490,10 @@ export default function SettingsPage() {
           <TabsTrigger value="footer" className="flex items-center gap-2">
             <Layout className="h-4 w-4" />
             Footer
+          </TabsTrigger>
+          <TabsTrigger value="header" className="flex items-center gap-2">
+            <PanelTop className="h-4 w-4" />
+            Header
           </TabsTrigger>
         </TabsList>
 
@@ -1334,7 +1452,267 @@ export default function SettingsPage() {
             </Card>
           </div>
         </TabsContent>
+
+        {/* Header / Menu Style */}
+        <TabsContent value="header">
+          <div className="space-y-6">
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Header Behavior</h2>
+              <p className="text-sm text-gray-500 mb-4">
+                Controls whether the header starts transparent/floating over a page's first section
+                and becomes solid on scroll, or stays solid always (today's default).
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="header-mode">Mode</Label>
+                  <Select
+                    value={settings.header.mode}
+                    onValueChange={(value) => setSettings(prev => ({
+                      ...prev,
+                      header: { ...prev.header, mode: value as 'solid' | 'floating' }
+                    }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="solid">Solid — always (default, unchanged)</SelectItem>
+                      <SelectItem value="floating">Floating over first section, solid on scroll</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="header-transition">Transition Speed (ms)</Label>
+                  <Input
+                    id="header-transition"
+                    type="number"
+                    min={0}
+                    max={1000}
+                    value={settings.header.transitionDurationMs}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      header: { ...prev.header, transitionDurationMs: Number(e.target.value) || 0 }
+                    }))}
+                  />
+                </div>
+                <div className="flex items-center gap-3">
+                  <Switch
+                    checked={settings.header.autoHide.enabled}
+                    onCheckedChange={(checked: boolean) => setSettings(prev => ({
+                      ...prev,
+                      header: { ...prev.header, autoHide: { enabled: checked } }
+                    }))}
+                  />
+                  <Label>Auto-hide on scroll-down, reveal on scroll-up (solid state only)</Label>
+                </div>
+                <div />
+                <div>
+                  <Label htmlFor="header-height-desktop">Height — Desktop (px)</Label>
+                  <Input
+                    id="header-height-desktop"
+                    type="number"
+                    min={40}
+                    max={160}
+                    value={settings.header.height.desktop}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      header: { ...prev.header, height: { ...prev.header.height, desktop: Number(e.target.value) || 64 } }
+                    }))}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="header-height-mobile">Height — Mobile (px)</Label>
+                  <Input
+                    id="header-height-mobile"
+                    type="number"
+                    min={40}
+                    max={160}
+                    value={settings.header.height.mobile}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      header: { ...prev.header, height: { ...prev.header.height, mobile: Number(e.target.value) || 56 } }
+                    }))}
+                  />
+                </div>
+              </div>
+            </Card>
+
+            {/* Floating State */}
+            <Card className={`p-6 ${settings.header.mode === 'solid' ? 'opacity-60' : ''}`}>
+              <h2 className="text-xl font-semibold mb-1">Floating State</h2>
+              <p className="text-sm text-gray-500 mb-4">
+                How the header looks while still over a page's first section.
+                {settings.header.mode === 'solid' && ' (Has no effect until Mode is set to "Floating" above — values are still saved.)'}
+              </p>
+              <HeaderChromeFields
+                idPrefix="floating"
+                chrome={settings.header.floatingState}
+                onChange={(chrome) => setSettings(prev => ({
+                  ...prev,
+                  header: { ...prev.header, floatingState: chrome }
+                }))}
+                logoUpload={floatingLogoUpload}
+                onLogoUpload={handleFloatingLogoUpload}
+              />
+            </Card>
+
+            {/* Solid State */}
+            <Card className="p-6">
+              <h2 className="text-xl font-semibold mb-1">Solid State</h2>
+              <p className="text-sm text-gray-500 mb-4">
+                How the header looks once the visitor has scrolled past the first section
+                (or always, when Mode is "Solid").
+              </p>
+              <HeaderChromeFields
+                idPrefix="solid"
+                chrome={settings.header.solidState}
+                onChange={(chrome) => setSettings(prev => ({
+                  ...prev,
+                  header: { ...prev.header, solidState: chrome }
+                }))}
+                logoUpload={solidLogoUpload}
+                onLogoUpload={handleSolidLogoUpload}
+              />
+            </Card>
+          </div>
+        </TabsContent>
       </Tabs>
+    </div>
+  );
+}
+
+function ColorRow({
+  id,
+  label,
+  value,
+  fallback,
+  onChange
+}: {
+  id: string;
+  label: string;
+  value: string;
+  fallback: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div>
+      <Label htmlFor={id}>{label}</Label>
+      <div className="flex gap-2 mt-1">
+        <input
+          type="color"
+          value={value || fallback}
+          onChange={(e) => onChange(e.target.value)}
+          className="h-9 w-12 rounded border border-input cursor-pointer"
+        />
+        <Input
+          id={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={fallback}
+        />
+      </div>
+    </div>
+  );
+}
+
+interface HeaderChromeFieldsProps {
+  idPrefix: string;
+  chrome: HeaderChromeState;
+  onChange: (chrome: HeaderChromeState) => void;
+  logoUpload: ReturnType<typeof useImageUpload>;
+  onLogoUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+function HeaderChromeFields({ idPrefix, chrome, onChange, logoUpload, onLogoUpload }: HeaderChromeFieldsProps) {
+  const patch = (fields: Partial<HeaderChromeState>) => onChange({ ...chrome, ...fields });
+
+  return (
+    <div className="space-y-4">
+      <p className="text-xs text-gray-500">Leave background/text color empty to use the site's default look for this state.</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ColorRow
+          id={`${idPrefix}-bg`}
+          label="Background Color"
+          value={chrome.background === 'transparent' ? '' : chrome.background}
+          fallback="#ffffff"
+          onChange={(v) => patch({ background: v })}
+        />
+        <div>
+          <Label htmlFor={`${idPrefix}-bg-opacity`}>Background Opacity</Label>
+          <Input
+            id={`${idPrefix}-bg-opacity`}
+            type="number"
+            min={0}
+            max={1}
+            step={0.05}
+            value={chrome.backgroundOpacity}
+            onChange={(e) => patch({ backgroundOpacity: Math.max(0, Math.min(1, Number(e.target.value))) })}
+          />
+        </div>
+        <ColorRow
+          id={`${idPrefix}-text`}
+          label="Text Color"
+          value={chrome.textColor}
+          fallback="#475569"
+          onChange={(v) => patch({ textColor: v })}
+        />
+        <ColorRow
+          id={`${idPrefix}-link-hover`}
+          label="Link Hover Color"
+          value={chrome.linkHoverColor}
+          fallback="#0f172a"
+          onChange={(v) => patch({ linkHoverColor: v })}
+        />
+      </div>
+
+      <div className="flex flex-wrap gap-6">
+        <div className="flex items-center gap-2">
+          <Switch checked={chrome.backdropBlur} onCheckedChange={(checked: boolean) => patch({ backdropBlur: checked })} />
+          <Label>Backdrop Blur</Label>
+        </div>
+        <div className="flex items-center gap-2">
+          <Switch checked={chrome.showBorder} onCheckedChange={(checked: boolean) => patch({ showBorder: checked })} />
+          <Label>Bottom Border</Label>
+        </div>
+        <div className="flex items-center gap-2">
+          <Switch checked={chrome.showShadow} onCheckedChange={(checked: boolean) => patch({ showShadow: checked })} />
+          <Label>Shadow</Label>
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor={`${idPrefix}-logo-variant`}>Logo Variant</Label>
+        <Select
+          value={chrome.logoVariant}
+          onValueChange={(value) => patch({ logoVariant: value as HeaderChromeState['logoVariant'] })}
+        >
+          <SelectTrigger>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="light">Light logo (for dark backgrounds)</SelectItem>
+            <SelectItem value="dark">Dark logo (for light backgrounds)</SelectItem>
+            <SelectItem value="custom">Custom image</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {chrome.logoVariant === 'custom' && (
+          <div className="mt-3 flex items-center gap-4">
+            {(logoUpload.preview || chrome.logoUrlOverride) && (
+              <img
+                src={logoUpload.preview || chrome.logoUrlOverride}
+                alt="Custom logo preview"
+                className="h-10 max-w-[160px] object-contain rounded border border-input bg-white"
+              />
+            )}
+            <label className="inline-flex items-center gap-2 px-3 py-2 rounded-md border border-input text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-neutral-800">
+              <Upload className="h-4 w-4" />
+              {logoUpload.isUploading ? 'Uploading...' : 'Upload Logo'}
+              <input type="file" accept="image/*" className="hidden" onChange={onLogoUpload} />
+            </label>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

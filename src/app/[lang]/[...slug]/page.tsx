@@ -11,16 +11,18 @@ import { useParams } from 'next/navigation';
 import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
 import { SectionCSSLoader } from '@/components/SectionCSSLoader';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
+import { useHeaderVisibility, parseHeaderOverrideMode } from '@/components/HeaderVisibilityProvider';
 
 export default function DynamicPage() {
   const params = useParams();
   const lang = params?.lang as string || 'en';
   const slugArray = params?.slug as string[] || [];
   const fullSlug = slugArray.join('/');
-  
+
   const [pageData, setPageData] = useState<SectionConfig[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const { setPageOverrideMode } = useHeaderVisibility();
 
   useEffect(() => {
     const fetchPage = async () => {
@@ -28,7 +30,7 @@ export default function DynamicPage() {
         // ساخت slug کامل با زبان
         const completeSlug = `/${lang}/${fullSlug}`;
         console.log('Fetching page with slug:', completeSlug);
-        
+
         const response = await fetch(`/api/pages/by-slug?slug=${encodeURIComponent(completeSlug)}`);
         if (response.ok) {
           const data = await response.json();
@@ -38,6 +40,7 @@ export default function DynamicPage() {
           } else {
             setNotFound(true);
           }
+          setPageOverrideMode(parseHeaderOverrideMode(data.page?.headerOverride));
         } else {
           console.error('Page not found:', response.status);
           setNotFound(true);
@@ -51,7 +54,7 @@ export default function DynamicPage() {
     };
 
     fetchPage();
-  }, [fullSlug, lang]);
+  }, [fullSlug, lang, setPageOverrideMode]);
 
   if (isLoading) {
     return (

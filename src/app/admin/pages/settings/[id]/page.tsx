@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Save, Trash2, Eye, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { parseHeaderOverrideMode, PageHeaderOverrideMode } from '@/components/HeaderVisibilityProvider';
 
 export default function PageSettings() {
   const params = useParams();
@@ -21,6 +22,7 @@ export default function PageSettings() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
+  const [headerOverrideMode, setHeaderOverrideMode] = useState<PageHeaderOverrideMode>('inherit');
 
   useEffect(() => {
     fetchPage();
@@ -35,7 +37,8 @@ export default function PageSettings() {
       const result = await res.json();
       if (result.success) {
         setPage(result.page);
-        
+        setHeaderOverrideMode(parseHeaderOverrideMode(result.page.headerOverride));
+
         // اگر صفحه در گروهی است، زبانهای موجود در گروه را بگیر
         if (result.page.pageGroupId) {
           const groupRes = await fetch(`/api/admin/pages/grouped`, {
@@ -74,7 +77,8 @@ export default function PageSettings() {
           status: page.status,
           language: page.language,
           metaTitle: page.metaTitle,
-          metaDescription: page.metaDescription
+          metaDescription: page.metaDescription,
+          headerOverride: { mode: headerOverrideMode }
         })
       });
 
@@ -279,6 +283,35 @@ export default function PageSettings() {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-white"
               />
             </div>
+          </div>
+        </div>
+
+        <div className="border-t dark:border-slate-700 pt-6">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+            Header Behavior
+          </h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+            Overrides the site-wide Header Settings (Site Settings → Header) for this page only.
+            Colors, blur, logo, and auto-hide always come from the site-wide setting.
+          </p>
+          <div className="space-y-2">
+            {([
+              { value: 'inherit', label: 'Use site-wide setting' },
+              { value: 'floating', label: 'Always floating' },
+              { value: 'solid', label: 'Always solid' }
+            ] as { value: PageHeaderOverrideMode; label: string }[]).map((option) => (
+              <label key={option.value} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name="headerOverrideMode"
+                  value={option.value}
+                  checked={headerOverrideMode === option.value}
+                  onChange={() => setHeaderOverrideMode(option.value)}
+                  className="text-indigo-600 focus:ring-indigo-500"
+                />
+                <span className="text-sm text-gray-700 dark:text-gray-300">{option.label}</span>
+              </label>
+            ))}
           </div>
         </div>
 

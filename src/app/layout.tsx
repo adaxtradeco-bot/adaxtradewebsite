@@ -4,6 +4,7 @@ import { ThemeProvider } from 'next-themes';
 import { ThemeManager } from '@/components/ThemeManager';
 import { FaviconManager } from '@/components/FaviconManager';
 import { GlobalCSSLoader } from '@/components/GlobalCSSLoader';
+import { HeaderVisibilityProvider } from '@/components/HeaderVisibilityProvider';
 
 export default function RootLayout({
   children,
@@ -21,10 +22,12 @@ export default function RootLayout({
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SiteSettingsProvider>
-            <ThemeManager />
-            <FaviconManager />
-            <GlobalCSSLoader />
-            {children}
+            <HeaderVisibilityProvider>
+              <ThemeManager />
+              <FaviconManager />
+              <GlobalCSSLoader />
+              {children}
+            </HeaderVisibilityProvider>
           </SiteSettingsProvider>
         </ThemeProvider>
       </body>

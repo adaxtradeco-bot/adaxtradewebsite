@@ -11,6 +11,7 @@ import { useParams } from 'next/navigation';
 import { useTranslation } from '@/hooks/useTranslation';
 import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
+import { useHeaderVisibility, parseHeaderOverrideMode } from '@/components/HeaderVisibilityProvider';
 
 export default function HomePage() {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ export default function HomePage() {
   const lang = params?.lang as string || 'en';
   const [homepageData, setHomepageData] = useState<SectionConfig[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { setPageOverrideMode } = useHeaderVisibility();
 
   useEffect(() => {
     const fetchHomepage = async () => {
@@ -28,6 +30,7 @@ export default function HomePage() {
           if (data.page?.builderData) {
             setHomepageData(data.page.builderData);
           }
+          setPageOverrideMode(parseHeaderOverrideMode(data.page?.headerOverride));
         } else {
           const homepageResponse = await fetch('/api/pages/homepage');
           if (homepageResponse.ok) {
@@ -35,6 +38,7 @@ export default function HomePage() {
             if (data.page?.builderData) {
               setHomepageData(data.page.builderData);
             }
+            setPageOverrideMode(parseHeaderOverrideMode(data.page?.headerOverride));
           }
         }
       } catch (error) {
@@ -45,7 +49,7 @@ export default function HomePage() {
     };
 
     fetchHomepage();
-  }, [lang]);
+  }, [lang, setPageOverrideMode]);
 
   if (isLoading) {
     return (

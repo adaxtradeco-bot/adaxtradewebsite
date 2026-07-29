@@ -79,6 +79,7 @@ export async function PUT(
       metaTitle: data.metaTitle,
       metaDescription: data.metaDescription,
       sections: data.sections ? JSON.stringify(data.sections) : undefined,
+      headerOverride: data.headerOverride !== undefined ? JSON.stringify(data.headerOverride) : undefined,
       updatedAt: new Date(),
     };
     

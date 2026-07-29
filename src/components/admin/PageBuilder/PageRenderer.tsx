@@ -8,6 +8,7 @@ import React from 'react';
 import { SectionRenderer } from '@/lib/page-builder/section-renderer';
 import { SectionCSSLoader } from '@/components/SectionCSSLoader';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
+import { FirstSectionMarker } from '@/components/FirstSectionMarker';
 
 interface PageRendererProps {
   sections: SectionConfig[];
@@ -40,13 +41,15 @@ export function PageRenderer({ sections, isPreview = false }: PageRendererProps)
   return (
     <div className="min-h-screen">
       <SectionCSSLoader sections={sectionsArray} />
-      {sectionsArray.map((section: SectionConfig) => (
-        <SectionRenderer
-          key={section.id}
-          section={section}
-          isBuilder={false}
-        />
-      ))}
+      {sectionsArray.map((section: SectionConfig, index: number) =>
+        index === 0 ? (
+          <FirstSectionMarker key={section.id}>
+            <SectionRenderer section={section} isBuilder={false} />
+          </FirstSectionMarker>
+        ) : (
+          <SectionRenderer key={section.id} section={section} isBuilder={false} />
+        )
+      )}
     </div>
   );
 }

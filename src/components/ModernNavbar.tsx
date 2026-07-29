@@ -16,6 +16,11 @@ import { Logo } from './ui/Logo';
 import { ConditionalLanguageSwitch } from './ConditionalLanguageSwitch';
 import { ConditionalContactSales } from './ConditionalContactSales';
 import { useParams } from 'next/navigation';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { useHeaderVisibility } from './HeaderVisibilityProvider';
+import { useHeaderScrollState } from '@/lib/hooks/useHeaderScrollState';
+import { usePrefersReducedMotion } from '@/lib/hooks/useScrollParallax';
+import { resolveEffectiveHeaderMode, resolveHeaderChrome } from '@/lib/header/resolveHeaderState';
 
 interface IconConfig {
   name: string;
@@ -198,17 +203,88 @@ const CloseIcon = () => (
     };
   }, []);
 
+  // --- Header Settings: floating/solid mode, per-page override, auto-hide ---
+  const { settings } = useSiteSettings();
+  const headerSettings = settings.header;
+  const { inFirstSection, pageOverrideMode } = useHeaderVisibility();
+  const reducedMotion = usePrefersReducedMotion();
+
+  const effectiveHeaderMode = resolveEffectiveHeaderMode(headerSettings.mode, pageOverrideMode);
+  const { isFloatingNow, chrome } = resolveHeaderChrome(headerSettings, effectiveHeaderMode, inFirstSection);
+  const transitionMs = reducedMotion ? 0 : headerSettings.transitionDurationMs;
+
+  // Auto-Hide never fires while floating over the hero, or while a dropdown/mobile menu is open.
+  const headerHidden = useHeaderScrollState({
+    enabled: headerSettings.autoHide.enabled,
+    suppressed: isFloatingNow || !!activeDropdown || isMobileMenuOpen
+  });
+
+  // A page in 'floating' mode needs the header out of normal document flow so the
+  // first section can render full-bleed underneath it; 'solid' mode (today's default)
+  // keeps the original space-reserving `sticky` behavior untouched (Requirement 1.7).
+  const navPositionClass = effectiveHeaderMode === 'floating' ? 'fixed' : 'sticky';
+
+  const backdropStyle: React.CSSProperties = {
+    transitionProperty: 'background, opacity, backdrop-filter, box-shadow, border-color',
+    transitionDuration: `${transitionMs}ms`,
+    transitionTimingFunction: 'ease-out'
+  };
+  if (chrome.background) {
+    backdropStyle.background = chrome.background;
+    backdropStyle.opacity = chrome.backgroundOpacity;
+  }
+  if (chrome.backdropBlur) {
+    backdropStyle.backdropFilter = 'blur(12px)';
+    (backdropStyle as Record<string, string>).WebkitBackdropFilter = 'blur(12px)';
+  }
+  if (chrome.showBorder) {
+    backdropStyle.borderBottom = '1px solid rgba(0,0,0,0.08)';
+  }
+  if (chrome.showShadow) {
+    backdropStyle.boxShadow = '0 1px 12px rgba(0,0,0,0.08)';
+  }
+  // Empty `chrome.background` means "keep ModernNavbar's original Tailwind classes" —
+  // the same empty-string-as-inherit convention already used by footer.style.
+  const backdropClassName = chrome.background ? '' : 'bg-white/90 dark:bg-neutral-900/90';
+
+  const navCssVars: Record<string, string> = {};
+  if (chrome.textColor) navCssVars['--header-text'] = chrome.textColor;
+  if (chrome.linkHoverColor) navCssVars['--header-link-hover'] = chrome.linkHoverColor;
+  navCssVars['--header-height-desktop'] = `${headerSettings.height.desktop}px`;
+  navCssVars['--header-height-mobile'] = `${headerSettings.height.mobile}px`;
+
+  const navLinkTextClass = chrome.textColor ? 'text-[var(--header-text)]' : 'text-neutral-600 dark:text-neutral-400';
+  const navLinkHoverClass = chrome.linkHoverColor ? 'hover:text-[var(--header-link-hover)]' : '';
+  const navLinkClass = `${navLinkTextClass} ${navLinkHoverClass}`.trim();
+  const chevronClass = chrome.textColor ? 'text-[var(--header-text)]' : 'text-neutral-600 dark:text-neutral-500';
+  const hamburgerBarStyle: React.CSSProperties | undefined = chrome.textColor ? { backgroundColor: chrome.textColor } : undefined;
+
+  const navStyle: React.CSSProperties = {
+    ...navCssVars,
+    transform: headerHidden ? 'translateY(-100%)' : 'translateY(0)',
+    transitionProperty: 'transform',
+    transitionDuration: `${transitionMs}ms`,
+    transitionTimingFunction: 'ease-out'
+  };
+
   return (
     <>
-      <nav className={`sticky top-0 z-[10000] w-full ${activeDropdown ? 'nav-active-dropdown' : ''}`}>
+      <nav
+        className={`${navPositionClass} top-0 left-0 right-0 z-[10000] w-full ${activeDropdown ? 'nav-active-dropdown' : ''}`}
+        style={navStyle}
+      >
         {/* Backdrop */}
-        <div className="absolute inset-0 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md" />
-        
+        <div className={`absolute inset-0 ${backdropClassName}`} style={backdropStyle} />
+
         {/* Main Navigation */}
-        <div className="relative flex justify-between items-center max-w-7xl mx-auto gap-13 px-5 py-3.5">
+        <div className="relative flex justify-between items-center max-w-7xl mx-auto gap-13 px-5 py-3.5 min-h-[var(--header-height-mobile)] md:min-h-[var(--header-height-desktop)]">
           {/* Logo Section */}
           <div className="flex items-center gap-5">
-            <Logo href={`/${currentLang}`} />
+            <Logo
+              href={`/${currentLang}`}
+              forceVariant={chrome.logoVariant !== 'custom' ? chrome.logoVariant : undefined}
+              overrideUrl={chrome.logoVariant === 'custom' ? chrome.logoUrlOverride : undefined}
+            />
 
             {/* Desktop Navigation Links */}
             <div className="hidden lg:flex items-center gap-2">
@@ -227,10 +303,10 @@ const CloseIcon = () => (
                           activeDropdown === item.label ? 'bg-black/6 dark:bg-white/11' : ''
                         }`}
                       >
-                        <span className="text-neutral-600 dark:text-neutral-400 font-medium text-sm leading-5 tracking-tight whitespace-nowrap">
+                        <span className={`${navLinkClass} font-medium text-sm leading-5 tracking-tight whitespace-nowrap`}>
                           {item.label}
                         </span>
-                        <div className="flex justify-center items-center w-3.5 h-3.5 text-neutral-600 dark:text-neutral-500 transition-transform duration-200">
+                        <div className={`flex justify-center items-center w-3.5 h-3.5 ${chevronClass} transition-transform duration-200`}>
                           <ChevronIcon />
                         </div>
                       </Link>
@@ -240,10 +316,10 @@ const CloseIcon = () => (
                           activeDropdown === item.label ? 'bg-black/6 dark:bg-white/11' : ''
                         }`}
                       >
-                        <span className="text-neutral-600 dark:text-neutral-400 font-medium text-sm leading-5 tracking-tight whitespace-nowrap">
+                        <span className={`${navLinkClass} font-medium text-sm leading-5 tracking-tight whitespace-nowrap`}>
                           {item.label}
                         </span>
-                        <div className="flex justify-center items-center w-3.5 h-3.5 text-neutral-600 dark:text-neutral-500 transition-transform duration-200">
+                        <div className={`flex justify-center items-center w-3.5 h-3.5 ${chevronClass} transition-transform duration-200`}>
                           <ChevronIcon />
                         </div>
                       </button>
@@ -251,7 +327,7 @@ const CloseIcon = () => (
                   ) : (
                     <Link
                       href={item.href!}
-                      className="flex items-center gap-1 h-8 px-2.5 rounded-lg bg-transparent cursor-pointer transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11 text-neutral-600 dark:text-neutral-400 font-medium text-sm leading-5 tracking-tight whitespace-nowrap"
+                      className={`flex items-center gap-1 h-8 px-2.5 rounded-lg bg-transparent cursor-pointer transition-colors duration-200 hover:bg-black/4 dark:hover:bg-white/11 ${navLinkClass} font-medium text-sm leading-5 tracking-tight whitespace-nowrap`}
                     >
                       {item.label}
                     </Link>
@@ -283,9 +359,9 @@ const CloseIcon = () => (
               onClick={() => setIsMobileMenuOpen(true)}
               aria-label="Open mobile menu"
             >
-              <div className="w-full h-0.5 rounded-sm bg-neutral-600 dark:bg-neutral-400 transition-all duration-300" />
-              <div className="w-full h-0.5 rounded-sm bg-neutral-600 dark:bg-neutral-400 transition-all duration-300" />
-              <div className="w-full h-0.5 rounded-sm bg-neutral-600 dark:bg-neutral-400 transition-all duration-300" />
+              <div className={`w-full h-0.5 rounded-sm ${chrome.textColor ? '' : 'bg-neutral-600 dark:bg-neutral-400'} transition-all duration-300`} style={hamburgerBarStyle} />
+              <div className={`w-full h-0.5 rounded-sm ${chrome.textColor ? '' : 'bg-neutral-600 dark:bg-neutral-400'} transition-all duration-300`} style={hamburgerBarStyle} />
+              <div className={`w-full h-0.5 rounded-sm ${chrome.textColor ? '' : 'bg-neutral-600 dark:bg-neutral-400'} transition-all duration-300`} style={hamburgerBarStyle} />
             </button>
           </div>
         </div>

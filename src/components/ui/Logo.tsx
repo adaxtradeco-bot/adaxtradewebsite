@@ -14,9 +14,18 @@ interface LogoProps {
   href?: string;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
+  /**
+   * Forces the light or dark logo asset regardless of the site's current
+   * dark/light theme — used by ModernNavbar's Header Settings, where the
+   * floating vs. solid header state picks its own logo variant independent
+   * of the visitor's theme preference.
+   */
+  forceVariant?: 'light' | 'dark';
+  /** Renders this URL directly instead of the configured logo assets (Header Settings' `logoVariant: 'custom'`). */
+  overrideUrl?: string;
 }
 
-export function Logo({ href = '/', className = '', size = 'md' }: LogoProps) {
+export function Logo({ href = '/', className = '', size = 'md', forceVariant, overrideUrl }: LogoProps) {
   const { settings, isLoading } = useSiteSettings();
 
   const sizeClasses = {
@@ -40,16 +49,34 @@ export function Logo({ href = '/', className = '', size = 'md' }: LogoProps) {
   const logoWidth = Math.round(settings.logo.width * sizeMultiplier[size]);
   const logoHeight = Math.round(settings.logo.height * sizeMultiplier[size]);
 
+  // When a variant is forced, resolve to a single URL (with light<->dark fallback)
+  // and feed it to ThemeLogo as both light/dark so it never flips with the theme.
+  const forcedUrl = forceVariant
+    ? (forceVariant === 'dark' ? settings.logo.darkUrl : settings.logo.lightUrl) ||
+      (forceVariant === 'dark' ? settings.logo.lightUrl : settings.logo.darkUrl)
+    : '';
+
+  const hasAnyLogo = overrideUrl || forcedUrl || settings.logo.lightUrl || settings.logo.darkUrl;
+
   return (
-    <Link 
-      href={href} 
+    <Link
+      href={href}
       className={`flex-shrink-0 ${className}`}
       aria-label={settings.logo.alt}
     >
-      {(settings.logo.lightUrl || settings.logo.darkUrl) ? (
+      {overrideUrl ? (
+        <img
+          src={overrideUrl}
+          alt={settings.logo.alt}
+          width={logoWidth}
+          height={logoHeight}
+          className={`object-contain ${sizeClasses[size]}`}
+          style={{ maxWidth: logoWidth, maxHeight: logoHeight }}
+        />
+      ) : hasAnyLogo ? (
         <ThemeLogo
-          lightUrl={settings.logo.lightUrl}
-          darkUrl={settings.logo.darkUrl}
+          lightUrl={forceVariant ? forcedUrl : settings.logo.lightUrl}
+          darkUrl={forceVariant ? forcedUrl : settings.logo.darkUrl}
           alt={settings.logo.alt}
           width={logoWidth}
           height={logoHeight}

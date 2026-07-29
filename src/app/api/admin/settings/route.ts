@@ -7,6 +7,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// Defaults reproduce ModernNavbar's current, unconditional appearance exactly
+// (mode: 'solid') so no existing site changes appearance until a Builder_Admin
+// explicitly opts into 'floating'. Mirrors src/hooks/useSiteSettings.ts's defaults.
+const DEFAULT_HEADER_SETTINGS = {
+  mode: 'solid' as const,
+  transitionDurationMs: 250,
+  floatingState: {
+    background: 'transparent',
+    backgroundOpacity: 0,
+    backdropBlur: false,
+    textColor: '#ffffff',
+    linkHoverColor: '#ffffff',
+    logoVariant: 'light' as const,
+    logoUrlOverride: '',
+    showBorder: false,
+    showShadow: false
+  },
+  solidState: {
+    background: '',
+    backgroundOpacity: 0.9,
+    backdropBlur: true,
+    textColor: '',
+    linkHoverColor: '',
+    logoVariant: 'dark' as const,
+    logoUrlOverride: '',
+    showBorder: false,
+    showShadow: false
+  },
+  autoHide: { enabled: false },
+  height: { desktop: 64, mobile: 56 }
+};
+
 export async function GET() {
   try {
     const settings = await prisma.siteSettings.findFirst();
@@ -40,9 +72,10 @@ export async function GET() {
           url: '/favicon.ico',
           appleTouchIcon: '/apple-touch-icon.png',
           manifest: '/site.webmanifest'
-        }
+        },
+        header: DEFAULT_HEADER_SETTINGS
       };
-      
+
       const response = NextResponse.json(defaultSettings);
       response.cookies.set('defaultLanguage', defaultSettings.languages.defaultLanguage, {
         path: '/',
@@ -70,6 +103,14 @@ export async function GET() {
           address: '',
           ...(saved.footer?.contactInfo || {})
         }
+      },
+      header: {
+        ...DEFAULT_HEADER_SETTINGS,
+        ...saved.header,
+        floatingState: { ...DEFAULT_HEADER_SETTINGS.floatingState, ...(saved.header?.floatingState || {}) },
+        solidState: { ...DEFAULT_HEADER_SETTINGS.solidState, ...(saved.header?.solidState || {}) },
+        autoHide: { ...DEFAULT_HEADER_SETTINGS.autoHide, ...(saved.header?.autoHide || {}) },
+        height: { ...DEFAULT_HEADER_SETTINGS.height, ...(saved.header?.height || {}) }
       }
     };
 

@@ -33,6 +33,7 @@ model Page {
   isBuilderPage Boolean   @default(false) // Flag for builder-created pages
   builderVersion String?  // Track builder version for migrations
   isHomepage    Boolean   @default(false) // Flag for homepage
+  headerOverride String?  // JSON string: {"mode":"inherit"|"solid"|"floating"}, null/unset = inherit site-wide Header Settings
   
   // Multilingual grouping
   pageGroupId   String?   // Link to PageGroup for multilingual pages

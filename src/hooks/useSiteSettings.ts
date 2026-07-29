@@ -63,6 +63,33 @@ interface SiteSettings {
       padding: string;
     };
   };
+  header: HeaderSettings;
+}
+
+export interface HeaderChromeState {
+  background: string;
+  backgroundOpacity: number;
+  backdropBlur: boolean;
+  textColor: string;
+  linkHoverColor: string;
+  logoVariant: 'light' | 'dark' | 'custom';
+  logoUrlOverride: string;
+  showBorder: boolean;
+  showShadow: boolean;
+}
+
+export interface HeaderSettings {
+  mode: 'solid' | 'floating';
+  transitionDurationMs: number;
+  floatingState: HeaderChromeState;
+  solidState: HeaderChromeState;
+  autoHide: {
+    enabled: boolean;
+  };
+  height: {
+    desktop: number;
+    mobile: number;
+  };
 }
 
 export interface FooterLink {
@@ -154,6 +181,44 @@ const defaultSettings: SiteSettings = {
       borderColor: '',
       padding: 'py-12'
     }
+  },
+  header: {
+    // 'solid' reproduces ModernNavbar's current, unconditional look exactly —
+    // no existing page changes appearance until a Builder_Admin opts into 'floating'.
+    mode: 'solid',
+    transitionDurationMs: 250,
+    floatingState: {
+      background: 'transparent',
+      backgroundOpacity: 0,
+      backdropBlur: false,
+      textColor: '#ffffff',
+      linkHoverColor: '#ffffff',
+      logoVariant: 'light',
+      logoUrlOverride: '',
+      showBorder: false,
+      showShadow: false
+    },
+    solidState: {
+      // Empty strings mean "keep ModernNavbar's existing Tailwind utility classes"
+      // (bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md, text-neutral-600 dark:text-neutral-400),
+      // the same empty-string-as-inherit convention already used by footer.style above.
+      background: '',
+      backgroundOpacity: 0.9,
+      backdropBlur: true,
+      textColor: '',
+      linkHoverColor: '',
+      logoVariant: 'dark',
+      logoUrlOverride: '',
+      showBorder: false,
+      showShadow: false
+    },
+    autoHide: {
+      enabled: false
+    },
+    height: {
+      desktop: 64,
+      mobile: 56
+    }
   }
 };
 
@@ -200,6 +265,26 @@ export function SiteSettingsProvider(props: SiteSettingsProviderProps) {
             style: {
               ...defaultSettings.footer.style,
               ...(data.footer?.style || {})
+            }
+          },
+          header: {
+            ...defaultSettings.header,
+            ...(data.header || {}),
+            floatingState: {
+              ...defaultSettings.header.floatingState,
+              ...(data.header?.floatingState || {})
+            },
+            solidState: {
+              ...defaultSettings.header.solidState,
+              ...(data.header?.solidState || {})
+            },
+            autoHide: {
+              ...defaultSettings.header.autoHide,
+              ...(data.header?.autoHide || {})
+            },
+            height: {
+              ...defaultSettings.header.height,
+              ...(data.header?.height || {})
             }
           }
         };
