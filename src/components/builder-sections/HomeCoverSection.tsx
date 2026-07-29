@@ -17,8 +17,23 @@ export interface HomeCoverOpening {
   logoUrl?: string;
   logoAlt?: string;
   backgroundColor?: string; // opening-panel background, e.g. "#fafafa"
+  /**
+   * Opacity of the opening panel's backdrop only (0-1, default 1 = fully solid).
+   * Below 1 the background media stays visible behind the brand mark during the
+   * opening, matching the reference site's effect. Applied to the backdrop layer
+   * alone, so the logo itself always renders at full opacity.
+   */
+  backgroundOpacity?: number;
   durationMs?: number; // how long the opening stays before fading, default 1200
 }
+
+/**
+ * 'immediate'     — video autoplays as soon as it can (native `poster` covers the gap)
+ * 'after-poster'  — the poster image is held on top and the video is started on a
+ *                   timer, so a fully-loaded still is shown first and the cut to
+ *                   motion is deliberate rather than dependent on network speed
+ */
+export type VideoStartMode = 'immediate' | 'after-poster';
 
 export interface HomeCoverCta {
   text: string;
@@ -35,6 +50,8 @@ export interface HomeCoverData {
   videoAutoplay?: boolean; // default true
   videoLoop?: boolean; // default true
   videoMuted?: boolean; // default true (required for autoplay)
+  videoStartMode?: VideoStartMode; // default 'immediate'
+  videoStartDelayMs?: number; // used when videoStartMode === 'after-poster', default 1800
 
   overlayColor?: string; // default "#000000"
   overlayOpacity?: number; // 0-1, default 0.35
@@ -98,6 +115,8 @@ export default function HomeCoverSection({ data, style, isBuilder = false }: Pro
     videoAutoplay = true,
     videoLoop = true,
     videoMuted = true,
+    videoStartMode = 'immediate',
+    videoStartDelayMs = 1800,
     overlayColor = '#000000',
     overlayOpacity = 0.35,
     tagline,
@@ -172,20 +191,58 @@ export default function HomeCoverSection({ data, style, isBuilder = false }: Pro
 
   const poster = isMobile ? posterImageMobile || posterImageDesktop : posterImageDesktop || posterImageMobile;
 
+  // Poster-first mode: hold a fully-loaded still on top, then hand over to the
+  // video on a timer, so the cut to motion is deliberate instead of depending on
+  // how fast the video buffers. In the builder the settled state renders at once.
+  const deferVideo = mediaType === 'video' && !!videoUrl && videoStartMode === 'after-poster' && !!poster;
+  const [videoStarted, setVideoStarted] = useState(!deferVideo || isBuilder);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (!deferVideo || isBuilder) {
+      setVideoStarted(true);
+      return;
+    }
+    setVideoStarted(false);
+    const timer = setTimeout(() => {
+      setVideoStarted(true);
+      // Muted playback, so this resolves; swallow the rejection browsers throw
+      // when the tab is backgrounded or the element was torn down mid-flight.
+      // `play()` predates promises and still returns undefined in some engines,
+      // so the result can't be assumed thenable.
+      const played = videoRef.current?.play();
+      if (played && typeof played.catch === 'function') played.catch(() => {});
+    }, Math.max(0, videoStartDelayMs));
+    return () => clearTimeout(timer);
+  }, [deferVideo, isBuilder, videoStartDelayMs, videoUrl]);
+
   const renderMedia = () => {
     if (mediaType === 'video') {
       if (videoUrl) {
         return (
-          <video
-            className="absolute inset-0 w-full h-full object-cover"
-            autoPlay={videoAutoplay}
-            loop={videoLoop}
-            muted={videoAutoplay ? true : videoMuted}
-            playsInline
-            poster={poster}
-          >
-            <source src={videoUrl} />
-          </video>
+          <>
+            <video
+              ref={videoRef}
+              className="absolute inset-0 w-full h-full object-cover"
+              autoPlay={deferVideo ? false : videoAutoplay}
+              loop={videoLoop}
+              muted={videoAutoplay ? true : videoMuted}
+              playsInline
+              preload="auto"
+              poster={poster}
+            >
+              <source src={videoUrl} />
+            </video>
+            {deferVideo && (
+              <img
+                src={poster}
+                alt=""
+                aria-hidden
+                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-out"
+                style={{ opacity: videoStarted ? 0 : 1 }}
+              />
+            )}
+          </>
         );
       }
       if (poster || imageUrl) {
@@ -228,34 +285,46 @@ export default function HomeCoverSection({ data, style, isBuilder = false }: Pro
           style={{ backgroundColor: overlayColor, opacity: clamp(overlayOpacity, 0, 1) }}
         />
 
-        {/* Opening reveal panel */}
+        {/* Opening reveal panel — the backdrop is its own layer so `backgroundOpacity`
+            can let the media show through behind a fully-opaque brand mark. */}
         {opening?.enabled &&
-          (motionDisabled ? (
-            <div
-              className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
-              style={{ backgroundColor: opening.backgroundColor ?? '#fafafa', opacity: 0 }}
-              aria-hidden
-            >
-              {opening.logoUrl && (
-                <img src={opening.logoUrl} alt={opening.logoAlt ?? ''} className="max-h-24 max-w-[60%] object-contain" />
-              )}
-            </div>
-          ) : (
-            <motion.div
-              className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none"
-              style={{
-                backgroundColor: opening.backgroundColor ?? '#fafafa',
-                opacity: isPinReveal ? openingOpacityScroll : undefined,
-              }}
-              initial={false}
-              animate={isPinReveal ? undefined : { opacity: openingDone ? 0 : 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              {opening.logoUrl && (
-                <img src={opening.logoUrl} alt={opening.logoAlt ?? ''} className="max-h-24 max-w-[60%] object-contain" />
-              )}
-            </motion.div>
-          ))}
+          (() => {
+            const backdrop = (
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundColor: opening.backgroundColor ?? '#fafafa',
+                  opacity: clamp(opening.backgroundOpacity ?? 1, 0, 1),
+                }}
+              />
+            );
+            const logo = opening.logoUrl ? (
+              <img
+                src={opening.logoUrl}
+                alt={opening.logoAlt ?? ''}
+                className="relative max-h-24 max-w-[60%] object-contain"
+              />
+            ) : null;
+            const panelCls = 'absolute inset-0 flex items-center justify-center z-20 pointer-events-none';
+
+            return motionDisabled ? (
+              <div className={panelCls} style={{ opacity: 0 }} aria-hidden>
+                {backdrop}
+                {logo}
+              </div>
+            ) : (
+              <motion.div
+                className={panelCls}
+                style={{ opacity: isPinReveal ? openingOpacityScroll : undefined }}
+                initial={false}
+                animate={isPinReveal ? undefined : { opacity: openingDone ? 0 : 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                {backdrop}
+                {logo}
+              </motion.div>
+            );
+          })()}
 
         {/* Content */}
         {(() => {

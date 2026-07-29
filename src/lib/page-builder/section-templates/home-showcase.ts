@@ -27,6 +27,8 @@ export const HOME_SHOWCASE_TEMPLATES: SectionTemplate[] = [
         videoAutoplay: true,
         videoLoop: true,
         videoMuted: true,
+        videoStartMode: 'after-poster',
+        videoStartDelayMs: 1800,
         overlayColor: '#000000',
         overlayOpacity: 0.35,
         tagline: 'Every idea, one connected direction.',
@@ -37,7 +39,10 @@ export const HOME_SHOWCASE_TEMPLATES: SectionTemplate[] = [
           logoUrl: '/media/home-showcase/sample-logo.svg',
           logoAlt: 'Brand wordmark',
           backgroundColor: '#fafafa',
-          durationMs: 1200,
+          // Translucent so the poster/video stays visible behind the brand mark
+          // during the opening, matching the reference site's cover.
+          backgroundOpacity: 0.55,
+          durationMs: 1800,
         },
         theme: 'dark',
         showScrollCue: true,

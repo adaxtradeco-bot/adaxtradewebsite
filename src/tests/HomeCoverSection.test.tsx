@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import HomeCoverSection, { HomeCoverData } from '@/components/builder-sections/HomeCoverSection';
 
 function mockMatchMedia(reduced: boolean) {
@@ -119,6 +119,143 @@ describe('HomeCoverSection', () => {
     const openingPanel = logoImg?.parentElement;
     // Under reduced motion the opening panel must already be hidden (opacity 0).
     expect(openingPanel?.style.opacity).toBe('0');
+  });
+
+  it('keeps the background media visible behind the brand when opening.backgroundOpacity < 1', () => {
+    const { container } = render(
+      <HomeCoverSection
+        data={{
+          ...baseData,
+          opening: {
+            enabled: true,
+            logoUrl: 'https://picsum.photos/seed/logo/200/200',
+            logoAlt: 'Brand logo',
+            backgroundColor: '#fafafa',
+            backgroundOpacity: 0.55,
+          },
+        }}
+      />
+    );
+    const logoImg = container.querySelector('img[alt="Brand logo"]') as HTMLElement;
+    const panel = logoImg.parentElement as HTMLElement;
+    const backdrop = panel.querySelector('div') as HTMLElement;
+
+    // The backdrop carries the translucency, so media shows through...
+    expect(backdrop.style.opacity).toBe('0.55');
+    expect(backdrop.style.backgroundColor).toBe('rgb(250, 250, 250)');
+    // ...while the logo itself is never dimmed by it.
+    expect(logoImg.style.opacity).toBe('');
+  });
+
+  it('defaults the opening backdrop to fully solid when backgroundOpacity is unset', () => {
+    const { container } = render(
+      <HomeCoverSection
+        data={{
+          ...baseData,
+          opening: { enabled: true, logoUrl: 'https://picsum.photos/seed/logo/200/200', logoAlt: 'Brand logo' },
+        }}
+      />
+    );
+    const panel = (container.querySelector('img[alt="Brand logo"]') as HTMLElement).parentElement!;
+    expect((panel.querySelector('div') as HTMLElement).style.opacity).toBe('1');
+  });
+
+  it('holds the poster on top and does not autoplay when videoStartMode is "after-poster"', () => {
+    const { container } = render(
+      <HomeCoverSection
+        data={{
+          ...baseData,
+          mediaType: 'video',
+          videoUrl: 'https://example.com/v.mp4',
+          posterImageDesktop: 'https://picsum.photos/seed/poster/1600/900',
+          videoStartMode: 'after-poster',
+          videoStartDelayMs: 1800,
+        }}
+      />
+    );
+    const video = container.querySelector('video') as HTMLVideoElement;
+    const posterOverlay = container.querySelector('img[aria-hidden]') as HTMLElement;
+
+    expect(video.getAttribute('autoplay')).toBeNull();
+    expect(posterOverlay).toBeTruthy();
+    expect(posterOverlay.style.opacity).toBe('1');
+    // muted must still be forced, since the timer will start playback programmatically
+    expect(video.muted).toBe(true);
+  });
+
+  it('cross-fades the poster away once the start timer fires', async () => {
+    // jsdom has no real media pipeline; `play()` throws "Not implemented" there.
+    const playSpy = vi
+      .spyOn(HTMLMediaElement.prototype, 'play')
+      .mockImplementation(() => Promise.resolve());
+    vi.useFakeTimers();
+    try {
+      const { container } = render(
+        <HomeCoverSection
+          data={{
+            ...baseData,
+            mediaType: 'video',
+            videoUrl: 'https://example.com/v.mp4',
+            posterImageDesktop: 'https://picsum.photos/seed/poster/1600/900',
+            videoStartMode: 'after-poster',
+            videoStartDelayMs: 1800,
+          }}
+        />
+      );
+      expect((container.querySelector('img[aria-hidden]') as HTMLElement).style.opacity).toBe('1');
+
+      await act(async () => {
+        vi.advanceTimersByTime(1900);
+      });
+
+      expect((container.querySelector('img[aria-hidden]') as HTMLElement).style.opacity).toBe('0');
+      expect(playSpy).toHaveBeenCalled();
+    } finally {
+      vi.useRealTimers();
+      playSpy.mockRestore();
+    }
+  });
+
+  it('does not crash when video.play() returns undefined instead of a promise (older engines)', async () => {
+    const playSpy = vi
+      .spyOn(HTMLMediaElement.prototype, 'play')
+      .mockImplementation(() => undefined as unknown as Promise<void>);
+    vi.useFakeTimers();
+    try {
+      render(
+        <HomeCoverSection
+          data={{
+            ...baseData,
+            mediaType: 'video',
+            videoUrl: 'https://example.com/v.mp4',
+            posterImageDesktop: 'https://picsum.photos/seed/poster/1600/900',
+            videoStartMode: 'after-poster',
+            videoStartDelayMs: 100,
+          }}
+        />
+      );
+      await act(async () => {
+        expect(() => vi.advanceTimersByTime(200)).not.toThrow();
+      });
+    } finally {
+      vi.useRealTimers();
+      playSpy.mockRestore();
+    }
+  });
+
+  it('renders no poster overlay and keeps native autoplay in the default "immediate" mode', () => {
+    const { container } = render(
+      <HomeCoverSection
+        data={{
+          ...baseData,
+          mediaType: 'video',
+          videoUrl: 'https://example.com/v.mp4',
+          posterImageDesktop: 'https://picsum.photos/seed/poster/1600/900',
+        }}
+      />
+    );
+    expect(container.querySelector('img[aria-hidden]')).toBeNull();
+    expect(container.querySelector('video')?.getAttribute('autoplay')).not.toBeNull();
   });
 
   it('renders tagline, body lines, and CTA', () => {

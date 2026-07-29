@@ -166,17 +166,47 @@ export function HomeCoverPropertyPanel({ section, onUpdate }: Props) {
         </div>
 
         {mediaType === 'video' && (
-          <div className="grid grid-cols-3 gap-2">
-            <Field label="Autoplay">
-              <Toggle value={data.videoAutoplay !== false} onChange={(v) => update({ videoAutoplay: v })} />
+          <>
+            <div className="grid grid-cols-3 gap-2">
+              <Field label="Autoplay">
+                <Toggle value={data.videoAutoplay !== false} onChange={(v) => update({ videoAutoplay: v })} />
+              </Field>
+              <Field label="Loop">
+                <Toggle value={data.videoLoop !== false} onChange={(v) => update({ videoLoop: v })} />
+              </Field>
+              <Field label="Muted">
+                <Toggle value={data.videoMuted !== false} onChange={(v) => update({ videoMuted: v })} />
+              </Field>
+            </div>
+
+            <Field label="Video Start">
+              <select
+                className={inputCls}
+                value={data.videoStartMode ?? 'immediate'}
+                onChange={(e) => update({ videoStartMode: e.target.value })}
+              >
+                <option value="immediate">Immediate — play as soon as it loads</option>
+                <option value="after-poster">Show poster first, then start on a timer</option>
+              </select>
             </Field>
-            <Field label="Loop">
-              <Toggle value={data.videoLoop !== false} onChange={(v) => update({ videoLoop: v })} />
-            </Field>
-            <Field label="Muted">
-              <Toggle value={data.videoMuted !== false} onChange={(v) => update({ videoMuted: v })} />
-            </Field>
-          </div>
+
+            {data.videoStartMode === 'after-poster' && (
+              <Field label={`Start Video After — ${data.videoStartDelayMs ?? 1800}ms`}>
+                <input
+                  type="range"
+                  min={0}
+                  max={6000}
+                  step={100}
+                  value={data.videoStartDelayMs ?? 1800}
+                  onChange={(e) => update({ videoStartDelayMs: parseInt(e.target.value, 10) })}
+                  className="w-full"
+                />
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Needs a poster image — the still is held on screen until the timer fires, then cross-fades to the video.
+                </p>
+              </Field>
+            )}
+          </>
         )}
       </Collapsible>
 
@@ -259,6 +289,21 @@ export function HomeCoverPropertyPanel({ section, onUpdate }: Props) {
               value={opening.backgroundColor ?? '#fafafa'}
               onChange={(v) => updateNested('opening', { backgroundColor: v })}
             />
+            <Field label={`Backdrop Opacity — ${Math.round((opening.backgroundOpacity ?? 1) * 100)}%`}>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.05}
+                value={opening.backgroundOpacity ?? 1}
+                onChange={(e) => updateNested('opening', { backgroundOpacity: parseFloat(e.target.value) })}
+                className="w-full"
+              />
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Below 100% the background video/image stays visible behind the logo during the opening. The logo itself
+                always stays fully opaque.
+              </p>
+            </Field>
             <Field label={`Duration — ${opening.durationMs ?? 1200}ms`}>
               <input
                 type="range"
