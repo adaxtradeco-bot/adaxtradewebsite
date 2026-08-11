@@ -91,9 +91,10 @@ export default function ImportExportModal({
     
     setLoading(true);
     try {
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/import-export', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           action: 'import',
           data: previewData,

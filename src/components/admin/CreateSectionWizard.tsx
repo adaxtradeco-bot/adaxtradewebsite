@@ -132,9 +132,10 @@ export default function CreateSectionWizard({ onClose, onSuccess, onError }: Wiz
         return;
       }
 
+      const token = localStorage.getItem('adminToken');
       const res = await fetch('/api/admin/sections/create', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           typeSlug,
           name,

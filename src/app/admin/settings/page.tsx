@@ -335,9 +335,10 @@ export default function SettingsPage() {
   const saveSettings = async () => {
     setIsSaving(true);
     try {
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/settings', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(settings)
       });
 
