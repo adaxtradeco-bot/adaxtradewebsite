@@ -9,6 +9,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSidebar } from '@/hooks/useSidebar';
+import { useAdminUser } from '@/hooks/useAdminUser';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: '📊' },
@@ -20,6 +21,11 @@ const navigation = [
   { name: 'Translations', href: '/admin/translations', icon: '🌐' },
   { name: 'Media', href: '/admin/media', icon: '🖼️' },
   { name: 'Settings', href: '/admin/settings', icon: '⚙️' },
+  { name: 'My Profile', href: '/admin/profile', icon: '👤' },
+];
+
+const adminOnlyNavigation = [
+  { name: 'Users', href: '/admin/users', icon: '👥' },
 ];
 
 export default function AdminLayout({
@@ -30,7 +36,9 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const { isCollapsed, toggle } = useSidebar();
+  const { isAdmin } = useAdminUser();
   const isLoginPage = pathname === '/admin/login';
+  const visibleNavigation = isAdmin ? [...navigation, ...adminOnlyNavigation] : navigation;
 
   const handleLogout = () => {
     document.cookie = 'auth-token=; path=/; max-age=0';
@@ -72,7 +80,7 @@ export default function AdminLayout({
         
         <nav className="mt-6 px-3 flex-1">
           <ul className="space-y-1">
-            {navigation.map((item) => {
+            {visibleNavigation.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <li key={item.name}>

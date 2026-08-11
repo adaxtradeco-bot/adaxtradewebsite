@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyToken } from '@/lib/auth';
+import { authenticateRequest } from '@/lib/api-auth';
 
 // GET /api/admin/pages/[id]/builder - Get page for builder
 export async function GET(
@@ -14,12 +14,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const page = await prisma.page.findUnique({
       where: { id: params.id },
@@ -89,12 +85,8 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const { builderData, isBuilderPage, builderVersion } = await request.json();
     

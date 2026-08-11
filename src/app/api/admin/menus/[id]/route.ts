@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyToken } from '@/lib/auth';
+import { authenticateRequest, authorizeDelete } from '@/lib/api-auth';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const menu = await prisma.menu.findUnique({
       where: { id: params.id },
@@ -28,15 +24,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const data = await request.json();
-    
+
     const menu = await prisma.menu.update({
       where: { id: params.id },
       data: {
@@ -57,12 +49,8 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authorizeDelete(request);
+    if (!auth.ok) return auth.response;
 
     await prisma.menu.delete({
       where: { id: params.id },

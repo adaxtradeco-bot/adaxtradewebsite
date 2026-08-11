@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
+import { authenticateRequest } from '@/lib/api-auth';
 
 // Configure route for large file uploads
 export const runtime = 'nodejs';
@@ -14,6 +15,9 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
+
     let formData;
     try {
       formData = await request.formData();

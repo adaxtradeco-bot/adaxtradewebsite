@@ -9,6 +9,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Globe, Copy, Plus, Edit, Trash2, Eye, EyeOff } from 'lucide-react';
+import { useAdminUser } from '@/hooks/useAdminUser';
 
 interface Footer {
   id: string;
@@ -43,6 +44,7 @@ const languageNames: Record<string, string> = {
 };
 
 export default function FootersPage() {
+  const { isAdmin } = useAdminUser();
   const [footers, setFooters] = useState<Footer[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState<string>('all');
@@ -299,13 +301,15 @@ export default function FootersPage() {
                 >
                   <Copy className="w-4 h-4" />
                 </button>
-                <button
-                  onClick={() => deleteFooter(footer.id)}
-                  className="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
-                  title="Delete"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                {isAdmin && (
+                  <button
+                    onClick={() => deleteFooter(footer.id)}
+                    className="px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
+                    title="Delete"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
           ))}

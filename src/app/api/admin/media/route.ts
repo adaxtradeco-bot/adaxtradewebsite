@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put, list, del } from '@vercel/blob';
-import { verifyToken } from '@/lib/auth';
+import { authenticateRequest, authorizeDelete } from '@/lib/api-auth';
 
 // Configure route for large file uploads
 export const runtime = 'nodejs';
@@ -10,12 +10,8 @@ export const dynamic = 'force-dynamic';
 // GET - List all media files
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const { blobs } = await list();
     
@@ -43,12 +39,8 @@ export async function GET(request: NextRequest) {
 // POST - Upload new file
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     let formData;
     try {
@@ -121,12 +113,8 @@ export async function POST(request: NextRequest) {
 // DELETE - Delete file
 export async function DELETE(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authorizeDelete(request);
+    if (!auth.ok) return auth.response;
 
     const { searchParams } = new URL(request.url);
     const url = searchParams.get('url');

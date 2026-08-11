@@ -39,10 +39,12 @@ export function PageListFlat({ onAddTranslation }: PageListFlatProps) {
   const fetchPages = async () => {
     try {
       const timestamp = Date.now();
+      const token = localStorage.getItem('adminToken');
       const res = await fetch(`/api/admin/pages/grouped?t=${timestamp}`, {
         cache: 'no-store',
         headers: {
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache',
+          Authorization: `Bearer ${token}`
         }
       });
       const result = await res.json();

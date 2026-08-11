@@ -5,18 +5,14 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { authenticateRequest } from '@/lib/api-auth';
 import { importTranslationsFromFiles, exportTranslationsToFiles } from '@/lib/translation-sync';
 
 // POST /api/admin/translations/sync - Sync translations between database and files
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const { direction } = await request.json();
 

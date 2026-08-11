@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
-import { verifyToken } from '@/lib/auth';
+import { authenticateRequest } from '@/lib/api-auth';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -8,12 +8,8 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const formData = await request.formData();
     const chunk = formData.get('chunk') as File;

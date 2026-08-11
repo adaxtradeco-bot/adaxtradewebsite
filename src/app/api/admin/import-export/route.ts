@@ -8,9 +8,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { ImportExportManager } from '@/lib/import-export/utils';
 import { ExportData, PageExportData, SectionExportData, ImportResult } from '@/lib/import-export/types';
+import { authenticateRequest } from '@/lib/api-auth';
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
+
     const body = await request.json();
     const { action, data, options } = body;
 

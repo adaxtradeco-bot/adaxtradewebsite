@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react';
 import { Globe, Plus, Edit, Trash2, Eye, EyeOff, Copy, Save } from 'lucide-react';
+import { useAdminUser } from '@/hooks/useAdminUser';
 
 interface ContactSalesButton {
   id: string;
@@ -39,6 +40,7 @@ const languageNames: Record<string, string> = {
 };
 
 export default function ContactSalesPage() {
+  const { isAdmin } = useAdminUser();
   const [buttons, setButtons] = useState<ContactSalesButton[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -303,12 +305,14 @@ export default function ContactSalesPage() {
                       <Edit className="w-4 h-4" />
                       Edit
                     </button>
-                    <button
-                      onClick={() => deleteButton(button.id)}
-                      className="px-3 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-sm"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {isAdmin && (
+                      <button
+                        onClick={() => deleteButton(button.id)}
+                        className="px-3 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-sm"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </>
               )}

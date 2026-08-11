@@ -6,14 +6,18 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { authenticateRequest } from '@/lib/api-auth';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function GET(request: NextRequest) {
   try {
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
+
     console.log('Fetching grouped pages...');
-    
+
     const groups = await prisma.pageGroup.findMany({
       include: {
         pages: {

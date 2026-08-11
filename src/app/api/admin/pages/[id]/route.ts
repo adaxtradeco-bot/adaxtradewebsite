@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { verifyToken } from '@/lib/auth';
+import { authenticateRequest, authorizeDelete } from '@/lib/api-auth';
 
 // GET /api/admin/pages/[id] - Get single page
 export async function GET(
@@ -14,12 +14,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const page = await prisma.page.findUnique({
       where: { id: params.id },
@@ -48,15 +44,11 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
 
     const data = await request.json();
-    
+
     // Check if slug is being updated and if it's unique
     if (data.slug) {
       const existingPage = await prisma.page.findUnique({
@@ -108,12 +100,8 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    
-    if (!token || !verifyToken(token)) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = authorizeDelete(request);
+    if (!auth.ok) return auth.response;
 
     // دریافت اطلاعات صفحه قبل از حذف
     const page = await prisma.page.findUnique({

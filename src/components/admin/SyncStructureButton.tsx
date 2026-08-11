@@ -32,9 +32,10 @@ export function SyncStructureButton({
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('adminToken');
       const res = await fetch(`/api/admin/pages/${sourcePageId}/sync-structure`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           targetPageId,
           syncContent

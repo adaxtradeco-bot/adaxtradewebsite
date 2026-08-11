@@ -46,7 +46,10 @@ export function LanguageSwitcher({
 
   const fetchGroupLanguages = async () => {
     try {
-      const res = await fetch('/api/admin/pages/grouped');
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch('/api/admin/pages/grouped', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       const result = await res.json();
       
       if (result.success) {

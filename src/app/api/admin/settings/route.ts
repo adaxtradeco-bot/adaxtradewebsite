@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { authorizeSettings } from '@/lib/api-auth';
 
 // Defaults reproduce ModernNavbar's current, unconditional appearance exactly
 // (mode: 'solid') so no existing site changes appearance until a Builder_Admin
@@ -39,7 +40,10 @@ const DEFAULT_HEADER_SETTINGS = {
   height: { desktop: 64, mobile: 56 }
 };
 
-export async function GET() {
+// GET is intentionally left unauthenticated: src/hooks/useSiteSettings.ts fetches
+// this route from the public site's root layout (logo, theme, header, contact-sales
+// visibility) for every anonymous visitor, so it cannot require a Bearer token.
+export async function GET(request: NextRequest) {
   try {
     const settings = await prisma.siteSettings.findFirst();
     
@@ -131,6 +135,9 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = authorizeSettings(request);
+    if (!auth.ok) return auth.response;
+
     const settingsData = await request.json();
 
     // Validate required fields

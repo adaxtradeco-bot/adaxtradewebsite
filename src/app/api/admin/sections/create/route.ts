@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { authorizeSettings } from '@/lib/api-auth';
 
 const PROJECT_ROOT = process.cwd();
 
@@ -13,6 +14,9 @@ function toComponentName(typeSlug: string): string {
 
 export async function POST(request: NextRequest) {
   try {
+    const auth = authorizeSettings(request);
+    if (!auth.ok) return auth.response;
+
     const body = await request.json();
     const { typeSlug, name, category, description, icon, defaultData, componentCode } = body;
 

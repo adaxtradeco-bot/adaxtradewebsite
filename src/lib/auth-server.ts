@@ -34,3 +34,11 @@ export async function getAuthUser() {
 
   return verifyToken(token);
 }
+
+export async function requireAdmin() {
+  const user = await requireAuth();
+  if (user.role !== 'admin') {
+    redirect('/admin');
+  }
+  return user;
+}

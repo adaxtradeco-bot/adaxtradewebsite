@@ -11,10 +11,12 @@ import { useParams, useRouter } from 'next/navigation';
 import { Save, Trash2, Eye, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { parseHeaderOverrideMode, PageHeaderOverrideMode } from '@/components/HeaderVisibilityProvider';
+import { useAdminUser } from '@/hooks/useAdminUser';
 
 export default function PageSettings() {
   const params = useParams();
   const router = useRouter();
+  const { isAdmin } = useAdminUser();
   const [page, setPage] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -316,14 +318,18 @@ export default function PageSettings() {
         </div>
 
         <div className="border-t dark:border-slate-700 pt-6 flex items-center justify-between">
-          <button
-            onClick={handleDelete}
-            disabled={deleting}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
-          >
-            <Trash2 size={16} />
-            {deleting ? 'Deleting...' : 'Delete Page'}
-          </button>
+          {isAdmin ? (
+            <button
+              onClick={handleDelete}
+              disabled={deleting}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+            >
+              <Trash2 size={16} />
+              {deleting ? 'Deleting...' : 'Delete Page'}
+            </button>
+          ) : (
+            <div />
+          )}
 
           <div className="flex gap-2">
             <a

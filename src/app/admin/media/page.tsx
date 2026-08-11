@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAdminUser } from '@/hooks/useAdminUser';
 
 interface MediaFile {
   filename: string;
@@ -12,6 +13,7 @@ interface MediaFile {
 }
 
 export default function MediaPage() {
+  const { isAdmin } = useAdminUser();
   const [files, setFiles] = useState<MediaFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -312,13 +314,15 @@ export default function MediaPage() {
                       >
                         📋
                       </button>
-                      <button
-                        onClick={() => handleDelete(file.filename)}
-                        className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
-                        title="Delete"
-                      >
-                        🗑️
-                      </button>
+                      {isAdmin && (
+                        <button
+                          onClick={() => handleDelete(file.filename)}
+                          className="p-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition-colors"
+                          title="Delete"
+                        >
+                          🗑️
+                        </button>
+                      )}
                     </div>
                   </div>
                   
@@ -350,12 +354,14 @@ export default function MediaPage() {
                       >
                         📋 Copy URL
                       </button>
-                      <button
-                        onClick={() => handleDelete(file.filename)}
-                        className="px-3 py-1 text-sm bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded hover:bg-red-200 dark:hover:bg-red-800 transition-colors"
-                      >
-                        🗑️ Delete
-                      </button>
+                      {isAdmin && (
+                        <button
+                          onClick={() => handleDelete(file.filename)}
+                          className="px-3 py-1 text-sm bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded hover:bg-red-200 dark:hover:bg-red-800 transition-colors"
+                        >
+                          🗑️ Delete
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

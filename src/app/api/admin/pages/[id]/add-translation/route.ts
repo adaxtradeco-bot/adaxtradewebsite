@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
+import { authenticateRequest } from '@/lib/api-auth';
 
 const prisma = new PrismaClient();
 
@@ -14,8 +15,11 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   const debugLogs: string[] = [];
-  
+
   try {
+    const auth = authenticateRequest(request);
+    if (!auth.ok) return auth.response;
+
     const { id } = params;
     const body = await request.json();
     const { language, slug, copyStructure = true, copyStyles = true, copyContent = false } = body;

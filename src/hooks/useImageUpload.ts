@@ -53,8 +53,10 @@ export function useImageUpload({
     formData.append('type', type);
 
     try {
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/upload', {
         method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
         body: formData
       });
 
