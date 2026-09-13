@@ -21,6 +21,32 @@ const SOCIAL_ICONS = {
   github: Github,
 };
 
+const SOCIAL_LABELS: Record<string, string> = {
+  twitter: 'Twitter',
+  linkedin: 'LinkedIn',
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  youtube: 'YouTube',
+  github: 'GitHub',
+};
+
+// Icon size (px) and matching label text class per size option
+const SOCIAL_SIZES = {
+  sm: { icon: 16, text: 'text-xs' },
+  md: { icon: 20, text: 'text-sm' },
+  lg: { icon: 24, text: 'text-base' },
+  xl: { icon: 32, text: 'text-lg' },
+};
+
+// Links saved without a scheme (e.g. "instagram.com/x") are treated by the browser
+// as relative paths and resolve against the site's own domain — prepend https://.
+function toExternalUrl(url: string): string {
+  const trimmed = url.trim();
+  if (!trimmed) return '';
+  if (/^[a-z][a-z0-9+.-]*:/i.test(trimmed) || trimmed.startsWith('//')) return trimmed;
+  return `https://${trimmed.replace(/^\/+/, '')}`;
+}
+
 interface FooterColumn {
   title: string;
   links: {
@@ -44,6 +70,8 @@ interface FooterData {
     show?: boolean;
     copyrightText?: string;
     showSocialLinks?: boolean;
+    socialIconSize?: keyof typeof SOCIAL_SIZES;
+    socialDisplay?: 'icon' | 'icon-label';
     socialLinks?: {
       platform: string;
       url: string;
@@ -230,21 +258,27 @@ export function Footer() {
             <p className="text-slate-500 dark:text-neutral-400">{copyrightText}</p>
 
             {footerData.bottomBar.showSocialLinks && footerData.bottomBar.socialLinks && footerData.bottomBar.socialLinks.length > 0 && (
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-4">
                 {footerData.bottomBar.socialLinks.map((social, idx) => {
                   const Icon = SOCIAL_ICONS[social.platform as keyof typeof SOCIAL_ICONS];
-                  return Icon ? (
+                  const href = toExternalUrl(social.url || '');
+                  if (!Icon || !href) return null;
+                  const size = SOCIAL_SIZES[footerData.bottomBar?.socialIconSize ?? 'md'] ?? SOCIAL_SIZES.md;
+                  const showLabel = footerData.bottomBar?.socialDisplay === 'icon-label';
+                  const label = SOCIAL_LABELS[social.platform] || social.platform;
+                  return (
                     <a
                       key={idx}
-                      href={social.url}
+                      href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors"
-                      aria-label={social.platform}
+                      className={`inline-flex items-center gap-2 ${size.text} text-slate-400 hover:text-slate-700 dark:hover:text-white transition-colors`}
+                      aria-label={label}
                     >
-                      <Icon className="h-4 w-4" />
+                      <Icon size={size.icon} className="shrink-0" />
+                      {showLabel && <span>{label}</span>}
                     </a>
-                  ) : null;
+                  );
                 })}
               </div>
             )}

@@ -42,6 +42,8 @@ interface FooterData {
     show: boolean;
     copyrightText: string;
     showSocialLinks: boolean;
+    socialIconSize?: 'sm' | 'md' | 'lg' | 'xl';
+    socialDisplay?: 'icon' | 'icon-label';
     socialLinks: SocialLink[];
   };
   style: {
@@ -99,6 +101,8 @@ const defaultFooterData: FooterData = {
     show: true,
     copyrightText: '© {year} Company. All rights reserved.',
     showSocialLinks: true,
+    socialIconSize: 'md',
+    socialDisplay: 'icon',
     socialLinks: []
   },
   style: {
@@ -531,6 +535,38 @@ export default function FooterEditorPage() {
                   <span className="text-sm">Show</span>
                 </label>
               </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Icon Size</label>
+                  <select
+                    value={footerData.bottomBar.socialIconSize ?? 'md'}
+                    onChange={(e) => setFooterData({
+                      ...footerData,
+                      bottomBar: { ...footerData.bottomBar, socialIconSize: e.target.value as FooterData['bottomBar']['socialIconSize'] }
+                    })}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                  >
+                    <option value="sm">Small (16px)</option>
+                    <option value="md">Medium (20px)</option>
+                    <option value="lg">Large (24px)</option>
+                    <option value="xl">Extra Large (32px)</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Display</label>
+                  <select
+                    value={footerData.bottomBar.socialDisplay ?? 'icon'}
+                    onChange={(e) => setFooterData({
+                      ...footerData,
+                      bottomBar: { ...footerData.bottomBar, socialDisplay: e.target.value as FooterData['bottomBar']['socialDisplay'] }
+                    })}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+                  >
+                    <option value="icon">Icon only</option>
+                    <option value="icon-label">Icon + name</option>
+                  </select>
+                </div>
+              </div>
               <div className="space-y-2">
                 {footerData.bottomBar.socialLinks.map((social, idx) => (
                   <div key={idx} className="flex items-center gap-2">
@@ -544,10 +580,17 @@ export default function FooterEditorPage() {
                       ))}
                     </select>
                     <input
-                      type="url"
+                      type="text"
+                      inputMode="url"
                       value={social.url}
                       onChange={(e) => updateSocialLink(idx, { url: e.target.value })}
-                      placeholder="https://..."
+                      onBlur={(e) => {
+                        const url = e.target.value.trim();
+                        if (url && !/^[a-z][a-z0-9+.-]*:/i.test(url) && !url.startsWith('//')) {
+                          updateSocialLink(idx, { url: `https://${url.replace(/^\/+/, '')}` });
+                        }
+                      }}
+                      placeholder="https://instagram.com/yourpage"
                       className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
                     />
                     <button
