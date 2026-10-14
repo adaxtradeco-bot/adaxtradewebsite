@@ -300,6 +300,81 @@ describe('HomeCoverSection', () => {
     expect(container.querySelector('video')?.getAttribute('autoplay')).not.toBeNull();
   });
 
+  describe('contentImage', () => {
+    const contentImage = {
+      enabled: true,
+      url: 'https://picsum.photos/seed/side/800/600',
+      alt: 'Industry and trade',
+    };
+    const findImage = (container: HTMLElement) =>
+      container.querySelector('img[alt="Industry and trade"]') as HTMLImageElement | null;
+
+    it('renders the image beside the text on the right by default', () => {
+      const { container } = render(<HomeCoverSection data={{ ...baseData, contentImage }} isBuilder />);
+      const img = findImage(container);
+      expect(img).toBeTruthy();
+      expect(img?.src).toContain('seed/side');
+      const row = img!.parentElement!.parentElement as HTMLElement;
+      expect(row.className).toContain('md:flex-row');
+      expect(row.className).not.toContain('md:flex-row-reverse');
+    });
+
+    it('flips the row when position is "left"', () => {
+      const { container } = render(
+        <HomeCoverSection data={{ ...baseData, contentImage: { ...contentImage, position: 'left' } }} isBuilder />
+      );
+      const row = findImage(container)!.parentElement!.parentElement as HTMLElement;
+      expect(row.className).toContain('md:flex-row-reverse');
+    });
+
+    it('clamps widthPercent into 20-60 and exposes it as a CSS variable', () => {
+      const widthOf = (widthPercent: number) => {
+        const { container, unmount } = render(
+          <HomeCoverSection data={{ ...baseData, contentImage: { ...contentImage, widthPercent } }} isBuilder />
+        );
+        const row = findImage(container)!.parentElement!.parentElement as HTMLElement;
+        const width = row.style.getPropertyValue('--cover-image-w');
+        unmount();
+        return width;
+      };
+      expect(widthOf(45)).toBe('45%');
+      expect(widthOf(5)).toBe('20%');
+      expect(widthOf(95)).toBe('60%');
+    });
+
+    it('uses object-contain by default and a rounded 4:3 object-cover frame for fit "cover"', () => {
+      const contain = render(<HomeCoverSection data={{ ...baseData, contentImage }} isBuilder />);
+      expect(findImage(contain.container)!.className).toContain('object-contain');
+      contain.unmount();
+
+      const cover = render(
+        <HomeCoverSection data={{ ...baseData, contentImage: { ...contentImage, fit: 'cover' } }} isBuilder />
+      );
+      const cls = findImage(cover.container)!.className;
+      expect(cls).toContain('object-cover');
+      expect(cls).toContain('rounded-2xl');
+    });
+
+    it('renders no content image when disabled or when the url is empty', () => {
+      const disabled = render(
+        <HomeCoverSection data={{ ...baseData, contentImage: { ...contentImage, enabled: false } }} isBuilder />
+      );
+      expect(findImage(disabled.container)).toBeNull();
+      disabled.unmount();
+
+      const noUrl = render(
+        <HomeCoverSection data={{ ...baseData, contentImage: { enabled: true, url: '' } }} isBuilder />
+      );
+      expect(noUrl.container.querySelectorAll('img')).toHaveLength(1); // just the background media
+    });
+
+    it('keeps the text and CTA rendering alongside the image', () => {
+      const { getByText } = render(<HomeCoverSection data={{ ...baseData, contentImage }} isBuilder />);
+      expect(getByText(baseData.tagline)).toBeTruthy();
+      expect(getByText('Discover more')).toBeTruthy();
+    });
+  });
+
   it('renders tagline, body lines, and CTA', () => {
     const { getByText } = render(<HomeCoverSection data={baseData} isBuilder />);
     expect(getByText(baseData.tagline)).toBeTruthy();

@@ -54,4 +54,39 @@ describe('HomeCoverPropertyPanel', () => {
       data: expect.objectContaining({ cta: expect.objectContaining({ enabled: true }) }),
     });
   });
+
+  it('toggling "Show Image Beside Text" creates data.contentImage without dropping other fields', () => {
+    const onUpdate = vi.fn();
+    const { getByText } = render(<HomeCoverPropertyPanel section={baseSection} onUpdate={onUpdate} />);
+
+    const toggle = getByText('Show Image Beside Text').parentElement?.querySelector('button') as HTMLElement;
+    fireEvent.click(toggle);
+
+    expect(onUpdate).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        tagline: 'Original tagline',
+        contentImage: expect.objectContaining({ enabled: true }),
+      }),
+    });
+  });
+
+  it('shows image controls only when contentImage is enabled and updates its position', () => {
+    const onUpdate = vi.fn();
+    const off = render(<HomeCoverPropertyPanel section={baseSection} onUpdate={onUpdate} />);
+    expect(off.queryByText('Image Position')).toBeNull();
+    off.unmount();
+
+    const section: SectionConfig = {
+      ...baseSection,
+      data: { ...baseSection.data, contentImage: { enabled: true, url: 'https://example.com/a.png', position: 'right' } },
+    };
+    const { getByDisplayValue } = render(<HomeCoverPropertyPanel section={section} onUpdate={onUpdate} />);
+    fireEvent.change(getByDisplayValue('Right of the text'), { target: { value: 'left' } });
+
+    expect(onUpdate).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        contentImage: expect.objectContaining({ enabled: true, url: 'https://example.com/a.png', position: 'left' }),
+      }),
+    });
+  });
 });

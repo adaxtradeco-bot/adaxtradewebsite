@@ -43,6 +43,19 @@ export interface HomeCoverCta {
   enabled: boolean;
 }
 
+/**
+ * Optional image shown beside the text block (tagline / body / CTA), e.g. text on
+ * the right and a picture on the left. On mobile the image stacks under the text.
+ */
+export interface HomeCoverContentImage {
+  enabled: boolean;
+  url?: string;
+  alt?: string;
+  position?: 'left' | 'right'; // which side the image sits on at md+, default 'right'
+  widthPercent?: number; // share of the content row the image takes at md+ (20-60), default 40
+  fit?: 'contain' | 'cover'; // 'contain' keeps logos/transparent PNGs uncropped, default 'contain'
+}
+
 export interface HomeCoverData {
   mediaType: 'image' | 'video';
   imageUrl?: string;
@@ -61,6 +74,7 @@ export interface HomeCoverData {
   tagline: string;
   body?: string; // \n separated lines, rendered as stacked lines
   cta?: HomeCoverCta;
+  contentImage?: HomeCoverContentImage;
 
   opening?: HomeCoverOpening;
 
@@ -124,6 +138,7 @@ export default function HomeCoverSection({ data, style, isBuilder = false }: Pro
     tagline,
     body,
     cta,
+    contentImage,
     opening,
     theme = 'dark',
     showScrollCue = true,
@@ -339,7 +354,7 @@ export default function HomeCoverSection({ data, style, isBuilder = false }: Pro
 
         {/* Content */}
         {(() => {
-          const content = (
+          const textBlock = (
             <>
               <p className="text-sm md:text-base font-medium tracking-wide uppercase opacity-80 mb-3">{tagline}</p>
               {body && (
@@ -364,6 +379,36 @@ export default function HomeCoverSection({ data, style, isBuilder = false }: Pro
               )}
             </>
           );
+
+          // Text and image sit side by side from md up; below that the image stacks
+          // under the text. The image is capped in height so it never overflows the
+          // pinned 100vh frame in pin-reveal mode.
+          const content =
+            contentImage?.enabled && contentImage.url ? (
+              <div
+                className={`flex flex-col gap-8 md:items-center md:gap-12 ${
+                  contentImage.position === 'left' ? 'md:flex-row-reverse' : 'md:flex-row'
+                }`}
+                style={
+                  {
+                    '--cover-image-w': `${clamp(contentImage.widthPercent ?? 40, 20, 60)}%`,
+                  } as React.CSSProperties
+                }
+              >
+                <div className="md:flex-1 min-w-0">{textBlock}</div>
+                <div className="w-full md:w-auto md:basis-[var(--cover-image-w)] md:shrink-0">
+                  <img
+                    src={contentImage.url}
+                    alt={contentImage.alt ?? ''}
+                    className={`w-full max-h-[50vh] md:max-h-[60vh] ${
+                      contentImage.fit === 'cover' ? 'aspect-[4/3] object-cover rounded-2xl' : 'object-contain'
+                    }`}
+                  />
+                </div>
+              </div>
+            ) : (
+              textBlock
+            );
 
           if (motionDisabled) {
             return (

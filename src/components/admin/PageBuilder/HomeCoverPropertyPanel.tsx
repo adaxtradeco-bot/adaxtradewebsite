@@ -102,6 +102,7 @@ export function HomeCoverPropertyPanel({ section, onUpdate }: Props) {
   const scrollEffect = data.scrollEffect ?? 'parallax';
   const cta = data.cta ?? { text: '', href: '', enabled: false };
   const opening = data.opening ?? { enabled: false };
+  const contentImage = data.contentImage ?? { enabled: false };
 
   return (
     <div className="space-y-4">
@@ -261,6 +262,69 @@ export function HomeCoverPropertyPanel({ section, onUpdate }: Props) {
                   placeholder="https://..."
                 />
               </Field>
+            </>
+          )}
+        </div>
+
+        <div className="p-2 border border-gray-200 dark:border-gray-600 rounded-lg space-y-2">
+          <Field label="Show Image Beside Text">
+            <Toggle value={contentImage.enabled === true} onChange={(v) => updateNested('contentImage', { enabled: v })} />
+          </Field>
+          {contentImage.enabled && (
+            <>
+              <Field label="Image">
+                <MediaUpload
+                  src={contentImage.url ?? ''}
+                  width={200}
+                  height={130}
+                  objectFit="contain"
+                  onMediaChange={(src) => updateNested('contentImage', { url: src })}
+                  uploadButtonText="Upload Image"
+                  acceptedTypes="image/*"
+                />
+              </Field>
+              <Field label="Alt Text">
+                <input
+                  className={inputCls}
+                  value={contentImage.alt ?? ''}
+                  onChange={(e) => updateNested('contentImage', { alt: e.target.value })}
+                  placeholder="Describe the image"
+                />
+              </Field>
+              <Field label="Image Position">
+                <select
+                  className={inputCls}
+                  value={contentImage.position ?? 'right'}
+                  onChange={(e) => updateNested('contentImage', { position: e.target.value })}
+                >
+                  <option value="right">Right of the text</option>
+                  <option value="left">Left of the text</option>
+                </select>
+              </Field>
+              <Field label={`Image Width — ${contentImage.widthPercent ?? 40}%`}>
+                <input
+                  type="range"
+                  min={20}
+                  max={60}
+                  step={5}
+                  value={contentImage.widthPercent ?? 40}
+                  onChange={(e) => updateNested('contentImage', { widthPercent: parseInt(e.target.value, 10) })}
+                  className="w-full"
+                />
+              </Field>
+              <Field label="Image Fit">
+                <select
+                  className={inputCls}
+                  value={contentImage.fit ?? 'contain'}
+                  onChange={(e) => updateNested('contentImage', { fit: e.target.value })}
+                >
+                  <option value="contain">Contain — show whole image (logos, PNGs)</option>
+                  <option value="cover">Cover — fill a 4:3 frame with rounded corners</option>
+                </select>
+              </Field>
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Side by side on desktop; on mobile the image sits under the text.
+              </p>
             </>
           )}
         </div>
