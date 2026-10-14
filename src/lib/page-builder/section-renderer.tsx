@@ -132,6 +132,7 @@ import TopStripSection from '@/components/builder-sections/TopStripSection';
 import { ContactFormSection } from '@/components/builder-sections/ContactFormSection';
 import HomeCoverSection from '@/components/builder-sections/HomeCoverSection';
 import HomeInnovationSection from '@/components/builder-sections/HomeInnovationSection';
+import IntelligenceScrollStorySection from '@/components/builder-sections/IntelligenceScrollStorySection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -996,6 +997,14 @@ export function SectionRenderer({
         case 'home-innovation':
           return (
             <HomeInnovationSection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'intelligence-scroll-story':
+          return (
+            <IntelligenceScrollStorySection
               data={(section as any).data}
               style={(section as any).style}
               isBuilder={isBuilder}

@@ -48,6 +48,7 @@ import { FeaturesGridNWMPropertyPanel } from './FeaturesGridNWMPropertyPanel';
 import { TopStripPropertyPanel } from './TopStripPropertyPanel';
 import { HomeCoverPropertyPanel } from './HomeCoverPropertyPanel';
 import { HomeInnovationPropertyPanel } from './HomeInnovationPropertyPanel';
+import { IntelligenceScrollStoryPropertyPanel } from './IntelligenceScrollStoryPropertyPanel';
 import { WorkflowSectionPropertyPanel } from './WorkflowSectionPropertyPanel';
 
 interface PropertyPanelProps {
@@ -567,7 +568,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     'hero-slider', 'hero-slider-nwm', 'metro-grid',
     'rotating-tabs', 'analytics-bento-grid', 'logo-cloud', 'integration-marquee',
     'form-builder-templates', 'form-builder-mobile-voice', 'flow-builder', 'automation-events',
-    'features-grid-nwm', 'top-strip', 'workflow', 'home-cover', 'home-innovation'
+    'features-grid-nwm', 'top-strip', 'workflow', 'home-cover', 'home-innovation',
+    'intelligence-scroll-story'
   ].includes(section.type);
 
   const renderSectionSpecificFields = () => {
@@ -654,6 +656,8 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <HomeCoverPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'home-innovation':
         return <HomeInnovationPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'intelligence-scroll-story':
+        return <IntelligenceScrollStoryPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'workflow':
         return <WorkflowSectionPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'hero-slider':
