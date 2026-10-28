@@ -133,6 +133,7 @@ import { ContactFormSection } from '@/components/builder-sections/ContactFormSec
 import HomeCoverSection from '@/components/builder-sections/HomeCoverSection';
 import HomeInnovationSection from '@/components/builder-sections/HomeInnovationSection';
 import IntelligenceScrollStorySection from '@/components/builder-sections/IntelligenceScrollStorySection';
+import SplitGatewaySection from '@/components/builder-sections/SplitGatewaySection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -1005,6 +1006,14 @@ export function SectionRenderer({
         case 'intelligence-scroll-story':
           return (
             <IntelligenceScrollStorySection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'split-gateway':
+          return (
+            <SplitGatewaySection
               data={(section as any).data}
               style={(section as any).style}
               isBuilder={isBuilder}
