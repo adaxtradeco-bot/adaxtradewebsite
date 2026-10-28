@@ -497,7 +497,7 @@ export default function WhyAutomateWithUsSection({
             >
               {titleHighlight}
             </em>
-            <br />working for you
+          
           </h2>
 
           <p className="text-[16px] font-light leading-[1.7] text-slate-500 dark:text-[#8A8FA8] max-w-[560px] mx-auto">
