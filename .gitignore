@@ -77,7 +77,6 @@ test-*.html
 update-db.js
 add_homepage_field.sql
 HERO_SLIDES_DATA.ts
-middleware.ts
 update-db-prisma.ts
 clean-test-settings.js
 
@@ -165,6 +164,3 @@ add-*.js
 *.tsbuildinfo
 next-env.d.ts
 prisma.config.ts
-
-# Middleware (if not used)
-middleware.ts
