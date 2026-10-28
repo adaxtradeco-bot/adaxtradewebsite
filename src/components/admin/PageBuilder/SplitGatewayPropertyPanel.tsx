@@ -522,14 +522,14 @@ export function SplitGatewayPropertyPanel({ section, onUpdate }: Props) {
         {tog('Fill the screen (header + section = one full page)', ['layout', 'fillScreen'])}
         {n.layout.fillScreen ? (
           <>
-            {num('Header height to subtract', ['layout', 'headerHeight'], 0, 300, 2, 'px')}
+            {num('Header height (fallback only)', ['layout', 'headerHeight'], 0, 300, 2, 'px')}
             {sel('Content position when the section is taller', ['layout', 'verticalAlign'], [
               { value: 'start', label: 'Top' },
               { value: 'center', label: 'Center' },
               { value: 'end', label: 'Bottom' },
             ])}
             <p className="text-[11px] text-gray-400">
-              Only a minimum height: if the cards need more room the section grows, nothing is ever cut. Use 0 for a floating header.
+              Only a minimum height: if the cards need more room the section grows, nothing is ever cut. The header height is measured live from the site header (0 while it floats); the value above is just a fallback until it is known.
             </p>
           </>
         ) : (

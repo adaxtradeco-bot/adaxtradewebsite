@@ -139,7 +139,8 @@ describe('SplitGatewaySection spacing and screen fill', () => {
 
   it('fill screen is only a minimum height (header subtracted) and keeps the cards uncut', () => {
     const out = css({ layout: { fillScreen: true, headerHeight: 120, verticalAlign: 'center' } });
-    expect(out).toContain('min-height:calc(100svh - 120px)');
+    expect(out).toContain('min-height:calc(100svh - var(--site-header-h, 120px))');
+    expect(out).toContain('min-height:calc(100vh - var(--site-header-h, 120px))');
     expect(out).toContain('justify-content:center');
     expect(out).not.toMatch(/\sheight:calc\(100/);
     expect(out).not.toContain('max-height');

@@ -12,6 +12,7 @@ import {
   type GatewayCard,
   type GatewayMedia,
 } from '@/lib/page-builder/split-gateway';
+import { HEADER_HEIGHT_VAR } from '@/lib/hooks/useHeaderHeightVar';
 
 export interface SplitGatewaySectionProps {
   data: SplitGatewayInput | Record<string, any>;
@@ -33,7 +34,8 @@ function buildCss(scope: string, d: SplitGatewayData, isBuilder: boolean): strin
   const padTop = Math.max(24, L.paddingTop);
   const padBottom = Math.max(24, L.paddingBottom);
   const headerH = Math.max(0, L.headerHeight);
-  const minH = fill ? `min-height:calc(100vh - ${headerH}px);min-height:calc(100svh - ${headerH}px);` : `min-height:${L.minHeight}px;`;
+  const hv = `var(${HEADER_HEIGHT_VAR}, ${headerH}px)`; // live header height; the manual value is only the fallback
+  const minH = fill ? `min-height:calc(100vh - ${hv});min-height:calc(100svh - ${hv});` : `min-height:${L.minHeight}px;`;
 
   const cardHover: Record<string, string> = {
     none: '',

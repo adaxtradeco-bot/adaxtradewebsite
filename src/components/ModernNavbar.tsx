@@ -21,6 +21,7 @@ import { useHeaderVisibility } from './HeaderVisibilityProvider';
 import { useHeaderScrollState } from '@/lib/hooks/useHeaderScrollState';
 import { usePrefersReducedMotion } from '@/lib/hooks/useScrollParallax';
 import { resolveEffectiveHeaderMode, resolveHeaderChrome } from '@/lib/header/resolveHeaderState';
+import { useHeaderHeightVar } from '@/lib/hooks/useHeaderHeightVar';
 
 interface IconConfig {
   name: string;
@@ -224,6 +225,10 @@ const CloseIcon = () => (
   // keeps the original space-reserving `sticky` behavior untouched (Requirement 1.7).
   const navPositionClass = effectiveHeaderMode === 'floating' ? 'fixed' : 'sticky';
 
+  // Publishes the live header height as --site-header-h (0 while floating) for sections that opt in.
+  const navRef = useRef<HTMLElement>(null);
+  useHeaderHeightVar(navRef, effectiveHeaderMode === 'floating');
+
   const backdropStyle: React.CSSProperties = {
     transitionProperty: 'background, opacity, backdrop-filter, box-shadow, border-color',
     transitionDuration: `${transitionMs}ms`,
@@ -270,6 +275,7 @@ const CloseIcon = () => (
   return (
     <>
       <nav
+        ref={navRef}
         className={`${navPositionClass} top-0 left-0 right-0 z-[10000] w-full ${activeDropdown ? 'nav-active-dropdown' : ''}`}
         style={navStyle}
       >

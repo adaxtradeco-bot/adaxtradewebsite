@@ -153,7 +153,10 @@ export interface GatewayLayout {
    * is ever clipped.
    */
   fillScreen: boolean;
-  /** Height of the site header in px, subtracted when `fillScreen` is on (0 for a floating header). */
+  /**
+   * Fallback header height in px, used only until the site publishes the live value
+   * (`--site-header-h`, measured from the real header; 0 while it floats).
+   */
   headerHeight: number;
   /** Where the content sits when the section is taller than it needs to be. */
   verticalAlign: GatewayAlign;
