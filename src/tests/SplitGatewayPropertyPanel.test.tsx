@@ -67,6 +67,17 @@ describe('SplitGatewayPropertyPanel', () => {
     expect(onUpdate.mock.calls.at(-1)![0].data.motion.mediaHover).toBe('grayscale');
   });
 
+  it('toggles fill-screen and writes the header height and spacing values', () => {
+    const onUpdate = vi.fn();
+    const { getByText, getByLabelText } = render(<SplitGatewayPropertyPanel section={section} onUpdate={onUpdate} />);
+    fireEvent.click(getByText('Layout & sizes'));
+    fireEvent.click(getByLabelText('Fill the screen (header + section = one full page)'));
+    expect(onUpdate.mock.calls.at(-1)![0].data.layout.fillScreen).toBe(true);
+    fireEvent.click(getByText('Card spacing'));
+    fireEvent.change(getByLabelText('Title → description value'), { target: { value: '18' } });
+    expect(onUpdate.mock.calls.at(-1)![0].data.spacing.titleGap).toBe(18);
+  });
+
   it('switches the background type and shows the matching controls', () => {
     const onUpdate = vi.fn();
     const { getByDisplayValue } = render(<SplitGatewayPropertyPanel section={section} onUpdate={onUpdate} />);

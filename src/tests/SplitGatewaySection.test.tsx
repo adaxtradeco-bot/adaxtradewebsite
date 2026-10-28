@@ -111,6 +111,60 @@ describe('SplitGatewaySection', () => {
   });
 });
 
+describe('SplitGatewaySection spacing and screen fill', () => {
+  beforeEach(() => {
+    vi.stubGlobal('IntersectionObserver', FakeObserver as any);
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+  const css = (props: any, builder = false) => {
+    const { container } = render(<SplitGatewaySection data={props} isBuilder={builder} />);
+    return container.querySelector('style')!.innerHTML;
+  };
+
+  it('uses layout padding as the only vertical padding (64px default, not the style class)', () => {
+    const { container } = render(<SplitGatewaySection data={{}} style={{ padding: 'py-32' }} />);
+    expect(container.querySelector('section')!.className).not.toContain('py-32');
+    expect(container.querySelector('style')!.innerHTML).toContain('padding-top:64px;padding-bottom:64px');
+  });
+
+  it('never lets the padding drop below 24px, and shrinks it on mobile', () => {
+    const out = css({ layout: { paddingTop: 0, paddingBottom: 4 } });
+    expect(out).toContain('padding-top:24px;padding-bottom:24px');
+    const big = css({ layout: { paddingTop: 200, paddingBottom: 200 } });
+    expect(big).toContain('padding-top:200px;padding-bottom:200px');
+    expect(big).toContain('padding-top:48px;padding-bottom:48px'); // mobile cap
+  });
+
+  it('fill screen is only a minimum height (header subtracted) and keeps the cards uncut', () => {
+    const out = css({ layout: { fillScreen: true, headerHeight: 120, verticalAlign: 'center' } });
+    expect(out).toContain('min-height:calc(100svh - 120px)');
+    expect(out).toContain('justify-content:center');
+    expect(out).not.toMatch(/\sheight:calc\(100/);
+    expect(out).not.toContain('max-height');
+  });
+
+  it('uses the fixed minHeight when fill screen is off, and ignores fill screen inside the builder', () => {
+    expect(css({ layout: { fillScreen: false, minHeight: 500 } })).toContain('min-height:500px');
+    expect(css({ layout: { fillScreen: true, minHeight: 500 } }, true)).toContain('min-height:500px');
+  });
+
+  it('applies the configurable line heights and gaps', () => {
+    const out = css({
+      heading: { lineHeight: 1.8, signatureGap: 40 },
+      typography: { titleLineHeight: 1.6 },
+      spacing: { mediaGap: 36, badgeGap: 6, titleGap: 14, descGap: 30, servicesGap: 18 },
+    });
+    expect(out).toContain('line-height:1.8');
+    expect(out).toContain('.sg-signature{margin-top:40px');
+    expect(out).toContain('margin:0 0 14px;font-size:34px;line-height:1.6');
+    expect(out).toContain('.sg-desc{margin:0 0 30px');
+    expect(out).toContain('.sg-svcs{margin:0 0 18px');
+    expect(out).toContain('padding:36px 18px 12px');
+  });
+});
+
 describe('split-gateway registration', () => {
   it('is in the registry once, accepted by the schema, and rendered by SectionRenderer', () => {
     expect(SECTION_TEMPLATES.filter((t) => t.type === 'split-gateway')).toHaveLength(1);

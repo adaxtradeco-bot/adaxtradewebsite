@@ -111,6 +111,10 @@ export interface GatewayHeading {
   titleSize: number;
   signatureSize: number;
   titleWeight: number;
+  /** Line height of the title lines (e.g. 1.5). */
+  lineHeight: number;
+  /** Space between the title and the signature line, in px. */
+  signatureGap: number;
   /** Soft shadow so text stays readable straight on a photo or video. */
   textShadow: boolean;
   /** Optional panel behind the heading. */
@@ -134,15 +138,31 @@ export interface GatewayLayout {
   cardRadius: number;
   mediaRadius: number;
   textAlign: GatewayAlign;
-  /** Extra space above/below the whole section, in px. */
+  /**
+   * Space above/below the content inside the section, in px. This is the ONE vertical-padding
+   * control of the section (the section's own `style.padding` class is not applied), with a
+   * 24px floor so the cards never touch the top/bottom edge.
+   */
   paddingTop: number;
   paddingBottom: number;
+  /** Minimum section height in px (ignored while `fillScreen` is on). */
   minHeight: number;
+  /**
+   * Make the section at least as tall as the screen minus the header, so header + section fill
+   * the page. It is only a minimum: when the cards are taller the section simply grows — nothing
+   * is ever clipped.
+   */
+  fillScreen: boolean;
+  /** Height of the site header in px, subtracted when `fillScreen` is on (0 for a floating header). */
+  headerHeight: number;
+  /** Where the content sits when the section is taller than it needs to be. */
+  verticalAlign: GatewayAlign;
 }
 
 export interface GatewayTypography {
   titleSize: number;
   titleWeight: number;
+  titleLineHeight: number;
   descSize: number;
   descLineHeight: number;
   serviceSize: number;
@@ -167,6 +187,20 @@ export interface GatewayColors {
   ctaBorder: string;
   ctaHoverBackground: string;
   ctaHoverText: string;
+}
+
+/** Vertical rhythm inside a card, in px. */
+export interface GatewaySpacing {
+  /** Media → first text (badge/title). */
+  mediaGap: number;
+  /** Badge → title. */
+  badgeGap: number;
+  /** Title → description. */
+  titleGap: number;
+  /** Description → services. */
+  descGap: number;
+  /** Services → button. */
+  servicesGap: number;
 }
 
 export interface GatewayServicesStyle {
@@ -202,6 +236,7 @@ export interface SplitGatewayData {
   layout: GatewayLayout;
   typography: GatewayTypography;
   colors: GatewayColors;
+  spacing: GatewaySpacing;
   services: GatewayServicesStyle;
   motion: GatewayMotion;
 }
@@ -276,6 +311,8 @@ export const DEFAULT_GATEWAY_HEADING: GatewayHeading = {
   titleSize: 56,
   signatureSize: 19,
   titleWeight: 900,
+  lineHeight: 1.5,
+  signatureGap: 24,
   textShadow: true,
   box: { enabled: false, background: '#07142C', borderColor: '#D4AF6A', radius: 24 },
   maxWidth: 900,
@@ -294,14 +331,18 @@ export const DEFAULT_GATEWAY_LAYOUT: GatewayLayout = {
   cardRadius: 28,
   mediaRadius: 18,
   textAlign: 'start',
-  paddingTop: 0,
-  paddingBottom: 0,
+  paddingTop: 64,
+  paddingBottom: 64,
   minHeight: 0,
+  fillScreen: false,
+  headerHeight: 110,
+  verticalAlign: 'center',
 };
 
 export const DEFAULT_GATEWAY_TYPOGRAPHY: GatewayTypography = {
   titleSize: 34,
   titleWeight: 900,
+  titleLineHeight: 1.3,
   descSize: 15,
   descLineHeight: 2,
   serviceSize: 14,
@@ -325,6 +366,14 @@ export const DEFAULT_GATEWAY_COLORS: GatewayColors = {
   ctaBorder: '#D4AF6A',
   ctaHoverBackground: '#E2C285',
   ctaHoverText: '#000000',
+};
+
+export const DEFAULT_GATEWAY_SPACING: GatewaySpacing = {
+  mediaGap: 28,
+  badgeGap: 12,
+  titleGap: 10,
+  descGap: 24,
+  servicesGap: 22,
 };
 
 export const DEFAULT_GATEWAY_SERVICES: GatewayServicesStyle = {
@@ -356,6 +405,7 @@ export const DEFAULT_SPLIT_GATEWAY_DATA: SplitGatewayData = {
   layout: DEFAULT_GATEWAY_LAYOUT,
   typography: DEFAULT_GATEWAY_TYPOGRAPHY,
   colors: DEFAULT_GATEWAY_COLORS,
+  spacing: DEFAULT_GATEWAY_SPACING,
   services: DEFAULT_GATEWAY_SERVICES,
   motion: DEFAULT_GATEWAY_MOTION,
 };
@@ -403,6 +453,7 @@ export function normalizeGatewayData(raw: unknown): SplitGatewayData {
     layout: mergeDeep(DEFAULT_GATEWAY_LAYOUT, r.layout),
     typography: mergeDeep(DEFAULT_GATEWAY_TYPOGRAPHY, r.typography),
     colors: mergeDeep(DEFAULT_GATEWAY_COLORS, r.colors),
+    spacing: mergeDeep(DEFAULT_GATEWAY_SPACING, r.spacing),
     services: mergeDeep(DEFAULT_GATEWAY_SERVICES, r.services),
     motion: mergeDeep(DEFAULT_GATEWAY_MOTION, r.motion),
     cards: cards.map((c: unknown, i: number) => {

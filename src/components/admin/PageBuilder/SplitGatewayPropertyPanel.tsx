@@ -319,6 +319,8 @@ export function SplitGatewayPropertyPanel({ section, onUpdate }: Props) {
             ])}
             {num('Title size', ['heading', 'titleSize'], 20, 96, 1, 'px')}
             {num('Title weight', ['heading', 'titleWeight'], 300, 900, 100)}
+            {num('Title line height', ['heading', 'lineHeight'], 1, 2.4, 0.05)}
+            {num('Gap: title → signature', ['heading', 'signatureGap'], 0, 120, 2, 'px')}
             {num('Signature size', ['heading', 'signatureSize'], 12, 40, 1, 'px')}
             {num('Max width', ['heading', 'maxWidth'], 320, 1400, 20, 'px')}
             {num('Space below', ['heading', 'marginBottom'], 0, 200, 4, 'px')}
@@ -512,20 +514,48 @@ export function SplitGatewayPropertyPanel({ section, onUpdate }: Props) {
           { value: 'center', label: 'Center' },
           { value: 'end', label: 'End' },
         ])}
-        {num('Extra space above', ['layout', 'paddingTop'], 0, 400, 4, 'px')}
-        {num('Extra space below', ['layout', 'paddingBottom'], 0, 400, 4, 'px')}
-        {num('Minimum section height', ['layout', 'minHeight'], 0, 1400, 10, 'px')}
+        {num('Space above the content', ['layout', 'paddingTop'], 24, 400, 4, 'px')}
+        {num('Space below the content', ['layout', 'paddingBottom'], 24, 400, 4, 'px')}
+        <p className="text-[11px] text-gray-400">
+          This is the section's only vertical padding (minimum 24px, so cards never touch the page edge). It overrides the Section Style padding.
+        </p>
+        {tog('Fill the screen (header + section = one full page)', ['layout', 'fillScreen'])}
+        {n.layout.fillScreen ? (
+          <>
+            {num('Header height to subtract', ['layout', 'headerHeight'], 0, 300, 2, 'px')}
+            {sel('Content position when the section is taller', ['layout', 'verticalAlign'], [
+              { value: 'start', label: 'Top' },
+              { value: 'center', label: 'Center' },
+              { value: 'end', label: 'Bottom' },
+            ])}
+            <p className="text-[11px] text-gray-400">
+              Only a minimum height: if the cards need more room the section grows, nothing is ever cut. Use 0 for a floating header.
+            </p>
+          </>
+        ) : (
+          num('Minimum section height', ['layout', 'minHeight'], 0, 1400, 10, 'px')
+        )}
       </Group>
 
       {/* ── Typography ── */}
       <Group title="Text sizes">
         {num('Card title size', ['typography', 'titleSize'], 14, 72, 1, 'px')}
         {num('Card title weight', ['typography', 'titleWeight'], 300, 900, 100)}
+        {num('Card title line height', ['typography', 'titleLineHeight'], 1, 2.2, 0.05)}
         {num('Description size', ['typography', 'descSize'], 11, 28, 1, 'px')}
         {num('Description line height', ['typography', 'descLineHeight'], 1.2, 3, 0.1)}
         {num('Service text size', ['typography', 'serviceSize'], 10, 24, 1, 'px')}
         {num('Badge size', ['typography', 'badgeSize'], 9, 20, 1, 'px')}
         {num('Button text size', ['typography', 'ctaSize'], 11, 24, 1, 'px')}
+      </Group>
+
+      {/* ── Card spacing ── */}
+      <Group title="Card spacing">
+        {num('Media → text', ['spacing', 'mediaGap'], 0, 80, 2, 'px')}
+        {num('Badge → title', ['spacing', 'badgeGap'], 0, 40, 1, 'px')}
+        {num('Title → description', ['spacing', 'titleGap'], 0, 60, 1, 'px')}
+        {num('Description → services', ['spacing', 'descGap'], 0, 80, 2, 'px')}
+        {num('Services → button', ['spacing', 'servicesGap'], 0, 80, 2, 'px')}
       </Group>
 
       {/* ── Colours & card style ── */}

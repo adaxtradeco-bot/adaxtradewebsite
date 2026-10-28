@@ -21,13 +21,19 @@ export interface SplitGatewaySectionProps {
 
 /* ─── Scoped stylesheet (class names prefixed `sg-`, every colour/size from data via CSS variables) ─── */
 function buildCss(scope: string, d: SplitGatewayData, isBuilder: boolean): string {
-  const { layout: L, typography: T, colors: C, motion: M, background: B, heading: H } = d;
+  const { layout: L, typography: T, colors: C, motion: M, background: B, heading: H, spacing: S } = d;
   const s = `.${scope}`;
   const dur = clamp(M.duration, 0, 2000);
   const fixed = B.fixed && !isBuilder;
   const cols = L.columns > 0 ? `repeat(${L.columns}, minmax(0, 1fr))` : `repeat(auto-fit, minmax(min(100%, ${L.minCardWidth}px), 1fr))`;
   const cardBg = hexWithAlpha(C.cardBackground, clamp(C.cardOpacity, 0, 1));
   const side = L.mediaPosition === 'start' || L.mediaPosition === 'end';
+  const fill = L.fillScreen && !isBuilder;
+  const justify = L.verticalAlign === 'center' ? 'center' : L.verticalAlign === 'end' ? 'flex-end' : 'flex-start';
+  const padTop = Math.max(24, L.paddingTop);
+  const padBottom = Math.max(24, L.paddingBottom);
+  const headerH = Math.max(0, L.headerHeight);
+  const minH = fill ? `min-height:calc(100vh - ${headerH}px);min-height:calc(100svh - ${headerH}px);` : `min-height:${L.minHeight}px;`;
 
   const cardHover: Record<string, string> = {
     none: '',
@@ -72,28 +78,28 @@ function buildCss(scope: string, d: SplitGatewayData, isBuilder: boolean): strin
         : `background-color:${C.ctaBackground};border:1px solid ${C.ctaBorder}`;
 
   return `
-${s}{position:relative;isolation:isolate;overflow:hidden;min-height:${L.minHeight}px;padding-top:${L.paddingTop}px;padding-bottom:${L.paddingBottom}px;font-family:inherit}
+${s}{position:relative;isolation:isolate;overflow:hidden;box-sizing:border-box;display:flex;flex-direction:column;justify-content:${justify};${minH}padding-top:${padTop}px;padding-bottom:${padBottom}px;font-family:inherit}
 ${s} .sg-bg{position:absolute;inset:0;z-index:0;overflow:hidden;${fixed ? 'clip-path:inset(0);' : ''}background:${B.type === 'color' ? B.color : 'transparent'}}
 ${s} .sg-bg-layer{position:${fixed ? 'fixed' : 'absolute'};inset:0;width:100%;height:${fixed ? '100vh' : '100%'};${B.blur > 0 ? `filter:blur(${B.blur}px);transform:scale(1.05);` : ''}}
 ${s} .sg-bg-media{width:100%;height:100%;object-fit:${B.fit};object-position:${B.position};display:block}
 ${s} .sg-overlay{position:absolute;inset:0;background:${B.overlay.color};opacity:${clamp(B.overlay.opacity, 0, 1)}}
-${s} .sg-inner{position:relative;z-index:1;max-width:${L.maxWidth}px;margin-inline:auto;padding-inline:clamp(16px,4vw,56px)}
+${s} .sg-inner{position:relative;z-index:1;width:100%;box-sizing:border-box;max-width:${L.maxWidth}px;margin-inline:auto;padding-inline:clamp(16px,4vw,56px)}
 ${s} .sg-head{max-width:${H.maxWidth}px;margin-inline:${H.align === 'center' ? 'auto' : H.align === 'end' ? '0 auto' : 'auto 0'};margin-bottom:${H.marginBottom}px;text-align:${H.align}}
 ${s} .sg-head-box{display:inline-block;max-width:100%;padding:26px 44px;border:1px solid ${H.box.borderColor};background:${H.box.background};border-radius:${H.box.radius}px}
 ${s} .sg-eyebrow{margin:0 0 14px;font-size:12px;letter-spacing:.16em;color:${H.accentColor}}
-${s} .sg-title{margin:0;font-size:clamp(28px,5vw,${H.titleSize}px);line-height:1.5;font-weight:${H.titleWeight};letter-spacing:-.01em;color:${H.color};${H.textShadow ? 'text-shadow:0 2px 28px rgba(0,0,0,.6);' : ''}}
+${s} .sg-title{margin:0;font-size:clamp(28px,5vw,${H.titleSize}px);line-height:${H.lineHeight};font-weight:${H.titleWeight};letter-spacing:-.01em;color:${H.color};${H.textShadow ? 'text-shadow:0 2px 28px rgba(0,0,0,.6);' : ''}}
 ${s} .sg-title-accent{color:${H.accentColor}}
-${s} .sg-signature{margin-top:24px;display:flex;align-items:center;justify-content:${H.align === 'center' ? 'center' : H.align === 'end' ? 'flex-end' : 'flex-start'};gap:18px;font-size:${H.signatureSize}px;font-weight:700;letter-spacing:.03em;color:${H.color};${H.textShadow ? 'text-shadow:0 2px 18px rgba(0,0,0,.65);' : ''}}
+${s} .sg-signature{margin-top:${H.signatureGap}px;display:flex;align-items:center;justify-content:${H.align === 'center' ? 'center' : H.align === 'end' ? 'flex-end' : 'flex-start'};gap:18px;font-size:${H.signatureSize}px;font-weight:700;letter-spacing:.03em;color:${H.color};${H.textShadow ? 'text-shadow:0 2px 18px rgba(0,0,0,.65);' : ''}}
 ${s} .sg-rule{width:64px;height:1px;background:${H.accentColor};flex:none}
 ${s} .sg-grid{display:grid;gap:${L.gap}px;grid-template-columns:${cols}}
 ${s} .sg-card{--sg-accent:${C.accent};--sg-cta-color:${C.ctaColor};--sg-cta-hbg:${C.ctaHoverBackground};--sg-cta-hcolor:${C.ctaHoverText};position:relative;display:flex;flex-direction:${side ? (L.mediaPosition === 'start' ? 'row' : 'row-reverse') : L.mediaPosition === 'bottom' ? 'column-reverse' : 'column'};padding:${L.cardPadding}px;background:${cardBg};${C.cardBlur > 0 ? `-webkit-backdrop-filter:blur(${C.cardBlur}px);backdrop-filter:blur(${C.cardBlur}px);` : ''}border:${C.cardBorderWidth}px solid ${C.cardBorder};border-radius:${L.cardRadius}px;color:${C.text};text-align:${L.textAlign};transition:transform ${dur}ms ease,box-shadow ${dur}ms ease,border-color ${dur}ms ease}
 ${s} .sg-media{position:relative;overflow:hidden;border-radius:${L.mediaRadius}px;flex:none;${side ? `width:${L.mediaWidthPercent}%;min-height:${L.mediaHeight}px` : `height:${L.mediaHeight}px`};background:rgba(255,255,255,.04)}
 ${s} .sg-media-el{width:100%;height:100%;display:block;transition:transform ${Math.max(dur, 400) * 2}ms cubic-bezier(.2,.7,.2,1),filter ${dur}ms ease}
-${s} .sg-body{flex:1;min-width:0;display:flex;flex-direction:column;padding:${side ? '8px 22px' : '28px 18px 12px'}}
-${s} .sg-badge{align-self:flex-start;margin:0 0 12px;padding:4px 12px;border-radius:999px;border:1px solid var(--sg-accent);font-size:${T.badgeSize}px;font-weight:700;color:var(--sg-accent)}
-${s} .sg-card-title{margin:0 0 10px;font-size:${T.titleSize}px;line-height:1.3;font-weight:${T.titleWeight};color:${C.title}}
-${s} .sg-desc{margin:0 0 24px;font-size:${T.descSize}px;line-height:${T.descLineHeight};color:${C.text}}
-${s} .sg-svcs{margin:0 0 22px;padding:0;list-style:none;${d.services.layout === 'columns' ? 'display:grid;grid-template-columns:repeat(var(--sg-n),minmax(0,1fr));' : d.services.layout === 'chips' ? 'display:flex;flex-wrap:wrap;gap:8px;' : ''}${d.services.layout !== 'chips' ? `border:1px solid ${C.serviceBorder};border-radius:16px;overflow:hidden;` : ''}}
+${s} .sg-body{flex:1;min-width:0;display:flex;flex-direction:column;padding:${side ? '8px 22px' : `${S.mediaGap}px 18px 12px`}}
+${s} .sg-badge{align-self:flex-start;margin:0 0 ${S.badgeGap}px;padding:4px 12px;border-radius:999px;border:1px solid var(--sg-accent);font-size:${T.badgeSize}px;font-weight:700;color:var(--sg-accent)}
+${s} .sg-card-title{margin:0 0 ${S.titleGap}px;font-size:${T.titleSize}px;line-height:${T.titleLineHeight};font-weight:${T.titleWeight};color:${C.title}}
+${s} .sg-desc{margin:0 0 ${S.descGap}px;font-size:${T.descSize}px;line-height:${T.descLineHeight};color:${C.text}}
+${s} .sg-svcs{margin:0 0 ${S.servicesGap}px;padding:0;list-style:none;${d.services.layout === 'columns' ? 'display:grid;grid-template-columns:repeat(var(--sg-n),minmax(0,1fr));' : d.services.layout === 'chips' ? 'display:flex;flex-wrap:wrap;gap:8px;' : ''}${d.services.layout !== 'chips' ? `border:1px solid ${C.serviceBorder};border-radius:16px;overflow:hidden;` : ''}}
 ${s} .sg-svc{position:relative;z-index:1;padding:${d.services.layout === 'chips' ? '8px 16px' : '16px 20px'};font-size:${T.serviceSize}px;line-height:1.8;color:${C.serviceText};transition:background-color ${dur}ms ease,color ${dur}ms ease;${d.services.layout === 'chips' ? `border:1px solid ${C.serviceBorder};border-radius:999px;` : ''}}
 ${d.services.layout === 'columns' && d.services.showDividers ? `${s} .sg-svc+.sg-svc{border-inline-start:1px solid ${C.serviceBorder}}` : ''}
 ${d.services.layout === 'list' && d.services.showDividers ? `${s} .sg-svc+.sg-svc{border-top:1px solid ${C.serviceBorder}}` : ''}
@@ -112,10 +118,11 @@ ${ctaHover[M.ctaHover] ?? ''}
 ${serviceHover[M.serviceHover] ?? ''}
 ${M.entrance !== 'none' ? `${s} .sg-ent[data-sg-armed='true']:not([data-sg-shown='true']){opacity:0}${s} .sg-ent[data-sg-shown='true']{animation:${s.slice(1)}-in ${M.entranceDuration}ms cubic-bezier(.2,.7,.2,1) backwards}@keyframes ${s.slice(1)}-in{from{${entranceFrom[M.entrance]}}}` : ''}
 @media (max-width:767px){
+${s}{padding-top:${Math.max(24, Math.min(padTop, 48))}px;padding-bottom:${Math.max(24, Math.min(padBottom, 48))}px}
 ${s} .sg-grid{grid-template-columns:1fr}
 ${s} .sg-card{flex-direction:column}
 ${s} .sg-media{width:auto;min-height:0;height:${Math.min(L.mediaHeight, 240)}px}
-${s} .sg-body{padding:24px 14px 10px}
+${s} .sg-body{padding:${Math.min(S.mediaGap, 24)}px 14px 10px}
 ${s} .sg-svcs{grid-template-columns:1fr}
 ${d.services.layout === 'columns' && d.services.showDividers ? `${s} .sg-svc+.sg-svc{border-inline-start:0;border-top:1px solid ${C.serviceBorder}}` : ''}
 }
@@ -312,7 +319,7 @@ export default function SplitGatewaySection({ data, style, isBuilder = false }: 
   return (
     <section
       ref={rootRef}
-      className={`${scope} ${style?.padding ?? 'py-16'} ${style?.textColor ?? ''}`}
+      className={`${scope} ${style?.textColor ?? ''}`}
       aria-label={d.ariaLabel || undefined}
       data-armed={armed ? 'true' : 'false'}
     >
