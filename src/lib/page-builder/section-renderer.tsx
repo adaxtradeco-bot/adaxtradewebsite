@@ -134,6 +134,7 @@ import HomeCoverSection from '@/components/builder-sections/HomeCoverSection';
 import HomeInnovationSection from '@/components/builder-sections/HomeInnovationSection';
 import IntelligenceScrollStorySection from '@/components/builder-sections/IntelligenceScrollStorySection';
 import SplitGatewaySection from '@/components/builder-sections/SplitGatewaySection';
+import ProjectHeroSection from '@/components/builder-sections/ProjectHeroSection';
 
 interface SectionRendererProps {
   section: SectionConfig;
@@ -1014,6 +1015,14 @@ export function SectionRenderer({
         case 'split-gateway':
           return (
             <SplitGatewaySection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'project-hero':
+          return (
+            <ProjectHeroSection
               data={(section as any).data}
               style={(section as any).style}
               isBuilder={isBuilder}

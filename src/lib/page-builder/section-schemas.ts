@@ -149,6 +149,7 @@ export const BaseSectionSchema = z.object({
     'home-innovation',
     'intelligence-scroll-story',
     'split-gateway',
+    'project-hero',
   ]),
   order: z.number(),
   data: z.record(z.string(), z.any()),

@@ -27,6 +27,7 @@ import { FORMS_ACTIONS_TEMPLATES } from './section-templates/forms-actions';
 import { HOME_SHOWCASE_TEMPLATES } from './section-templates/home-showcase';
 import { INTELLIGENCE_SCROLL_STORY_TEMPLATES } from './section-templates/intelligence-scroll-story';
 import { SPLIT_GATEWAY_TEMPLATES } from './section-templates/split-gateway';
+import { PROJECT_HERO_TEMPLATES } from './section-templates/project-hero';
 
 export { SECTION_CATEGORIES };
 export type { SectionTemplate };
@@ -52,6 +53,7 @@ export const SECTION_TEMPLATES: SectionTemplate[] = [
   ...HOME_SHOWCASE_TEMPLATES,
   ...INTELLIGENCE_SCROLL_STORY_TEMPLATES,
   ...SPLIT_GATEWAY_TEMPLATES,
+  ...PROJECT_HERO_TEMPLATES,
 ];
 
 export function getSectionTemplate(type: string): SectionTemplate | undefined {
