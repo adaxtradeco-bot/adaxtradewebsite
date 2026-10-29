@@ -1,0 +1,35 @@
+hero-container-terminal.jpg
+  File:Aerial image of the Eurogate and Burchardkai container terminals (view from the southeast).jpg
+  Author: Carsten Steger
+  License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+  Source: https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Eurogate_and_Burchardkai_container_terminals_(view_from_the_southeast).jpg
+
+technical-specs.jpg
+  File:Performing tests to the breakers and disconnects in the electrical equipment and panels at a substation in Queens. (49214091023).jpg
+  Author: MTA Capital Construction Mega Projects
+  License: CC BY 2.0 (https://creativecommons.org/licenses/by/2.0)
+  Source: https://commons.wikimedia.org/wiki/File:Performing_tests_to_the_breakers_and_disconnects_in_the_electrical_equipment_and_panels_at_a_substation_in_Queens._(49214091023).jpg
+
+international-shipping.jpg
+  File:View of Port of Los Angeles with container ships.jpg
+  Author: Downtowngal
+  License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+  Source: https://commons.wikimedia.org/wiki/File:View_of_Port_of_Los_Angeles_with_container_ships.jpg
+
+spare-parts-warehouse.jpg
+  File:Hohenems-Grass-automatically high bay warehouse-01ASD.jpg
+  Author: Asurnipal
+  License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+  Source: https://commons.wikimedia.org/wiki/File:Hohenems-Grass-automatically_high_bay_warehouse-01ASD.jpg
+
+quality-inspection.jpg
+  File:U S Customs & Border Protection Takes Next Step in the Resumption of Maritime Operations at the Port of New York - Newark (8155160929).jpg
+  Author: CBP Photography
+  License: Public domain ()
+  Source: https://commons.wikimedia.org/wiki/File:U_S_Customs_%26_Border_Protection_Takes_Next_Step_in_the_Resumption_of_Maritime_Operations_at_the_Port_of_New_York_-_Newark_(8155160929).jpg
+
+global-sourcing.jpg
+  File:Bayport Container Terminal Aerial - Near Houston (43373625235).jpg
+  Author: formulanone
+  License: CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0)
+  Source: https://commons.wikimedia.org/wiki/File:Bayport_Container_Terminal_Aerial_-_Near_Houston_(43373625235).jpg
