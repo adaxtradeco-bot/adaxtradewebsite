@@ -16,3 +16,27 @@ port-containers.jpg
   License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0)
   Source: https://commons.wikimedia.org/wiki/File:Sundah%C3%B6fn_in_Port_of_Reykjav%C3%ADk.jpg
 
+trade-fair-stands.jpg
+  File:MESAP 2019. - štandovi.jpg
+  Author: Silverije
+  License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+  Source: https://commons.wikimedia.org/wiki/File:MESAP_2019._-_%C5%A1tandovi.jpg
+
+product-showcase-booth.jpg
+  File:Leica booth, TIPMEE 20171014.jpg
+  Author: Solomon203
+  License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+  Source: https://commons.wikimedia.org/wiki/File:Leica_booth,_TIPMEE_20171014.jpg
+
+container-ship.jpg
+  File:Cuxhaven, Elbmündung, Containerschiff "Ever Genius" -- 2024 -- 6143.jpg
+  Author: Dietmar Rabich
+  License: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0)
+  Source: https://commons.wikimedia.org/wiki/File:Cuxhaven,_Elbm%C3%BCndung,_Containerschiff_%22Ever_Genius%22_--_2024_--_6143.jpg
+
+port-cranes-dusk.jpg
+  File:Container cranes at the MPET- MSC PSA European Terminal in Port of Antwerp (Kieldrecht, Belgium) during the sunset civil twilight (DSCF3919).jpg
+  Author: Trougnouf
+  License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0)
+  Source: https://commons.wikimedia.org/wiki/File:Container_cranes_at_the_MPET-_MSC_PSA_European_Terminal_in_Port_of_Antwerp_(Kieldrecht,_Belgium)_during_the_sunset_civil_twilight_(DSCF3919).jpg
+
