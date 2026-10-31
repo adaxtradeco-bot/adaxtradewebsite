@@ -229,3 +229,77 @@ export const analyticsApi = {
     return response.json();
   },
 };
+// Blog API (sends the admin JWT; throws with the server's error message)
+async function blogRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('adminToken') : null;
+  const response = await fetch(`${API_BASE}/blog${path}`, {
+    ...init,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token && { Authorization: `Bearer ${token}` }),
+      ...init.headers,
+    },
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || response.statusText);
+  return data as T;
+}
+
+const jsonBody = (method: string, body: unknown): RequestInit => ({ method, body: JSON.stringify(body) });
+
+export interface BlogPostListItem {
+  id: string;
+  title: string;
+  slug: string;
+  language: string;
+  status: string;
+  source: string;
+  publishedAt: string | null;
+  scheduledAt: string | null;
+  updatedAt: string;
+  postGroupId: string | null;
+  category: { id: string; name: string } | null;
+  author: { id: string; name: string } | null;
+}
+
+export interface BlogTerm {
+  id: string;
+  name: string;
+  slug: string;
+  language: string;
+  groupKey?: string | null;
+  description?: string | null;
+  _count: { posts: number };
+}
+
+export const blogApi = {
+  posts: {
+    list: (params: Record<string, string | number | undefined> = {}) => {
+      const query = new URLSearchParams();
+      Object.entries(params).forEach(([k, v]) => v !== undefined && v !== '' && query.set(k, String(v)));
+      return blogRequest<{ posts: BlogPostListItem[]; total: number; page: number; totalPages: number }>(`/posts?${query}`);
+    },
+    get: (id: string) => blogRequest<{ post: any }>(`/posts/${id}`),
+    create: (data: Record<string, unknown>) => blogRequest<{ post: any }>('/posts', jsonBody('POST', data)),
+    update: (id: string, data: Record<string, unknown>) => blogRequest<{ post: any }>(`/posts/${id}`, jsonBody('PUT', data)),
+    remove: (id: string) => blogRequest<{ success: boolean }>(`/posts/${id}`, { method: 'DELETE' }),
+    addTranslation: (id: string, language: string) =>
+      blogRequest<{ post: any }>(`/posts/${id}/add-translation`, jsonBody('POST', { language })),
+    bulk: (ids: string[], action: 'publish' | 'draft' | 'archive' | 'delete') =>
+      blogRequest<{ count: number }>('/posts/bulk', jsonBody('POST', { ids, action })),
+  },
+  categories: {
+    list: (language?: string) =>
+      blogRequest<{ categories: BlogTerm[] }>(`/categories${language ? `?language=${language}` : ''}`),
+    create: (data: Record<string, unknown>) => blogRequest<{ category: BlogTerm }>('/categories', jsonBody('POST', data)),
+    update: (id: string, data: Record<string, unknown>) =>
+      blogRequest<{ category: BlogTerm }>(`/categories/${id}`, jsonBody('PUT', data)),
+    remove: (id: string) => blogRequest<{ success: boolean }>(`/categories/${id}`, { method: 'DELETE' }),
+  },
+  tags: {
+    list: (language?: string) => blogRequest<{ tags: BlogTerm[] }>(`/tags${language ? `?language=${language}` : ''}`),
+    create: (data: Record<string, unknown>) => blogRequest<{ tag: BlogTerm }>('/tags', jsonBody('POST', data)),
+    update: (id: string, data: Record<string, unknown>) => blogRequest<{ tag: BlogTerm }>(`/tags/${id}`, jsonBody('PUT', data)),
+    remove: (id: string) => blogRequest<{ success: boolean }>(`/tags/${id}`, { method: 'DELETE' }),
+  },
+};

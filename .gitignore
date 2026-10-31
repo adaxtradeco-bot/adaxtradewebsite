@@ -164,3 +164,7 @@ add-*.js
 *.tsbuildinfo
 next-env.d.ts
 prisma.config.ts
+
+# Static export tooling
+.next-export/
+dist-static/

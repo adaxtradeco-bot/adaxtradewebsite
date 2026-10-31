@@ -18,6 +18,9 @@ model User {
   role      String   @default("admin")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  bio       String?
+  avatar    String?
+  posts     Post[]
 }
 
 model Page {
@@ -89,4 +92,84 @@ model SiteSettings {
   data      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id              String        @id @default(cuid())
+  slug            String
+  language        String        @default("en")
+  title           String
+  excerpt         String?
+  coverImage      String?
+  coverImageAlt   String?
+  builderData     String?       // JSON array of builder sections (same as Page.builderData)
+  status          String        @default("draft") // draft | scheduled | published | archived
+  publishedAt     DateTime?
+  scheduledAt     DateTime?
+  readingTime     Int           @default(1)
+  metaTitle       String?
+  metaDescription String?
+  ogImage         String?
+  canonicalUrl    String?
+  noindex         Boolean       @default(false)
+  source          String        @default("admin") // admin | api
+  externalId      String?
+  authorId        String?
+  categoryId      String?
+  postGroupId     String?
+  author          User?         @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  category        BlogCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  postGroup       PostGroup?    @relation(fields: [postGroupId], references: [id], onDelete: SetNull)
+  tags            BlogTag[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([language, slug])
+  @@unique([language, externalId])
+  @@index([status, publishedAt])
+  @@index([categoryId])
+  @@index([postGroupId])
+}
+
+model PostGroup {
+  id              String   @id @default(cuid())
+  defaultLanguage String   @default("en")
+  posts           Post[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model BlogCategory {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String
+  description String?
+  language    String
+  groupKey    String? // same value across languages = same category
+  posts       Post[]
+
+  @@unique([language, slug])
+  @@index([groupKey])
+}
+
+model BlogTag {
+  id       String @id @default(cuid())
+  name     String
+  slug     String
+  language String
+  posts    Post[]
+
+  @@unique([language, slug])
+}
+
+model ApiKey {
+  id          String    @id @default(cuid())
+  name        String
+  prefix      String    @unique // first 8 chars, shown in the admin
+  hashedKey   String    // sha256 of the full key
+  scopes      String    @default("blog:write") // comma separated
+  lastUsedAt  DateTime?
+  revokedAt   DateTime?
+  createdById String?
+  createdAt   DateTime  @default(now())
 }

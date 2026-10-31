@@ -172,6 +172,19 @@ async function main() {
     console.log('🧩 Created section template:', template.name);
   }
 
+  const blogCategories = [
+    { language: 'en', slug: 'general', name: 'General' },
+    { language: 'fa', slug: 'general', name: 'عمومی' },
+  ];
+  for (const category of blogCategories) {
+    await prisma.blogCategory.upsert({
+      where: { language_slug: { language: category.language, slug: category.slug } },
+      update: {},
+      create: { ...category, groupKey: 'general' },
+    });
+  }
+  console.log('📝 Seeded blog categories');
+
   console.log('✅ Database seeded successfully!');
 }
 

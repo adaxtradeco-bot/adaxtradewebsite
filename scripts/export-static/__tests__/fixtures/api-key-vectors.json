@@ -1,0 +1,66 @@
+[
+  {
+    "input": "/api/menu?language=fa&location=header",
+    "expected": "/api/menu?language=fa&location=header"
+  },
+  {
+    "input": "/api/menu?location=header&language=fa",
+    "expected": "/api/menu?language=fa&location=header"
+  },
+  {
+    "input": "/api/x?a=2&a=1",
+    "expected": "/api/x?a=1&a=2"
+  },
+  {
+    "input": "/api/x?a=1&b=2&a=0",
+    "expected": "/api/x?a=0&a=1&b=2"
+  },
+  {
+    "input": "/api/pages/by-slug?slug=%2Ffa",
+    "expected": "/api/pages/by-slug?slug=%2Ffa"
+  },
+  {
+    "input": "/api/pages/by-slug?slug=/fa",
+    "expected": "/api/pages/by-slug?slug=%2Ffa"
+  },
+  {
+    "input": "/api/pages/by-slug?slug=/fa/درباره-ما",
+    "expected": "/api/pages/by-slug?slug=%2Ffa%2F%D8%AF%D8%B1%D8%A8%D8%A7%D8%B1%D9%87-%D9%85%D8%A7"
+  },
+  {
+    "input": "/api/pages/by-slug?slug=%2Fen%2Fa%20b",
+    "expected": "/api/pages/by-slug?slug=%2Fen%2Fa+b"
+  },
+  {
+    "input": "/api/pages/by-slug?slug=a+b",
+    "expected": "/api/pages/by-slug?slug=a+b"
+  },
+  {
+    "input": "https://example.com/api/menu?language=en",
+    "expected": "/api/menu?language=en"
+  },
+  {
+    "input": "http://localhost:3999/api/menu?language=en#top",
+    "expected": "/api/menu?language=en"
+  },
+  {
+    "input": "/api/admin/settings",
+    "expected": "/api/admin/settings"
+  },
+  {
+    "input": "/api/admin/settings?",
+    "expected": "/api/admin/settings"
+  },
+  {
+    "input": "/api/admin/settings#frag",
+    "expected": "/api/admin/settings"
+  },
+  {
+    "input": "/api/menu?a=&b=1",
+    "expected": "/api/menu?a=&b=1"
+  },
+  {
+    "input": "/api/pages/check?path=/en/about/&x=%E2%9C%93",
+    "expected": "/api/pages/check?path=%2Fen%2Fabout%2F&x=%E2%9C%93"
+  }
+]

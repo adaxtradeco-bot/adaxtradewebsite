@@ -50,6 +50,10 @@ import { HomeCoverPropertyPanel } from './HomeCoverPropertyPanel';
 import { HomeInnovationPropertyPanel } from './HomeInnovationPropertyPanel';
 import { IntelligenceScrollStoryPropertyPanel } from './IntelligenceScrollStoryPropertyPanel';
 import { SplitGatewayPropertyPanel } from './SplitGatewayPropertyPanel';
+import { BlogHeadingPropertyPanel } from './BlogHeadingPropertyPanel';
+import { BlogRichTextPropertyPanel } from './BlogRichTextPropertyPanel';
+import { BlogHtmlPropertyPanel } from './BlogHtmlPropertyPanel';
+import { BlogLatestPostsPropertyPanel } from './BlogLatestPostsPropertyPanel';
 import { ProjectHeroPropertyPanel } from './ProjectHeroPropertyPanel';
 import { WorkflowSectionPropertyPanel } from './WorkflowSectionPropertyPanel';
 
@@ -558,6 +562,7 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
 
   // Check if section has custom visual editor
   const hasCustomEditor = [
+    'blog-heading', 'blog-rich-text', 'blog-html', 'blog-latest-posts',
     'product-hero', 'process-steps', 'why-automate-with-us',
     'reports-hero', 'reports-what-you-can-build', 'reports-chart-builder',
     'reports-table', 'reports-kanban', 'reports-ai-insights',
@@ -662,6 +667,14 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
         return <IntelligenceScrollStoryPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'split-gateway':
         return <SplitGatewayPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'blog-heading':
+        return <BlogHeadingPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'blog-rich-text':
+        return <BlogRichTextPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'blog-latest-posts':
+        return <BlogLatestPostsPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'blog-html':
+        return <BlogHtmlPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'project-hero':
         return <ProjectHeroPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'workflow':

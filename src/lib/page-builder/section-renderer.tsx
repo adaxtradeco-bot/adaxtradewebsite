@@ -134,6 +134,10 @@ import HomeCoverSection from '@/components/builder-sections/HomeCoverSection';
 import HomeInnovationSection from '@/components/builder-sections/HomeInnovationSection';
 import IntelligenceScrollStorySection from '@/components/builder-sections/IntelligenceScrollStorySection';
 import SplitGatewaySection from '@/components/builder-sections/SplitGatewaySection';
+import BlogHeadingSection from '@/components/builder-sections/BlogHeadingSection';
+import BlogRichTextSection from '@/components/builder-sections/BlogRichTextSection';
+import BlogHtmlSection from '@/components/builder-sections/BlogHtmlSection';
+import BlogLatestPostsSection from '@/components/builder-sections/BlogLatestPostsSection';
 import ProjectHeroSection from '@/components/builder-sections/ProjectHeroSection';
 
 interface SectionRendererProps {
@@ -1015,6 +1019,38 @@ export function SectionRenderer({
         case 'split-gateway':
           return (
             <SplitGatewaySection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'blog-heading':
+          return (
+            <BlogHeadingSection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'blog-rich-text':
+          return (
+            <BlogRichTextSection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'blog-latest-posts':
+          return (
+            <BlogLatestPostsSection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+            />
+          );
+        case 'blog-html':
+          return (
+            <BlogHtmlSection
               data={(section as any).data}
               style={(section as any).style}
               isBuilder={isBuilder}

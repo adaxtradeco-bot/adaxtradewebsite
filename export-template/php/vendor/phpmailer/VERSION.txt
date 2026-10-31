@@ -1,0 +1,1 @@
+PHPMailer v6.12.0 (https://github.com/PHPMailer/PHPMailer/releases/tag/v6.12.0) - unmodified src/ files, LGPL-2.1

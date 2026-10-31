@@ -1,0 +1,7 @@
+{
+  "adaxtrade": {
+    "envFile": ".env.adaxtrade.local",
+    "baseUrl": "https://adaxtrade.com",
+    "langs": ["fa", "en", "ar"]
+  }
+}

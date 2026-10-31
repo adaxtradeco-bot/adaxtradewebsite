@@ -11,6 +11,7 @@ import { useLanguage } from '@/lib/i18n/context';
 import { languages, SupportedLanguage } from '@/lib/i18n/config';
 import { useRouter, usePathname } from 'next/navigation';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { getBlogAlternates, isBlogPath, resolveBlogSwitchTarget } from '@/components/blog/blog-alternates';
 
 const ChevronIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,6 +52,12 @@ export function LanguageSwitch() {
     setLanguage(langCode);
     setIsOpen(false);
     
+    // Blog routes: sibling post if one exists, else that language's blog index
+    if (isBlogPath(pathname)) {
+      router.push(resolveBlogSwitchTarget(langCode, getBlogAlternates()));
+      return;
+    }
+
     const targetLang = languages[langCode];
     const segments = pathname.split('/');
     const currentLangCode = segments[1];

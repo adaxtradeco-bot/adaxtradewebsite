@@ -14,6 +14,9 @@ import { useAdminUser } from '@/hooks/useAdminUser';
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: '📊' },
   { name: 'Pages', href: '/admin/pages', icon: '📄' },
+  { name: 'Blog', href: '/admin/blog/posts', icon: '✍️' },
+  { name: 'Blog Categories', href: '/admin/blog/categories', icon: '🗂️' },
+  { name: 'Blog Tags', href: '/admin/blog/tags', icon: '🏷️' },
   { name: 'Menus', href: '/admin/menus', icon: '🍔' },
   { name: 'Footers', href: '/admin/footers', icon: '🦶' },
   { name: 'Contact Sales', href: '/admin/contact-sales', icon: '📞' },
@@ -26,6 +29,7 @@ const navigation = [
 
 const adminOnlyNavigation = [
   { name: 'Users', href: '/admin/users', icon: '👥' },
+  { name: 'Blog API Keys', href: '/admin/blog/api-keys', icon: '🔑' },
 ];
 
 export default function AdminLayout({

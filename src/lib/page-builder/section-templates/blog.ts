@@ -1,0 +1,75 @@
+import { SECTION_CATEGORIES, SectionTemplate } from '../section-registry.types';
+
+/** Blog-post building blocks (heading, rich text, raw HTML, latest-posts list). */
+export const BLOG_TEMPLATES: SectionTemplate[] = [
+  {
+    id: 'blog-heading-default',
+    name: 'Blog Heading',
+    type: 'blog-heading',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Section heading (h2–h4) with an optional anchor id for in-page links.',
+    icon: '🔠',
+    defaultData: {
+      id: '',
+      type: 'blog-heading',
+      order: 0,
+      data: { text: 'Heading', level: 'h2', align: 'start' },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'blog-rich-text-default',
+    name: 'Blog Rich Text',
+    type: 'blog-rich-text',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Formatted text with links, lists, quotes, code and images.',
+    icon: '📝',
+    defaultData: {
+      id: '',
+      type: 'blog-rich-text',
+      order: 0,
+      data: { html: '<p>Start writing…</p>' },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'blog-html-default',
+    name: 'Blog HTML',
+    type: 'blog-html',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Custom HTML block (sanitized on save and on render).',
+    icon: '🧩',
+    defaultData: {
+      id: '',
+      type: 'blog-html',
+      order: 0,
+      data: { html: '<p>Custom HTML</p>' },
+    },
+    configSchema: {},
+  },
+  {
+    id: 'blog-latest-posts-default',
+    name: 'Latest Blog Posts',
+    type: 'blog-latest-posts',
+    category: SECTION_CATEGORIES.CONTENT,
+    description: 'Grid or list of the latest published posts, optionally filtered by category or tag.',
+    icon: '📰',
+    defaultData: {
+      id: '',
+      type: 'blog-latest-posts',
+      order: 0,
+      data: {
+        title: '',
+        subtitle: '',
+        count: 3,
+        categorySlug: '',
+        tagSlug: '',
+        layout: 'grid',
+        columns: 3,
+        show: { cover: true, date: true, excerpt: true, author: false, category: true },
+        viewAll: { enabled: true, text: 'View all posts' },
+      },
+    },
+    configSchema: {},
+  },
+];
