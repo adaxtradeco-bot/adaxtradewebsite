@@ -26,10 +26,11 @@ interface PageBuilderProps {
   onSave?: (sections: SectionConfig[]) => Promise<void>;
   adminMode?: boolean;
   pageStatus?: string;
+  publishUrl?: string;
   language?: string;
 }
 
-export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus, language }: PageBuilderProps) {
+export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus, publishUrl, language }: PageBuilderProps) {
   const [sections, setSections] = useState<SectionConfig[]>(Array.isArray(initialSections) ? initialSections : []);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -207,6 +208,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
         onPreviewModeChange={setPreviewMode}
         pageId={pageId}
         pageStatus={pageStatus}
+        publishUrl={publishUrl}
         isSectionLibraryVisible={isSectionLibraryVisible}
         onToggleSectionLibrary={() => setIsSectionLibraryVisible(!isSectionLibraryVisible)}
         onOpenJSONEditor={() => setIsJSONEditorOpen(true)}

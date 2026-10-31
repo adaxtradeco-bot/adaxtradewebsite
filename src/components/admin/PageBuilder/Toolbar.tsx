@@ -18,6 +18,7 @@ interface ToolbarProps {
   onPreviewModeChange: (mode: 'desktop' | 'tablet' | 'mobile') => void;
   pageId?: string;
   pageStatus?: string;
+  publishUrl?: string;
   onPublish?: () => Promise<void>;
   isSectionLibraryVisible?: boolean;
   onToggleSectionLibrary?: () => void;
@@ -33,6 +34,7 @@ export function Toolbar({
   onPreviewModeChange,
   pageId,
   pageStatus,
+  publishUrl,
   onPublish,
   isSectionLibraryVisible = true,
   onToggleSectionLibrary,
@@ -46,7 +48,7 @@ export function Toolbar({
     setIsPublishing(true);
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`/api/admin/pages/${pageId}`, {
+      const res = await fetch(publishUrl ?? `/api/admin/pages/${pageId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

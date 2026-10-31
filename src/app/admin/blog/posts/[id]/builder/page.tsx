@@ -79,6 +79,7 @@ export default function BlogPostBuilderPage() {
         initialSections={post.builderData || []}
         onSave={handleSave}
         pageStatus={post.status}
+        publishUrl={`/api/admin/blog/posts/${post.id}`}
         language={post.language}
       />
     </div>
