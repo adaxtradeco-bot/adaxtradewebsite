@@ -106,7 +106,7 @@ export default function ProcessStepsSection({
 }: ProcessStepsSectionProps) {
   const {
     eyebrow = 'How we work',
-    sectionTitle = 'From first call',
+    sectionTitle = 'From first call to',
     sectionTitleHighlight = 'full operation',
     description = 'Most BPMS projects fail not because of the platform, but because of poor implementation. We bring specialized teams to every phase — so you\'re never alone navigating the journey from first process to full automation.',
     stats = DEFAULT_STATS,
@@ -198,7 +198,6 @@ export default function ProcessStepsSection({
               style={{ fontSize: 'clamp(34px, 5vw, 54px)' }}>
               {sectionTitle}
               <br />
-              to{' '}
               <em
                 className="not-italic"
                 style={{

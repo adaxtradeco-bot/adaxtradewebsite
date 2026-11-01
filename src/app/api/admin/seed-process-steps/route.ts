@@ -15,7 +15,7 @@ const PROCESS_STEPS_SECTION = {
   order: 99,
   data: {
     eyebrow: 'How we work',
-    sectionTitle: 'From first call',
+    sectionTitle: 'From first call to',
     sectionTitleHighlight: 'full operation',
     description:
       "Most BPMS projects fail not because of the platform, but because of poor implementation. We bring specialized teams to every phase — so you're never alone navigating the journey from first process to full automation.",
