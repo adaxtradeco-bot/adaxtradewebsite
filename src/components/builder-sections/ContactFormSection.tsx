@@ -17,6 +17,10 @@ interface Feature {
   icon: string;
   title: string;
   description: string;
+  /** Optional link (tel:, mailto:, https:…) — turns the description into a link. */
+  href?: string;
+  /** Render the description left-to-right (phone numbers, e-mail addresses) inside an RTL page. */
+  ltr?: boolean;
 }
 
 interface ContactFormSectionProps {
@@ -30,6 +34,22 @@ interface ContactFormSectionProps {
     features?: Feature[];
     successTitle?: string;
     successMessage?: string;
+    /** Per-field label / placeholder overrides, keyed by field name (name, email, phone, company, website, message). */
+    fieldLabels?: Record<string, string>;
+    fieldPlaceholders?: Record<string, string>;
+    /** Text overrides (default: English). */
+    submitText?: string;
+    submittingText?: string;
+    privacyNote?: string;
+    errorText?: string;
+    /** Brand colour (hex) for the submit button and the feature icons. Empty = the theme's blue gradient. */
+    accentColor?: string;
+    /** Text colour on the accent colour (default white). */
+    accentTextColor?: string;
+    /** Optional picture above the feature list. */
+    image?: string;
+    imageAlt?: string;
+    imageHeight?: number;
   };
   isBuilder?: boolean;
 }
@@ -144,11 +164,21 @@ export function ContactFormSection({ data, isBuilder = false }: ContactFormSecti
   const title = data.title || copy.title;
   const subtitle = data.subtitle || copy.subtitle;
   const description = data.description || copy.description;
+  const accent = data.accentColor || '';
+  const accentText = data.accentTextColor || '#ffffff';
+  const submitText = data.submitText || `${copy.button} →`;
+  const submittingText = data.submittingText || 'Sending...';
+  const privacyNote = data.privacyNote ?? 'By submitting this form, you agree to our Privacy Policy';
+  const errorText = data.errorText || 'Something went wrong. Please try again or contact us directly.';
   const successTitle = data.successTitle || 'Thank you!';
   const successMessage =
     data.successMessage || "We've received your submission and will get back to you soon.";
 
-  const fieldDefs = FORM_FIELD_DEFS[formType];
+  const fieldDefs = FORM_FIELD_DEFS[formType].map((f) => ({
+    ...f,
+    label: data.fieldLabels?.[f.name] || f.label,
+    placeholder: data.fieldPlaceholders?.[f.name] ?? f.placeholder,
+  }));
   const t = THEME_CLASSES[theme];
 
   const [formData, setFormData] = useState<Record<string, string>>(() => buildEmptyFormData(formType));
@@ -193,7 +223,7 @@ export function ContactFormSection({ data, isBuilder = false }: ContactFormSecti
       setStatus('success');
     } catch {
       setStatus('error');
-      setErrorMessage('Something went wrong. Please try again or contact us directly.');
+      setErrorMessage(errorText);
     }
   };
 
@@ -235,14 +265,13 @@ export function ContactFormSection({ data, isBuilder = false }: ContactFormSecti
       <button
         type="submit"
         disabled={status === 'submitting'}
-        className="w-full px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-full font-bold hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        className={`w-full px-8 py-4 text-white rounded-full font-bold hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${accent ? '' : 'bg-gradient-to-r from-blue-600 to-cyan-500'}`}
+        style={accent ? { backgroundColor: accent, color: accentText } : undefined}
       >
-        {status === 'submitting' ? 'Sending...' : `${copy.button} →`}
+        {status === 'submitting' ? submittingText : submitText}
       </button>
 
-      <p className={`text-xs text-center ${t.bodyText}`}>
-        By submitting this form, you agree to our Privacy Policy
-      </p>
+      {privacyNote && <p className={`text-xs text-center ${t.bodyText}`}>{privacyNote}</p>}
     </form>
   );
 
@@ -290,6 +319,17 @@ export function ContactFormSection({ data, isBuilder = false }: ContactFormSecti
               <p className={`text-lg ${t.bodyText}`}>{description}</p>
             </div>
 
+            {data.image && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={data.image}
+                alt={data.imageAlt ?? ''}
+                className="w-full rounded-2xl object-cover shadow-xl"
+                style={{ height: data.imageHeight ?? 220 }}
+                loading="lazy"
+              />
+            )}
+
             {features.length > 0 && (
               <div className="space-y-6">
                 {features.map((feature, idx) => (
@@ -297,12 +337,29 @@ export function ContactFormSection({ data, isBuilder = false }: ContactFormSecti
                     key={idx}
                     className={`flex items-start gap-4 p-4 rounded-xl hover:shadow-lg transition-all duration-300 ${t.featureCard}`}
                   >
-                    <div className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-2xl shadow-lg ${t.iconWrap}`}>
+                    <div
+                      className={`flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center text-2xl shadow-lg ${accent ? '' : t.iconWrap}`}
+                      style={accent ? { backgroundColor: accent, color: accentText } : undefined}
+                    >
                       {feature.icon}
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <h3 className={`font-bold text-lg mb-1 ${t.heading}`}>{feature.title}</h3>
-                      <p className={`text-sm ${t.bodyText}`}>{feature.description}</p>
+                      <p className={`text-sm ${t.bodyText}`}>
+                        {feature.href ? (
+                          <a
+                            href={feature.href}
+                            className="hover:underline"
+                            {...(feature.ltr ? { dir: 'ltr', style: { display: 'inline-block' } } : {})}
+                          >
+                            {feature.description}
+                          </a>
+                        ) : feature.ltr ? (
+                          <span dir="ltr" style={{ display: 'inline-block' }}>{feature.description}</span>
+                        ) : (
+                          feature.description
+                        )}
+                      </p>
                     </div>
                   </div>
                 ))}
