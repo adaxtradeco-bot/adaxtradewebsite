@@ -1,15 +1,16 @@
+// PM2 process file. Deployment-specific values come from the environment.
 module.exports = {
   apps: [{
-    name: 'ivaflow',
+    name: process.env.PM2_APP_NAME || 'website',
     script: 'server.js',
-    cwd: '/home/u333279351/apps/english-website',
+    cwd: __dirname,
     instances: 1,
     autorestart: true,
     watch: false,
     max_memory_restart: '512M',
     env: {
       NODE_ENV: 'production',
-      PORT: 3000
+      PORT: process.env.PORT || 3000
     },
     error_file: './logs/err.log',
     out_file: './logs/out.log',

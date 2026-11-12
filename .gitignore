@@ -168,3 +168,8 @@ prisma.config.ts
 # Static export tooling
 .next-export/
 dist-static/
+
+# Local-only archive: old notes, one-off scripts, DB exports, credentials
+_local/
+backups/
+prisma/prisma/*.db

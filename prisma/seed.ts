@@ -4,6 +4,7 @@
  * Created: 2024-01-15
  */
 
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
@@ -12,28 +13,29 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Seeding database...');
 
-  // Create admin user with strong credentials
-  const adminEmail = 'administrator@ivaflow.com';
-  const adminPassword = 'IVAFlow@2024#SecureAdmin!Prod';
+  // Admin credentials come from the environment; nothing is hardcoded or printed.
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminEmail || !adminPassword) {
+    throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD must be set to seed the admin user');
+  }
+  if (adminPassword.length < 12) {
+    throw new Error('ADMIN_PASSWORD must be at least 12 characters');
+  }
   const hashedPassword = await bcrypt.hash(adminPassword, 10);
-  
+
   const adminUser = await prisma.user.upsert({
     where: { email: adminEmail },
     update: { password: hashedPassword },
     create: {
       email: adminEmail,
-      name: 'IVAFlow Administrator',
+      name: process.env.ADMIN_NAME || 'Administrator',
       password: hashedPassword,
       role: 'admin',
     },
   });
 
-  console.log('\n' + '='.repeat(60));
-  console.log('👤 Admin User Created/Updated');
-  console.log('='.repeat(60));
-  console.log('📧 Email:', adminEmail);
-  console.log('🔐 Password:', adminPassword);
-  console.log('='.repeat(60) + '\n');
+  console.log('👤 Admin user created/updated:', adminEmail);
 
   // Create pages
   const pages = [
