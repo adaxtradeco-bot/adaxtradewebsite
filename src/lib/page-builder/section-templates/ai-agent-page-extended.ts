@@ -135,14 +135,14 @@ export const AI_AGENT_PAGE_EXTENDED_TEMPLATES: SectionTemplate[] = [
         eyebrow: 'Self-Improving AI',
         title: 'Deploy, Scale',
         highlightedTitle: '& Continuously Learn',
-        lead: "Ivaflow's AI Agent isn't a one-time setup. It learns from every execution.",
+        lead: "Our platform's AI Agent isn't a one-time setup. It learns from every execution.",
         cards: [
           {
             number: '01',
             tag: 'Self-Improving AI',
             title: 'Continuous Learning from Execution',
             description:
-              'The more your team works inside Ivaflow, the better the AI becomes.',
+              'The more your team works inside our platform, the better the AI becomes.',
             example:
               'Example: After three months, routing accuracy improves as AI learns which agents handle which request types most effectively.',
           },
@@ -172,7 +172,7 @@ export const AI_AGENT_PAGE_EXTENDED_TEMPLATES: SectionTemplate[] = [
         title: 'Built for Real Operations.',
         highlightedTitle: 'Designed for Every Team.',
         subtitle:
-          "Whether you're running IT service management, HR operations, finance approvals, or customer support - Ivaflow's AI Agent adapts to your domain.",
+          "Whether you're running IT service management, HR operations, finance approvals, or customer support - our platform's AI Agent adapts to your domain.",
         badges: [
           { icon: '💼', label: 'IT & Service Desk', color: '#6366f1' },
           { icon: '👥', label: 'Human Resources', color: '#06b6d4' },
@@ -239,7 +239,7 @@ export const AI_AGENT_PAGE_EXTENDED_TEMPLATES: SectionTemplate[] = [
             number: '∞',
             label: 'Process Complexity Handled',
             description:
-              'Simple ticket routing or complex multi-department workflows - Ivaflow AI handles it all.',
+              'Simple ticket routing or complex multi-department workflows - Our AI handles it all.',
             color: 'green',
           },
           {
@@ -247,7 +247,7 @@ export const AI_AGENT_PAGE_EXTENDED_TEMPLATES: SectionTemplate[] = [
             number: '',
             label: 'One AI. Your entire organization.',
             description:
-              'Ivaflow AI Agent connects every module, every team, and every process.',
+              'Our AI Agent connects every module, every team, and every process.',
             color: 'indigo',
             span: 'wide',
             badges: [

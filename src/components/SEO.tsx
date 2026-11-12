@@ -4,6 +4,7 @@
  * Created: 2024-01-20
  */
 
+import { brand } from '@/config/brand';
 import Head from 'next/head';
 
 interface SEOProps {
@@ -17,7 +18,7 @@ interface SEOProps {
   modifiedTime?: string;
 }
 
-const SITE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://ivaflow.com';
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_BASE_URL || brand.url;
 
 const SUPPORTED_LANGUAGES = ['en', 'ar', 'tr', 'fr', 'de', 'es', 'fa'];
 
@@ -31,7 +32,7 @@ export function SEO({
   publishedTime,
   modifiedTime
 }: SEOProps) {
-  const fullTitle = `${title} | IVAFlow`;
+  const fullTitle = `${title} | ${brand.name}`;
   const canonicalUrl = `${SITE_URL}/${language}/${slug}`;
   const defaultImage = `${SITE_URL}/og-image.png`;
   const ogImage = image || defaultImage;

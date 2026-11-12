@@ -533,7 +533,7 @@ export const MEDIA_PROOF_CORE_TEMPLATES: SectionTemplate[] = [
         metrics: [
           {
             number: '5',
-            label: 'IVAFlow modules embeddable as workspace components'
+            label: 'Platform modules embeddable as workspace components'
           },
           {
             number: '3',
@@ -550,7 +550,7 @@ export const MEDIA_PROOF_CORE_TEMPLATES: SectionTemplate[] = [
         ],
         testimonials: [
           {
-            quote: 'The vendor portal went live in under a week. The forms and approval flows were already in IVAFlow — we just organized them into a workspace and set the access scope.',
+            quote: 'The vendor portal went live in under a week. The forms and approval flows were already in our platform — we just organized them into a workspace and set the access scope.',
             author: 'Procurement Lead',
             company: 'Industrial Manufacturing'
           },

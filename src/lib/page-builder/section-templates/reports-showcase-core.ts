@@ -22,7 +22,7 @@ export const REPORTS_SHOWCASE_CORE_TEMPLATES: SectionTemplate[] = [
       type: 'reports-hero',
       order: 0,
       data: {
-        badge: 'Reports & Analytics — Ivaflow',
+        badge: 'Reports & Analytics',
         title: 'Your data tells a story.',
         titleGradient: 'Start reading it.',
         subtitle:

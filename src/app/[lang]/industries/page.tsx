@@ -1,3 +1,4 @@
+import { brand } from '@/config/brand';
 import { Metadata } from 'next';
 
 import IndustryHeroSection from '@/components/builder-sections/IndustryHeroSection';
@@ -5,7 +6,7 @@ import IndustryCardsSection from '@/components/builder-sections/IndustryCardsSec
 import CTASection from '@/components/builder-sections/CTASection';
 
 export const metadata: Metadata = {
-  title: 'Industry Solutions - IVAFlow',
+  title: `Industry Solutions - ${brand.name}`,
   description: 'Built for Your Industry. See how teams in fleet, construction, healthcare, government and more transform operations with AI-native no-code automation.',
 };
 
@@ -201,7 +202,7 @@ export default function IndustriesPage({ params }: PageProps) {
 
   const ctaData = {
     title: "Don't See Your Industry?",
-    description: "IVAFlow adapts to any process. Book a demo—we'll map your exact workflow in minutes.",
+    description: `${brand.name} adapts to any process. Book a demo—we'll map your exact workflow in minutes.`,
     primaryButton: {
       text: "Schedule Demo",
       link: "/contact"

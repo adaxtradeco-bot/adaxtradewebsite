@@ -24,7 +24,7 @@ export const EXTERNAL_PORTALS_TEMPLATES: SectionTemplate[] = [
         eyebrow: 'Process Automation',
         title: 'From Submission to Resolution:',
         highlightedTitle: 'Fully Automated Workflows',
-        lead: "Ivaflow's process engine handles routing, notifications, escalations, and approvals — no code required.",
+        lead: "Our platform's process engine handles routing, notifications, escalations, and approvals — no code required.",
         steps: [
           {
             number: '1',
@@ -106,7 +106,7 @@ export const EXTERNAL_PORTALS_TEMPLATES: SectionTemplate[] = [
         eyebrow: 'AI-Powered Automation',
         title: 'Let AI Handle the',
         highlightedTitle: 'Repetitive Work',
-        lead: "Ivaflow's AI agents analyze, route, respond, and learn from every interaction — reducing manual effort by up to 70%.",
+        lead: "Our platform's AI agents analyze, route, respond, and learn from every interaction — reducing manual effort by up to 70%.",
         capabilities: [
           {
             icon: '🤖',
@@ -239,7 +239,7 @@ export const EXTERNAL_PORTALS_TEMPLATES: SectionTemplate[] = [
       data: {
         eyebrow: 'Competitive Edge',
         title: 'Why Choose',
-        highlightedTitle: 'Ivaflow External Portals',
+        highlightedTitle: 'External Portals',
         lead: 'See how we compare to Jira Service Desk, Kissflow, and other service portal solutions.',
         competitor1Name: 'Jira Service Desk',
         competitor2Name: 'Kissflow',

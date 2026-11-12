@@ -16,6 +16,7 @@
 
 'use client';
 
+import { sanitizeRichText } from '@/lib/sanitize';
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import InfographicRenderer from './InfographicRenderer';
@@ -371,7 +372,7 @@ export default function AutomationEventsSection({ data, style }: AutomationEvent
                       </span>
                       <p
                         className="text-[12.5px] text-slate-600 dark:text-[#8A8FA8] leading-[1.6]"
-                        dangerouslySetInnerHTML={{ __html: currentEvent.exampleText }}
+                        dangerouslySetInnerHTML={{ __html: sanitizeRichText(currentEvent.exampleText) }}
                       />
                     </div>
                   )}

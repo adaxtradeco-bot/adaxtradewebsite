@@ -8,6 +8,7 @@
 
 'use client';
 
+import { sanitizeSvg } from '@/lib/sanitize';
 import React from 'react';
 
 interface SnapCard {
@@ -59,7 +60,7 @@ const DEFAULT_CARDS: SnapCard[] = [
     iconBg: 'rgba(0,212,168,0.08)',
     iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="#00D4A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
     title: 'Built to sell',
-    description: 'White-label ready, multi-tenant capable, and flexible enough to fit any vertical. IVAFLOW is the product behind your automation practice — invisible to your clients.',
+    description: 'White-label ready, multi-tenant capable, and flexible enough to fit any vertical. Our platform is the product behind your automation practice — invisible to your clients.',
   },
 ];
 
@@ -76,7 +77,7 @@ function CardIcon({ card }: { card: SnapCard }) {
     return <span className="text-xl">{card.iconEmoji}</span>;
   }
   if (card.iconSvg) {
-    return <span className="w-[22px] h-[22px] block" dangerouslySetInnerHTML={{ __html: card.iconSvg }} />;
+    return <span className="w-[22px] h-[22px] block" dangerouslySetInnerHTML={{ __html: sanitizeSvg(card.iconSvg) }} />;
   }
   return <span className="text-xl">⚡</span>;
 }
@@ -90,7 +91,7 @@ export default function PlatformSnapshotSection({
     eyebrow = 'The platform at a glance',
     title = 'One platform. Every process.',
     titleHighlight = 'Every client.',
-    description = 'IVAFLOW is a fully modular BPMS — built so your team can configure, launch, and hand over complete automation systems without writing a single line of code.',
+    description = 'Our platform is a fully modular BPMS — built so your team can configure, launch, and hand over complete automation systems without writing a single line of code.',
     cards = DEFAULT_CARDS,
     accentColor = '#4F7FFF',
     accentColor2 = '#7B5CFF',

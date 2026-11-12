@@ -1,5 +1,6 @@
 'use client';
 
+import { sanitizeRichText } from '@/lib/sanitize';
 import React, { useState, useRef } from 'react';
 
 interface VideoSectionProps {
@@ -51,7 +52,7 @@ export default function VideoSection({ data, style }: VideoSectionProps) {
                 {data.features.map((feature, index) => (
                   <li key={index} className="flex items-center gap-3 text-lg">
                     <span className="text-green-400">✅</span>
-                    <span dangerouslySetInnerHTML={{ __html: feature }} />
+                    <span dangerouslySetInnerHTML={{ __html: sanitizeRichText(feature) }} />
                   </li>
                 ))}
               </ul>

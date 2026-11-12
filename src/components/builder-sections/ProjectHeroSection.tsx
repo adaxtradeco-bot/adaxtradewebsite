@@ -1,5 +1,6 @@
 'use client';
 
+import { safeStyleText } from '@/lib/sanitize';
 import React, { useEffect, useId, useMemo, useRef } from 'react';
 import {
   normalizeProjectHeroData,
@@ -241,7 +242,7 @@ export default function ProjectHeroSection({ data, style, isBuilder = false }: P
 
   return (
     <section ref={rootRef} className={`${scope} ${style?.textColor ?? ''}`} aria-label={d.ariaLabel || undefined}>
-      <style dangerouslySetInnerHTML={{ __html: css }} />
+      <style dangerouslySetInnerHTML={{ __html: safeStyleText(css) }} />
       <Background d={d} isBuilder={isBuilder} />
       <div className="ph-inner">
         {H.enabled && (

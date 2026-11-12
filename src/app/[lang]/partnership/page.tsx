@@ -1,3 +1,4 @@
+import { brand } from '@/config/brand';
 import { notFound } from 'next/navigation';
 import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
 import { Metadata } from 'next';
@@ -7,8 +8,8 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Partner Program - IVAFlow',
-    description: 'Join the IVAFlow partner ecosystem and grow with AI-native no-code automation',
+    title: `Partner Program - ${brand.name}`,
+    description: `Join the ${brand.name} partner ecosystem and grow with AI-native no-code automation`,
   };
 }
 

@@ -28,7 +28,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
         titleMiddle: 'will rely on —',
         titleHighlight: 'forever',
         description:
-          'IVAFLOW is a complete no-code Business Process Management Suite. Visual, modular, and built for any industry. Give your clients the power to automate their operations — and give your practice a product that closes deals.',
+          'Our platform is a complete no-code Business Process Management Suite. Visual, modular, and built for any industry. Give your clients the power to automate their operations — and give your practice a product that closes deals.',
         buttons: [
           {
             text: 'See the platform in action →',
@@ -73,7 +73,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
         title: 'One platform. Every process.',
         titleHighlight: 'Every client.',
         description:
-          'IVAFLOW is a fully modular BPMS — built so your team can configure, launch, and hand over complete automation systems without writing a single line of code.',
+          'Our platform is a fully modular BPMS — built so your team can configure, launch, and hand over complete automation systems without writing a single line of code.',
         cards: [
           {
             iconColor: '#4F7FFF',
@@ -97,7 +97,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
             iconSvg: `<svg viewBox="0 0 24 24" fill="none" stroke="#00D4A8" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>`,
             title: 'Built to sell',
             description:
-              'White-label ready, multi-tenant capable, and flexible enough to fit any vertical. IVAFLOW is the product behind your automation practice — invisible to your clients.',
+              'White-label ready, multi-tenant capable, and flexible enough to fit any vertical. Our platform is the product behind your automation practice — invisible to your clients.',
           },
         ],
         accentColor: '#4F7FFF',
@@ -136,7 +136,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
             tag: 'Workflow Orchestrator',
             title: 'Automate any business process — visually',
             description:
-              'Map workflows, assign roles, set conditions, and launch automated processes through a drag-and-drop designer. From simple approvals to complex multi-department flows — if your client can describe it, IVAFLOW can run it.',
+              'Map workflows, assign roles, set conditions, and launch automated processes through a drag-and-drop designer. From simple approvals to complex multi-department flows — if your client can describe it, our platform can run it.',
             linkText: 'Explore Workflows',
             linkHref: '#',
           },
@@ -297,7 +297,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
         tag: 'Automation Engine',
         title: 'Complex logic.',
         titleHighlight: 'Zero complexity',
-        body: "IVAFLOW's automation engine runs silently in the background — moving data between systems, sending alerts, enforcing deadlines, and triggering actions based on real events. Build flows through a visual node builder. No formulas. No scripts. No developers.",
+        body: "Our platform's automation engine runs silently in the background — moving data between systems, sending alerts, enforcing deadlines, and triggering actions based on real events. Build flows through a visual node builder. No formulas. No scripts. No developers.",
         stats: [
           { value: '5–8×', label: 'Faster than traditional delivery' },
           { value: '0', label: 'Lines of code required' },
@@ -355,7 +355,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
         title: 'Walk into any sector and',
         titleHighlight: 'deliver',
         description:
-          "IVAFLOW's modular architecture adapts to the way any industry operates. One platform covers them all — so your team doesn't need industry-specific software for every client.",
+          "Our platform's modular architecture adapts to the way any industry operates. One platform covers them all — so your team doesn't need industry-specific software for every client.",
         industries: [
           {
             emoji: '⚡',
@@ -442,7 +442,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
         leftCard: {
           tag: 'SLA Management',
           title: 'No task gets lost.\nNo deadline goes unnoticed.',
-          body: 'IVAFLOW tracks every activity against its deadline and acts automatically when something falls behind — alerting the right people, routing to backup teams, and logging every event for compliance and review.',
+          body: 'Our platform tracks every activity against its deadline and acts automatically when something falls behind — alerting the right people, routing to backup teams, and logging every event for compliance and review.',
           features: [
             'Per-task SLA definition with smart deadlines',
             'Multi-level escalation alerts (manager, team, director)',
@@ -454,7 +454,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
         rightCard: {
           tag: 'Integration Hub',
           title: "Your clients' existing systems\ndon't have to change.",
-          body: 'IVAFLOW connects to any external platform through a visual API integration layer. SSO, ERP, CRM, SMS, call centers, IoT sensors — configured without a developer, running without maintenance.',
+          body: 'Our platform connects to any external platform through a visual API integration layer. SSO, ERP, CRM, SMS, call centers, IoT sensors — configured without a developer, running without maintenance.',
           features: [
             'Visual API connector — zero code required',
             'SSO & organizational directory sync',
@@ -489,7 +489,7 @@ export const PLATFORM_SHOWCASE_TEMPLATES: SectionTemplate[] = [
       type: 'partner-cta-strip',
       order: 0,
       data: {
-        title: 'Ready to see what IVAFLOW\ncan do for your clients?',
+        title: 'Ready to see what our platform\ncan do for your clients?',
         subtitle:
           "Book a platform walkthrough. We'll walk through a real use case in your target industry — no commitment needed.",
         buttons: [

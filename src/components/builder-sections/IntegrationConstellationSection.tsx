@@ -5,6 +5,7 @@
  */
 'use client';
 
+import { brand } from '@/config/brand';
 import React from 'react';
 
 interface IntegrationCard {
@@ -134,7 +135,7 @@ export default function IntegrationConstellationSection({
                 fontWeight="700"
                 fontFamily="Inter,sans-serif"
               >
-                {data.centerLabel || 'IVAFLOW'}
+                {data.centerLabel || brand.name.toUpperCase()}
               </text>
               <text
                 x="180"

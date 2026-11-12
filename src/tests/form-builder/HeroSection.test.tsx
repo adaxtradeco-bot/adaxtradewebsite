@@ -4,6 +4,7 @@
  * Created: 2024-01-15
  */
 
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { HeroSection } from '@/components/form-builder/HeroSection';
 
@@ -15,10 +16,10 @@ describe('HeroSection', () => {
     expect(screen.getByText(/Run Your Processes/)).toBeInTheDocument();
   });
 
-  it('renders call-to-action buttons', () => {
+  it('renders call-to-action links', () => {
     render(<HeroSection />);
-    expect(screen.getByRole('button', { name: /Open the Designer/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Browse Templates/ })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Open the Designer/ })).toHaveAttribute('href', '#designer');
+    expect(screen.getByRole('link', { name: /Browse Templates/ })).toHaveAttribute('href', '#templates');
   });
 
   it('displays feature badges', () => {
@@ -32,6 +33,7 @@ describe('HeroSection', () => {
     render(<HeroSection />);
     expect(screen.getByText('Drag & Drop')).toBeInTheDocument();
     expect(screen.getByText('Validations')).toBeInTheDocument();
-    expect(screen.getByText('Integrations')).toBeInTheDocument();
+    // "Integrations" is both a nav link and a feature tile label.
+    expect(screen.getAllByText('Integrations').length).toBeGreaterThanOrEqual(2);
   });
 });

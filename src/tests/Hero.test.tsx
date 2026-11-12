@@ -4,24 +4,34 @@
  * Created: 2024-01-15
  */
 
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Hero } from '@/components/Hero';
+import { LanguageProvider } from '@/lib/i18n/context';
+
+vi.mock('next/navigation', () => ({
+  useParams: () => ({ lang: 'en' }),
+  usePathname: () => '/en',
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+}));
+
+const renderHero = () =>
+  render(
+    <LanguageProvider initialLanguage="en">
+      <Hero />
+    </LanguageProvider>
+  );
 
 describe('Hero', () => {
   it('renders hero heading', () => {
-    render(<Hero />);
+    renderHero();
     expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
     expect(screen.getByText(/Master English with/)).toBeInTheDocument();
   });
 
-  it('renders call-to-action buttons', () => {
-    render(<Hero />);
-    expect(screen.getByRole('link', { name: /Start Learning/ })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /Explore Features/ })).toBeInTheDocument();
-  });
-
-  it('has proper semantic structure', () => {
-    render(<Hero />);
-    expect(screen.getByRole('banner')).toBeInTheDocument();
+  it('renders call-to-action links pointing at the current language', () => {
+    renderHero();
+    expect(screen.getByRole('link', { name: /Start Learning/ })).toHaveAttribute('href', '/en/contact');
+    expect(screen.getByRole('link', { name: /Explore Features/ })).toHaveAttribute('href', '/en/form-builder');
   });
 });

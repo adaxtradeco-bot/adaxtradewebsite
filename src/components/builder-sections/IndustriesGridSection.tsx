@@ -105,7 +105,7 @@ export default function IndustriesGridSection({
     eyebrow = 'Industries',
     title = 'Walk into any sector and',
     titleHighlight = 'deliver',
-    description = 'IVAFLOW\'s modular architecture adapts to the way any industry operates. One platform covers them all — so your team doesn\'t need industry-specific software for every client.',
+    description = 'Our platform\'s modular architecture adapts to the way any industry operates. One platform covers them all — so your team doesn\'t need industry-specific software for every client.',
     industries = DEFAULT_INDUSTRIES,
     moreLabel = 'Also serving:',
     moreIndustries = DEFAULT_MORE,

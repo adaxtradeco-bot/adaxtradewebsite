@@ -1,5 +1,6 @@
 'use client';
 
+import { safeStyleText } from '@/lib/sanitize';
 import React, { useEffect, useId, useMemo, useRef, useState } from 'react';
 import {
   normalizeGatewayData,
@@ -325,7 +326,7 @@ export default function SplitGatewaySection({ data, style, isBuilder = false }: 
       aria-label={d.ariaLabel || undefined}
       data-armed={armed ? 'true' : 'false'}
     >
-      <style dangerouslySetInnerHTML={{ __html: css }} />
+      <style dangerouslySetInnerHTML={{ __html: safeStyleText(css) }} />
       <Background d={d} isBuilder={isBuilder} />
       <div className="sg-inner">
         {H.enabled && (

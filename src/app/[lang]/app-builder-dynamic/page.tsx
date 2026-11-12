@@ -1,3 +1,4 @@
+import { brand } from '@/config/brand';
 import { Metadata } from 'next';
 import { MediaContentSection } from '@/components/builder-sections/MediaContentSection';
 import FeatureCardsSection from '@/components/builder-sections/FeatureCardsSection';
@@ -6,7 +7,7 @@ import SidebarContentSection from '@/components/builder-sections/SidebarContentS
 import AppBuilderHeroSection from '@/components/builder-sections/AppBuilderHeroSection';
 
 export const metadata: Metadata = {
-  title: 'App Builder - IVAFlow',
+  title: `App Builder - ${brand.name}`,
   description: 'Build complete web apps in days with AI-assisted no-code platform',
 };
 
@@ -42,7 +43,7 @@ export default function AppBuilderDynamicPage() {
         data={{
           title: 'Why Choose App Builder?',
           subtitle: 'The Smart Way',
-          description: 'Traditional development takes months and requires specialized teams. With IVAFlow App Builder, business users can create production-ready applications in days, not months.',
+          description: `Traditional development takes months and requires specialized teams. With ${brand.name} App Builder, business users can create production-ready applications in days, not months.`,
           mediaType: 'image',
           mediaUrl: '/placeholder-dashboard.jpg',
           mediaAlt: 'App Builder Dashboard',

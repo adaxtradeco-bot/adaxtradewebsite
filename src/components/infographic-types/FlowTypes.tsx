@@ -7,6 +7,7 @@
  */
 'use client';
 
+import { sanitizeRichText } from '@/lib/sanitize';
 import React from 'react';
 import { ColorPalette } from '@/lib/infographic-themes';
 
@@ -157,7 +158,7 @@ export const EventFlowType: React.FC<FlowTypeProps> = ({ data, colors }) => (
           <div
             className="text-[13px] leading-[1.5]"
             style={{ color: 'rgba(255,255,255,0.75)' }}
-            dangerouslySetInnerHTML={{ __html: step.text }}
+            dangerouslySetInnerHTML={{ __html: sanitizeRichText(step.text) }}
           />
         </div>
       </div>

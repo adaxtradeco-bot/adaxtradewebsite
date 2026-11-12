@@ -120,7 +120,7 @@ export const REPORTS_SHOWCASE_ADVANCED_TEMPLATES: SectionTemplate[] = [
         title: "Your dashboards don't just show data.",
         titleGradient: 'They act on it.',
         subtitle:
-          "Connect to Ivaflow's AI engine and turn passive reports into proactive systems.",
+          "Connect to our platform's AI engine and turn passive reports into proactive systems.",
         cards: [
           {
             num: '01',
@@ -178,7 +178,7 @@ export const REPORTS_SHOWCASE_ADVANCED_TEMPLATES: SectionTemplate[] = [
         description:
           'No SQL, no API keys in your dashboards. Every connection built through an intuitive visual interface.',
         sources: [
-          { icon: '⚙', name: 'Ivaflow Forms', type: 'Internal' },
+          { icon: '⚙', name: 'Platform Forms', type: 'Internal' },
           { icon: '⚙', name: 'Workflows & SLA', type: 'Internal' },
           { icon: '🗄', name: 'SQL Server', type: 'Database' },
           { icon: '🗄', name: 'PostgreSQL', type: 'Database' },
@@ -235,7 +235,7 @@ export const REPORTS_SHOWCASE_ADVANCED_TEMPLATES: SectionTemplate[] = [
             suffix: '+',
             label: 'Data connectors',
             description:
-              'Connect to internal Ivaflow data, SQL databases, REST APIs, Excel, and more.',
+              'Connect to internal platform data, SQL databases, REST APIs, Excel, and more.',
             color: '#06b6d4',
             iconBg: 'rgba(6,182,212,0.12)',
             iconBorder: 'rgba(6,182,212,0.2)',
@@ -268,7 +268,7 @@ export const REPORTS_SHOWCASE_ADVANCED_TEMPLATES: SectionTemplate[] = [
         ],
         wideTitle: 'Connects to your entire stack',
         wideDescription:
-          'Every module in Ivaflow feeds your dashboards automatically — no manual syncing, no data silos.',
+          'Every module in our platform feeds your dashboards automatically — no manual syncing, no data silos.',
         wideBadges: [
           { text: 'Forms & Apps', colorClass: 'indigo' },
           { text: 'Workflow engine', colorClass: 'cyan' },
@@ -305,7 +305,7 @@ export const REPORTS_SHOWCASE_ADVANCED_TEMPLATES: SectionTemplate[] = [
       data: {
         eyebrow: 'Seamless integration',
         title: 'Works with',
-        titleGradient: 'everything in Ivaflow',
+        titleGradient: 'everything in our platform',
         description:
           'Dashboards refresh instantly across every module — no manual syncing, no data silos.',
         chips: [

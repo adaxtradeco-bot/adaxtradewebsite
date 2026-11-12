@@ -1,3 +1,4 @@
+import { brand } from '@/config/brand';
 import { SECTION_CATEGORIES, SectionTemplate } from '../section-registry.types';
 
 /**
@@ -49,7 +50,7 @@ export const SPLIT_GATEWAY_TEMPLATES: SectionTemplate[] = [
           eyebrow: '',
           title: 'Moving toward a sustainable future',
           accentTitle: 'and a greener world',
-          signature: 'with ADAXTRADE',
+          signature: `with ${brand.name.toUpperCase()}`,
           align: 'center',
           color: '#FFFFFF',
           accentColor: '#EBCB8B',

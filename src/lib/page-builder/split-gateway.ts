@@ -1,3 +1,5 @@
+import { brand } from '@/config/brand';
+
 /**
  * split-gateway — data model, defaults and helpers.
  *
@@ -307,7 +309,7 @@ export const DEFAULT_GATEWAY_HEADING: GatewayHeading = {
   eyebrow: '',
   title: 'Moving toward a sustainable future',
   accentTitle: 'and a greener world',
-  signature: 'with ADAXTRADE',
+  signature: `with ${brand.name.toUpperCase()}`,
   align: 'center',
   color: '#FFFFFF',
   accentColor: '#EBCB8B',
@@ -494,3 +496,4 @@ export function hexWithAlpha(color: string, alpha: number): string {
 }
 
 export const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+

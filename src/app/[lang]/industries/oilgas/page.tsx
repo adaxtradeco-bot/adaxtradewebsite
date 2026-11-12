@@ -1,3 +1,4 @@
+import { brand } from '@/config/brand';
 import { Metadata } from 'next';
 import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
 import { PrismaClient } from '@prisma/client';
@@ -5,7 +6,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const metadata: Metadata = {
-  title: 'Oil & Gas Solutions - IVAFlow',
+  title: `Oil & Gas Solutions - ${brand.name}`,
   description: 'Transform oil & gas operations with intelligent automation',
 };
 

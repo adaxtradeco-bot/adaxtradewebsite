@@ -6,6 +6,7 @@
 
 'use client';
 
+import { sanitizeSvg } from '@/lib/sanitize';
 import React, { useEffect, useRef, useState } from 'react';
 import type { SectionConfig } from '@/lib/page-builder/section-schemas';
 
@@ -93,7 +94,7 @@ const IntegrationMarqueeSection: React.FC<IntegrationMarqueeSectionProps> = ({
       case 'svg':
         return (
           <div
-            dangerouslySetInnerHTML={{ __html: app.svgCode || '' }}
+            dangerouslySetInnerHTML={{ __html: sanitizeSvg(app.svgCode) }}
             style={{ width: '24px', height: '24px' }}
           />
         );

@@ -5,6 +5,7 @@
  */
 'use client';
 
+import { sanitizeSvg } from '@/lib/sanitize';
 import React, { useEffect, useRef } from 'react';
 
 interface AIAgentHeroSectionProps {
@@ -116,7 +117,7 @@ export default function AIAgentHeroSection({
           <button className="flex items-center gap-2 bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-500 text-white px-8 py-4 rounded-xl text-base font-bold shadow-[0_0_50px_rgba(99,102,241,0.4)] hover:shadow-[0_0_80px_rgba(99,102,241,0.6)] hover:-translate-y-0.5 transition-all">
             {data.primaryButtonIcon && (
               <span
-                dangerouslySetInnerHTML={{ __html: data.primaryButtonIcon }}
+                dangerouslySetInnerHTML={{ __html: sanitizeSvg(data.primaryButtonIcon) }}
               />
             )}
             {data.primaryButtonText || 'Get Started Free'}
@@ -124,7 +125,7 @@ export default function AIAgentHeroSection({
           <button className="flex items-center gap-2 bg-white/80 dark:bg-white/5 text-slate-900 dark:text-white border border-slate-300/70 dark:border-white/20 px-8 py-4 rounded-xl text-base font-medium hover:bg-white dark:hover:bg-white/10 transition-all">
             {data.secondaryButtonIcon && (
               <span
-                dangerouslySetInnerHTML={{ __html: data.secondaryButtonIcon }}
+                dangerouslySetInnerHTML={{ __html: sanitizeSvg(data.secondaryButtonIcon) }}
               />
             )}
             {data.secondaryButtonText || 'Watch a Demo'}

@@ -8,7 +8,21 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { prisma } from './prisma';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
+export const MIN_JWT_SECRET_LENGTH = 32;
+
+/**
+ * Resolve the JWT secret lazily (not at import time, so `next build` works
+ * without it). Returns null when it is missing or too short — callers must
+ * fail closed. There is deliberately no fallback value.
+ */
+export function getJwtSecret(): string | null {
+  const secret = process.env.JWT_SECRET;
+  if (!secret || secret.length < MIN_JWT_SECRET_LENGTH) return null;
+  return secret;
+}
+
+const MISSING_SECRET_MESSAGE = `JWT_SECRET is not set or is shorter than ${MIN_JWT_SECRET_LENGTH} characters`;
+let warnedMissingSecret = false;
 
 export interface AuthUser {
   id: string;
@@ -26,24 +40,44 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 }
 
 export function generateToken(user: AuthUser): string {
+  const secret = getJwtSecret();
+  if (!secret) {
+    throw new Error(MISSING_SECRET_MESSAGE);
+  }
   return jwt.sign(
-    { 
-      id: user.id, 
-      email: user.email, 
-      name: user.name, 
-      role: user.role 
+    {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role
     },
-    JWT_SECRET,
-    { expiresIn: '7d' }
+    secret,
+    { expiresIn: '7d', algorithm: 'HS256' }
   );
 }
 
 export function verifyToken(token: string): AuthUser | null {
+  const secret = getJwtSecret();
+  if (!secret) {
+    if (!warnedMissingSecret) {
+      warnedMissingSecret = true;
+      console.error(`${MISSING_SECRET_MESSAGE}; rejecting all auth tokens`);
+    }
+    return null;
+  }
   try {
-    return jwt.verify(token, JWT_SECRET) as AuthUser;
+    return jwt.verify(token, secret, { algorithms: ['HS256'] }) as AuthUser;
   } catch {
     return null;
   }
+}
+
+// Compared against when the email is unknown, so "no such user" costs about
+// as much time as "wrong password" (no cheap user-enumeration timing signal).
+let dummyHash: Promise<string> | null = null;
+function getDummyHash(): Promise<string> {
+  if (!dummyHash) dummyHash = bcrypt.hash('timing-equaliser-not-a-password', 10);
+  return dummyHash;
 }
 
 export async function authenticateUser(email: string, password: string): Promise<AuthUser | null> {
@@ -51,7 +85,10 @@ export async function authenticateUser(email: string, password: string): Promise
     where: { email },
   });
 
-  if (!user) return null;
+  if (!user) {
+    await verifyPassword(password, await getDummyHash());
+    return null;
+  }
 
   const isValid = await verifyPassword(password, user.password);
   if (!isValid) return null;

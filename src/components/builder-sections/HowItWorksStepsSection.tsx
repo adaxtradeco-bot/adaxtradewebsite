@@ -8,6 +8,7 @@
 
 'use client';
 
+import { sanitizeSvg } from '@/lib/sanitize';
 import React, { useEffect, useRef } from 'react';
 
 /* ─── Types ─── */
@@ -120,7 +121,7 @@ function StepVisual({
             }}
           >
             {step.visualIcon ? (
-              <span dangerouslySetInnerHTML={{ __html: step.visualIcon }} />
+              <span dangerouslySetInnerHTML={{ __html: sanitizeSvg(step.visualIcon) }} />
             ) : (
               <span className="text-xl">🖼️</span>
             )}

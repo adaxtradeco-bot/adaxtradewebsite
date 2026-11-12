@@ -1,10 +1,11 @@
+import { brand } from '@/config/brand';
 import { Metadata } from 'next';
 import WorkflowHeroSection from '@/components/builder-sections/WorkflowHeroSection';
 import FeatureCardsSection from '@/components/builder-sections/FeatureCardsSection';
 import MetricsSection from '@/components/builder-sections/MetricsSection';
 
 export const metadata: Metadata = {
-  title: 'Workflow Orchestrator - IVAFlow',
+  title: `Workflow Orchestrator - ${brand.name}`,
   description: 'Orchestrate processes, reduce errors, and move faster with intelligent workflow automation',
 };
 

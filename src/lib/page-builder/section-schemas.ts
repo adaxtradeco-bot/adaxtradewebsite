@@ -423,15 +423,15 @@ export const WallOfFieldsSchema = BaseSectionSchema.extend({
   }),
 });
 
-// Why IvaFlow New Version section schema
+// Why Choose Us New Version section schema
 export const WhyIvaFlowNewVersionSchema = BaseSectionSchema.extend({
   type: z.literal('why-ivaflow-new-version'),
   data: z.object({
     header: z.object({
-      badge: z.string().default('Why IvaFlow'),
+      badge: z.string().default('Why Choose Us'),
       badgeTextColor: z.string().default('text-slate-600 dark:text-slate-400'),
       badgeIconColor: z.string().default('bg-cyan-500'),
-      title: z.string().default('What makes IvaFlow different?'),
+      title: z.string().default('What makes us different?'),
       titleColor: z.string().default('text-slate-900 dark:text-white'),
       description: z
         .string()

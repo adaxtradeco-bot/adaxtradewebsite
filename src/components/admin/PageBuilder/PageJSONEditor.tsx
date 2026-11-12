@@ -7,6 +7,7 @@
 
 'use client';
 
+import { escapeHtml } from '@/lib/sanitize';
 import React, { useState, useEffect } from 'react';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 
@@ -401,7 +402,7 @@ export function PageJSONEditor({ sections, onSave, onClose }: PageJSONEditorProp
     
     // Add remaining text
     if (currentIndex < line.length) {
-      const remaining = line.substring(currentIndex);
+      const remaining = escapeHtml(line.substring(currentIndex));
       // Highlight numbers
       const withNumbers = remaining.replace(/\b(\d+)\b/g, '<span class="text-orange-600 dark:text-orange-400">$1</span>');
       // Highlight booleans

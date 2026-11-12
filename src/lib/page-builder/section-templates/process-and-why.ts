@@ -283,7 +283,7 @@ export const PROCESS_AND_WHY_TEMPLATES: SectionTemplate[] = [
 
   {
     id: 'why-ivaflow-new-version',
-    name: 'Why IvaFlow - New Version',
+    name: 'Why Us - New Version',
     type: 'why-ivaflow-new-version',
     category: SECTION_CATEGORIES.CONTENT,
     description:
@@ -295,10 +295,10 @@ export const PROCESS_AND_WHY_TEMPLATES: SectionTemplate[] = [
       order: 0,
       data: {
         header: {
-          badge: 'Why IvaFlow',
+          badge: 'Why Choose Us',
           badgeTextColor: 'text-slate-600 dark:text-slate-400',
           badgeIconColor: 'bg-cyan-500',
-          title: 'What makes IvaFlow different?',
+          title: 'What makes us different?',
           titleColor: 'text-slate-900 dark:text-white',
           description:
             'A truly no-code operating system for serious organizations — designed to deliver outcomes, not just software.',

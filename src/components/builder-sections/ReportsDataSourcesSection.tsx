@@ -25,7 +25,7 @@ interface Props {
 }
 
 const DEFAULT_SOURCES: DataSource[] = [
-  { icon: '⚙', name: 'Ivaflow Forms', type: 'Internal' },
+  { icon: '⚙', name: 'Platform Forms', type: 'Internal' },
   { icon: '⚙', name: 'Workflows & SLA', type: 'Internal' },
   { icon: '🗄', name: 'SQL Server', type: 'Database' },
   { icon: '🗄', name: 'PostgreSQL', type: 'Database' },

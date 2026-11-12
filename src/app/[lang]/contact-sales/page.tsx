@@ -1,11 +1,12 @@
+import { brand } from '@/config/brand';
 import { Metadata } from 'next';
 import { ContactFormSection } from '@/components/builder-sections/ContactFormSection';
 import { TrustedBySection } from '@/components/builder-sections/TrustedBySection';
 import { FAQAccordionSection } from '@/components/builder-sections/FAQAccordionSection';
 
 export const metadata: Metadata = {
-  title: 'Contact Sales - IVAFlow',
-  description: 'Get in touch with our sales team to learn how IVAFlow can transform your business',
+  title: `Contact Sales - ${brand.name}`,
+  description: `Get in touch with our sales team to learn how ${brand.name} can transform your business`,
 };
 
 export default function ContactSalesPage() {
@@ -22,7 +23,7 @@ export default function ContactSalesPage() {
             Ready to Transform Your Business?
           </h1>
           <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto animate-slide-up animation-delay-100">
-            Connect with our sales team to discover how IVAFlow's AI-native automation platform can help you build powerful applications without code.
+            Connect with our sales team to discover how {brand.name}'s AI-native automation platform can help you build powerful applications without code.
           </p>
           <div className="flex gap-4 justify-center flex-wrap animate-slide-up animation-delay-200">
             <a href="#contact" className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold hover:bg-slate-100 transition-all hover:scale-105 shadow-2xl">
@@ -62,11 +63,11 @@ export default function ContactSalesPage() {
         <ContactFormSection
           data={{
             formType: 'demo',
-            destinationEmail: 'sales@ivaflow.com',
+            destinationEmail: brand.contactEmail,
             theme: 'standard',
             title: 'Get in Touch with Our Sales Team',
             subtitle: 'Contact Sales',
-            description: 'Fill out the form below and our team will get back to you within 24 hours to discuss your needs and show you how IVAFlow can help.',
+            description: `Fill out the form below and our team will get back to you within 24 hours to discuss your needs and show you how ${brand.name} can help.`,
             features: [
               {
                 icon: '⚡',
@@ -102,7 +103,7 @@ export default function ContactSalesPage() {
             description: 'Find answers to common questions about our sales process and services.',
             faqs: [
               {
-                question: 'How quickly can I get started with IVAFlow?',
+                question: `How quickly can I get started with ${brand.name}?`,
                 answer: 'You can start building immediately after signing up. Our intuitive drag-and-drop builder allows you to create your first form or workflow in minutes. For enterprise customers, we provide dedicated onboarding and training.'
               },
               {
@@ -110,11 +111,11 @@ export default function ContactSalesPage() {
                 answer: 'We offer 24/7 email support for all plans, with priority phone and chat support for enterprise customers. Our team includes technical experts who can help with implementation, integration, and best practices.'
               },
               {
-                question: 'Can IVAFlow integrate with our existing systems?',
-                answer: 'Yes! IVAFlow offers robust API and webhook capabilities, plus pre-built integrations with popular tools like Salesforce, Slack, Microsoft Teams, and more. Our enterprise plan includes custom integration support.'
+                question: `Can ${brand.name} integrate with our existing systems?`,
+                answer: `Yes! ${brand.name} offers robust API and webhook capabilities, plus pre-built integrations with popular tools like Salesforce, Slack, Microsoft Teams, and more. Our enterprise plan includes custom integration support.`
               },
               {
-                question: 'Is my data secure with IVAFlow?',
+                question: `Is my data secure with ${brand.name}?`,
                 answer: 'Absolutely. We use bank-level AES-256 encryption, are SOC 2 Type II certified, and comply with GDPR, HIPAA, and other major data protection regulations. Your data is stored in secure, redundant data centers.'
               },
               {
@@ -133,7 +134,7 @@ export default function ContactSalesPage() {
       {/* Final CTA */}
       <section className="py-20 px-6 bg-gradient-to-r from-slate-900 to-blue-900 text-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">Ready to See IVAFlow in Action?</h2>
+          <h2 className="text-4xl font-bold mb-4">Ready to See {brand.name} in Action?</h2>
           <p className="text-xl mb-8 opacity-90">
             Schedule a personalized demo with our team today.
           </p>

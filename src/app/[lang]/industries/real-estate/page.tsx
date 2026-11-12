@@ -1,3 +1,4 @@
+import { brand } from '@/config/brand';
 import { Metadata } from 'next';
 import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
 import { PrismaClient } from '@prisma/client';
@@ -5,7 +6,7 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export const metadata: Metadata = {
-  title: 'Real Estate Solutions - IVAFlow',
+  title: `Real Estate Solutions - ${brand.name}`,
   description: 'Streamline property management and operations',
 };
 

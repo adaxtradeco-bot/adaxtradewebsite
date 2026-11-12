@@ -29,7 +29,7 @@ interface Props {
 
 const DEFAULT_STATS: ScaleStat[] = [
   { icon: '📊', value: '10+', numericTarget: 10, suffix: '+', label: 'Chart types', description: 'Bar, line, area, pie, scatter, heatmap, combo, gauge, funnel, and KPI cards.', color: '#818cf8', iconBg: 'rgba(99,102,241,0.12)', iconBorder: 'rgba(99,102,241,0.2)', glowColor: 'rgba(99,102,241,0.25)' },
-  { icon: '🔌', value: '8+', numericTarget: 8, suffix: '+', label: 'Data connectors', description: 'Connect to internal Ivaflow data, SQL databases, REST APIs, Excel, and more.', color: '#06b6d4', iconBg: 'rgba(6,182,212,0.12)', iconBorder: 'rgba(6,182,212,0.2)', glowColor: 'rgba(6,182,212,0.2)' },
+  { icon: '🔌', value: '8+', numericTarget: 8, suffix: '+', label: 'Data connectors', description: 'Connect to internal platform data, SQL databases, REST APIs, Excel, and more.', color: '#06b6d4', iconBg: 'rgba(6,182,212,0.12)', iconBorder: 'rgba(6,182,212,0.2)', glowColor: 'rgba(6,182,212,0.2)' },
   { icon: '⚡', value: 'Real-time', label: 'Live data refresh', description: 'Dashboards update instantly when forms are submitted or workflows progress.', color: '#a78bfa', iconBg: 'rgba(139,92,246,0.12)', iconBorder: 'rgba(139,92,246,0.2)', glowColor: 'rgba(139,92,246,0.2)' },
   { icon: '✓', value: '0', numericTarget: 0, suffix: '', label: 'Lines of code required', description: 'Every dashboard, chart, and automation built entirely through a visual interface.', color: '#10b981', iconBg: 'rgba(16,185,129,0.12)', iconBorder: 'rgba(16,185,129,0.2)', glowColor: 'rgba(16,185,129,0.18)' },
 ];
@@ -75,7 +75,7 @@ export default function ReportsScaleSection({ data, isBuilder = false }: Props) 
     titleGradient = 'scale',
     stats = DEFAULT_STATS,
     wideTitle = 'Connects to your entire stack',
-    wideDescription = 'Every module in Ivaflow feeds your dashboards automatically — no manual syncing, no data silos.',
+    wideDescription = 'Every module in our platform feeds your dashboards automatically — no manual syncing, no data silos.',
     wideBadges = DEFAULT_BADGES,
     accentColor = '#6366f1',
     accentColor2 = '#818cf8',

@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { z } from 'zod';
+import { isAllowedRecipient } from '@/lib/contact-form-recipients';
+import { createRateLimiter, getClientIp } from '@/lib/rate-limit';
+
+// In-memory = per server instance (see rate-limit.ts).
+const submissionsByIp = createRateLimiter({ limit: 5, windowMs: 10 * 60 * 1000 });
 
 const FORM_FIELD_SCHEMAS = {
   contact: z.object({
@@ -38,6 +43,8 @@ const RequestSchema = z.object({
   destinationEmail: z.string().trim().email('Invalid destination email'),
   fields: z.record(z.string(), z.string()),
   pageUrl: z.string().trim().max(500).optional(),
+  // Honeypot: a hidden input humans never fill.
+  hp: z.string().max(500).optional(),
 });
 
 function escapeHtml(value: string): string {
@@ -69,7 +76,15 @@ function buildEmailHtml(formType: FormType, fields: Record<string, string>, page
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const limit = submissionsByIp.hit(getClientIp(request.headers));
+    if (!limit.allowed) {
+      return NextResponse.json(
+        { success: false, error: 'rate_limited' },
+        { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } }
+      );
+    }
+
+    const body = await request.json().catch(() => null);
     const parsed = RequestSchema.safeParse(body);
 
     if (!parsed.success) {
@@ -79,7 +94,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { formType, destinationEmail, fields, pageUrl } = parsed.data;
+    const { formType, destinationEmail, fields, pageUrl, hp } = parsed.data;
+
+    if (hp) {
+      // Pretend success so bots get no signal.
+      return NextResponse.json({ success: true });
+    }
+
+    if (!(await isAllowedRecipient(destinationEmail))) {
+      console.warn('Contact form: rejected unconfigured destination email');
+      return NextResponse.json({ success: false, error: 'invalid_destination' }, { status: 400 });
+    }
+
     const fieldSchema = FORM_FIELD_SCHEMAS[formType];
     const fieldsResult = fieldSchema.safeParse(fields);
 

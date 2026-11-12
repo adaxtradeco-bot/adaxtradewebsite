@@ -5,42 +5,29 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { readFile } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { readFile, stat } from 'fs/promises';
+import { getUploadContentType, resolveUploadPath, uploadSecurityHeaders } from '@/lib/upload-files';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { path: string[] } }
 ) {
   try {
-    const filePath = params.path.join('/');
-    const fullPath = join(process.cwd(), 'public', 'uploads', filePath);
+    const fullPath = resolveUploadPath(params.path);
+    const stats = fullPath ? await stat(fullPath).catch(() => null) : null;
 
-    if (!existsSync(fullPath)) {
+    if (!fullPath || !stats?.isFile()) {
       return new NextResponse('File not found', { status: 404 });
     }
 
     const fileBuffer = await readFile(fullPath);
-    
-    // Determine content type based on file extension
-    const extension = filePath.split('.').pop()?.toLowerCase();
-    const contentTypes: Record<string, string> = {
-      'jpg': 'image/jpeg',
-      'jpeg': 'image/jpeg',
-      'png': 'image/png',
-      'gif': 'image/gif',
-      'webp': 'image/webp',
-      'svg': 'image/svg+xml',
-      'ico': 'image/x-icon'
-    };
-
-    const contentType = contentTypes[extension || ''] || 'application/octet-stream';
+    const contentType = getUploadContentType(fullPath);
 
     return new NextResponse(new Uint8Array(fileBuffer), {
       headers: {
         'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=31536000, immutable'
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        ...uploadSecurityHeaders(contentType),
       }
     });
 

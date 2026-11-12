@@ -26,7 +26,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
         title: 'Every capability your clients need -',
         titleHighlight: 'configured, not built',
         description:
-          "Every feature in IVAFLOW is designed to be configured visually by your team - no development required. Here's what you can deliver to any client, in any industry.",
+          "Every feature in our platform is designed to be configured visually by your team - no development required. Here's what you can deliver to any client, in any industry.",
         accentColor: '#4F7FFF',
         accentColor2: '#7B5CFF',
         modules: [
@@ -72,7 +72,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
               {
                 moduleTag: 'Form Builder · Data Connection',
                 title: 'Fields connected live to any data source',
-                body: 'Any field in any form can pull its data from an external system in real time - a database, a REST API, another form in IVAFLOW, or any connected service. Dropdown lists that populate from your HR system. Customer names that auto-fill from your CRM. No copy-paste, no stale data.',
+                body: 'Any field in any form can pull its data from an external system in real time - a database, a REST API, another form in our platform, or any connected service. Dropdown lists that populate from your HR system. Customer names that auto-fill from your CRM. No copy-paste, no stale data.',
                 badges: [
                   { text: 'REST API data sources', variant: 'green' },
                   { text: 'Database direct binding', variant: 'green' },
@@ -116,7 +116,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
                 moduleTag: 'Workflow · Process Triggers',
                 title:
                   'Every process starts exactly when - and how - it should',
-                body: "Workflows don't always start the same way. IVAFLOW supports every type of trigger your clients need - a user clicks a button, a scheduled time arrives, an external system fires a webhook, or a condition in another process is met. One platform, every scenario.",
+                body: "Workflows don't always start the same way. Our platform supports every type of trigger your clients need - a user clicks a button, a scheduled time arrives, an external system fires a webhook, or a condition in another process is met. One platform, every scenario.",
                 badges: [
                   { text: 'Manual user-initiated start', variant: 'purple' },
                   {
@@ -140,7 +140,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
                 moduleTag: 'Workflow · Smart Assignment',
                 title:
                   'The right person gets the task - every time, automatically',
-                body: "Forget manual task routing. IVAFLOW assigns each process stage to the right person dynamically - based on the data in the form, the org chart position, who started the process, or rules you define. When your client's organization changes, the routing updates itself.",
+                body: "Forget manual task routing. Our platform assigns each process stage to the right person dynamically - based on the data in the form, the org chart position, who started the process, or rules you define. When your client's organization changes, the routing updates itself.",
                 badges: [
                   { text: 'Org chart position-based routing', variant: 'blue' },
                   { text: 'Form data-driven assignment', variant: 'blue' },
@@ -226,7 +226,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
               {
                 moduleTag: 'Analytics · Data Sources',
                 title: 'One dashboard. Data from everywhere.',
-                body: 'Connect your dashboards to any data source - IVAFLOW process data, external databases, REST APIs, Excel files, or cloud systems via JDBC/ODBC. Build reports that bring together numbers from across the entire organization onto a single screen, without any data migration.',
+                body: 'Connect your dashboards to any data source - our platform process data, external databases, REST APIs, Excel files, or cloud systems via JDBC/ODBC. Build reports that bring together numbers from across the entire organization onto a single screen, without any data migration.',
                 badges: [
                   { text: 'REST API & webhook sources', variant: 'blue' },
                   { text: 'Database direct connection', variant: 'blue' },
@@ -243,7 +243,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
               {
                 moduleTag: 'Analytics · Interactive Reports',
                 title: 'Click any number - and go deeper instantly',
-                body: 'Dashboards in IVAFLOW are not static pictures of data - they are interactive. Click any chart to drill into the underlying records. Apply dynamic filters and watch every connected chart update instantly. Give managers and executives the power to investigate without waiting for a report to be rebuilt.',
+                body: 'Dashboards in our platform are not static pictures of data - they are interactive. Click any chart to drill into the underlying records. Apply dynamic filters and watch every connected chart update instantly. Give managers and executives the power to investigate without waiting for a report to be rebuilt.',
                 badges: [
                   { text: 'Drill-down to record level', variant: 'purple' },
                   { text: 'Cross-chart dynamic filtering', variant: 'purple' },
@@ -268,7 +268,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
               {
                 moduleTag: 'Automation · Visual Builder',
                 title: 'Build automation flows like drawing a diagram',
-                body: "IVAFLOW's node-based automation designer lets business analysts map out complex multi-step automation flows visually - connecting triggers, conditions, actions, and API calls by dragging nodes onto a canvas. No scripting knowledge needed. What you see is exactly what runs.",
+                body: "Our platform's node-based automation designer lets business analysts map out complex multi-step automation flows visually - connecting triggers, conditions, actions, and API calls by dragging nodes onto a canvas. No scripting knowledge needed. What you see is exactly what runs.",
                 badges: [
                   { text: 'Visual node-based designer', variant: 'purple' },
                   {
@@ -288,7 +288,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
               {
                 moduleTag: 'Automation · AI Integration',
                 title: 'Connect any process to AI - and let it decide',
-                body: 'Route process data to any AI model - online or on-premise - and use the response to drive the next step automatically. Classify complaints, detect sentiment, summarize documents, or chain multiple AI models in sequence. IVAFLOW makes AI a working part of operations, not just a demo feature.',
+                body: 'Route process data to any AI model - online or on-premise - and use the response to drive the next step automatically. Classify complaints, detect sentiment, summarize documents, or chain multiple AI models in sequence. Our platform makes AI a working part of operations, not just a demo feature.',
                 badges: [
                   {
                     text: 'Online & offline AI model support',
@@ -316,7 +316,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
               {
                 moduleTag: 'SLA · Deadline Intelligence',
                 title: 'Deadlines that chase people - so you do not have to',
-                body: 'Set a time standard for every task and let IVAFLOW handle the follow-up. As deadlines approach, the system sends multi-level alerts - first to the assignee, then their manager, then leadership - escalating automatically until action is taken. Nothing falls through the cracks.',
+                body: 'Set a time standard for every task and let our platform handle the follow-up. As deadlines approach, the system sends multi-level alerts - first to the assignee, then their manager, then leadership - escalating automatically until action is taken. Nothing falls through the cracks.',
                 badges: [
                   { text: 'Per-task SLA definition', variant: 'amber' },
                   { text: '3-level escalation alerts', variant: 'amber' },
@@ -333,7 +333,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
               {
                 moduleTag: 'SLA · Performance Analytics',
                 title: 'Understand where time is being lost - and fix it',
-                body: "Go beyond 'on time or late.' IVAFLOW's SLA analytics show success rates by process, team, and time period - alongside average handling times and the most common causes of delay. Give operations managers the data they need to make informed decisions about staffing, routing, and process design.",
+                body: "Go beyond 'on time or late.' our platform's SLA analytics show success rates by process, team, and time period - alongside average handling times and the most common causes of delay. Give operations managers the data they need to make informed decisions about staffing, routing, and process design.",
                 badges: [
                   { text: 'SLA success & failure matrix', variant: 'blue' },
                   { text: 'Average handling time (AHT)', variant: 'blue' },
@@ -361,7 +361,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
               {
                 moduleTag: 'Integration · API Connections',
                 title: 'Connect to any system - without writing a single line',
-                body: "IVAFLOW's visual API connector lets your team link any external system to any process - configuring endpoints, headers, request bodies, and response mappings through a clean interface. Connect CRM, ERP, SMS gateways, and legacy platforms without needing a developer on the call.",
+                body: "Our platform's visual API connector lets your team link any external system to any process - configuring endpoints, headers, request bodies, and response mappings through a clean interface. Connect CRM, ERP, SMS gateways, and legacy platforms without needing a developer on the call.",
                 badges: [
                   { text: 'Visual REST API builder', variant: 'green' },
                   {
@@ -383,7 +383,7 @@ export const PLATFORM_CAPABILITIES_TEMPLATES: SectionTemplate[] = [
                 moduleTag: 'Integration · Location & GIS',
                 title:
                   'Add location awareness to any process - anywhere in the world',
-                body: 'For clients in logistics, municipal services, field operations, or any location-dependent sector - IVAFLOW brings real-time geographic data directly into process workflows. Track assets, trigger steps based on location, and build spatial dashboards that show operations on a live map.',
+                body: 'For clients in logistics, municipal services, field operations, or any location-dependent sector - our platform brings real-time geographic data directly into process workflows. Track assets, trigger steps based on location, and build spatial dashboards that show operations on a live map.',
                 badges: [
                   {
                     text: 'Real-time asset & vehicle tracking',

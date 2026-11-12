@@ -150,6 +150,8 @@ const THEME_CLASSES: Record<
   },
 };
 
+const HONEYPOT_NAME = 'website_url';
+
 function buildEmptyFormData(formType: FormType): Record<string, string> {
   return Object.fromEntries(FORM_FIELD_DEFS[formType].map((field) => [field.name, '']));
 }
@@ -191,8 +193,9 @@ export function ContactFormSection({ data, isBuilder = false }: ContactFormSecti
     setErrorMessage('');
   }, [formType]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const honeypot = new FormData(e.currentTarget).get(HONEYPOT_NAME);
 
     if (isBuilder) {
       setStatus('success');
@@ -211,6 +214,7 @@ export function ContactFormSection({ data, isBuilder = false }: ContactFormSecti
           destinationEmail,
           fields: formData,
           pageUrl: typeof window !== 'undefined' ? window.location.href : undefined,
+          hp: typeof honeypot === 'string' ? honeypot : '',
         }),
       });
 
@@ -272,6 +276,12 @@ export function ContactFormSection({ data, isBuilder = false }: ContactFormSecti
       </button>
 
       {privacyNote && <p className={`text-xs text-center ${t.bodyText}`}>{privacyNote}</p>}
+
+      {/* Honeypot (kept last so it does not shift the layout): hidden from people and
+          assistive tech; submissions that fill it are dropped server-side. */}
+      <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}>
+        <input type="text" name={HONEYPOT_NAME} tabIndex={-1} autoComplete="off" defaultValue="" />
+      </div>
     </form>
   );
 

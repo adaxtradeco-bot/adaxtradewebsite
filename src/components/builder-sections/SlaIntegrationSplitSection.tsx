@@ -34,7 +34,7 @@ interface SlaIntegrationSplitSectionProps {
 const DEFAULT_LEFT: SplitCard = {
   tag: 'SLA Management',
   title: 'No task gets lost.\nNo deadline goes unnoticed.',
-  body: 'IVAFLOW tracks every activity against its deadline and acts automatically when something falls behind — alerting the right people, routing to backup teams, and logging every event for compliance and review.',
+  body: 'Our platform tracks every activity against its deadline and acts automatically when something falls behind — alerting the right people, routing to backup teams, and logging every event for compliance and review.',
   features: [
     'Per-task SLA definition with smart deadlines',
     'Multi-level escalation alerts (manager, team, director)',
@@ -47,7 +47,7 @@ const DEFAULT_LEFT: SplitCard = {
 const DEFAULT_RIGHT: SplitCard = {
   tag: 'Integration Hub',
   title: 'Your clients\' existing systems\ndon\'t have to change.',
-  body: 'IVAFLOW connects to any external platform through a visual API integration layer. SSO, ERP, CRM, SMS, call centers, IoT sensors — configured without a developer, running without maintenance.',
+  body: 'Our platform connects to any external platform through a visual API integration layer. SSO, ERP, CRM, SMS, call centers, IoT sensors — configured without a developer, running without maintenance.',
   features: [
     'Visual API connector — zero code required',
     'SSO & organizational directory sync',

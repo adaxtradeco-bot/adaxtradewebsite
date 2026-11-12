@@ -139,7 +139,7 @@ export default function AutomationEngineSection({
     tag = 'Automation Engine',
     title = 'Complex logic.',
     titleHighlight = 'Zero complexity',
-    body = 'IVAFLOW\'s automation engine runs silently in the background — moving data between systems, sending alerts, enforcing deadlines, and triggering actions based on real events. Build flows through a visual node builder. No formulas. No scripts. No developers.',
+    body = 'Our platform\'s automation engine runs silently in the background — moving data between systems, sending alerts, enforcing deadlines, and triggering actions based on real events. Build flows through a visual node builder. No formulas. No scripts. No developers.',
     stats = DEFAULT_STATS,
     triggers = DEFAULT_TRIGGERS,
     flowNodes = DEFAULT_FLOW_NODES,

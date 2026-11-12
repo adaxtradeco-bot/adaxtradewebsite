@@ -39,7 +39,7 @@ export default function ReportsIntegrationSection({ data, isBuilder = false }: P
   const {
     eyebrow = 'Seamless integration',
     title = 'Works with',
-    titleGradient = 'everything in Ivaflow',
+    titleGradient = 'everything in our platform',
     description = 'Dashboards refresh instantly across every module — no manual syncing, no data silos.',
     chips = DEFAULT_CHIPS,
     accentColor = '#6366f1',

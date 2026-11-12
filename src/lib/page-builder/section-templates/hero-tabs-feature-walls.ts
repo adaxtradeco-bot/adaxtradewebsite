@@ -80,7 +80,7 @@ export const HERO_TABS_FEATURE_WALLS_TEMPLATES: SectionTemplate[] = [
             title: 'IT Leaders',
             subtitle:
               'If you have a huge backlog of internal applications and processes to be built',
-            description: 'IVAFlow is the IDEAL platform for',
+            description: 'We are the IDEAL platform for',
             benefits: [
               'Building dozens of custom applications',
               'Automating simple to complex processes',
@@ -97,7 +97,7 @@ export const HERO_TABS_FEATURE_WALLS_TEMPLATES: SectionTemplate[] = [
             title: 'Developers',
             subtitle:
               'If you want to accelerate app development and reduce manual coding efforts',
-            description: 'IVAFlow is the right choice for your team',
+            description: 'We are the right choice for your team',
             benefits: [
               'Delivers 10x productivity',
               'Uses AI to automate repetitive tasks',
@@ -114,7 +114,7 @@ export const HERO_TABS_FEATURE_WALLS_TEMPLATES: SectionTemplate[] = [
             title: 'Process owners',
             subtitle:
               'If you need to streamline workflows without relying on IT',
-            description: 'IVAFlow is the right choice for your team',
+            description: 'We are the right choice for your team',
             benefits: [
               'Automates simple to complex processes',
               'Provides no-code tools for faster execution',
@@ -131,7 +131,7 @@ export const HERO_TABS_FEATURE_WALLS_TEMPLATES: SectionTemplate[] = [
             title: 'Business users',
             subtitle:
               'If you need a user-friendly platform to simplify daily tasks',
-            description: 'IVAFlow is the right choice for your team',
+            description: 'We are the right choice for your team',
             benefits: [
               'Requires no coding to create and modify processes',
               'Uses AI to automate and optimize work',

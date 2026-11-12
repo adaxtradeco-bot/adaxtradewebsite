@@ -46,7 +46,7 @@ const DEFAULT_MODULES: Module[] = [
     icon: '⚡',
     tag: 'Workflow Orchestrator',
     title: 'Automate any business process — visually',
-    description: 'Map workflows, assign roles, set conditions, and launch automated processes through a drag-and-drop designer. From simple approvals to complex multi-department flows — if your client can describe it, IVAFLOW can run it.',
+    description: 'Map workflows, assign roles, set conditions, and launch automated processes through a drag-and-drop designer. From simple approvals to complex multi-department flows — if your client can describe it, our platform can run it.',
     linkText: 'Explore Workflows',
     linkHref: '#',
   },

@@ -5,27 +5,59 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { authenticateUser, generateToken } from '@/lib/auth';
+import { createRateLimiter, getClientIp, type RateLimitResult } from '@/lib/rate-limit';
+
+const WINDOW_MS = 15 * 60 * 1000;
+// Failed attempts only. In-memory = per server instance (see rate-limit.ts).
+const failedByEmail = createRateLimiter({ limit: 5, windowMs: WINDOW_MS });
+const failedByIp = createRateLimiter({ limit: 10, windowMs: WINDOW_MS });
+
+const LoginSchema = z.object({
+  email: z.string().trim().min(1).max(320),
+  password: z.string().min(1).max(1024),
+});
+
+function tooManyAttempts(limit: RateLimitResult) {
+  return NextResponse.json(
+    { error: 'Too many login attempts. Please try again later.' },
+    { status: 429, headers: { 'Retry-After': String(limit.retryAfterSeconds) } }
+  );
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    const body = await request.json().catch(() => null);
+    const parsed = LoginSchema.safeParse(body);
 
-    if (!email || !password) {
+    if (!parsed.success) {
       return NextResponse.json(
         { error: 'Email and password are required' },
         { status: 400 }
       );
     }
 
+    const { email, password } = parsed.data;
+    const ipKey = `ip:${getClientIp(request.headers)}`;
+    const emailKey = `email:${email.toLowerCase()}`;
+
+    for (const blocked of [failedByIp.check(ipKey), failedByEmail.check(emailKey)]) {
+      if (!blocked.allowed) return tooManyAttempts(blocked);
+    }
+
     const user = await authenticateUser(email, password);
-    
+
     if (!user) {
+      failedByIp.hit(ipKey);
+      failedByEmail.hit(emailKey);
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
       );
     }
+
+    failedByEmail.reset(emailKey);
 
     const token = generateToken(user);
 

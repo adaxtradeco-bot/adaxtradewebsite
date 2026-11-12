@@ -9,6 +9,7 @@
 
 'use client';
 
+import { brand } from '@/config/brand';
 import React, { useState, useRef } from 'react';
 
 interface ReportsHeroSectionData {
@@ -48,7 +49,7 @@ const DEFAULT_BARS = [55, 72, 88, 63, 91, 78, 65];
 
 export default function ReportsHeroSection({ data, isBuilder = false }: ReportsHeroSectionProps) {
   const {
-    badge = 'Reports & Analytics — Ivaflow',
+    badge = 'Reports & Analytics',
     title = 'Your data tells a story.',
     titleGradient = 'Start reading it.',
     subtitle = 'Real-time dashboards, automated reports, and AI-powered insights — built visually, with zero code.',
@@ -212,7 +213,7 @@ export default function ReportsHeroSection({ data, isBuilder = false }: ReportsH
             <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
             <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
             <div className="flex-1 mx-3 h-5 rounded flex items-center px-2.5 text-[10px] bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.06] text-slate-400 dark:text-[#404060]">
-              ivaflow.com/dashboard/analytics
+              {brand.url.replace(/^https?:[/][/]/, '')}/dashboard/analytics
             </div>
           </div>
           {renderMedia()}

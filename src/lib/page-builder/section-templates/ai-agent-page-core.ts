@@ -22,11 +22,11 @@ export const AI_AGENT_PAGE_CORE_TEMPLATES: SectionTemplate[] = [
       type: 'ai-agent-hero',
       order: 0,
       data: {
-        eyebrow: 'Ivaflow AI Agent - Now Live',
+        eyebrow: 'AI Agent - Now Live',
         title: 'Empower Your Workflows',
         highlightedText: 'with Intelligent Automation',
         subtitle:
-          "Your organization doesn't need more tools - it needs intelligence built into every step. Ivaflow's AI Agent understands your business, builds your systems, runs your operations, and continuously improves everything - so your team can focus on what truly matters.",
+          "Your organization doesn't need more tools - it needs intelligence built into every step. Our platform's AI Agent understands your business, builds your systems, runs your operations, and continuously improves everything - so your team can focus on what truly matters.",
         primaryButtonText: 'Get Started Free',
         primaryButtonIcon:
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>',
@@ -320,7 +320,7 @@ export const AI_AGENT_PAGE_CORE_TEMPLATES: SectionTemplate[] = [
         title: 'Integrate & Orchestrate',
         highlightedTitle: 'Everything',
         lead: 'AI bridges your internal systems, external tools, and communication channels.',
-        centerLabel: 'IVAFLOW',
+        centerLabel: 'PLATFORM',
         innerNodes: [
           { label: 'CRM', angle: 0 },
           { label: 'ERP', angle: 90 },

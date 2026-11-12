@@ -42,7 +42,7 @@ export default function PartnerCtaStripSection({
   isBuilder = false,
 }: PartnerCtaStripSectionProps) {
   const {
-    title = 'Ready to see what IVAFLOW\ncan do for your clients?',
+    title = 'Ready to see what our platform\ncan do for your clients?',
     subtitle = 'Book a platform walkthrough. We\'ll walk through a real use case in your target industry — no commitment needed.',
     buttons = DEFAULT_BUTTONS,
     accentColor = '#4F7FFF',

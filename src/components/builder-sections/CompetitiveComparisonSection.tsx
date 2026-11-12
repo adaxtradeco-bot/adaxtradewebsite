@@ -5,6 +5,7 @@
  */
 'use client';
 
+import { brand } from '@/config/brand';
 import React from 'react';
 
 interface ComparisonRow {
@@ -102,7 +103,7 @@ export default function CompetitiveComparisonSection({
                     Feature
                   </th>
                   <th className="text-left p-4 font-bold text-sm border-b border-slate-200 dark:border-white/5 bg-indigo-500/10 text-indigo-600 dark:text-indigo-300">
-                    Ivaflow
+                    {brand.name}
                   </th>
                   <th className="text-left p-4 font-bold text-sm border-b border-slate-200 dark:border-white/5">
                     {data.competitor1Name || 'Competitor 1'}
