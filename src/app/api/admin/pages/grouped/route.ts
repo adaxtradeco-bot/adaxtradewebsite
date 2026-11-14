@@ -32,6 +32,7 @@ export async function GET(request: NextRequest) {
             language: true,
             status: true,
             isDefaultLang: true,
+            isHomepage: true,
             lastSyncedAt: true,
             updatedAt: true,
             createdAt: true
@@ -51,6 +52,7 @@ export async function GET(request: NextRequest) {
         language: true,
         status: true,
         isDefaultLang: true,
+        isHomepage: true,
         updatedAt: true,
         createdAt: true
       }
