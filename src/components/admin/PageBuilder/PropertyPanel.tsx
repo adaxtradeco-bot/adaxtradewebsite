@@ -8,6 +8,8 @@
 'use client';
 
 import React from 'react';
+import { Icon } from '@/components/admin/icons';
+import { SECTION_TEMPLATES } from '@/lib/page-builder/section-registry';
 import { useForm } from 'react-hook-form';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import InteractiveFeatureWallPropertyPanel from './InteractiveFeatureWallPropertyPanel';
@@ -61,6 +63,11 @@ interface PropertyPanelProps {
   section: SectionConfig;
   onUpdate: (updates: Partial<SectionConfig>) => void;
   onClose: () => void;
+  /** Shell extras (all optional) */
+  position?: { index: number; total: number };
+  expanded?: boolean;
+  onToggleExpand?: () => void;
+  onApply?: () => void;
 }
 
 function ImageUploader({ value, onChange, field, onSettingsChange }: { 
@@ -538,8 +545,8 @@ function JSONEditor({ section, onUpdate }: { section: SectionConfig; onUpdate: (
   );
 }
 
-export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps) {
-  const { register, handleSubmit, watch, setValue } = useForm<any>({
+export function PropertyPanel({ section, onUpdate, onClose, position, expanded, onToggleExpand, onApply }: PropertyPanelProps) {
+  const { register, handleSubmit, watch, setValue, reset } = useForm<any>({
     defaultValues: {
       ...section.data,
       style: section.style || {},
@@ -547,7 +554,9 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
   });
 
   const watchedValues = watch();
-  const [editMode, setEditMode] = React.useState<'visual' | 'json'>('visual');
+  const [tab, setTab] = React.useState<'content' | 'style' | 'json'>('content');
+  // Snapshot taken when the section was selected, used by Reset.
+  const initialRef = React.useRef({ data: section.data, style: section.style });
 
   // Update section when form values change (only for form-based sections)
   React.useEffect(() => {
@@ -808,150 +817,128 @@ export function PropertyPanel({ section, onUpdate, onClose }: PropertyPanelProps
     }
   };
 
+  const humanize = (t: string) =>
+    t.replace(/Section$/, '').replace(/[-_]/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^./, (c) => c.toUpperCase());
+  const templateName = SECTION_TEMPLATES.find((t) => t.type === section.type)?.name ?? humanize(section.type);
+
+  const handleReset = () => {
+    const { data, style } = initialRef.current;
+    reset({ ...(data as any), style: (style as any) || {} });
+    onUpdate({ data: data as any, style: style as any });
+  };
+
+  const tabs: { id: typeof tab; label: string }[] = [
+    { id: 'content', label: 'Content' },
+    { id: 'style', label: 'Style' },
+    { id: 'json', label: 'JSON' },
+  ];
+  const fieldCls =
+    'w-full h-10 px-3 border border-[#D0D5DD] rounded-lg bg-white text-sm text-[#101828] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]';
+
   return (
-    <div className="w-full sm:w-96 lg:w-96 xl:w-[28rem] h-full bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 flex flex-col max-w-full shadow-2xl lg:shadow-none">
+    <div className="w-full h-full bg-white border-l border-[#E4E7EC] flex flex-col max-w-full">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Edit Section
-        </h2>
-        <button
-          onClick={onClose}
-          className="p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto">
-        <form className="p-4 space-y-6">
-          {/* Section Info */}
-          <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
-            <div className="flex items-center space-x-2 mb-2">
-              <span className="text-2xl">
-                {section.type === 'hero' ? '🎯' : 
-                 section.type === 'features' ? '⭐' :
-                 section.type === 'cta' ? '🚀' :
-                 section.type === 'tabs' ? '📑' :
-                 section.type === 'faq' ? '❓' : '📄'}
-              </span>
-              <span className="font-medium text-gray-900 dark:text-white capitalize">
-                {section.type} Section
-              </span>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              Configure the content and appearance of this section
-            </p>
-          </div>
-
-          {/* Edit Mode Toggle (for sections with custom editors) */}
-          {hasCustomEditor && (
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">Edit Mode</span>
-                <div className="flex gap-1 bg-white dark:bg-gray-800 rounded-md p-0.5 border border-gray-300 dark:border-gray-600">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setEditMode('visual');
-                    }}
-                    className={`px-3 py-1 text-xs font-medium rounded transition-all ${
-                      editMode === 'visual'
-                        ? 'bg-blue-600 text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                  >
-                    🎨 Visual
-                  </button>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setEditMode('json');
-                    }}
-                    className={`px-3 py-1 text-xs font-medium rounded transition-all ${
-                      editMode === 'json'
-                        ? 'bg-purple-600 text-white shadow-sm'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                    }`}
-                  >
-                    📝 JSON
-                  </button>
-                </div>
-              </div>
-              <p className="text-xs text-gray-600 dark:text-gray-400">
-                {editMode === 'visual' 
-                  ? '✨ Use visual controls to edit section properties'
-                  : '⚡ Edit raw JSON for advanced customization & copy/paste'}
-              </p>
+      <div className="px-4 pt-3.5 pb-2.5 flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h2 className="text-base font-bold text-[#101828] truncate">{templateName}</h2>
+          {position && (
+            <div className="text-[13px] text-[#667085] mt-0.5">
+              Section {position.index + 1} of {position.total}
             </div>
           )}
+        </div>
+        <div className="flex gap-1">
+          {onToggleExpand && (
+            <button
+              onClick={onToggleExpand}
+              aria-label={expanded ? 'Shrink panel' : 'Expand panel'}
+              title={expanded ? 'Shrink panel' : 'Expand panel'}
+              className="w-8 h-8 grid place-items-center rounded-lg text-[#475467] hover:bg-[#F2F4F7]"
+            >
+              <Icon name="expand" />
+            </button>
+          )}
+          <button
+            onClick={onClose}
+            aria-label="Close panel"
+            className="w-8 h-8 grid place-items-center rounded-lg text-[#475467] hover:bg-[#F2F4F7]"
+          >
+            <Icon name="close" />
+          </button>
+        </div>
+      </div>
 
-          {/* Content Tab */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center">
-              <span className="mr-2">{editMode === 'json' ? '📝' : '🎨'}</span>
-              {editMode === 'json' ? 'JSON Editor' : 'Content'}
-            </h3>
-            {hasCustomEditor && editMode === 'json' ? (
-              <JSONEditor section={section} onUpdate={onUpdate} />
-            ) : (
-              renderSectionSpecificFields()
-            )}
-          </div>
+      <div className="px-4 pb-2.5">
+        <div className="flex p-[3px] rounded-[10px] bg-[#F2F4F7]" role="tablist">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              aria-selected={tab === t.id}
+              onClick={() => setTab(t.id)}
+              className={`flex-1 h-[30px] rounded-lg text-[13px] font-medium ${
+                tab === t.id ? 'bg-white text-[#101828] shadow-[0_1px_2px_rgba(16,24,40,.12)]' : 'text-[#475467]'
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
-          {/* Style Tab */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3 flex items-center">
-              <span className="mr-2">🎨</span>
-              Style
-            </h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Text Alignment
-                </label>
-                <select
-                  {...register('style.alignment')}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                >
-                  <option value="left">Left</option>
-                  <option value="center">Center</option>
-                  <option value="right">Right</option>
-                </select>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Padding
-                </label>
-                <select
-                  {...register('style.padding')}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                >
-                  <option value="py-8">Small (32px)</option>
-                  <option value="py-16">Medium (64px)</option>
-                  <option value="py-20">Large (80px)</option>
-                  <option value="py-24">Extra Large (96px)</option>
-                </select>
-              </div>
+      {/* Content: Content/Style panes stay mounted so their local state survives tab switches */}
+      <div className="flex-1 min-h-0 overflow-y-auto border-t border-[#E4E7EC]">
+        <form className="p-4" onSubmit={(e) => e.preventDefault()}>
+          <div className={tab === 'content' ? '' : 'hidden'}>{renderSectionSpecificFields()}</div>
+
+          <div className={tab === 'style' ? 'space-y-4' : 'hidden'}>
+            <div>
+              <label className="block text-[13px] font-semibold text-[#344054] mb-1.5">Text alignment</label>
+              <select {...register('style.alignment')} className={fieldCls}>
+                <option value="left">Left</option>
+                <option value="center">Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-[13px] font-semibold text-[#344054] mb-1.5">Padding</label>
+              <select {...register('style.padding')} className={fieldCls}>
+                <option value="py-8">Small (32px)</option>
+                <option value="py-16">Medium (64px)</option>
+                <option value="py-20">Large (80px)</option>
+                <option value="py-24">Extra Large (96px)</option>
+              </select>
             </div>
           </div>
         </form>
+        {tab === 'json' && (
+          <div className="p-4">
+            <JSONEditor section={section} onUpdate={onUpdate} />
+          </div>
+        )}
       </div>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
-          {section.type === 'hero' || section.type === 'features' || section.type === 'cta' 
-            ? 'Changes are applied automatically'
-            : 'Edit JSON and click Save to apply'}
+      {/* Sticky action bar */}
+      <div className="px-4 py-2.5 border-t border-[#E4E7EC] bg-white">
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="flex-1 h-9 rounded-lg border border-[#D0D5DD] bg-white text-sm font-medium text-[#101828] hover:bg-[#F9FAFB]"
+          >
+            Reset
+          </button>
+          <button
+            type="button"
+            onClick={onApply ?? onClose}
+            className="flex-[2] h-9 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-sm font-medium text-white"
+          >
+            Apply changes
+          </button>
+        </div>
+        <p className="mt-1.5 text-[11px] text-[#667085] text-center">
+          Edits show on the canvas as you type; Reset restores the values from when you selected this section.
         </p>
       </div>
     </div>

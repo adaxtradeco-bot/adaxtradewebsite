@@ -135,13 +135,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <nav className={`flex-1 min-h-0 overflow-y-auto ${collapsed ? 'w-full px-2' : ''}`}>
-          {navGroups.map((group) => {
+          {navGroups.map((group, gi) => {
             const items = group.items.filter((i) => !i.adminOnly || isAdmin);
             if (items.length === 0) return null;
             return (
               <div key={group.label}>
                 {collapsed ? (
-                  <div className="h-px bg-[#1D2939] my-3" />
+                  <div className={gi === 0 ? 'h-1' : 'h-px bg-[#1D2939] my-3'} />
                 ) : (
                   <div className="text-[11px] font-semibold tracking-[.08em] uppercase text-[#98A2B3] px-3 mt-5 mb-1.5">
                     {group.label}

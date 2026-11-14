@@ -86,7 +86,7 @@ export function PageRowActions({ page, handlers }: { page: AdminPage; handlers: 
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-10 z-30 w-[220px] p-1.5 rounded-[10px] bg-white border border-[#E4E7EC] shadow-[0_12px_32px_rgba(16,24,40,.16)] text-left"
+          className="absolute right-0 top-10 z-30 w-[248px] p-1.5 rounded-[10px] bg-white border border-[#E4E7EC] shadow-[0_12px_32px_rgba(16,24,40,.16)] text-left"
         >
           {item('copy', 'Duplicate', () => handlers.onDuplicate(page))}
           {canSetDefault &&

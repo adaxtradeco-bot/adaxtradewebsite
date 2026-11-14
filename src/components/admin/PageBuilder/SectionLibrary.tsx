@@ -9,15 +9,23 @@
 
 import React, { useState } from 'react';
 import { Eye } from 'lucide-react';
+import { Icon } from '@/components/admin/icons';
+import type { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { SECTION_TEMPLATES, SECTION_CATEGORIES } from '@/lib/page-builder/section-registry';
 import { SectionPreviewModal } from '@/components/section-preview/SectionPreviewModal';
 import { getSectionPreviewData } from '@/lib/section-preview-data';
 
 interface SectionLibraryProps {
   onAddSection: (templateType: string) => void;
+  /** Layers tab (optional: without these the library behaves as before). */
+  sections?: SectionConfig[];
+  selectedSectionId?: string | null;
+  onSelectSection?: (id: string) => void;
+  onClose?: () => void;
 }
 
-export function SectionLibrary({ onAddSection }: SectionLibraryProps) {
+export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSelectSection, onClose }: SectionLibraryProps) {
+  const [tab, setTab] = useState<'library' | 'layers'>('library');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<string[]>([
     SECTION_CATEGORIES.HEADERS,
@@ -48,25 +56,73 @@ export function SectionLibrary({ onAddSection }: SectionLibraryProps) {
   }, {} as Record<string, typeof SECTION_TEMPLATES>);
 
   return (
-    <div className="w-full lg:w-72 xl:w-80 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col max-w-full">
+    <div className="w-[300px] max-w-full h-full bg-white border-r border-[#E4E7EC] flex flex-col">
       {/* Header */}
-      <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-          Section Library
-        </h2>
-        
-        {/* Search */}
-        <input
-          type="text"
-          placeholder="Search sections..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        />
+      <div className="p-3 border-b border-[#E4E7EC] space-y-3">
+        <div className="flex items-center gap-2">
+          <div className="flex flex-1 p-[3px] rounded-[10px] bg-[#F2F4F7]" role="tablist">
+            {(['library', 'layers'] as const).map((t) => (
+              <button
+                key={t}
+                role="tab"
+                aria-selected={tab === t}
+                onClick={() => setTab(t)}
+                className={`flex-1 h-[30px] rounded-lg text-[13px] font-medium capitalize ${
+                  tab === t ? 'bg-white text-[#101828] shadow-[0_1px_2px_rgba(16,24,40,.12)]' : 'text-[#475467]'
+                }`}
+              >
+                {t}
+                {t === 'layers' && sections ? ` (${sections.length})` : ''}
+              </button>
+            ))}
+          </div>
+          {onClose && (
+            <button
+              onClick={onClose}
+              aria-label="Close library"
+              className="xl:hidden w-8 h-8 grid place-items-center rounded-lg text-[#475467] hover:bg-[#F2F4F7]"
+            >
+              <Icon name="close" />
+            </button>
+          )}
+        </div>
+        {tab === 'library' && (
+          <input
+            type="text"
+            placeholder="Search sections..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full h-9 px-3 border border-[#D0D5DD] rounded-lg bg-white text-[#101828] text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]"
+          />
+        )}
       </div>
 
+      {tab === 'layers' && (
+        <div className="flex-1 overflow-y-auto p-2">
+          {(sections ?? []).length === 0 && (
+            <p className="text-sm text-[#667085] text-center py-8">No sections yet. Add one from the Library.</p>
+          )}
+          {(sections ?? []).map((sec, i) => {
+            const tpl = SECTION_TEMPLATES.find((t) => t.type === sec.type);
+            const active = sec.id === selectedSectionId;
+            return (
+              <button
+                key={sec.id}
+                onClick={() => onSelectSection?.(sec.id)}
+                className={`w-full flex items-center gap-3 h-10 px-3 rounded-lg text-left text-sm ${
+                  active ? 'bg-[#EEF4FF] text-[#1D4ED8] font-semibold' : 'text-[#101828] hover:bg-[#F2F4F7]'
+                }`}
+              >
+                <span className="w-5 text-xs text-[#667085] font-semibold">{i + 1}</span>
+                <span className="truncate">{tpl?.name ?? sec.type.replace(/Section$/, '').replace(/[-_]/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2')}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {/* Categories */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className={`flex-1 overflow-y-auto p-3 space-y-3 ${tab === 'library' ? '' : 'hidden'}`}>
         {Object.entries(groupedTemplates).map(([category, templates]) => (
           <div key={category} className="space-y-2">
             {/* Category Header */}
@@ -141,7 +197,7 @@ export function SectionLibrary({ onAddSection }: SectionLibraryProps) {
       </div>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+      <div className={`p-3 border-t border-[#E4E7EC] ${tab === 'library' ? '' : 'hidden'}`}>
         <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
           Click any section to add it to your page
         </p>

@@ -13,7 +13,6 @@ import { Canvas } from './Canvas';
 import { SectionLibrary } from './SectionLibrary';
 import { PropertyPanel } from './PropertyPanel';
 import { Toolbar } from './Toolbar';
-import { PreviewModes } from './PreviewModes';
 import { InlineCSSEditor } from '@/components/ui/InlineCSSEditor';
 import { MediaBrowser } from './MediaBrowser';
 import { PageJSONEditor } from './PageJSONEditor';
@@ -28,9 +27,14 @@ interface PageBuilderProps {
   pageStatus?: string;
   publishUrl?: string;
   language?: string;
+  /** Page builder route extras (all optional; the blog builder omits them) */
+  pageTitle?: string;
+  pageSlug?: string;
+  onExit?: () => void;
+  onToggleAdminMode?: () => void;
 }
 
-export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus, publishUrl, language }: PageBuilderProps) {
+export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus, publishUrl, language, pageTitle, pageSlug, onExit, onToggleAdminMode }: PageBuilderProps) {
   const [sections, setSections] = useState<SectionConfig[]>(Array.isArray(initialSections) ? initialSections : []);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -54,6 +58,15 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
     acceptTypes?: string[];
   }>({ isOpen: false, onSelect: () => {}, acceptTypes: ['image/*', 'video/*'] });
   const [isJSONEditorOpen, setIsJSONEditorOpen] = useState(false);
+  const [inspectorExpanded, setInspectorExpanded] = useState(false);
+
+  // Library is docked on wide screens (>=1280px) and a slide-over below that.
+  useEffect(() => {
+    if (window.innerWidth < 1280) setIsSectionLibraryVisible(false);
+  }, []);
+  const closeLibraryIfOverlay = useCallback(() => {
+    if (window.innerWidth < 1280) setIsSectionLibraryVisible(false);
+  }, []);
 
   const selectedSection = Array.isArray(sections) ? sections.find(s => s.id === selectedSectionId) : null;
 
@@ -212,36 +225,58 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
         isSectionLibraryVisible={isSectionLibraryVisible}
         onToggleSectionLibrary={() => setIsSectionLibraryVisible(!isSectionLibraryVisible)}
         onOpenJSONEditor={() => setIsJSONEditorOpen(true)}
+        pageTitle={pageTitle}
+        pageSlug={pageSlug}
+        language={language}
+        onExit={onExit}
+        onOpenGlobalCSS={onExit ? () => setGlobalCSSEditor(true) : undefined}
+        onOpenPageCSS={onExit ? () => setPageCSSEditor({ pageId, pageTitle: pageTitle ?? '' }) : undefined}
+        onToggleSectionCSS={onExit ? onToggleAdminMode : undefined}
+        sectionCSSActive={adminMode}
       />
 
       <div className="flex-1 flex overflow-hidden relative">
         {!isPreviewMode && (
           <>
-            {/* Section Library - Hidden when section is selected on small screens */}
+            {/* Section Library: docked at >=1280px, slide-over below */}
             {isSectionLibraryVisible && (
-              <div className={`${
-                selectedSectionId ? 'hidden lg:flex' : 'flex'
-              } flex-shrink-0`}>
-                <SectionLibrary onAddSection={handleAddSection} />
-              </div>
+              <>
+                <div
+                  className="xl:hidden absolute inset-0 z-20 bg-[#101828]/30"
+                  onClick={() => setIsSectionLibraryVisible(false)}
+                />
+                <div className="absolute xl:static inset-y-0 left-0 z-30 xl:z-auto flex-shrink-0 shadow-[12px_0_32px_rgba(16,24,40,.14)] xl:shadow-none">
+                  <SectionLibrary
+                    onAddSection={(t) => {
+                      handleAddSection(t);
+                      closeLibraryIfOverlay();
+                    }}
+                    sections={sections}
+                    selectedSectionId={selectedSectionId}
+                    onSelectSection={(id) => {
+                      setSelectedSectionId(id);
+                      closeLibraryIfOverlay();
+                    }}
+                    onClose={() => setIsSectionLibraryVisible(false)}
+                  />
+                </div>
+              </>
             )}
 
             {/* Main Canvas */}
             <div className="flex-1 flex flex-col min-w-0">
-              <PreviewModes 
-                mode={previewMode} 
-                onModeChange={setPreviewMode} 
-              />
-              
               <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-                <SortableContext 
-                  items={sections.map(s => s.id)} 
+                <SortableContext
+                  items={sections.map(s => s.id)}
                   strategy={verticalListSortingStrategy}
                 >
                   <Canvas
                     sections={sections}
                     selectedSectionId={selectedSectionId}
-                    onSectionSelect={setSelectedSectionId}
+                    onSectionSelect={(id) => {
+                      setSelectedSectionId(id);
+                      closeLibraryIfOverlay();
+                    }}
                     onSectionDelete={handleDeleteSection}
                     onSectionDuplicate={handleDuplicateSection}
                     previewMode={previewMode}
@@ -249,7 +284,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
                     language={language}
                   />
                 </SortableContext>
-                
+
                 <DragOverlay>
                   {draggedSection && (
                     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 opacity-90">
@@ -260,23 +295,24 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
               </DndContext>
             </div>
 
-            {/* Property Panel - Overlay on small screens, sidebar on large */}
+            {/* Inspector: 360px dock at >=1280px, overlay drawer below */}
             {selectedSection && (
-              <div className="fixed lg:relative inset-y-0 right-0 z-50 lg:flex-shrink-0 transform transition-transform duration-300 ease-in-out">
+              <div
+                className={`absolute xl:static inset-y-0 right-0 z-30 xl:z-auto flex-shrink-0 max-w-full shadow-[-12px_0_32px_rgba(16,24,40,.14)] xl:shadow-none ${
+                  inspectorExpanded ? 'w-[min(720px,calc(100%-24px))] xl:w-[560px]' : 'w-[400px] xl:w-[360px]'
+                }`}
+              >
                 <PropertyPanel
+                  key={selectedSection.id}
                   section={selectedSection}
                   onUpdate={(updates) => handleUpdateSection(selectedSection.id, updates)}
                   onClose={() => setSelectedSectionId(null)}
+                  onApply={() => setSelectedSectionId(null)}
+                  position={{ index: sections.findIndex(s => s.id === selectedSection.id), total: sections.length }}
+                  expanded={inspectorExpanded}
+                  onToggleExpand={() => setInspectorExpanded(v => !v)}
                 />
               </div>
-            )}
-            
-            {/* Backdrop for mobile when PropertyPanel is open */}
-            {selectedSection && (
-              <div 
-                className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-                onClick={() => setSelectedSectionId(null)}
-              />
             )}
           </>
         )}
