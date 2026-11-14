@@ -6,6 +6,7 @@
 
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
+import { Icon, type IconName } from '@/components/admin/icons';
 import { requireAuth } from '@/lib/auth-server';
 
 async function getDashboardStats() {
@@ -49,6 +50,7 @@ async function getRecentPages() {
       select: {
         id: true,
         title: true,
+        slug: true,
         updatedAt: true,
         status: true,
       },
@@ -61,174 +63,124 @@ async function getRecentPages() {
 
 export default async function AdminDashboard() {
   await requireAuth();
-  
+
   const stats = await getDashboardStats();
   const recentPages = await getRecentPages();
 
-  const statCards = [
-    {
-      title: 'Total Pages',
-      value: stats.totalPages,
-      icon: '📄',
-      color: 'bg-blue-500',
-    },
-    {
-      title: 'Published',
-      value: stats.publishedPages,
-      icon: '✅',
-      color: 'bg-green-500',
-    },
-    {
-      title: 'Drafts',
-      value: stats.draftPages,
-      icon: '📝',
-      color: 'bg-yellow-500',
-    },
-    {
-      title: 'Sections',
-      value: stats.totalSections,
-      icon: '🧩',
-      color: 'bg-purple-500',
-    },
+  const statCards: { title: string; value: number; icon: IconName; bg: string; fg: string }[] = [
+    { title: 'Total Pages', value: stats.totalPages, icon: 'page', bg: 'bg-[#EEF4FF]', fg: 'text-[#1D4ED8]' },
+    { title: 'Published', value: stats.publishedPages, icon: 'check', bg: 'bg-[#ECFDF3]', fg: 'text-[#067647]' },
+    { title: 'Drafts', value: stats.draftPages, icon: 'edit', bg: 'bg-[#FFFAEB]', fg: 'text-[#B54708]' },
+    { title: 'Sections', value: stats.totalSections, icon: 'layers', bg: 'bg-[#F4F3FF]', fg: 'text-[#5925DC]' },
   ];
 
+  const quickActions: { label: string; hint: string; href: string; icon: IconName }[] = [
+    { label: 'Manage sections', hint: 'View and edit page sections', href: '/admin/sections', icon: 'layers' },
+    { label: 'Manage translations', hint: 'Update multilingual content', href: '/admin/translations', icon: 'globe' },
+    { label: 'Manage menus', hint: 'Build navigation menus', href: '/admin/menus', icon: 'menu' },
+    { label: 'Write a blog post', hint: 'Draft and publish articles', href: '/admin/blog/posts/new', icon: 'pen' },
+  ];
+
+  const card = 'bg-white border border-[#E4E7EC] rounded-xl';
+
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Dashboard
-        </h1>
-        <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Welcome to your website admin panel
-        </p>
+    <div className="flex flex-col gap-6">
+      <div className="flex items-end justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-[28px] leading-tight font-bold text-[#101828]">Dashboard</h1>
+          <p className="mt-1.5 text-[15px] text-[#475467]">Welcome to your website admin panel</p>
+        </div>
+        <Link
+          href="/admin/pages?new=1"
+          className="inline-flex items-center gap-2 h-10 px-4 rounded-lg bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-sm font-medium"
+        >
+          <Icon name="plus" />
+          Create new page
+        </Link>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {statCards.map((card) => (
-          <div
-            key={card.title}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow p-6"
-          >
-            <div className="flex items-center">
-              <div className={`p-3 rounded-lg ${card.color} text-white mr-4`}>
-                <span className="text-2xl">{card.icon}</span>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  {card.title}
-                </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {card.value}
-                </p>
-              </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        {statCards.map((c) => (
+          <div key={c.title} className={`${card} p-5 flex items-center gap-4`}>
+            <div className={`w-11 h-11 rounded-[10px] grid place-items-center ${c.bg} ${c.fg}`}>
+              <Icon name={c.icon} size={22} />
+            </div>
+            <div>
+              <div className="text-[13px] font-medium text-[#475467]">{c.title}</div>
+              <div className="text-[28px] font-bold leading-[1.15] text-[#101828]">{c.value}</div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            Quick Actions
-          </h2>
-          <div className="space-y-3">
-            <Link href="/admin/pages" className="block w-full text-left p-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
-              <div className="flex items-center">
-                <span className="text-2xl mr-3">➕</span>
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    Create New Page
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Add a new page to your website
-                  </p>
-                </div>
-              </div>
-            </Link>
-            
-            <Link href="/admin/sections" className="block w-full text-left p-3 rounded-lg bg-green-50 dark:bg-green-900/20 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
-              <div className="flex items-center">
-                <span className="text-2xl mr-3">🧩</span>
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    Manage Sections
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    View and edit page sections
-                  </p>
-                </div>
-              </div>
-            </Link>
-            
-            <Link href="/admin/translations" className="block w-full text-left p-3 rounded-lg bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
-              <div className="flex items-center">
-                <span className="text-2xl mr-3">🌐</span>
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    Manage Translations
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Update multilingual content
-                  </p>
-                </div>
-              </div>
-            </Link>
-            
-            <Link href="/admin/menus" className="block w-full text-left p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors">
-              <div className="flex items-center">
-                <span className="text-2xl mr-3">📋</span>
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">
-                    Manage Menus
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Build navigation menus
-                  </p>
-                </div>
-              </div>
+      <div className="flex flex-col lg:flex-row gap-6">
+        <section className={`${card} lg:flex-[2] min-w-0 flex flex-col`}>
+          <div className="flex items-center justify-between px-6 pt-5 pb-3">
+            <h2 className="text-[17px] font-semibold text-[#101828]">Recent pages</h2>
+            <Link href="/admin/pages" className="text-sm font-medium text-[#1D4ED8] hover:underline">
+              View all pages
             </Link>
           </div>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-            Recent Pages
-          </h2>
-          <div className="space-y-3">
-            {recentPages.length > 0 ? (
-              recentPages.map((page) => (
-                <Link
-                  key={page.id}
-                  href={`/admin/pages/edit/${page.id}`}
-                  className="flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                >
-                  <span className="text-xl mr-3">
-                    {page.status === 'published' ? '✅' : '📝'}
+          <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)_110px_150px] gap-4 px-6 py-2.5 bg-[#F9FAFB] border-y border-[#E4E7EC] text-xs font-semibold tracking-[.04em] uppercase text-[#667085]">
+            <div>Title</div>
+            <div>Slug</div>
+            <div>Status</div>
+            <div>Updated</div>
+          </div>
+          {recentPages.length > 0 ? (
+            recentPages.map((page) => (
+              <Link
+                key={page.id}
+                href={`/admin/pages/builder/${page.id}`}
+                className="grid grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)_110px_150px] gap-4 items-center px-6 py-4 border-b border-[#F2F4F7] last:border-b-0 text-sm hover:bg-[#F9FAFB]"
+              >
+                <div className="font-semibold truncate text-[#101828]">{page.title}</div>
+                <div className="text-[13px] text-[#475467] font-mono truncate">{page.slug}</div>
+                <div>
+                  <span
+                    className={`inline-flex items-center h-6 px-2.5 rounded-full text-xs font-semibold ${
+                      page.status === 'published'
+                        ? 'bg-[#ECFDF3] text-[#067647]'
+                        : 'bg-[#F2F4F7] text-[#475467]'
+                    }`}
+                  >
+                    {page.status === 'published' ? 'Published' : page.status === 'draft' ? 'Draft' : page.status}
                   </span>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {page.title}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {new Date(page.updatedAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
-                  </div>
-                </Link>
-              ))
-            ) : (
-              <p className="text-gray-600 dark:text-gray-400 text-center py-4">
-                No pages yet. Create your first page!
-              </p>
-            )}
-          </div>
-        </div>
+                </div>
+                <div className="text-[#475467]">
+                  {new Date(page.updatedAt).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </div>
+              </Link>
+            ))
+          ) : (
+            <p className="text-[#475467] text-center py-8">No pages yet. Create your first page!</p>
+          )}
+        </section>
+
+        <section className={`${card} lg:flex-1 min-w-0 px-6 py-5 flex flex-col gap-1.5`}>
+          <h2 className="mb-2 text-[17px] font-semibold text-[#101828]">Quick actions</h2>
+          {quickActions.map((a) => (
+            <Link
+              key={a.href}
+              href={a.href}
+              className="flex items-center gap-3.5 p-3 rounded-[10px] hover:bg-[#F9FAFB]"
+            >
+              <div className="w-10 h-10 rounded-[10px] bg-[#EEF4FF] text-[#1D4ED8] grid place-items-center">
+                <Icon name={a.icon} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-semibold text-[#101828]">{a.label}</div>
+                <div className="text-[13px] text-[#475467]">{a.hint}</div>
+              </div>
+              <Icon name="chevronRight" className="text-[#98A2B3]" />
+            </Link>
+          ))}
+        </section>
       </div>
     </div>
   );
