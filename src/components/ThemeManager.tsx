@@ -8,14 +8,17 @@
 
 import { useEffect } from 'react';
 import { useTheme } from 'next-themes';
+import { usePathname } from 'next/navigation';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export function ThemeManager() {
   const { settings, isLoading } = useSiteSettings();
   const { setTheme } = useTheme();
+  // Admin and the page builder have their own theme (useAdminTheme).
+  const isAdmin = (usePathname() || '').startsWith('/admin');
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || isAdmin) return;
 
     const applyTheme = () => {
       if (settings.theme.autoSwitchByTime) {
@@ -66,7 +69,7 @@ export function ThemeManager() {
         clearInterval(interval);
       }
     };
-  }, [settings.theme, isLoading, setTheme]);
+  }, [settings.theme, isLoading, isAdmin, setTheme]);
 
   // This component doesn't render anything
   return null;

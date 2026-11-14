@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSidebar } from '@/hooks/useSidebar';
 import { useAdminUser } from '@/hooks/useAdminUser';
+import { useAdminTheme } from '@/hooks/useAdminTheme';
 import { Icon, type IconName } from '@/components/admin/icons';
 
 interface NavItem {
@@ -81,6 +82,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const { isCollapsed, toggle } = useSidebar();
   const { user, isAdmin } = useAdminUser();
+  const { theme, toggle: toggleTheme } = useAdminTheme();
+  const isDark = theme === 'dark';
   const isLoginPage = pathname === '/admin/login';
   const isBuilder = pathname.startsWith('/admin/pages/builder/');
   // The builder always gets the rail so the canvas keeps its width.
@@ -100,7 +103,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const displayName = user?.name || 'Administrator';
 
   return (
-    <div className="min-h-screen bg-[#F6F7F9] dark:bg-gray-900 font-[Inter,system-ui,sans-serif] text-[#101828]">
+    <div className="min-h-screen bg-[#F6F7F9] dark:bg-gray-900 font-[Inter,system-ui,sans-serif] text-[#101828] dark:text-gray-100">
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
@@ -179,6 +182,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         <div className={`border-t border-[#1D2939] mt-2 pt-2 ${collapsed ? 'w-full px-2' : ''}`}>
           <button
+            onClick={toggleTheme}
+            title={isDark ? 'Switch admin to light mode' : 'Switch admin to dark mode'}
+            aria-label={isDark ? 'Switch admin to light mode' : 'Switch admin to dark mode'}
+            className={`flex items-center w-full h-11 rounded-lg text-sm font-medium text-[#D0D5DD] hover:bg-[#1D2939] hover:text-white ${
+              collapsed ? 'justify-center' : 'gap-3 px-3'
+            }`}
+          >
+            <span aria-hidden className="w-5 text-center text-base leading-none">
+              {isDark ? '☀' : '☾'}
+            </span>
+            {!collapsed && <span>{isDark ? 'Light mode' : 'Dark mode'}</span>}
+          </button>
+          <button
             onClick={handleLogout}
             title={collapsed ? 'Logout' : undefined}
             aria-label="Logout"
@@ -199,22 +215,22 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }`}
       >
         {!isBuilder && (
-          <header className="h-16 flex-none sticky top-0 z-40 flex items-center justify-between px-8 bg-white border-b border-[#E4E7EC]">
-            <div className="text-sm text-[#475467]">
+          <header className="h-16 flex-none sticky top-0 z-40 flex items-center justify-between px-8 bg-white dark:bg-gray-800 border-b border-[#E4E7EC] dark:border-gray-700">
+            <div className="text-sm text-[#475467] dark:text-gray-400">
               Admin <span className="text-[#98A2B3]">/</span>{' '}
-              <span className="text-[#101828] font-semibold">{crumbFor(pathname)}</span>
+              <span className="text-[#101828] dark:text-gray-100 font-semibold">{crumbFor(pathname)}</span>
             </div>
             <div className="flex items-center gap-3">
               <a
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-[#D0D5DD] bg-white text-sm font-medium text-[#101828] hover:bg-[#F9FAFB]"
+                className="inline-flex items-center gap-2 h-9 px-4 rounded-lg border border-[#D0D5DD] dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-[#101828] dark:text-gray-100 hover:bg-[#F9FAFB] dark:hover:bg-gray-600"
               >
                 <Icon name="external" />
                 View site
               </a>
-              <div className="flex items-center gap-2.5 pl-3 border-l border-[#E4E7EC]">
+              <div className="flex items-center gap-2.5 pl-3 border-l border-[#E4E7EC] dark:border-gray-700">
                 <div className="w-8 h-8 rounded-full bg-[#EEF4FF] text-[#1D4ED8] grid place-items-center font-bold text-[13px]">
                   {displayName.charAt(0).toUpperCase()}
                 </div>
