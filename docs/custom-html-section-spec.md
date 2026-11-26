@@ -159,6 +159,8 @@ Token form `{{cf:<path>}}`. Before tokenizing, literal `{{cf:` in the source bec
 - Repeater: item template per item; empty array → nothing.
 - Unknown token → empty. Never throws (catch → render defaults + `console.warn`).
 - `opts.builder === false` strips `data-cf` attributes from the output (smaller public DOM).
+- Attribute tokens are default-deny: only `alt`, `title`, `placeholder`, `aria-*`, `href`, `src`, `poster`, `data-src`, `data-lazy-src`, `style` and `target` receive values; anything else renders empty. URL tokens are dropped on `script`, `link` and `base`.
+- richtext values keep only the class names that appear in that field's default.
 
 ## 6. Detection (`detect.ts`)
 
@@ -276,6 +278,10 @@ Executed by `runtime.ts` as `fn(root, docShim, winShim, …trackedTimers)` via a
 3. Admin → ok.
 4. Non-admin: recompute `hash(template, fields)`; must be in `{ hashes of all custom-html sections in prevSections (any id) } ∪ libraryHashes`. Values are not checked (escaped at render).
 5. Non-admin: a section whose `type` changed to or from `custom-html` relative to the same id in prev is also checked (covered by 2–4 since type is evaluated on next).
+6. Parsing must be lossless (stored data equals validated data), and `__proto__`/`constructor`/`prototype` keys are rejected in `tailwind.config` (400).
+7. Non-admin: `runInBuilder: true` is allowed only if a stored previous section with the same template hash already had it (403). Library entries do not grant it.
+
+Blog posts never accept or render `custom-html` (schemas, sanitizer, translation copy, renderers).
 
 ### 8.3 Where the guard / restrictions apply
 

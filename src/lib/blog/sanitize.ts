@@ -1,4 +1,5 @@
 import sanitize from 'sanitize-html';
+import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
 
 const IFRAME_HOSTS = [
   'youtube.com', 'www.youtube.com', 'youtube-nocookie.com', 'www.youtube-nocookie.com',
@@ -42,9 +43,14 @@ export function sanitizeHtml(html: string): string {
 
 const HTML_SECTION_TYPES = new Set(['blog-rich-text', 'blog-html']);
 
-/** Sanitizes the `html` field of every blog HTML-carrying section. */
+/** Blog bodies never carry code sections: only admins may author those, and only on pages. */
+export function dropCustomHtmlSections<T>(sections: T[]): T[] {
+  return sections.filter((s) => (s as { type?: unknown } | null)?.type !== CUSTOM_HTML_TYPE);
+}
+
+/** Drops custom-html sections and sanitizes the `html` field of every blog HTML-carrying section. */
 export function sanitizeSections<T extends { type: string; data?: Record<string, any> }>(sections: T[]): T[] {
-  return sections.map((section) =>
+  return dropCustomHtmlSections(sections).map((section) =>
     HTML_SECTION_TYPES.has(section.type) && typeof section.data?.html === 'string'
       ? { ...section, data: { ...section.data, html: sanitizeHtml(section.data.html) } }
       : section

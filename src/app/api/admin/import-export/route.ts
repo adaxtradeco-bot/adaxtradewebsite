@@ -9,8 +9,7 @@ import { prisma } from '@/lib/prisma';
 import { ImportExportManager } from '@/lib/import-export/utils';
 import { ExportData, PageExportData, SectionExportData, ImportResult } from '@/lib/import-export/types';
 import { authenticateRequest } from '@/lib/api-auth';
-import { guardBuilderWrite } from '@/lib/custom-html/guard';
-import { parseCustomHtmlData } from '@/lib/custom-html/schema';
+import { guardBuilderWrite, parseStoredCustomHtml } from '@/lib/custom-html/guard';
 import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
 import { getPermissions } from '@/lib/permissions';
 
@@ -137,7 +136,7 @@ async function handleImport(
             defaultObj = null;
           }
         }
-        const parsed = parseCustomHtmlData(defaultObj);
+        const parsed = parseStoredCustomHtml(defaultObj);
         if (!parsed.success) {
           return NextResponse.json(
             { error: 'Invalid custom HTML data', reason: parsed.error },

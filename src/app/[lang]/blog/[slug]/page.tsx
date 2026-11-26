@@ -10,6 +10,7 @@ import { PostHeader } from '../_components/PostHeader';
 import { PostBody } from '../_components/PostBody';
 import { PostCard } from '../_components/PostCard';
 import { getLabels } from '../_components/labels';
+import { dropCustomHtmlSections } from '@/lib/blog/sanitize';
 
 export const revalidate = 60;
 
@@ -17,7 +18,8 @@ function parseSections(raw: string | null): SectionConfig[] {
   if (!raw) return [];
   try {
     const data = JSON.parse(raw);
-    return Array.isArray(data) ? data : [];
+    // Filtered here too: PostBody is a client component, so its props are public payload.
+    return Array.isArray(data) ? dropCustomHtmlSections<SectionConfig>(data) : [];
   } catch {
     return [];
   }

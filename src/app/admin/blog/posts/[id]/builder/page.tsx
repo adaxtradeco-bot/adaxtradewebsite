@@ -81,6 +81,7 @@ export default function BlogPostBuilderPage() {
         pageStatus={post.status}
         publishUrl={`/api/admin/blog/posts/${post.id}`}
         language={post.language}
+        allowCustomHtml={false}
       />
     </div>
   );

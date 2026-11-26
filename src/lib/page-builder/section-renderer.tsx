@@ -148,6 +148,8 @@ interface SectionRendererProps {
   isSelected?: boolean;
   onSelect?: () => void;
   adminMode?: boolean;
+  /** false in the blog builder: custom-html (code) sections are never rendered there */
+  allowCustomHtml?: boolean;
 }
 
 export function SectionRenderer({
@@ -157,6 +159,7 @@ export function SectionRenderer({
   isSelected = false,
   onSelect,
   adminMode = false,
+  allowCustomHtml = true,
 }: SectionRendererProps) {
   const commonProps = {
     section,
@@ -1047,6 +1050,14 @@ export function SectionRenderer({
             />
           );
         case 'custom-html':
+          if (!allowCustomHtml) {
+            // In the builder keep something visible so the section can be selected and deleted.
+            return isBuilder ? (
+              <div role="alert" className="p-6 text-center text-sm text-amber-800 bg-amber-50 border border-amber-300">
+                Custom HTML sections are not supported in blog posts. Delete this section to save.
+              </div>
+            ) : null;
+          }
           return (
             <CustomHtmlSection
               data={(section as any).data}

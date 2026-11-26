@@ -13,6 +13,7 @@ function isObject(v: unknown): v is Record<string, unknown> {
 function stripSection(section: Record<string, unknown>): Record<string, unknown> {
   const data = section.data;
   if (!isObject(data) || !isObject(data.template)) return section;
+  if (!('css' in data.template) && !('jsSource' in data.template)) return section;
   const template: Record<string, unknown> = {};
   const keys = Object.keys(data.template);
   for (let i = 0; i < keys.length; i++) {
@@ -22,14 +23,25 @@ function stripSection(section: Record<string, unknown>): Record<string, unknown>
   return { ...section, data: { ...data, template } };
 }
 
+/** Maps stripNode over a list, returning the same array when no entry changed. */
+function stripList(list: Json[]): Json[] {
+  const out = list.map(stripNode);
+  return out.every((item, i) => item === list[i]) ? list : out;
+}
+
 function stripNode(node: Json): Json {
-  if (Array.isArray(node)) return node.map(stripNode);
+  if (Array.isArray(node)) return stripList(node);
   if (!isObject(node)) return node;
   let out: Record<string, unknown> = node;
   if (node.type === CUSTOM_HTML_TYPE) out = stripSection(node);
   // containers: { sections: [...] } and nested { children: [...] }
-  if (Array.isArray(out.sections)) out = { ...out, sections: out.sections.map(stripNode) };
-  if (Array.isArray(out.children)) out = { ...out, children: out.children.map(stripNode) };
+  const keys = ['sections', 'children'];
+  for (let i = 0; i < keys.length; i++) {
+    const list = out[keys[i]];
+    if (!Array.isArray(list)) continue;
+    const next = stripList(list);
+    if (next !== list) out = { ...out, [keys[i]]: next };
+  }
   return out;
 }
 

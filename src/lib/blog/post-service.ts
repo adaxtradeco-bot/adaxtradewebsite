@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { sanitizeSections } from './sanitize';
+import { dropCustomHtmlSections, sanitizeSections } from './sanitize';
 import { readingTime } from './reading-time';
 import { slugify, uniqueSlug } from './slug';
 import type { PostInput, PostStatus, PostUpdate } from './schemas';
@@ -211,6 +211,18 @@ export async function bulkUpdateStatus(ids: string[], status: 'draft' | 'publish
   return count;
 }
 
+/** A stored body as it may be copied: verbatim, unless it holds a custom-html section (dropped). */
+function copyableBody(builderData: string | null) {
+  try {
+    const parsed = JSON.parse(builderData ?? '');
+    if (!Array.isArray(parsed)) return builderData;
+    const kept = dropCustomHtmlSections(parsed);
+    return kept.length === parsed.length ? builderData : JSON.stringify(kept);
+  } catch {
+    return builderData;
+  }
+}
+
 /** New draft in `language`, same group, copying body and cover; text is left for translation. */
 export async function addTranslation(id: string, language: string) {
   const origin = await prisma.post.findUnique({ where: { id }, include: { category: true } });
@@ -228,7 +240,7 @@ export async function addTranslation(id: string, language: string) {
       language,
       slug: await uniqueSlug(language, origin.title),
       title: origin.title,
-      builderData: origin.builderData,
+      builderData: copyableBody(origin.builderData),
       readingTime: origin.readingTime,
       coverImage: origin.coverImage,
       coverImageAlt: origin.coverImageAlt,

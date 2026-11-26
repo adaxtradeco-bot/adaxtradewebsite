@@ -4,6 +4,7 @@ import { getApiCanPublish } from '@/lib/blog/api-keys';
 import { contentToSections, htmlToSections } from '@/lib/blog/blocks-to-sections';
 import { importCover } from '@/lib/blog/cover-import';
 import { BlogServiceError } from '@/lib/blog/post-service';
+import { validationStatus } from '@/lib/blog/schemas';
 
 const MAX_BODY = 1024 * 1024;
 
@@ -25,7 +26,7 @@ export async function readJson(request: Request): Promise<{ data: unknown } | { 
 export const validationError = (issues: { path: PropertyKey[]; message: string }[]) =>
   NextResponse.json(
     { error: 'validation_error', issues: issues.map((i) => ({ path: i.path.map(String).join('.'), message: i.message })) },
-    { status: 422 }
+    { status: validationStatus(issues) }
   );
 
 export function serviceError(e: unknown) {

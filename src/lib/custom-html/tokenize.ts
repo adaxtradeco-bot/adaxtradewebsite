@@ -38,6 +38,9 @@ function escapeLiteralTokens(root: Element): void {
           if (fixed !== attr.value) el.setAttribute(attr.name, fixed);
         }
         walk(el);
+        // <template> children live in a separate fragment, not in childNodes
+        const content = el.localName === 'template' ? (el as HTMLTemplateElement).content : undefined;
+        if (content) walk(content);
       }
     });
   };

@@ -24,6 +24,7 @@ interface CanvasProps {
   isPreview?: boolean;
   adminMode?: boolean;
   language?: string;
+  allowCustomHtml?: boolean;
 }
 
 export const Canvas = memo(function Canvas({
@@ -36,6 +37,7 @@ export const Canvas = memo(function Canvas({
   isPreview = false,
   adminMode = false,
   language,
+  allowCustomHtml = true,
 }: CanvasProps) {
   const getCanvasWidth = useCallback(() => {
     switch (previewMode) {
@@ -98,6 +100,7 @@ export const Canvas = memo(function Canvas({
                   onDuplicate={() => handleSectionDuplicate(section.id)}
                   isPreview={isPreview}
                   adminMode={adminMode}
+                  allowCustomHtml={allowCustomHtml}
                 />
               ))}
             </div>
@@ -162,6 +165,7 @@ interface SortableSectionProps {
   onDuplicate: () => void;
   isPreview: boolean;
   adminMode?: boolean;
+  allowCustomHtml: boolean;
 }
 
 const SortableSection = memo(function SortableSection({
@@ -172,6 +176,7 @@ const SortableSection = memo(function SortableSection({
   onDuplicate,
   isPreview,
   adminMode = false,
+  allowCustomHtml,
 }: SortableSectionProps) {
   const {
     attributes,
@@ -229,6 +234,7 @@ const SortableSection = memo(function SortableSection({
         isSelected={isSelected}
         onSelect={onSelect}
         adminMode={adminMode && !isPreview}
+        allowCustomHtml={allowCustomHtml}
       />
 
       {!isPreview && (

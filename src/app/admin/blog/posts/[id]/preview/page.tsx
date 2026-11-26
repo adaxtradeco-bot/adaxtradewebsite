@@ -40,7 +40,7 @@ export default function BlogPostPreview() {
           {post.excerpt && <p className="mt-3 text-lg opacity-80">{post.excerpt}</p>}
           {post.coverImage && <img src={post.coverImage} alt={post.coverImageAlt ?? ''} className="mt-6 w-full rounded-lg" />}
         </header>
-        <PageRenderer sections={sections} isPreview />
+        <PageRenderer sections={sections} isPreview allowCustomHtml={false} />
       </article>
     </div>
   );

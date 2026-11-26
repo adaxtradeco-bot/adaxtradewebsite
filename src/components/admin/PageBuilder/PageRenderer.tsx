@@ -9,20 +9,30 @@ import { SectionRenderer } from '@/lib/page-builder/section-renderer';
 import { SectionCSSLoader } from '@/components/SectionCSSLoader';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { FirstSectionMarker } from '@/components/FirstSectionMarker';
+import { stripCustomHtmlForPublic } from '@/lib/custom-html/public-strip';
+import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
 
 interface PageRendererProps {
   sections: SectionConfig[];
   isPreview?: boolean;
+  /** false for blog bodies: custom-html (code) sections are never rendered there */
+  allowCustomHtml?: boolean;
 }
 
-export function PageRenderer({ sections, isPreview = false }: PageRendererProps) {
+export function PageRenderer({ sections, isPreview = false, allowCustomHtml = true }: PageRendererProps) {
   // Handle both array format and { sections: [...] } format
-  const sectionsArray = Array.isArray(sections) 
+  const allSections = Array.isArray(sections) 
     ? sections 
     : (sections as any)?.sections 
     ? (sections as any).sections 
     : [];
-  
+
+  // This renderer never serves the builder, so admin-only template source is removed here, before it
+  // can reach a client component prop (and with it the public RSC payload).
+  const sectionsArray: SectionConfig[] = stripCustomHtmlForPublic<SectionConfig[]>(
+    allowCustomHtml ? allSections : allSections.filter((s: SectionConfig) => s?.type !== CUSTOM_HTML_TYPE)
+  );
+
   if (sectionsArray.length === 0) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex items-center justify-center">

@@ -155,6 +155,29 @@ const externalUrl = z
   .refine(isHttpUrl, { message: 'must be an http(s) URL' });
 const externalUrls = z.array(externalUrl).max(LIMITS.externalUrls);
 
+const RESERVED_CONFIG_KEYS = ['__proto__', 'constructor', 'prototype'];
+
+/** True when a reserved key is an own property anywhere inside `root`. */
+function hasReservedKey(root: unknown): boolean {
+  const stack: unknown[] = [root];
+  while (stack.length) {
+    const v = stack.pop();
+    if (typeof v !== 'object' || v === null) continue;
+    const keys = Object.keys(v);
+    for (let i = 0; i < keys.length; i++) {
+      if (RESERVED_CONFIG_KEYS.indexOf(keys[i]) !== -1) return true;
+      stack.push((v as Record<string, unknown>)[keys[i]]);
+    }
+  }
+  return false;
+}
+
+/** Checked before z.record, which silently skips a __proto__ key. */
+const tailwindConfig = z
+  .unknown()
+  .refine((v) => !hasReservedKey(v), { message: 'reserved key' })
+  .pipe(z.record(z.string().max(200), z.unknown()));
+
 export const CustomHtmlTemplateSchema = z
   .object({
     html: z.string().max(LIMITS.html),
@@ -165,7 +188,7 @@ export const CustomHtmlTemplateSchema = z
     externalScripts: externalUrls,
     externalStylesheets: externalUrls,
     tailwind: z
-      .object({ enabled: z.boolean(), config: z.record(z.string().max(200), z.unknown()).optional() })
+      .object({ enabled: z.boolean(), config: tailwindConfig.optional() })
       .strict()
       .optional(),
     dir: z.enum(['auto', 'ltr', 'rtl']).optional(),

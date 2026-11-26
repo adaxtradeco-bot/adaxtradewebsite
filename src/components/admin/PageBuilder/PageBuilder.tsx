@@ -35,9 +35,11 @@ interface PageBuilderProps {
   pageSlug?: string;
   onExit?: () => void;
   onToggleAdminMode?: () => void;
+  /** false in the blog builder: no custom-html import or rendering */
+  allowCustomHtml?: boolean;
 }
 
-export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus, publishUrl, language, pageTitle, pageSlug, onExit, onToggleAdminMode }: PageBuilderProps) {
+export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = false, pageStatus, publishUrl, language, pageTitle, pageSlug, onExit, onToggleAdminMode, allowCustomHtml = true }: PageBuilderProps) {
   const [sections, setSections] = useState<SectionConfig[]>(Array.isArray(initialSections) ? initialSections : []);
   const [selectedSectionId, setSelectedSectionId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -134,12 +136,12 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
   useEffect(() => {
     const onEditCode = (event: Event) => {
       const sectionId = (event as CustomEvent<{ sectionId?: string }>).detail?.sectionId;
-      if (!sectionId || !canEditCodeClient()) return;
+      if (!allowCustomHtml || !sectionId || !canEditCodeClient()) return;
       setImportWizard({ open: true, editSectionId: sectionId });
     };
     window.addEventListener(CHS_EVENTS.editCode, onEditCode);
     return () => window.removeEventListener(CHS_EVENTS.editCode, onEditCode);
-  }, []);
+  }, [allowCustomHtml]);
 
   // Update section configuration
   const handleUpdateSection = useCallback((sectionId: string, updates: Partial<SectionConfig>) => {
@@ -280,10 +282,10 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
                       closeLibraryIfOverlay();
                     }}
                     onClose={() => setIsSectionLibraryVisible(false)}
-                    onImportHtml={() => {
+                    onImportHtml={allowCustomHtml ? () => {
                       setImportWizard({ open: true, editSectionId: null });
                       closeLibraryIfOverlay();
-                    }}
+                    } : undefined}
                   />
                 </div>
               </>
@@ -308,6 +310,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
                     previewMode={previewMode}
                     adminMode={adminMode}
                     language={language}
+                    allowCustomHtml={allowCustomHtml}
                   />
                 </SortableContext>
 
@@ -355,6 +358,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
               previewMode={previewMode}
               isPreview={true}
               language={language}
+              allowCustomHtml={allowCustomHtml}
             />
           </div>
         )}

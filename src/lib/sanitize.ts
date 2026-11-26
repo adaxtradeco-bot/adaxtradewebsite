@@ -31,6 +31,45 @@ export function sanitizeRichText(html: unknown): string {
   return sanitize(html, RICH_TEXT_OPTIONS);
 }
 
+/** HTML splits class lists on ASCII whitespace only. */
+const classTokens = (value: string): string[] => value.split(/[\t\n\f\r ]+/).filter(Boolean);
+
+/** Every class name on any element of the inline rich text `html`. */
+export function richTextClasses(html: unknown): string[] {
+  if (typeof html !== 'string' || !html) return [];
+  const out: string[] = [];
+  sanitize(html, {
+    ...RICH_TEXT_OPTIONS,
+    transformTags: {
+      ...RICH_TEXT_OPTIONS.transformTags,
+      '*': (tagName, attribs) => {
+        if (attribs.class) out.push(...classTokens(attribs.class));
+        return { tagName, attribs };
+      },
+    },
+  });
+  return out;
+}
+
+/** `sanitizeRichText`, additionally dropping every class name that is not in `allowed`. */
+export function sanitizeRichTextWithClasses(html: unknown, allowed: ReadonlySet<string>): string {
+  if (typeof html !== 'string' || !html) return '';
+  return sanitize(html, {
+    ...RICH_TEXT_OPTIONS,
+    transformTags: {
+      ...RICH_TEXT_OPTIONS.transformTags,
+      '*': (tagName, attribs) => {
+        if (attribs.class !== undefined) {
+          const kept = classTokens(attribs.class).filter((c) => allowed.has(c));
+          if (kept.length) attribs.class = kept.join(' ');
+          else delete attribs.class;
+        }
+        return { tagName, attribs };
+      },
+    },
+  });
+}
+
 // ---------- SVG icons ----------
 
 const SVG_TAGS = [

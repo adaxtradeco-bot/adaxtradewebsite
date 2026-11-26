@@ -5,7 +5,7 @@
  * (repeater-expanded) template, so a substituted value is never scanned for tokens again. The context
  * of each token (attribute value, style url(), element text, CSS) selects the escaper.
  */
-import { sanitizeRichText, sanitizeSvg, safeStyleText } from '../sanitize';
+import { richTextClasses, sanitizeRichTextWithClasses, sanitizeSvg, safeStyleText } from '../sanitize';
 import { escapeAttr, escapeText, safeColor, safeCssUrl, safeEmbedUrl, safeUrl } from './escape';
 import {
   CUSTOM_HTML_LIMITS,
@@ -35,10 +35,12 @@ const SUBKEYS: Record<string, string[]> = {
   color: ['value'],
 };
 
-const URL_ATTRS = ['href', 'src', 'poster', 'data-src', 'data-lazy-src', 'action', 'formaction', 'xlink:href', 'background'];
-const HREF_KIND_ATTRS = ['href', 'action', 'formaction', 'xlink:href'];
-/** Attributes that may never receive a token value. */
-const BLOCKED_ATTRS = ['srcdoc', 'srcset', 'imagesrcset', 'data-srcset', 'sizes', 'is', 'ping'];
+// Attributes that may receive a token value (besides style, target and aria-*); every other one is
+// emptied. The URL list is what the tokenizer emits.
+const URL_ATTRS = ['href', 'src', 'poster', 'data-src', 'data-lazy-src'];
+const PLAIN_ATTRS = ['alt', 'title', 'placeholder'];
+/** Elements whose URL attributes load code or re-base the page (includes svg <script href>). */
+const NO_URL_TOKEN_TAGS = ['script', 'link', 'base'];
 const EMBED_TAGS = ['iframe', 'embed', 'object', 'frame'];
 const STRIP_ON_IMAGE_CHANGE = ['srcset', 'sizes', 'data-srcset'];
 const CSS_URL_PREFIX_RE = /url\(\s*(?:'[^']*|"[^"]*|[^'")\s]*)$/i;
@@ -66,12 +68,15 @@ interface Ctx {
   builder: boolean;
   childMaps: Map<FieldDef, Map<string, FieldDef>>;
   itemCache: Map<FieldDef, Record<string, unknown>[]>;
+  classCache: Map<FieldDef, Set<string>>;
 }
 
 interface Resolved {
   def: FieldDef;
   sub: string;
   value: unknown;
+  /** set for repeater children: the repeater holding this field */
+  rep?: FieldDef;
 }
 
 function buildCtx(data: RenderInput, useDefaults: boolean, builder: boolean): Ctx {
@@ -82,7 +87,7 @@ function buildCtx(data: RenderInput, useDefaults: boolean, builder: boolean): Ct
     if (f && typeof f.id === 'string' && typeof f.type === 'string' && !fields.has(f.id)) fields.set(f.id, f);
   }
   const values = !useDefaults && isPlainObj(data.values) ? (data.values as Record<string, unknown>) : {};
-  return { fields, values, builder, childMaps: new Map(), itemCache: new Map() };
+  return { fields, values, builder, childMaps: new Map(), itemCache: new Map(), classCache: new Map() };
 }
 
 function childMap(ctx: Ctx, rep: FieldDef): Map<string, FieldDef> {
@@ -140,7 +145,7 @@ function resolve(path: string, ctx: Ctx): Resolved | null {
     const sp = splitPath(m[3], kids);
     if (!sp || sp.def.type === 'repeater') return null;
     const v = has(item, sp.def.id) && shapeOk(sp.def.type, item[sp.def.id]) ? item[sp.def.id] : sp.def.default;
-    return { def: sp.def, sub: sp.sub, value: v };
+    return { def: sp.def, sub: sp.sub, value: v, rep };
   }
   const sp = splitPath(path, ctx.fields);
   if (!sp || sp.def.type === 'repeater') return null;
@@ -173,6 +178,30 @@ function defaultLeaf(res: Resolved): string {
 // Token -> string, per context
 // ---------------------------------------------------------------------------
 
+/**
+ * Class names the template author used in this field's default(s). Editor-supplied richtext may keep
+ * only these, so it cannot pull in arbitrary utility classes (e.g. a full-page overlay).
+ */
+function authorClasses(res: Resolved, ctx: Ctx): Set<string> {
+  const cached = ctx.classCache.get(res.def);
+  if (cached) return cached;
+  const defaults: unknown[] = [res.def.default];
+  if (res.rep && Array.isArray(res.rep.default)) {
+    const items = res.rep.default as unknown[];
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (isPlainObj(item) && has(item, res.def.id)) defaults.push(item[res.def.id]);
+    }
+  }
+  const out = new Set<string>();
+  for (let i = 0; i < defaults.length; i++) {
+    const classes = richTextClasses(defaults[i]);
+    for (let c = 0; c < classes.length; c++) out.add(classes[c]);
+  }
+  ctx.classCache.set(res.def, out);
+  return out;
+}
+
 /** Element-text context. */
 function textToken(path: string, ctx: Ctx): string {
   if (path === TOKEN_LITERAL_ID) return TOKEN_OPEN;
@@ -182,7 +211,7 @@ function textToken(path: string, ctx: Ctx): string {
   if (l === null) return '';
   switch (res.def.type) {
     case 'richtext':
-      return sanitizeRichText(l);
+      return sanitizeRichTextWithClasses(l, authorClasses(res, ctx));
     case 'icon':
       return res.sub === 'svg' ? sanitizeSvg(l) : escapeText(l);
     case 'textarea':
@@ -226,18 +255,19 @@ function normalizeTarget(v: string): string {
 function attrToken(attrName: string, tagName: string, path: string, prefix: string, ctx: Ctx): string {
   if (path === TOKEN_LITERAL_ID) return escapeAttr(TOKEN_OPEN);
   const name = attrName.toLowerCase();
-  if (name.indexOf('on') === 0 || BLOCKED_ATTRS.indexOf(name) !== -1) return '';
   const res = resolve(path, ctx);
   if (!res) return '';
   const l = leafOf(res);
   if (l === null) return '';
   if (name === 'style') return escapeAttr(cssToken(path, prefix, ctx));
   if (URL_ATTRS.indexOf(name) !== -1) {
+    if (NO_URL_TOKEN_TAGS.indexOf(tagName) !== -1) return '';
     if (res.def.type === 'embed' || EMBED_TAGS.indexOf(tagName) !== -1) return escapeAttr(safeEmbedUrl(l));
-    return escapeAttr(safeUrl(l, HREF_KIND_ATTRS.indexOf(name) !== -1 ? 'href' : 'src'));
+    return escapeAttr(safeUrl(l, name === 'href' ? 'href' : 'src'));
   }
-  if (name === 'target') return normalizeTarget(l);
-  return escapeAttr(l);
+  if (name === 'target') return normalizeTarget(l); // only ever _self or _blank
+  if (PLAIN_ATTRS.indexOf(name) !== -1 || name.indexOf('aria-') === 0) return escapeAttr(l);
+  return '';
 }
 
 // ---------------------------------------------------------------------------

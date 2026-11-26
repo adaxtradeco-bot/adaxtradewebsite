@@ -29,12 +29,22 @@ const BINDER = [
   '});',
 ].join('\n');
 
+/** Every descendant element in document order, including the contents of (nested) <template>s. */
+function allElements(root: ParentNode, out: Element[] = []): Element[] {
+  root.querySelectorAll('*').forEach((el) => {
+    out.push(el);
+    const content = el.localName === 'template' ? (el as HTMLTemplateElement).content : undefined;
+    if (content) allElements(content, out);
+  });
+  return out;
+}
+
 export function rewriteInlineHandlers(html: string): { html: string; handlerJs: string; count: number } {
   const doc = new DOMParser().parseFromString(`<!DOCTYPE html><html><body>${html}</body></html>`, 'text/html');
   const root = doc.body;
   const bodies: string[] = [];
 
-  root.querySelectorAll('*').forEach((el) => {
+  allElements(root).forEach((el) => {
     const refs: string[] = [];
     // keep any markers that already exist (re-import)
     const existing = (el.getAttribute('data-chs-h') ?? '').trim();

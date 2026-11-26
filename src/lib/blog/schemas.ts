@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { BaseSectionSchema } from '@/lib/page-builder/section-schemas';
+import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
 
 export const POST_STATUSES = ['draft', 'scheduled', 'published', 'archived'] as const;
 export type PostStatus = (typeof POST_STATUSES)[number];
@@ -8,6 +9,18 @@ const isoDate = z
   .string()
   .datetime({ offset: true })
   .transform((s) => new Date(s));
+
+export const CUSTOM_HTML_BLOG_ERROR = 'custom-html sections are not supported in blog posts';
+
+/** Page-builder section minus code sections: blog bodies are writable by editors and API keys. */
+const BlogSectionSchema = BaseSectionSchema.refine((s) => s.type !== CUSTOM_HTML_TYPE, {
+  message: CUSTOM_HTML_BLOG_ERROR,
+  path: ['type'],
+});
+
+/** HTTP status for failed blog validation: 400 for a forbidden section type, otherwise 422. */
+export const validationStatus = (issues: ReadonlyArray<{ message: string }>) =>
+  issues.some((i) => i.message === CUSTOM_HTML_BLOG_ERROR) ? 400 : 422;
 
 export const ContentBlockSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('heading'), text: z.string().min(1), level: z.union([z.literal(2), z.literal(3), z.literal(4)]).default(2) }),
@@ -41,7 +54,7 @@ const postInputObject = z.object({
     ...postFields,
     language: z.string().min(2).max(10),
     coverImage: z.string().nullish(),
-    sections: z.array(BaseSectionSchema).optional(),
+    sections: z.array(BlogSectionSchema).optional(),
     category: z.string().nullish(), // slug or name; created if missing
     categoryId: z.string().nullish(),
     authorId: z.string().nullish(),
@@ -75,7 +88,7 @@ const apiBodyFields = {
   coverImageUrl: z.string().url().optional(),
   category: z.string().min(1).max(120).optional(),
   seo: seoFields,
-  sections: z.array(BaseSectionSchema).optional(),
+  sections: z.array(BlogSectionSchema).optional(),
   html: z.string().min(1).optional(),
   content: z.array(ContentBlockSchema).min(1).optional(),
 };

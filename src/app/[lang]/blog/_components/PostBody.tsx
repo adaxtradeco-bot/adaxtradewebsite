@@ -4,5 +4,5 @@ import { PageRenderer } from '@/components/admin/PageBuilder/PageRenderer';
 import type { SectionConfig } from '@/lib/page-builder/section-schemas';
 
 export function PostBody({ sections }: { sections: SectionConfig[] }) {
-  return <PageRenderer sections={sections} />;
+  return <PageRenderer sections={sections} allowCustomHtml={false} />;
 }
