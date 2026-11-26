@@ -5,6 +5,7 @@ import { authenticateRequest } from '@/lib/api-auth';
 import { updatePost } from '@/lib/blog/post-service';
 import { blogErrorResponse } from '@/lib/blog/route-errors';
 import { BaseSectionSchema } from '@/lib/page-builder/section-schemas';
+import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,6 +45,12 @@ export async function PUT(request: NextRequest, { params }: Ctx) {
     if (!auth.ok) return auth.response;
 
     const { builderData } = BuilderBodySchema.parse(await request.json());
+    if (builderData.some((s) => s.type === CUSTOM_HTML_TYPE)) {
+      return NextResponse.json(
+        { error: 'custom-html sections are not supported in blog posts' },
+        { status: 400 }
+      );
+    }
     await updatePost(params.id, { sections: builderData });
     return NextResponse.json({ success: true });
   } catch (error) {

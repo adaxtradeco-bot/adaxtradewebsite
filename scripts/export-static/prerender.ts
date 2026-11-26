@@ -233,6 +233,10 @@ async function withPool<T>(concurrency: number, fn: (render: (r: RouteEntry, bas
   try {
     for (let i = 0; i < Math.max(1, concurrency); i++) {
       const context = await browser.newContext();
+      // Custom HTML sections skip client rendering of scripts during prerender (spec 7)
+      await context.addInitScript(() => {
+        (window as unknown as { __CHS_PRERENDER__?: boolean }).__CHS_PRERENDER__ = true;
+      });
       const page = await context.newPage();
       const worker = { context, page };
       workers.push(worker);

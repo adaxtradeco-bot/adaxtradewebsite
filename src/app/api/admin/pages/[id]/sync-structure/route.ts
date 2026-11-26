@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 import { authenticateRequest } from '@/lib/api-auth';
+import { syncSectionStructure } from '@/lib/custom-html/sync-structure';
 
 const prisma = new PrismaClient();
 
@@ -84,18 +85,7 @@ export async function POST(
     const syncedSections = sourceBuilderData.sections?.map((sourceSection: any) => {
       const targetSection = targetSectionsMap.get(sourceSection.id);
 
-      if (syncContent || !targetSection) {
-        // اگر syncContent فعال باشه یا سکشن در target وجود نداره، کل سکشن رو کپی کن
-        return { ...sourceSection };
-      } else {
-        // فقط type, order, style رو sync کن، محتوا رو حفظ کن
-        return {
-          ...targetSection,
-          type: sourceSection.type,
-          order: sourceSection.order,
-          style: sourceSection.style
-        };
-      }
+      return syncSectionStructure(sourceSection, targetSection as any, syncContent);
     }) || [];
 
     // بهروزرسانی صفحه مقصد

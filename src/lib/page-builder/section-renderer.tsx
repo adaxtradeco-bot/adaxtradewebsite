@@ -137,6 +137,7 @@ import SplitGatewaySection from '@/components/builder-sections/SplitGatewaySecti
 import BlogHeadingSection from '@/components/builder-sections/BlogHeadingSection';
 import BlogRichTextSection from '@/components/builder-sections/BlogRichTextSection';
 import BlogHtmlSection from '@/components/builder-sections/BlogHtmlSection';
+import CustomHtmlSection from '@/components/builder-sections/CustomHtmlSection';
 import BlogLatestPostsSection from '@/components/builder-sections/BlogLatestPostsSection';
 import ProjectHeroSection from '@/components/builder-sections/ProjectHeroSection';
 
@@ -169,9 +170,6 @@ export function SectionRenderer({
   const wrapperProps = (isBuilder && !isPreview) ? { isSelected, onSelect } : {};
 
   const renderSection = () => {
-    // Debug: Log section type
-    console.log('Rendering section:', section.type, section);
-
     // Normalize section type to lowercase for matching
     const normalizedType = section.type.toLowerCase();
 
@@ -1048,6 +1046,15 @@ export function SectionRenderer({
               isBuilder={isBuilder}
             />
           );
+        case 'custom-html':
+          return (
+            <CustomHtmlSection
+              data={(section as any).data}
+              style={(section as any).style}
+              isBuilder={isBuilder}
+              sectionId={section.id}
+            />
+          );
         case 'blog-html':
           return (
             <BlogHtmlSection
@@ -1267,7 +1274,6 @@ export function SectionRenderer({
           );
         default:
           console.error('❌ Unknown section type:', section.type);
-          console.log('📦 Section data:', JSON.stringify(section, null, 2));
           return (
             <div className="p-8 bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700 text-center rounded-lg">
               <p className="text-red-600 dark:text-red-400 font-bold mb-2">

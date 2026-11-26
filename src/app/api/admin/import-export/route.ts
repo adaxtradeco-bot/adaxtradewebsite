@@ -9,6 +9,10 @@ import { prisma } from '@/lib/prisma';
 import { ImportExportManager } from '@/lib/import-export/utils';
 import { ExportData, PageExportData, SectionExportData, ImportResult } from '@/lib/import-export/types';
 import { authenticateRequest } from '@/lib/api-auth';
+import { guardBuilderWrite } from '@/lib/custom-html/guard';
+import { parseCustomHtmlData } from '@/lib/custom-html/schema';
+import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
+import { getPermissions } from '@/lib/permissions';
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +23,7 @@ export async function POST(request: NextRequest) {
     const { action, data, options } = body;
 
     if (action === 'import') {
-      return handleImport(data, options);
+      return handleImport(data, options, auth.user);
     }
 
     return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
@@ -34,7 +38,8 @@ export async function POST(request: NextRequest) {
 
 async function handleImport(
   importData: ExportData,
-  options: { autoImportSections: boolean; validateData: boolean }
+  options: { autoImportSections: boolean; validateData: boolean },
+  user: { role: string }
 ): Promise<NextResponse> {
   const result: ImportResult = {
     success: false,
@@ -56,7 +61,10 @@ async function handleImport(
 
     if (importData.type === 'page') {
       const pageData = importData.data as PageExportData;
-      
+
+      const blocked = await guardBuilderWrite(user, [], pageData.page.builderData);
+      if (blocked) return blocked;
+
       // Check if page exists
       const existingPage = await prisma.page.findUnique({
         where: { slug: pageData.page.slug }
@@ -112,10 +120,35 @@ async function handleImport(
 
     if (importData.type === 'section') {
       const sectionData = importData.data as SectionExportData;
-      
-      // Check if section template exists
+
+      if (sectionData.type === CUSTOM_HTML_TYPE) {
+        if (!getPermissions(user.role).canEditCode) {
+          return NextResponse.json(
+            { error: 'Forbidden', reason: 'Importing custom HTML templates requires the admin role' },
+            { status: 403 }
+          );
+        }
+        const rawDefault: unknown = sectionData.defaultData;
+        let defaultObj: unknown = rawDefault;
+        if (typeof rawDefault === 'string') {
+          try {
+            defaultObj = JSON.parse(rawDefault);
+          } catch {
+            defaultObj = null;
+          }
+        }
+        const parsed = parseCustomHtmlData(defaultObj);
+        if (!parsed.success) {
+          return NextResponse.json(
+            { error: 'Invalid custom HTML data', reason: parsed.error },
+            { status: 400 }
+          );
+        }
+      }
+
+      // Check if section template exists (match type AND name so several custom templates can import)
       const existingTemplate = await prisma.sectionTemplate.findFirst({
-        where: { type: sectionData.type }
+        where: { type: sectionData.type, name: sectionData.name }
       });
 
       // For sections, always create if doesn't exist, skip if exists

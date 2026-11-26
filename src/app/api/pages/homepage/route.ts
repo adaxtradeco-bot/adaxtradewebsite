@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { stripCustomHtmlForPublic } from '@/lib/custom-html/public-strip';
 
 // GET /api/pages/homepage - Get homepage data
 export async function GET(request: NextRequest) {
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest) {
 
     const pageData = {
       ...page,
-      builderData: sections,
+      builderData: stripCustomHtmlForPublic(sections),
     };
 
     return NextResponse.json({ page: pageData });

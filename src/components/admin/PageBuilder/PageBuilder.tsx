@@ -18,6 +18,9 @@ import { MediaBrowser } from './MediaBrowser';
 import { PageJSONEditor } from './PageJSONEditor';
 import { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { SECTION_TEMPLATES } from '@/lib/page-builder/section-registry';
+import { ImportWizard } from './custom-html/ImportWizard';
+import { CHS_EVENTS, canEditCodeClient } from '@/lib/custom-html/client-role';
+import type { CustomHtmlData } from '@/lib/custom-html/types';
 
 interface PageBuilderProps {
   pageId: string;
@@ -59,6 +62,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
   }>({ isOpen: false, onSelect: () => {}, acceptTypes: ['image/*', 'video/*'] });
   const [isJSONEditorOpen, setIsJSONEditorOpen] = useState(false);
   const [inspectorExpanded, setInspectorExpanded] = useState(false);
+  const [importWizard, setImportWizard] = useState<{ open: boolean; editSectionId: string | null }>({ open: false, editSectionId: null });
 
   // Library is docked on wide screens (>=1280px) and a slide-over below that.
   useEffect(() => {
@@ -118,6 +122,24 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
     setSections(prev => [...prev, newSection]);
     setSelectedSectionId(newSection.id);
   }, [sections.length]);
+
+  // Insert a ready-made section (e.g. from the Custom HTML import wizard)
+  const handleInsertSection = useCallback((section: SectionConfig) => {
+    const newSection = { ...section, order: sections.length } as SectionConfig;
+    setSections(prev => [...prev, newSection]);
+    setSelectedSectionId(newSection.id);
+  }, [sections.length]);
+
+  // Property panel "Edit code" -> open the import wizard in edit mode (admins only)
+  useEffect(() => {
+    const onEditCode = (event: Event) => {
+      const sectionId = (event as CustomEvent<{ sectionId?: string }>).detail?.sectionId;
+      if (!sectionId || !canEditCodeClient()) return;
+      setImportWizard({ open: true, editSectionId: sectionId });
+    };
+    window.addEventListener(CHS_EVENTS.editCode, onEditCode);
+    return () => window.removeEventListener(CHS_EVENTS.editCode, onEditCode);
+  }, []);
 
   // Update section configuration
   const handleUpdateSection = useCallback((sectionId: string, updates: Partial<SectionConfig>) => {
@@ -258,6 +280,10 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
                       closeLibraryIfOverlay();
                     }}
                     onClose={() => setIsSectionLibraryVisible(false)}
+                    onImportHtml={() => {
+                      setImportWizard({ open: true, editSectionId: null });
+                      closeLibraryIfOverlay();
+                    }}
                   />
                 </div>
               </>
@@ -370,6 +396,17 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
           setMediaBrowser(prev => ({ ...prev, isOpen: false }));
         }}
         acceptTypes={mediaBrowser.acceptTypes}
+      />
+
+      {/* Custom HTML import wizard */}
+      <ImportWizard
+        isOpen={importWizard.open}
+        onClose={() => setImportWizard({ open: false, editSectionId: null })}
+        onInsert={handleInsertSection}
+        editSection={importWizard.editSectionId ? sections.find(s => s.id === importWizard.editSectionId) : undefined}
+        onReplace={(sectionId, data: CustomHtmlData) =>
+          handleUpdateSection(sectionId, { data } as unknown as Partial<SectionConfig>)
+        }
       />
 
       {/* Page JSON Editor */}

@@ -7,6 +7,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/api-auth';
+import { guardBuilderWrite } from '@/lib/custom-html/guard';
+import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
 
 // GET /api/admin/pages/[id]/builder - Get page for builder
 export async function GET(
@@ -54,7 +56,10 @@ export async function GET(
           : page.sections;
         
         if (Array.isArray(sections)) {
-          builderData = sections;
+          // Legacy sections never carry custom-html (spec 8.3)
+          builderData = sections.filter(
+            (s: any) => !(s && typeof s === 'object' && s.type === CUSTOM_HTML_TYPE)
+          );
         }
       } catch (error) {
         console.error('Failed to parse legacy sections:', error);
@@ -89,7 +94,17 @@ export async function PUT(
     if (!auth.ok) return auth.response;
 
     const { builderData, isBuilderPage, builderVersion } = await request.json();
-    
+
+    const existing = await prisma.page.findUnique({
+      where: { id: params.id },
+      select: { builderData: true },
+    });
+    if (!existing) {
+      return NextResponse.json({ error: 'Page not found' }, { status: 404 });
+    }
+    const blocked = await guardBuilderWrite(auth.user, existing.builderData, builderData);
+    if (blocked) return blocked;
+
     const page = await prisma.page.update({
       where: { id: params.id },
       data: {

@@ -55,6 +55,7 @@ import { SplitGatewayPropertyPanel } from './SplitGatewayPropertyPanel';
 import { BlogHeadingPropertyPanel } from './BlogHeadingPropertyPanel';
 import { BlogRichTextPropertyPanel } from './BlogRichTextPropertyPanel';
 import { BlogHtmlPropertyPanel } from './BlogHtmlPropertyPanel';
+import { CustomHtmlPropertyPanel } from './custom-html/CustomHtmlPropertyPanel';
 import { BlogLatestPostsPropertyPanel } from './BlogLatestPostsPropertyPanel';
 import { ProjectHeroPropertyPanel } from './ProjectHeroPropertyPanel';
 import { WorkflowSectionPropertyPanel } from './WorkflowSectionPropertyPanel';
@@ -684,6 +685,8 @@ export function PropertyPanel({ section, onUpdate, onClose, position, expanded, 
         return <BlogLatestPostsPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'blog-html':
         return <BlogHtmlPropertyPanel section={section} onUpdate={onUpdate} />;
+      case 'custom-html':
+        return <CustomHtmlPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'project-hero':
         return <ProjectHeroPropertyPanel section={section} onUpdate={onUpdate} />;
       case 'workflow':

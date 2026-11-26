@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest } from '@/lib/api-auth';
+import { guardBuilderWrite } from '@/lib/custom-html/guard';
 
 // GET /api/admin/pages - List all pages
 export async function GET(request: NextRequest) {
@@ -42,6 +43,11 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
 
     const data = await request.json();
+
+    if (data.builderData) {
+      const blocked = await guardBuilderWrite(auth.user, [], data.builderData);
+      if (blocked) return blocked;
+    }
     
     // Check if slug already exists
     if (data.slug) {

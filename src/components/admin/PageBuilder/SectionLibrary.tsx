@@ -7,13 +7,14 @@
 
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Eye } from 'lucide-react';
 import { Icon } from '@/components/admin/icons';
 import type { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { SECTION_TEMPLATES, SECTION_CATEGORIES } from '@/lib/page-builder/section-registry';
 import { SectionPreviewModal } from '@/components/section-preview/SectionPreviewModal';
 import { getSectionPreviewData } from '@/lib/section-preview-data';
+import { canEditCodeClient } from '@/lib/custom-html/client-role';
 
 interface SectionLibraryProps {
   onAddSection: (templateType: string) => void;
@@ -22,9 +23,15 @@ interface SectionLibraryProps {
   selectedSectionId?: string | null;
   onSelectSection?: (id: string) => void;
   onClose?: () => void;
+  /** Opens the Custom HTML import wizard (shown only to users who may edit code). */
+  onImportHtml?: () => void;
 }
 
-export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSelectSection, onClose }: SectionLibraryProps) {
+export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSelectSection, onClose, onImportHtml }: SectionLibraryProps) {
+  const [canImport, setCanImport] = useState(false);
+  useEffect(() => {
+    setCanImport(canEditCodeClient());
+  }, []);
   const [tab, setTab] = useState<'library' | 'layers'>('library');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedCategories, setExpandedCategories] = useState<string[]>([
@@ -123,6 +130,21 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
 
       {/* Categories */}
       <div className={`flex-1 overflow-y-auto p-3 space-y-3 ${tab === 'library' ? '' : 'hidden'}`}>
+        {onImportHtml && canImport && (
+          <div data-testid="custom-html-block" className="rounded-lg border border-dashed border-blue-300 bg-blue-50/60 p-3 dark:border-blue-700 dark:bg-blue-900/10">
+            <div className="mb-1 text-sm font-medium text-gray-900 dark:text-white">Custom HTML</div>
+            <p className="mb-2 text-xs text-gray-600 dark:text-gray-400">
+              Bring your own HTML, CSS and JS and turn it into an editable section.
+            </p>
+            <button
+              type="button"
+              onClick={onImportHtml}
+              className="w-full rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+            >
+              Import HTML…
+            </button>
+          </div>
+        )}
         {Object.entries(groupedTemplates).map(([category, templates]) => (
           <div key={category} className="space-y-2">
             {/* Category Header */}

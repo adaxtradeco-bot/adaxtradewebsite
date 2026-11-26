@@ -7,6 +7,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { authenticateRequest, authorizeDelete } from '@/lib/api-auth';
+import { normalizeSections } from '@/lib/custom-html/guard';
+import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
 
 // GET /api/admin/pages/[id] - Get single page
 export async function GET(
@@ -48,6 +50,19 @@ export async function PUT(
     if (!auth.ok) return auth.response;
 
     const data = await request.json();
+
+    // Legacy `sections` never carry custom-html; those go through the builder endpoint (spec 8.3)
+    if (
+      data.sections &&
+      normalizeSections(data.sections).some(
+        (s) => s && typeof s === 'object' && (s as { type?: unknown }).type === CUSTOM_HTML_TYPE
+      )
+    ) {
+      return NextResponse.json(
+        { error: 'custom-html sections must be saved through the page builder' },
+        { status: 400 }
+      );
+    }
 
     // Check if slug is being updated and if it's unique
     if (data.slug) {

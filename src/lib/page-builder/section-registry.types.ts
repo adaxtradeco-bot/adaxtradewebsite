@@ -17,4 +17,5 @@ export const SECTION_CATEGORIES = {
   ACTIONS: 'Actions',
   SOCIAL: 'Social Proof',
   NAVIGATION: 'Navigation',
+  CUSTOM: 'Custom HTML',
 } as const;

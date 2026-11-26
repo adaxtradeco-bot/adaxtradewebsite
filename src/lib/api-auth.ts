@@ -37,3 +37,9 @@ export function authorizeSettings(request: NextRequest): AuthResult {
   if (!auth.ok) return auth;
   return getPermissions(auth.user.role).canManageSettings ? auth : forbidden();
 }
+
+export function authorizeCode(request: NextRequest): AuthResult {
+  const auth = authenticateRequest(request);
+  if (!auth.ok) return auth;
+  return getPermissions(auth.user.role).canEditCode ? auth : forbidden();
+}

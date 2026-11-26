@@ -30,6 +30,8 @@ const nextConfig = {
   },
   experimental: {
     typedRoutes: false,
+    // Loaded via native require at runtime by the custom-html CSS compiler.
+    serverComponentsExternalPackages: ['tailwindcss', 'postcss'],
   },
   images: {
     ...(isStaticExport ? { unoptimized: true } : {}),

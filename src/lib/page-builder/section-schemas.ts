@@ -12,6 +12,7 @@ export const BaseSectionSchema = z.object({
   type: z.enum([
     'hero',
     'HeroSection',
+    'custom-html',
     'AppBuilderHero',
     'MediaContent',
     'FeatureCards',

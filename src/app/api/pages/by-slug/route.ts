@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { stripCustomHtmlForPublic } from '@/lib/custom-html/public-strip';
 
 export const dynamic = 'force-dynamic';
 
@@ -107,7 +108,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       page: {
         ...page,
-        builderData,
+        builderData: stripCustomHtmlForPublic(builderData),
       },
     });
   } catch (error) {
