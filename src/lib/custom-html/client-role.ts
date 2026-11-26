@@ -4,13 +4,28 @@
  */
 export function canEditCodeClient(): boolean {
   if (typeof window === 'undefined') return false;
+  return clientRole() === 'admin';
+}
+
+/** Role from localStorage.adminUser, falling back to the (unverified) JWT payload of adminToken. */
+function clientRole(): string | null {
   try {
     const raw = window.localStorage.getItem('adminUser');
-    if (!raw) return false;
-    const user = JSON.parse(raw) as { role?: unknown };
-    return user?.role === 'admin';
+    if (raw) {
+      const role = (JSON.parse(raw) as { role?: unknown })?.role;
+      if (typeof role === 'string' && role) return role.toLowerCase();
+    }
   } catch {
-    return false;
+    /* fall through to the token */
+  }
+  try {
+    const token = window.localStorage.getItem('adminToken');
+    const payload = token?.split('.')[1];
+    if (!payload) return null;
+    const json = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/'))) as { role?: unknown };
+    return typeof json.role === 'string' ? json.role.toLowerCase() : null;
+  } catch {
+    return null;
   }
 }
 
