@@ -7,9 +7,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { SectionConfig } from '@/lib/page-builder/section-schemas';
 import { parseCustomHtmlData } from '@/lib/custom-html/schema';
-import { CHS_EVENTS, canEditCodeClient, takePendingField } from '@/lib/custom-html/client-role';
-import type { FieldDef, FieldValue } from '@/lib/custom-html/types';
+import { CHS_EVENTS, canEditCodeClient, highlightCustomHtmlField, takePendingField } from '@/lib/custom-html/client-role';
+import type { CustomHtmlData, FieldDef, FieldValue } from '@/lib/custom-html/types';
 import { FieldEditor } from './FieldEditors';
+import { SaveToLibraryForm } from './SaveToLibraryForm';
 
 interface Props {
   section: SectionConfig;
@@ -36,21 +37,35 @@ interface GroupEntry {
   fields: FieldDef[];
 }
 
+/** Field a data-cf id belongs to: exact match, else the repeater that owns an item child ("r1.$0.title"). */
+function findField(fields: FieldDef[], fieldId: string): FieldDef | undefined {
+  return (
+    fields.find((f) => f.id === fieldId) ||
+    fields.find((f) => f.type === 'repeater' && fieldId.indexOf(f.id + '.') === 0)
+  );
+}
+
 function GroupBox({
   title,
   count,
   open,
   onToggle,
+  highlight,
   children,
 }: {
   title: string;
   count: number;
   open: boolean;
   onToggle: () => void;
+  /** A collapsed group holds the field hovered on the canvas. */
+  highlight?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div className="border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
+    <div
+      data-highlight={highlight ? 'true' : undefined}
+      className={`border rounded-lg overflow-hidden ${highlight ? 'border-blue-500 ring-2 ring-blue-500' : 'border-gray-200 dark:border-gray-600'}`}
+    >
       <button
         type="button"
         onClick={onToggle}
@@ -116,7 +131,10 @@ export function CustomHtmlPropertyPanel({ section, onUpdate }: Props) {
   const defaultOpen = (list: GroupEntry[]): Record<string, boolean> => (list[0] ? { [list[0].key]: true } : {});
   const effectiveOpen = openGroups ?? defaultOpen(groups);
   const isOpen = (key: string): boolean => !!query || !!effectiveOpen[key];
-  const toggleGroup = (key: string) => setOpenGroups({ ...effectiveOpen, [key]: !effectiveOpen[key] });
+  const toggleGroup = (key: string) => {
+    hoverRow(null); // rows can unmount under the pointer without a mouseleave
+    setOpenGroups({ ...effectiveOpen, [key]: !effectiveOpen[key] });
+  };
 
   const update = (patch: Record<string, unknown>) => onUpdate({ data: { ...rawData, ...patch } } as Partial<SectionConfig>);
   const setValue = (id: string, v: FieldValue) => update({ values: { ...values, [id]: v } });
@@ -132,10 +150,7 @@ export function CustomHtmlPropertyPanel({ section, onUpdate }: Props) {
     (ev: Event) => {
       const detail = (ev as CustomEvent<{ sectionId?: string; fieldId?: string }>).detail;
       if (!detail || detail.sectionId !== sectionId || !detail.fieldId) return;
-      const all = fieldsRef.current;
-      const target =
-        all.find((f) => f.id === detail.fieldId) ||
-        all.find((f) => detail.fieldId!.indexOf(f.id + '.') === 0 && f.type === 'repeater');
+      const target = findField(fieldsRef.current, detail.fieldId);
       if (!target) return;
       const group = groupsRef.current.find((g) => g.fields.indexOf(target) !== -1);
       if (group) setOpenGroups((prev) => ({ ...(prev ?? defaultOpen(groupsRef.current)), [group.key]: true }));
@@ -165,6 +180,35 @@ export function CustomHtmlPropertyPanel({ section, onUpdate }: Props) {
     };
   }, [handleSelect]);
 
+  // Hover highlight (spec §11), both directions between these rows and the canvas.
+  const [canvasHoverId, setCanvasHoverId] = useState<string | null>(null);
+  const hoveredRowRef = useRef<string | null>(null);
+
+  const hoverRow = (fieldId: string | null) => {
+    if (hoveredRowRef.current === fieldId) return;
+    hoveredRowRef.current = fieldId;
+    highlightCustomHtmlField(sectionId, fieldId);
+  };
+
+  useEffect(() => {
+    const onCanvasHover = (ev: Event) => {
+      const detail = (ev as CustomEvent<{ sectionId?: string; fieldId?: string | null }>).detail;
+      if (!detail || detail.sectionId !== sectionId) return;
+      setCanvasHoverId(detail.fieldId ? (findField(fieldsRef.current, detail.fieldId)?.id ?? null) : null);
+    };
+    window.addEventListener(CHS_EVENTS.hoverField, onCanvasHover);
+    return () => {
+      window.removeEventListener(CHS_EVENTS.hoverField, onCanvasHover);
+      if (hoveredRowRef.current !== null) {
+        hoveredRowRef.current = null;
+        highlightCustomHtmlField(sectionId, null);
+      }
+    };
+  }, [sectionId]);
+
+  const [saveOpen, setSaveOpen] = useState(false);
+  const libraryData: CustomHtmlData | null = parsed.success ? parsed.data : null;
+
   const editCode = () => window.dispatchEvent(new CustomEvent(CHS_EVENTS.editCode, { detail: { sectionId } }));
 
   return (
@@ -180,12 +224,18 @@ export function CustomHtmlPropertyPanel({ section, onUpdate }: Props) {
               Edit code
             </button>
           )}
+          {isAdmin && parsed.success && (
+            <button type="button" className={btnCls} aria-expanded={saveOpen} onClick={() => setSaveOpen((v) => !v)}>
+              Save to library
+            </button>
+          )}
           {parsed.success && (
             <button type="button" className={btnCls} onClick={() => update({ values: {} })}>
               Reset all to defaults
             </button>
           )}
         </div>
+        {isAdmin && libraryData && saveOpen && <SaveToLibraryForm data={libraryData} onClose={() => setSaveOpen(false)} />}
         {isAdmin && parsed.success && (
           <label className="flex items-center justify-between gap-3 text-xs font-medium text-gray-600 dark:text-gray-400">
             <span>Run scripts in builder</span>
@@ -218,7 +268,7 @@ export function CustomHtmlPropertyPanel({ section, onUpdate }: Props) {
           <label htmlFor="chs-field-search" className="sr-only">
             Search fields
           </label>
-          <input id="chs-field-search" type="search" className={inputCls} placeholder="Search fields…" value={search} onChange={(e) => setSearch(e.target.value)} />
+          <input id="chs-field-search" type="search" className={inputCls} placeholder="Search fields…" value={search} onChange={(e) => { hoverRow(null); setSearch(e.target.value); }} />
         </div>
       )}
 
@@ -227,15 +277,23 @@ export function CustomHtmlPropertyPanel({ section, onUpdate }: Props) {
           const list = query ? g.fields.filter((f) => f.label.toLowerCase().includes(query)) : g.fields;
           if (query && list.length === 0) return null;
           return (
-            <GroupBox key={g.key} title={g.title} count={list.length} open={isOpen(g.key)} onToggle={() => toggleGroup(g.key)}>
+            <GroupBox
+              key={g.key}
+              title={g.title}
+              count={list.length}
+              open={isOpen(g.key)}
+              onToggle={() => toggleGroup(g.key)}
+              highlight={!isOpen(g.key) && g.fields.some((f) => f.id === canvasHoverId)}
+            >
               {list.map((f) => (
-                <FieldEditor
-                  key={f.id}
-                  field={f}
-                  value={hasOwn(values, f.id) ? values[f.id] : f.default}
-                  onChange={(v) => setValue(f.id, v)}
-                  highlight={highlightId === f.id}
-                />
+                <div key={f.id} data-chs-row={f.id} onMouseEnter={() => hoverRow(f.id)} onMouseLeave={() => hoverRow(null)}>
+                  <FieldEditor
+                    field={f}
+                    value={hasOwn(values, f.id) ? values[f.id] : f.default}
+                    onChange={(v) => setValue(f.id, v)}
+                    highlight={highlightId === f.id || canvasHoverId === f.id}
+                  />
+                </div>
               ))}
             </GroupBox>
           );

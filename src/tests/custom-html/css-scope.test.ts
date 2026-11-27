@@ -118,9 +118,13 @@ describe('compileCss', () => {
     expect(r.cssScoped).toBe('');
   });
 
-  it('warns when tailwind is enabled', async () => {
-    const r = await run('.a{x:1}', '<p/>', { tailwind: { enabled: true } });
-    expect(r.warnings).toContain('Tailwind compile not available yet');
-    expect(r.cssScoped).toContain('.a');
+  it('rewrites a leading .dark compound on escaped utility selectors, leaving :is(.dark *) alone', async () => {
+    const { cssScoped, R } = await run(
+      '.dark .dark\\:x{a:1} .dark\\:y:is(.dark *){b:2} .dark\\:z:where(.dark, .dark *) > p{c:3} .\\32 xl\\:flex{d:4}',
+    );
+    expect(cssScoped).toContain(`.dark ${R} .dark\\:x{a:1}`);
+    expect(cssScoped).toContain(`${R} .dark\\:y:is(.dark *){b:2}`);
+    expect(cssScoped).toContain(`${R} .dark\\:z:where(.dark, .dark *) > p{c:3}`);
+    expect(cssScoped).toContain(`${R} .\\32 xl\\:flex{d:4}`);
   });
 });

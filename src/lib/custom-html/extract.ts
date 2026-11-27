@@ -28,6 +28,8 @@ const JS_TYPES = new Set([
 
 const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
 const TAILWIND_HOST = 'cdn.tailwindcss.com';
+/** top-level tailwind.config members that are code, not data (typically `require(...)`) */
+const TAILWIND_CODE_KEYS = ['plugins', 'presets'];
 
 function byteLength(s: string): number {
   try {
@@ -52,7 +54,8 @@ function parseUrl(raw: string): URL | null {
 
 class UnsupportedConfig extends Error {}
 
-function evalStatic(node: AstNode): unknown {
+/** `skip` applies to this object's own properties: a true result omits one without evaluating it. */
+function evalStatic(node: AstNode, skip?: (name: string, value: AstNode) => boolean): unknown {
   switch (node.type) {
     case 'Literal': {
       if (node.regex || typeof node.value === 'bigint') throw new UnsupportedConfig('regex/bigint literal');
@@ -88,6 +91,7 @@ function evalStatic(node: AstNode): unknown {
         else if (key.type === 'Literal') name = String(key.value);
         else throw new UnsupportedConfig('unsupported key');
         if (FORBIDDEN_KEYS.has(name)) throw new UnsupportedConfig(`forbidden key "${name}"`);
+        if (skip?.(name, prop.value as AstNode)) continue;
         out[name] = evalStatic(prop.value as AstNode);
       }
       return out;
@@ -143,7 +147,13 @@ function pullTailwindConfig(js: string): TailwindScan {
   for (const stmt of statements) {
     const right = (stmt.expression as AstNode).right as AstNode;
     try {
-      const value = evalStatic(right);
+      const value = evalStatic(right, (name, node) => {
+        if (TAILWIND_CODE_KEYS.indexOf(name) === -1) return false;
+        if (!(node.type === 'ArrayExpression' && node.elements.length === 0)) {
+          result.warnings.push(`tailwind.config "${name}" is not supported and was ignored.`);
+        }
+        return true;
+      });
       if (value && typeof value === 'object' && !Array.isArray(value)) {
         result.config = { ...(result.config ?? {}), ...(value as Record<string, unknown>) };
       } else {
@@ -251,6 +261,12 @@ export function extractSource(input: string, extra?: { css?: string; js?: string
       const url = parseUrl(src);
       if (url && url.hostname.toLowerCase() === TAILWIND_HOST) {
         tailwindEnabled = true;
+        const plugins = url.searchParams.get('plugins');
+        if (plugins) {
+          result.warnings.push(
+            `Tailwind CDN plugins (${plugins}) are not supported; their classes will not be styled.`
+          );
+        }
       } else if (url && (url.protocol === 'http:' || url.protocol === 'https:')) {
         pushUnique(result.externalScripts, src.startsWith('//') ? url.toString() : src);
       } else {
@@ -281,15 +297,32 @@ export function extractSource(input: string, extra?: { css?: string; js?: string
   });
 
   const body = doc.body;
+  // With Tailwind the <body> utilities carry the look of the page, so they move to a wrapper.
+  let bodyWrapper: Element | null = null;
   if (body && (body.getAttribute('class') || body.getAttribute('style'))) {
+    if (tailwindEnabled) {
+      bodyWrapper = doc.createElement('div');
+      bodyWrapper.setAttribute('data-chs-body', '');
+      for (const name of ['class', 'style']) {
+        const value = body.getAttribute(name);
+        if (value) bodyWrapper.setAttribute(name, value);
+      }
+    }
     result.warnings.push(
-      '<body> attributes (class/style) are not kept; html/body/:root CSS selectors are mapped to the section root.'
+      `<body> attributes (class/style) ${
+        bodyWrapper ? 'were moved to a wrapper <div>' : 'are not kept'
+      }; html/body/:root CSS selectors are mapped to the section root.`
     );
   }
 
   // Non-JS scripts that lived in <head> (e.g. JSON data) move to the start of the markup.
   const headLeftovers = Array.from(doc.head?.querySelectorAll('script') ?? []).map((s) => s.outerHTML);
-  result.html = (headLeftovers.join('\n') + (headLeftovers.length ? '\n' : '') + (body?.innerHTML ?? '')).trim();
+  let bodyHtml = body?.innerHTML ?? '';
+  if (bodyWrapper) {
+    bodyWrapper.innerHTML = bodyHtml;
+    bodyHtml = bodyWrapper.outerHTML;
+  }
+  result.html = (headLeftovers.join('\n') + (headLeftovers.length ? '\n' : '') + bodyHtml).trim();
 
   if (extra?.css && extra.css.trim()) cssParts.push(extra.css);
   if (extra?.js && extra.js.trim()) jsBlocks.push(extra.js);

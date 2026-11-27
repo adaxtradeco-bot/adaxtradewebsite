@@ -12,6 +12,7 @@ import {
   defaultCompile,
   mergePreviousFieldMeta,
   reconstructSource,
+  removedFieldLabels,
   type Analysis,
 } from '@/lib/custom-html/assemble';
 import { canMarkAs, markElementAsField, unmarkField } from '@/lib/custom-html/detect';
@@ -19,6 +20,8 @@ import { parseCustomHtmlData } from '@/lib/custom-html/schema';
 import {
   CUSTOM_HTML_LIMITS,
   CUSTOM_HTML_TYPE,
+  parseRepeaterPath,
+  repeaterChildPath,
   type CompileRequest,
   type CompileResult,
   type CustomHtmlData,
@@ -26,6 +29,9 @@ import {
   type FieldType,
 } from '@/lib/custom-html/types';
 import { MappingPreview } from './MappingPreview';
+import { RepeaterFieldRows } from './RepeaterFieldRows';
+import { canEditCodeClient } from '@/lib/custom-html/client-role';
+import { createLibraryItem } from '@/lib/custom-html/library-client';
 
 export interface ImportWizardProps {
   isOpen: boolean;
@@ -35,6 +41,8 @@ export interface ImportWizardProps {
   onReplace?: (sectionId: string, data: CustomHtmlData) => void;
   /** test seam; defaults to the admin compile API */
   compile?: (req: CompileRequest) => Promise<CompileResult>;
+  /** test seam; defaults to the admin library API */
+  saveToLibrary?: (input: { name: string; data: CustomHtmlData }) => Promise<unknown>;
 }
 
 const FIELD_TYPES: FieldType[] = ['text', 'textarea', 'richtext', 'link', 'image', 'bgImage', 'video', 'embed', 'icon'];
@@ -77,6 +85,16 @@ function findMarked(root: Element, id: string): Element | null {
   return Array.from(root.querySelectorAll('[data-cf]')).find((e) => e.getAttribute('data-cf') === id) ?? null;
 }
 
+/** Row ids of the field list: field ids plus repeater child paths. */
+function rowIds(fields: FieldDef[]): string[] {
+  const out: string[] = [];
+  for (const f of fields) {
+    out.push(f.id);
+    for (const child of f.children ?? []) out.push(repeaterChildPath(f.id, child.id));
+  }
+  return out;
+}
+
 function guessTypes(el: Element): FieldType[] {
   switch (el.tagName.toLowerCase()) {
     case 'img': return ['image'];
@@ -107,7 +125,8 @@ function Messages({ items, tone }: { items: string[]; tone: 'warn' | 'error' }) 
   );
 }
 
-export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace, compile = defaultCompile }: ImportWizardProps) {
+export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace, compile = defaultCompile, saveToLibrary = createLibraryItem }: ImportWizardProps) {
+  const [addToLibrary, setAddToLibrary] = useState(false);
   const [step, setStep] = useState<Step>(1);
   const [tab, setTab] = useState<Tab>('html');
   const [html, setHtml] = useState('');
@@ -125,6 +144,8 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [compileWarnings, setCompileWarnings] = useState<string[]>([]);
+  /** compiled with warnings: waits for the admin to confirm */
+  const [pending, setPending] = useState<CustomHtmlData | null>(null);
   const previous = useRef<CustomHtmlData | null>(null);
   const rowRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
@@ -163,6 +184,7 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
     setError(null);
     setNotice(null);
     setCompileWarnings([]);
+    setAddToLibrary(false);
     previous.current = null;
 
     if (editSection) {
@@ -228,7 +250,7 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
   const handleMark = useCallback(
     (el: Element) => {
       if (!root) return;
-      const before = new Set(fields.map((f) => f.id));
+      const before = new Set(rowIds(fields));
       let next = fields;
       for (const type of guessTypes(el)) {
         next = markElementAsField(root, el, type, fields);
@@ -241,14 +263,22 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
       setNotice(null);
       setFields(next);
       setVersion((v) => v + 1);
-      const added = next.find((f) => !before.has(f.id));
-      if (added) handleSelect(added.id);
+      const added = rowIds(next).find((id) => !before.has(id));
+      if (added) handleSelect(added);
     },
     [root, fields, handleSelect]
   );
 
-  const updateField = (id: string, patch: Partial<FieldDef>) =>
-    setFields((fs) => fs.map((f) => (f.id === id ? { ...f, ...patch } : f)));
+  const updateField = (id: string, patch: Partial<FieldDef>) => {
+    const path = parseRepeaterPath(id);
+    setFields((fs) =>
+      fs.map((f) => {
+        if (f.id === id) return { ...f, ...patch };
+        if (!path || f.id !== path.repeaterId) return f;
+        return { ...f, children: f.children?.map((c) => (c.id === path.childId ? { ...c, ...patch } : c)) };
+      })
+    );
+  };
 
   const changeType = (field: FieldDef, type: FieldType) => {
     if (!root || type === field.type) return;
@@ -289,11 +319,31 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
 
   const removedFields = useMemo(() => {
     const prev = previous.current;
-    if (!prev) return [];
-    return prev.fields.filter((pf) => !fields.some((f) => f.id === pf.id && f.type === pf.type));
+    return prev ? removedFieldLabels(prev, fields) : [];
   }, [fields, isOpen, step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const allWarnings = useMemo(() => [...(analysis?.warnings ?? []), ...compileWarnings], [analysis, compileWarnings]);
+
+  // A confirmed build must match what is on screen.
+  useEffect(() => {
+    setPending(null);
+    setCompileWarnings([]);
+  }, [analysis, fields, name, dir, isOpen]);
+
+  // "Edit code" source has no CDN script, so the stored Tailwind setting applies.
+  const tailwindPreview = useMemo(() => {
+    if (!analysis || analysis.blocked) return undefined;
+    const { extract, handlerJs: handlers } = analysis;
+    const tailwind = extract.tailwind ?? previous.current?.template.tailwind;
+    if (!tailwind?.enabled) return undefined;
+    return {
+      html: '',
+      css: extract.css,
+      js: extract.jsBlocks.join('\n'),
+      tailwind,
+      content: `${extract.html}\n${handlers}`,
+    };
+  }, [analysis]);
 
   // ---- step 4: build ----
   const submit = async () => {
@@ -305,23 +355,41 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
     setError(null);
     setCompiling(true);
     try {
-      const res = await assembleCustomHtml({
-        name,
-        analysis,
-        fields,
-        dir,
-        compile,
-        previous: previous.current ?? undefined,
-      });
-      setCompileWarnings(res.compileWarnings);
+      let data = pending;
+      if (!data) {
+        const res = await assembleCustomHtml({
+          name,
+          analysis,
+          fields,
+          dir,
+          compile,
+          previous: previous.current ?? undefined,
+        });
+        setCompileWarnings(res.compileWarnings);
+        if (res.compileWarnings.length > 0) {
+          setPending(res.data);
+          return;
+        }
+        data = res.data;
+      }
+      // Saved first: if it fails the wizard stays open and nothing has been inserted yet.
+      if (addToLibrary) {
+        try {
+          await saveToLibrary({ name: data.name, data });
+        } catch (err) {
+          throw new Error(
+            `Could not save to the library: ${err instanceof Error ? err.message : 'unknown error'}. Try again, or untick "Save to library".`
+          );
+        }
+      }
       if (isEdit && editSection) {
-        onReplace?.(editSection.id, res.data);
+        onReplace?.(editSection.id, data);
       } else {
         onInsert({
           id: `section-${Date.now()}`,
           type: CUSTOM_HTML_TYPE,
           order: 0,
-          data: res.data,
+          data,
         } as unknown as SectionConfig);
       }
       onClose();
@@ -418,7 +486,7 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
                   </ul>
                   {ex.tailwind?.enabled && (
                     <p className="text-amber-700 dark:text-amber-300">
-                      Tailwind CDN detected. Compiling Tailwind utility classes is planned for phase 2; the classes are kept but their CSS is not generated yet.
+                      Tailwind CDN detected: utility classes are compiled on insert.
                     </p>
                   )}
                 </div>
@@ -443,6 +511,7 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
                   selectedFieldId={selectedId}
                   onSelectField={handleSelect}
                   onMarkElement={handleMark}
+                  tailwind={tailwindPreview ? { request: tailwindPreview, compile } : undefined}
                 />
               </div>
               <div className="min-w-0 space-y-3">
@@ -476,11 +545,12 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
                       <div className="space-y-2">
                         {list.map((f) => {
                           const el = findMarked(root, f.id);
-                          const types = FIELD_TYPES.filter((t) => t === f.type || (el ? canMarkAs(el, t) : false));
+                          // a list cannot become another type (remove it instead)
+                          const types = f.type === 'repeater' ? [] : FIELD_TYPES.filter((t) => t === f.type || (el ? canMarkAs(el, t) : false));
                           if (!types.includes(f.type)) types.push(f.type);
                           return (
+                            <React.Fragment key={f.id}>
                             <div
-                              key={f.id}
                               ref={(n) => { rowRefs.current[f.id] = n; }}
                               data-testid="field-row"
                               onClick={() => setSelectedId(f.id)}
@@ -524,6 +594,22 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
                                 Remove
                               </button>
                             </div>
+                            {f.type === 'repeater' && (
+                              <RepeaterFieldRows
+                                root={root}
+                                repeater={f}
+                                fieldTypes={FIELD_TYPES}
+                                typeLabels={TYPE_LABEL}
+                                selectedId={selectedId}
+                                inputClassName={inputCls}
+                                rowRef={(id, n) => { rowRefs.current[id] = n; }}
+                                onSelect={setSelectedId}
+                                onUpdate={updateField}
+                                onChangeType={changeType}
+                                onRemove={removeField}
+                              />
+                            )}
+                            </React.Fragment>
                           );
                         })}
                       </div>
@@ -549,13 +635,29 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
                   <option value="auto">Follow page language (auto)</option>
                 </select>
               </div>
+              {canEditCodeClient() && (
+                <label className="flex items-start gap-2 text-sm text-gray-900 dark:text-white">
+                  <input type="checkbox" className="mt-1" checked={addToLibrary} onChange={(e) => setAddToLibrary(e.target.checked)} />
+                  <span>
+                    Save to library
+                    <span className="block text-xs text-gray-500 dark:text-gray-400">
+                      Adds a reusable copy of the code and default content. Pages keep their own copy.
+                    </span>
+                  </span>
+                </label>
+              )}
               {removedFields.length > 0 && (
                 <div data-testid="removed-fields">
                   <Messages
                     tone="warn"
-                    items={[`These fields will be removed and their values discarded: ${removedFields.map((f) => f.label).join(', ')}`]}
+                    items={[`These fields will be removed and their values discarded: ${removedFields.join(', ')}`]}
                   />
                 </div>
+              )}
+              {pending && (
+                <p role="status" data-testid="confirm-warnings" className="text-sm font-medium text-amber-800 dark:text-amber-200">
+                  The styles compiled with warnings. Review them, then confirm.
+                </p>
               )}
               <Messages tone="warn" items={allWarnings} />
               {allWarnings.length === 0 && <p className="text-sm text-gray-500 dark:text-gray-400">No warnings.</p>}
@@ -589,7 +691,7 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
             )}
             {step === 3 && (
               <button className={btnPrimary} disabled={compiling || !name.trim()} onClick={submit}>
-                {compiling ? 'Compiling…' : isEdit ? 'Save changes' : 'Insert section'}
+                {compiling ? 'Compiling…' : pending ? (isEdit ? 'Save anyway' : 'Insert anyway') : isEdit ? 'Save changes' : 'Insert section'}
               </button>
             )}
           </div>

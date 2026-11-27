@@ -84,6 +84,20 @@ export const CUSTOM_HTML_LIMITS = {
   uploadBytes: 2_000_000,
 } as const;
 
+/**
+ * Marks the root element of every repeater item (value = repeater id). Present in the detect DOM and
+ * in the stored template (re-import identifies items by it); stripped from public output.
+ */
+export const REPEATER_ITEM_ATTR = 'data-cf-item';
+/** Separator in a child path: "<repeaterId>.$.<childId>" (template), "<repeaterId>.$0.<childId>" (rendered). */
+export const REPEATER_PATH_SEP = '.$.';
+export const repeaterChildPath = (repeaterId: string, childId: string) => `${repeaterId}${REPEATER_PATH_SEP}${childId}`;
+/** Splits "<repeaterId>.$.<childId>" or "<repeaterId>.$<n>.<childId>"; null for any other string. */
+export function parseRepeaterPath(path: string): { repeaterId: string; index: number | null; childId: string } | null {
+  const m = /^(.+?)\.\$(\d*)\.(.+)$/.exec(path);
+  return m ? { repeaterId: m[1], index: m[2] === '' ? null : Number(m[2]), childId: m[3] } : null;
+}
+
 /** Token syntax helpers (spec §5). */
 export const TOKEN_OPEN = '{{cf:';
 export const TOKEN_CLOSE = '}}';
@@ -137,7 +151,8 @@ export interface DetectResult {
 
 /** tokenize.ts */
 // export function tokenizeHtml(root: Element, fields: FieldDef[]): string
-// export function detectCssFields(cssScoped: string, existing: FieldDef[]): { cssScoped: string; fields: FieldDef[] }
+// export function detectCssFields(cssScoped: string, existing: FieldDef[], opts?: { wrapper?: Element | null; previous?: {...} })
+//   : { cssScoped: string; fields: FieldDef[]; matched?: Record<string, string> }   // bgImage + colour fields
 
 /** handlers.ts */
 // export function rewriteInlineHandlers(html: string): { html: string; handlerJs: string; count: number }
@@ -154,6 +169,11 @@ export interface CompileRequest {
   css: string;
   js?: string;
   tailwind?: { enabled: boolean; config?: Record<string, unknown> };
+  /**
+   * Extra text scanned for Tailwind class names only: `html` is tokenized, so classes inside field
+   * defaults (rich text, icons, list items) and inline handlers are not in `html` / `js`.
+   */
+  content?: string;
 }
 export interface CompileResult { cssScoped: string; scope: string; warnings: string[] }
 // export async function compileCss(req: CompileRequest): Promise<CompileResult>

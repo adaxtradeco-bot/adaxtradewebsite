@@ -125,12 +125,12 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
     setSelectedSectionId(newSection.id);
   }, [sections.length]);
 
-  // Insert a ready-made section (e.g. from the Custom HTML import wizard)
+  // Insert a ready-made section (Custom HTML import wizard or saved library item).
+  // Order comes from the latest state: a library insert arrives after a fetch.
   const handleInsertSection = useCallback((section: SectionConfig) => {
-    const newSection = { ...section, order: sections.length } as SectionConfig;
-    setSections(prev => [...prev, newSection]);
-    setSelectedSectionId(newSection.id);
-  }, [sections.length]);
+    setSections(prev => [...prev, { ...section, order: prev.length } as SectionConfig]);
+    setSelectedSectionId(section.id);
+  }, []);
 
   // Property panel "Edit code" -> open the import wizard in edit mode (admins only)
   useEffect(() => {
@@ -284,6 +284,10 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
                     onClose={() => setIsSectionLibraryVisible(false)}
                     onImportHtml={allowCustomHtml ? () => {
                       setImportWizard({ open: true, editSectionId: null });
+                      closeLibraryIfOverlay();
+                    } : undefined}
+                    onInsertSection={allowCustomHtml ? (section) => {
+                      handleInsertSection(section);
                       closeLibraryIfOverlay();
                     } : undefined}
                   />

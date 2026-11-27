@@ -14,7 +14,7 @@ import { parseCustomHtmlData } from '@/lib/custom-html/schema';
 import { renderCustomHtml } from '@/lib/custom-html/render';
 import { runCustomHtmlScript } from '@/lib/custom-html/runtime';
 import { djb2 } from '@/lib/custom-html/hash';
-import { selectCustomHtmlField } from '@/lib/custom-html/client-role';
+import { CHS_EVENTS, hoverCustomHtmlField, selectCustomHtmlField } from '@/lib/custom-html/client-role';
 import type { RuntimeHandle } from '@/lib/custom-html/types';
 
 export interface CustomHtmlSectionProps {
@@ -26,6 +26,8 @@ export interface CustomHtmlSectionProps {
 
 const BUILDER_RERUN_DEBOUNCE_MS = 600;
 const RTL_LANGS = ['ar', 'fa'];
+const HIGHLIGHT_ATTR = 'data-chs-highlight';
+const HIGHLIGHT_CSS = `[${HIGHLIGHT_ATTR}]{outline:2px solid #2563eb !important;outline-offset:2px !important}`;
 
 function isRtlLang(lang: string | null | undefined): boolean {
   if (!lang) return false;
@@ -156,6 +158,46 @@ export default function CustomHtmlSection({ data, isBuilder = false, sectionId =
     };
   }, [hasValid, isBuilder, runInBuilder, js, scriptsKey, instanceId, sectionId, rerunKey]);
 
+  // Builder only (spec §11): hovering a panel row outlines the matching element(s) here, and
+  // hovering a [data-cf] element here is reported to the panel.
+  const [highlightId, setHighlightId] = useState<string | null>(null);
+  const hoveredRef = useRef<string | null>(null);
+  const reportHover = (fieldId: string | null) => {
+    if (hoveredRef.current === fieldId) return;
+    hoveredRef.current = fieldId;
+    hoverCustomHtmlField(sectionId, fieldId);
+  };
+
+  useEffect(() => {
+    if (!isBuilder) return;
+    const onHighlight = (ev: Event) => {
+      const detail = (ev as CustomEvent<{ sectionId?: string; fieldId?: string | null }>).detail;
+      if (detail && detail.sectionId === sectionId) setHighlightId(detail.fieldId || null);
+    };
+    window.addEventListener(CHS_EVENTS.highlightField, onHighlight);
+    return () => {
+      window.removeEventListener(CHS_EVENTS.highlightField, onHighlight);
+      setHighlightId(null);
+      if (hoveredRef.current !== null) {
+        hoveredRef.current = null;
+        hoverCustomHtmlField(sectionId, null);
+      }
+    };
+  }, [isBuilder, sectionId]);
+
+  // htmlKey: the content is re-created when the html changes, so the outline must be re-applied.
+  const highlightRepeater = !!valid?.fields.some((f) => f.id === highlightId && f.type === 'repeater');
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!isBuilder || !root || !highlightId) return;
+    const matched = Array.from(root.querySelectorAll('[data-cf]')).filter((el) => {
+      const id = el.getAttribute('data-cf') || '';
+      return id === highlightId || (highlightRepeater && id.indexOf(highlightId + '.') === 0);
+    });
+    matched.forEach((el) => el.setAttribute(HIGHLIGHT_ATTR, ''));
+    return () => matched.forEach((el) => el.removeAttribute(HIGHLIGHT_ATTR));
+  }, [isBuilder, highlightId, highlightRepeater, htmlKey]);
+
   if (!valid) {
     if (!isBuilder) return null;
     return (
@@ -186,11 +228,19 @@ export default function CustomHtmlSection({ data, isBuilder = false, sectionId =
           }
         },
         onSubmit: (e: React.FormEvent<HTMLDivElement>) => e.preventDefault(),
+        onMouseOver: (e: React.MouseEvent<HTMLDivElement>) => {
+          const target = e.target as Element | null;
+          if (!target || typeof target.closest !== 'function') return;
+          const field = target.closest('[data-cf]');
+          reportHover(field && e.currentTarget.contains(field) ? field.getAttribute('data-cf') || null : null);
+        },
+        onMouseLeave: () => reportHover(null),
       }
     : {};
 
   return (
     <div data-chs={valid.template.scope} data-chs-instance={instanceId} dir={dir} {...builderProps}>
+      {isBuilder && highlightId && <style data-chs-highlight-style="">{HIGHLIGHT_CSS}</style>}
       {/* raw text: React would HTML-escape `>` in a text child of <style> during SSR */}
       <style dangerouslySetInnerHTML={{ __html: rendered.css }} />
       <div key={htmlKey} ref={rootRef} dangerouslySetInnerHTML={{ __html: rendered.html }} />

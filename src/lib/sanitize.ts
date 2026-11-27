@@ -129,6 +129,55 @@ export function sanitizeSvg(svg: unknown): string {
   return sanitize(svg, SVG_OPTIONS);
 }
 
+export interface SvgNames {
+  classes: ReadonlySet<string>;
+  ids: ReadonlySet<string>;
+}
+
+/** `sanitizeSvg` with a second pass over the already cleaned attributes of every element. */
+function sanitizeSvgThen(svg: string, visit: (attribs: Record<string, string>) => void): string {
+  return sanitize(svg, {
+    ...SVG_OPTIONS,
+    transformTags: Object.fromEntries(
+      SVG_TAGS.map((t) => [
+        t,
+        (tagName: string, attribs: Record<string, string>) => {
+          const cleaned = cleanSvgAttribs(tagName, attribs);
+          visit(cleaned.attribs);
+          return cleaned;
+        },
+      ]),
+    ),
+  });
+}
+
+/** Every class name and id used by the given SVG strings. */
+export function svgNames(svgs: readonly unknown[]): SvgNames {
+  const classes = new Set<string>();
+  const ids = new Set<string>();
+  for (const svg of svgs) {
+    if (typeof svg !== 'string' || !svg) continue;
+    sanitizeSvgThen(svg, (attribs) => {
+      if (attribs.class) classTokens(attribs.class).forEach((c) => classes.add(c));
+      if (attribs.id) ids.add(attribs.id);
+    });
+  }
+  return { classes, ids };
+}
+
+/** `sanitizeSvg`, additionally dropping every class name and id that is not in `allowed`. */
+export function sanitizeSvgWithNames(svg: unknown, allowed: SvgNames): string {
+  if (typeof svg !== 'string' || !svg) return '';
+  return sanitizeSvgThen(svg, (attribs) => {
+    if (attribs.class !== undefined) {
+      const kept = classTokens(attribs.class).filter((c) => allowed.classes.has(c));
+      if (kept.length) attribs.class = kept.join(' ');
+      else delete attribs.class;
+    }
+    if (attribs.id !== undefined && !allowed.ids.has(attribs.id)) delete attribs.id;
+  });
+}
+
 // ---------- <style> text ----------
 
 /** Makes CSS text safe to place inside a <style> element (cannot close it early). */

@@ -49,7 +49,17 @@ export function takePendingField(sectionId: string): string | null {
   return p.fieldId;
 }
 
-/** Window events used between the canvas, the property panel and the import wizard. */
+/** Property panel row hover → outline the field on the canvas (null clears). */
+export function highlightCustomHtmlField(sectionId: string, fieldId: string | null): void {
+  window.dispatchEvent(new CustomEvent(CHS_EVENTS.highlightField, { detail: { sectionId, fieldId } }));
+}
+
+/** Canvas [data-cf] hover → highlight the property panel row (null clears). */
+export function hoverCustomHtmlField(sectionId: string, fieldId: string | null): void {
+  window.dispatchEvent(new CustomEvent(CHS_EVENTS.hoverField, { detail: { sectionId, fieldId } }));
+}
+
+/** Window events used between the canvas, the property panel, the library and the import wizard. */
 export const CHS_EVENTS = {
   /** detail: { sectionId: string; fieldId: string } — canvas click on a [data-cf] element (builder only) */
   selectField: 'chs:select-field',
@@ -57,4 +67,8 @@ export const CHS_EVENTS = {
   editCode: 'chs:edit-code',
   /** detail: { sectionId: string; fieldId: string | null } — property panel hover → canvas outline (phase 2) */
   highlightField: 'chs:highlight-field',
+  /** detail: { sectionId: string; fieldId: string | null } — canvas hover → property panel row highlight */
+  hoverField: 'chs:hover-field',
+  /** no detail — a library item was saved, renamed or deleted */
+  libraryChanged: 'chs:library-changed',
 } as const;

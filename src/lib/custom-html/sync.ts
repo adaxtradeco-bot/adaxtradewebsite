@@ -3,7 +3,7 @@
  * The template always comes from the source; per-language values survive when the target
  * already has a value of the same shape for that field.
  */
-import { CUSTOM_HTML_TYPE, type CustomHtmlData, type FieldValue } from './types';
+import { CUSTOM_HTML_TYPE, type CustomHtmlData, type FieldDef, type FieldValue, type RepeaterItem } from './types';
 
 const has = (o: object, k: string): boolean => Object.prototype.hasOwnProperty.call(o, k);
 
@@ -42,10 +42,41 @@ function setOwn(obj: Record<string, FieldValue>, key: string, value: FieldValue)
   Object.defineProperty(obj, key, { value, enumerable: true, writable: true, configurable: true });
 }
 
+const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
+
+/** The shape a stored value of this field must have. */
+function fitsType(field: FieldDef, value: unknown): boolean {
+  if (field.type === 'text' || field.type === 'textarea' || field.type === 'richtext') return typeof value === 'string';
+  if (field.type === 'repeater') return Array.isArray(value);
+  return isRecord(value);
+}
+
+/**
+ * Keeps the target's list (its length and order) and fits every item to the source's child fields:
+ * a child the target item lacks (new in the source, or of another shape) comes from the source item at
+ * the same position, and keys that are no longer children are dropped.
+ */
+function mergeItems(field: FieldDef, sourceItems: unknown, targetItems: unknown[]): RepeaterItem[] {
+  const children = Array.isArray(field.children) ? field.children : [];
+  const source = Array.isArray(sourceItems) ? sourceItems : [];
+  return targetItems.filter(isRecord).map((item, i) => {
+    const fallback: unknown = source[i];
+    const merged: RepeaterItem = {};
+    for (const child of children) {
+      if (has(item, child.id) && fitsType(child, item[child.id])) {
+        setOwn(merged, child.id, deepClone(item[child.id]) as FieldValue);
+      } else if (isRecord(fallback) && has(fallback, child.id) && fitsType(child, fallback[child.id])) {
+        setOwn(merged, child.id, deepClone(fallback[child.id]) as FieldValue);
+      }
+    }
+    return merged;
+  });
+}
+
 /**
  * Returns a copy of `source` whose values keep the target's translated values where the target is a
  * custom-html section with a value of the same shape; otherwise the source's value is used.
- * Neither argument is mutated.
+ * Repeater values are merged item by item. Neither argument is mutated.
  */
 export function mergeForLanguageSync<S extends CustomHtmlSectionLike>(
   source: S,
@@ -67,7 +98,14 @@ export function mergeForLanguageSync<S extends CustomHtmlSectionLike>(
     const srcHas = has(srcValues, id);
     const model: unknown = srcHas ? srcValues[id] : fields[i].default;
     if (targetValues && has(targetValues, id) && sameShape(model, targetValues[id])) {
-      setOwn(values, id, deepClone(targetValues[id]) as FieldValue);
+      const translated = targetValues[id];
+      setOwn(
+        values,
+        id,
+        fields[i].type === 'repeater' && Array.isArray(translated)
+          ? mergeItems(fields[i], model, translated)
+          : (deepClone(translated) as FieldValue),
+      );
     } else if (srcHas) {
       setOwn(values, id, deepClone(srcValues[id]));
     }

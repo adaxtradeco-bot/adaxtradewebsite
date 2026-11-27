@@ -15,6 +15,7 @@ import { SECTION_TEMPLATES, SECTION_CATEGORIES } from '@/lib/page-builder/sectio
 import { SectionPreviewModal } from '@/components/section-preview/SectionPreviewModal';
 import { getSectionPreviewData } from '@/lib/section-preview-data';
 import { canEditCodeClient } from '@/lib/custom-html/client-role';
+import { LibraryPicker } from './custom-html/LibraryPicker';
 
 interface SectionLibraryProps {
   onAddSection: (templateType: string) => void;
@@ -25,9 +26,11 @@ interface SectionLibraryProps {
   onClose?: () => void;
   /** Opens the Custom HTML import wizard (shown only to users who may edit code). */
   onImportHtml?: () => void;
+  /** Places a saved Custom HTML section. Omitted where custom HTML is not allowed (blog builder). */
+  onInsertSection?: (section: SectionConfig) => void;
 }
 
-export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSelectSection, onClose, onImportHtml }: SectionLibraryProps) {
+export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSelectSection, onClose, onImportHtml, onInsertSection }: SectionLibraryProps) {
   const [canImport, setCanImport] = useState(false);
   useEffect(() => {
     setCanImport(canEditCodeClient());
@@ -63,11 +66,11 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
   }, {} as Record<string, typeof SECTION_TEMPLATES>);
 
   return (
-    <div className="w-[300px] max-w-full h-full bg-white border-r border-[#E4E7EC] flex flex-col">
+    <div className="w-[300px] max-w-full h-full bg-white border-r border-[#E4E7EC] flex flex-col dark:bg-gray-800 dark:border-gray-700">
       {/* Header */}
-      <div className="p-3 border-b border-[#E4E7EC] space-y-3">
+      <div className="p-3 border-b border-[#E4E7EC] space-y-3 dark:border-gray-700">
         <div className="flex items-center gap-2">
-          <div className="flex flex-1 p-[3px] rounded-[10px] bg-[#F2F4F7]" role="tablist">
+          <div className="flex flex-1 p-[3px] rounded-[10px] bg-[#F2F4F7] dark:bg-gray-900" role="tablist">
             {(['library', 'layers'] as const).map((t) => (
               <button
                 key={t}
@@ -75,7 +78,7 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
                 aria-selected={tab === t}
                 onClick={() => setTab(t)}
                 className={`flex-1 h-[30px] rounded-lg text-[13px] font-medium capitalize ${
-                  tab === t ? 'bg-white text-[#101828] shadow-[0_1px_2px_rgba(16,24,40,.12)]' : 'text-[#475467]'
+                  tab === t ? 'bg-white text-[#101828] shadow-[0_1px_2px_rgba(16,24,40,.12)] dark:bg-gray-700 dark:text-white' : 'text-[#475467] dark:text-gray-300'
                 }`}
               >
                 {t}
@@ -87,7 +90,7 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
             <button
               onClick={onClose}
               aria-label="Close library"
-              className="xl:hidden w-8 h-8 grid place-items-center rounded-lg text-[#475467] hover:bg-[#F2F4F7]"
+              className="xl:hidden w-8 h-8 grid place-items-center rounded-lg text-[#475467] hover:bg-[#F2F4F7] dark:text-gray-300 dark:hover:bg-gray-700"
             >
               <Icon name="close" />
             </button>
@@ -99,7 +102,7 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
             placeholder="Search sections..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full h-9 px-3 border border-[#D0D5DD] rounded-lg bg-white text-[#101828] text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB]"
+            className="w-full h-9 px-3 border border-[#D0D5DD] rounded-lg bg-white text-[#101828] text-sm focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 focus:border-[#2563EB] dark:bg-gray-700 dark:text-white dark:border-gray-600"
           />
         )}
       </div>
@@ -107,7 +110,7 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
       {tab === 'layers' && (
         <div className="flex-1 overflow-y-auto p-2">
           {(sections ?? []).length === 0 && (
-            <p className="text-sm text-[#667085] text-center py-8">No sections yet. Add one from the Library.</p>
+            <p className="text-sm text-[#667085] text-center py-8 dark:text-gray-400">No sections yet. Add one from the Library.</p>
           )}
           {(sections ?? []).map((sec, i) => {
             const tpl = SECTION_TEMPLATES.find((t) => t.type === sec.type);
@@ -117,10 +120,10 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
                 key={sec.id}
                 onClick={() => onSelectSection?.(sec.id)}
                 className={`w-full flex items-center gap-3 h-10 px-3 rounded-lg text-left text-sm ${
-                  active ? 'bg-[#EEF4FF] text-[#1D4ED8] font-semibold' : 'text-[#101828] hover:bg-[#F2F4F7]'
+                  active ? 'bg-[#EEF4FF] text-[#1D4ED8] font-semibold dark:bg-blue-900/30 dark:text-blue-300' : 'text-[#101828] hover:bg-[#F2F4F7] dark:text-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
-                <span className="w-5 text-xs text-[#667085] font-semibold">{i + 1}</span>
+                <span className="w-5 text-xs text-[#667085] font-semibold dark:text-gray-400">{i + 1}</span>
                 <span className="truncate">{tpl?.name ?? sec.type.replace(/Section$/, '').replace(/[-_]/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2')}</span>
               </button>
             );
@@ -145,7 +148,11 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
             </button>
           </div>
         )}
-        {Object.entries(groupedTemplates).map(([category, templates]) => (
+        {Object.entries(groupedTemplates).map(([category, templates]) => {
+          const isCustom = category === SECTION_CATEGORIES.CUSTOM;
+          const showSaved = isCustom && !!onInsertSection;
+          if (isCustom && !showSaved && templates.length === 0) return null;
+          return (
           <div key={category} className="space-y-2">
             {/* Category Header */}
             <button
@@ -207,7 +214,9 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
                   </div>
                 ))}
                 
-                {templates.length === 0 && (
+                {showSaved && <LibraryPicker search={searchTerm} onInsert={onInsertSection!} />}
+
+                {templates.length === 0 && !showSaved && (
                   <p className="text-xs text-gray-500 dark:text-gray-400 italic ml-2">
                     No sections found
                   </p>
@@ -215,11 +224,12 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Footer */}
-      <div className={`p-3 border-t border-[#E4E7EC] ${tab === 'library' ? '' : 'hidden'}`}>
+      <div className={`p-3 border-t border-[#E4E7EC] dark:border-gray-700 ${tab === 'library' ? '' : 'hidden'}`}>
         <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
           Click any section to add it to your page
         </p>

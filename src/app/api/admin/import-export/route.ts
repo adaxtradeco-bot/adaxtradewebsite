@@ -10,7 +10,8 @@ import { ImportExportManager } from '@/lib/import-export/utils';
 import { ExportData, PageExportData, SectionExportData, ImportResult } from '@/lib/import-export/types';
 import { authenticateRequest } from '@/lib/api-auth';
 import { guardBuilderWrite, parseStoredCustomHtml } from '@/lib/custom-html/guard';
-import { CUSTOM_HTML_TYPE } from '@/lib/custom-html/types';
+import { CUSTOM_HTML_TYPE, type CustomHtmlData } from '@/lib/custom-html/types';
+import { LIBRARY_CATEGORY, prepareLibraryData } from '@/lib/custom-html/library';
 import { getPermissions } from '@/lib/permissions';
 
 export async function POST(request: NextRequest) {
@@ -120,6 +121,12 @@ async function handleImport(
     if (importData.type === 'section') {
       const sectionData = importData.data as SectionExportData;
 
+      // The type decides who may write the row (custom-html templates are trusted by the write guard).
+      if (typeof sectionData.type !== 'string') {
+        return NextResponse.json({ error: 'Invalid section type' }, { status: 400 });
+      }
+
+      let customHtmlData: CustomHtmlData | null = null;
       if (sectionData.type === CUSTOM_HTML_TYPE) {
         if (!getPermissions(user.role).canEditCode) {
           return NextResponse.json(
@@ -143,6 +150,15 @@ async function handleImport(
             { status: 400 }
           );
         }
+        // Stored like any other library item: no values, no runInBuilder, encoded once.
+        const prepared = prepareLibraryData(parsed.data);
+        if (!prepared.success) {
+          return NextResponse.json(
+            { error: 'Invalid custom HTML data', reason: prepared.error },
+            { status: 400 }
+          );
+        }
+        customHtmlData = prepared.data;
       }
 
       // Check if section template exists (match type AND name so several custom templates can import)
@@ -161,9 +177,9 @@ async function handleImport(
       const templateData = {
         name: sectionData.name,
         type: sectionData.type,
-        category: sectionData.category,
+        category: customHtmlData ? LIBRARY_CATEGORY : sectionData.category,
         description: sectionData.description,
-        defaultData: JSON.stringify(sectionData.defaultData)
+        defaultData: JSON.stringify(customHtmlData ?? sectionData.defaultData)
       };
 
       await prisma.sectionTemplate.create({

@@ -23,8 +23,13 @@ describe('detectFields — heuristics on the partner showcase fixture', () => {
   const r = detectFields(html);
 
   it('assigns sequential ids and a data-cf marker per field', () => {
-    expect(r.fields.map((f) => f.id)).toEqual(r.fields.map((_, i) => `f${i + 1}`));
-    expect(r.root.querySelectorAll('[data-cf]')).toHaveLength(r.fields.length);
+    // the two trust items are a repeater: its children continue the same f<n> numbering
+    const repeater = r.fields.find((f) => f.type === 'repeater')!;
+    expect(repeater.id).toBe('r1');
+    const ids = r.fields.flatMap((f) => f.children?.map((c) => c.id) ?? [f.id]);
+    expect(ids).toEqual(ids.map((_, i) => `f${i + 1}`));
+    // one marker per plain field, the repeater container, and each child once per item
+    expect(r.root.querySelectorAll('[data-cf]')).toHaveLength(r.fields.length + 2 * repeater.children!.length);
     expect(r.hasHints).toBe(false);
   });
 
@@ -36,7 +41,11 @@ describe('detectFields — heuristics on the partner showcase fixture', () => {
     expect(label?.type).toBe('richtext');
     const lead = r.fields.find((f) => f.default === 'From first session to live system in days.');
     expect(lead?.type).toBe('text');
-    expect(r.fields.some((f) => f.default === 'Faster delivery')).toBe(true);
+    const items = byType(r.fields, 'repeater')[0].default as Array<Record<string, string>>;
+    expect(items.map((item) => Object.values(item))).toEqual([
+      ['<span>5–8×</span>', 'Faster delivery'],
+      ['<span>0</span>', 'Lines of code needed'],
+    ]);
   });
 
   it('detects links with text and keeps target', () => {
@@ -98,6 +107,7 @@ describe('detectFields — Tailwind/media fixture', () => {
   });
 
   it('uses data-src when src is a data: placeholder', () => {
+    // the first image has classes the second lacks, so the cards stay separate fields
     const imgs = byType(r.fields, 'image');
     expect(imgs).toHaveLength(2);
     expect((imgs[1].default as { src: string }).src).toBe('https://placehold.co/150x150/FFF0CC/CC8800?text=Cost');

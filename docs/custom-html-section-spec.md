@@ -229,6 +229,13 @@ Input pasted text or `.html` upload (≤ 2 MB). Full document (`<html`/`<body`) 
 - Phase 2 Tailwind: `tailwindcss` v3 programmatic, `content: [{ raw: html + js, extension: 'html' }]`, `corePlugins.preflight = false`, `darkMode: 'class'`, `theme.extend` from config; output prepended to author CSS before scoping (its `.dark .dark\:x` selectors become `.dark R .dark\:x` by the rule above).
 - Value tokens are inserted after scoping by `tokenize.ts`.
 
+Tailwind as implemented:
+- The compile request also takes `content` (untokenized html + handler JS) so classes in richtext, icons, repeater items and handlers are scanned. The scope hash covers theme and scanned content too.
+- Only allow-listed `theme.extend` keys reach Tailwind; `plugins`, `presets`, `content`, `safelist`, theme overrides and `@apply` are not supported.
+- A zero-specificity `:where(R, R *)` base (box sizing, border defaults, `--tw-*` variables) and a scoped `.container` reset are added.
+- On Tailwind pages `extract.ts` moves `<body>` class/style onto a `<div data-chs-body>` wrapper. Re-editing keeps `template.tailwind`.
+- `dark:` follows the site's class toggle; single-class author rules beat utilities.
+
 ### 7.3 JS runtime (`handlers.ts`, `runtime.ts`)
 
 Goal: AI scripts run as on their own page, work when the same section appears twice, and are disposed on unmount.

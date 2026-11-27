@@ -5,10 +5,18 @@
  * (repeater-expanded) template, so a substituted value is never scanned for tokens again. The context
  * of each token (attribute value, style url(), element text, CSS) selects the escaper.
  */
-import { richTextClasses, sanitizeRichTextWithClasses, sanitizeSvg, safeStyleText } from '../sanitize';
+import {
+  richTextClasses,
+  sanitizeRichTextWithClasses,
+  sanitizeSvgWithNames,
+  safeStyleText,
+  svgNames,
+  type SvgNames,
+} from '../sanitize';
 import { escapeAttr, escapeText, safeColor, safeCssUrl, safeEmbedUrl, safeUrl } from './escape';
 import {
   CUSTOM_HTML_LIMITS,
+  REPEATER_ITEM_ATTR,
   TOKEN_LITERAL_ID,
   TOKEN_OPEN,
   TOKEN_RE,
@@ -69,6 +77,7 @@ interface Ctx {
   childMaps: Map<FieldDef, Map<string, FieldDef>>;
   itemCache: Map<FieldDef, Record<string, unknown>[]>;
   classCache: Map<FieldDef, Set<string>>;
+  svgCache: Map<FieldDef, SvgNames>;
 }
 
 interface Resolved {
@@ -87,7 +96,15 @@ function buildCtx(data: RenderInput, useDefaults: boolean, builder: boolean): Ct
     if (f && typeof f.id === 'string' && typeof f.type === 'string' && !fields.has(f.id)) fields.set(f.id, f);
   }
   const values = !useDefaults && isPlainObj(data.values) ? (data.values as Record<string, unknown>) : {};
-  return { fields, values, builder, childMaps: new Map(), itemCache: new Map(), classCache: new Map() };
+  return {
+    fields,
+    values,
+    builder,
+    childMaps: new Map(),
+    itemCache: new Map(),
+    classCache: new Map(),
+    svgCache: new Map(),
+  };
 }
 
 function childMap(ctx: Ctx, rep: FieldDef): Map<string, FieldDef> {
@@ -178,13 +195,8 @@ function defaultLeaf(res: Resolved): string {
 // Token -> string, per context
 // ---------------------------------------------------------------------------
 
-/**
- * Class names the template author used in this field's default(s). Editor-supplied richtext may keep
- * only these, so it cannot pull in arbitrary utility classes (e.g. a full-page overlay).
- */
-function authorClasses(res: Resolved, ctx: Ctx): Set<string> {
-  const cached = ctx.classCache.get(res.def);
-  if (cached) return cached;
+/** The author-written default(s) of a field: its own and, for a repeater child, every default item's. */
+function authorDefaults(res: Resolved): unknown[] {
   const defaults: unknown[] = [res.def.default];
   if (res.rep && Array.isArray(res.rep.default)) {
     const items = res.rep.default as unknown[];
@@ -193,6 +205,27 @@ function authorClasses(res: Resolved, ctx: Ctx): Set<string> {
       if (isPlainObj(item) && has(item, res.def.id)) defaults.push(item[res.def.id]);
     }
   }
+  return defaults;
+}
+
+/** Class names and ids of the default icon(s); editor-supplied SVG may keep only these. */
+function authorSvgNames(res: Resolved, ctx: Ctx): SvgNames {
+  let names = ctx.svgCache.get(res.def);
+  if (!names) {
+    names = svgNames(authorDefaults(res).map((d) => (isPlainObj(d) && has(d, 'svg') ? d.svg : '')));
+    ctx.svgCache.set(res.def, names);
+  }
+  return names;
+}
+
+/**
+ * Class names the template author used in this field's default(s). Editor-supplied richtext may keep
+ * only these, so it cannot pull in arbitrary utility classes (e.g. a full-page overlay).
+ */
+function authorClasses(res: Resolved, ctx: Ctx): Set<string> {
+  const cached = ctx.classCache.get(res.def);
+  if (cached) return cached;
+  const defaults = authorDefaults(res);
   const out = new Set<string>();
   for (let i = 0; i < defaults.length; i++) {
     const classes = richTextClasses(defaults[i]);
@@ -213,7 +246,7 @@ function textToken(path: string, ctx: Ctx): string {
     case 'richtext':
       return sanitizeRichTextWithClasses(l, authorClasses(res, ctx));
     case 'icon':
-      return res.sub === 'svg' ? sanitizeSvg(l) : escapeText(l);
+      return res.sub === 'svg' ? sanitizeSvgWithNames(l, authorSvgNames(res, ctx)) : escapeText(l);
     case 'textarea':
       return escapeText(l).replace(/\r\n|\r|\n/g, '<br>');
     default:
@@ -528,7 +561,7 @@ function renderTag(
     const gap = src.slice(prevEnd, attr.start);
     prevEnd = attr.end;
 
-    if (attr.nameLower === 'data-cf' && !ctx.builder) continue;
+    if ((attr.nameLower === 'data-cf' || attr.nameLower === REPEATER_ITEM_ATTR) && !ctx.builder) continue;
     if (tokenPaths(attr.name).length) continue;
     if (flags.imageChanged && STRIP_ON_IMAGE_CHANGE.indexOf(attr.nameLower) !== -1) continue;
     if (flags.videoChanged && tag.name === 'source' && attr.nameLower === 'type') continue;

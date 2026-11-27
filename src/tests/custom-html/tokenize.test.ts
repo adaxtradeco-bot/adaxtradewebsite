@@ -5,8 +5,9 @@ import { describe, expect, it } from 'vitest';
 import { detectFields } from '@/lib/custom-html/detect';
 import { extractSource } from '@/lib/custom-html/extract';
 import { buildRuntimeJs, rewriteInlineHandlers } from '@/lib/custom-html/handlers';
+import { renderWithDefaults } from '@/lib/custom-html/render';
 import { detectCssFields, tokenizeHtml } from '@/lib/custom-html/tokenize';
-import { TOKEN_RE, type FieldDef, type FieldValue } from '@/lib/custom-html/types';
+import { TOKEN_RE, type FieldDef } from '@/lib/custom-html/types';
 
 const fixture = (name: string) => readFileSync(path.join(__dirname, 'fixtures', name), 'utf8');
 
@@ -15,25 +16,17 @@ function tokenizeSource(html: string, opts?: Parameters<typeof detectFields>[1])
   return { ...r, tokenized: tokenizeHtml(r.root, r.fields) };
 }
 
-const escAttr = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
-const escText = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-/** Minimal stand-in for render.ts: substitutes defaults so we can compare with the source. */
+/** The template rendered with its field defaults, to compare with the source. */
 function renderDefaults(tokenized: string, fields: FieldDef[]): string {
-  const byId = new Map(fields.map((f) => [f.id, f]));
-  return tokenized.replace(TOKEN_RE, (_m, pathStr: string) => {
-    if (pathStr === '__lit') return '{{cf:';
-    const dot = pathStr.lastIndexOf('.');
-    const direct = byId.get(pathStr);
-    const f = direct ?? byId.get(pathStr.slice(0, dot));
-    if (!f) return '';
-    const v = f.default as FieldValue;
-    if (direct) return typeof v === 'string' ? (f.type === 'richtext' ? v : escText(v)) : '';
-    const prop = pathStr.slice(dot + 1);
-    const raw = (v as Record<string, string>)[prop] ?? '';
-    return prop === 'svg' ? raw : escAttr(raw);
-  });
+  const template = {
+    html: tokenized, css: '', cssScoped: '', js: '', jsSource: '',
+    externalScripts: [], externalStylesheets: [], scope: '0123456789',
+  };
+  return renderWithDefaults({ template, fields });
 }
+
+/** Fields including repeater children. */
+const countFields = (fields: FieldDef[]): number => fields.reduce((n, f) => n + 1 + (f.children?.length ?? 0), 0);
 
 const norm = (el: Element) => (el.textContent ?? '').replace(/\s+/g, ' ').trim();
 
@@ -213,8 +206,8 @@ describe('extract → detect → tokenize pipeline on fixtures', () => {
       expect(ex.errors).toEqual([]);
       const handlers = rewriteInlineHandlers(ex.html);
       const det = detectFields(handlers.html);
-      expect(det.fields.length).toBeGreaterThanOrEqual(min);
-      expect(det.fields.length).toBeLessThanOrEqual(max);
+      expect(countFields(det.fields)).toBeGreaterThanOrEqual(min);
+      expect(countFields(det.fields)).toBeLessThanOrEqual(max);
 
       let tokenized = tokenizeHtml(det.root, det.fields);
       let fields = det.fields;

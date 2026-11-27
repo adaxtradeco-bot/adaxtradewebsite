@@ -116,6 +116,22 @@ function validateValue(def: FieldDef, value: unknown, depth: number): string | n
   return 'unknown field type';
 }
 
+/**
+ * The author's min/max apply to stored values only. A default list that is already outside the
+ * bounds (re-import with more items) widens them, so its items stay editable.
+ */
+function repeaterBoundsError(def: FieldDef, value: unknown): string | null {
+  if (def.type !== 'repeater' || !Array.isArray(value)) return null;
+  const base = Array.isArray(def.default) ? def.default.length : 0;
+  if (def.max !== undefined && value.length > Math.max(def.max, base)) {
+    return `repeater allows at most ${def.max} items`;
+  }
+  if (def.min !== undefined && value.length < Math.min(def.min, base)) {
+    return `repeater needs at least ${def.min} items`;
+  }
+  return null;
+}
+
 export const FieldDefSchema: z.ZodType<FieldDef> = z.lazy(() =>
   z
     .object({
@@ -133,6 +149,9 @@ export const FieldDefSchema: z.ZodType<FieldDef> = z.lazy(() =>
     .superRefine((def, ctx) => {
       if (def.children && def.type !== 'repeater') {
         ctx.addIssue({ code: 'custom', message: 'children are only allowed on repeater fields', path: ['children'] });
+      }
+      if (def.min !== undefined && def.max !== undefined && def.min > def.max) {
+        ctx.addIssue({ code: 'custom', message: 'min must not be greater than max', path: ['min'] });
       }
       const err = validateValue(def as FieldDef, def.default, 0);
       if (err) ctx.addIssue({ code: 'custom', message: `default: ${err}`, path: ['default'] });
@@ -248,7 +267,8 @@ export const CustomHtmlDataSchema = z
     for (let i = 0; i < fields.length; i++) {
       const def = fields[i];
       if (Object.prototype.hasOwnProperty.call(data.values, def.id)) {
-        const err = validateValue(def, (data.values as Record<string, unknown>)[def.id], 0);
+        const value = (data.values as Record<string, unknown>)[def.id];
+        const err = validateValue(def, value, 0) ?? repeaterBoundsError(def, value);
         if (err) ctx.addIssue({ code: 'custom', message: err, path: ['values', def.id] });
       }
     }
