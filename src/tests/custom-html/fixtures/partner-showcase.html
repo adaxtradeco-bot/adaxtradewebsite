@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IVAFLOW — Platform for Partners</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --bg: #07080A; --accent: #4F7FFF; --text: #F0F2F8; }
+body { background: var(--bg); color: var(--text); overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+.container { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+.hero { position: relative; background-image: url('https://cdn.example.com/hero-bg.jpg'); background-size: cover; }
+.hero-grid { background-image: linear-gradient(rgba(79,127,255,.035) 1px, transparent 1px); }
+.noise { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3C/svg%3E"); }
+@font-face { font-family: 'Outfit'; src: url('https://cdn.example.com/outfit.woff2') format('woff2'); }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .65s ease, transform .65s ease; }
+.reveal.in { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- S1 HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="container">
+    <div class="hero-label reveal">
+      For Technology Partners &amp; Resellers &nbsp;·&nbsp; <span>White-label ready</span>
+    </div>
+    <h1 class="reveal reveal-d1">
+      A platform your clients<br>will rely on — <em>forever</em>
+    </h1>
+    <p class="hero-sub reveal reveal-d2">
+      IVAFLOW is a complete no-code Business Process Management Suite. Visual, modular, and built for any industry.
+    </p>
+    <div class="hero-ctas reveal reveal-d3">
+      <a href="#" class="btn-prim">See the platform in action <span>→</span></a>
+      <a href="/partners" class="btn-sec" target="_blank">Become a partner</a>
+    </div>
+    <div class="trust-strip reveal reveal-d4">
+      <div class="trust-item">
+        <div class="trust-num"><span>5–8×</span></div>
+        <div class="trust-label">Faster delivery</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-num"><span>0</span></div>
+        <div class="trust-label">Lines of code needed</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S2 SNAPSHOT -->
+<section class="snapshot">
+  <div class="container">
+    <div class="snapshot-header reveal">
+      <div class="eyebrow-pill"><div class="eyebrow-dot"></div><span class="eyebrow-text">The platform at a glance</span></div>
+      <h2 class="sec-title">One platform. Every process. <em>Every client.</em></h2>
+      <p class="sec-sub">IVAFLOW is a fully modular BPMS.</p>
+    </div>
+    <div class="snapshot-grid">
+      <div class="snap-card reveal reveal-d1">
+        <div class="snap-icon" style="background:rgba(79,127,255,.08);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4F7FFF" stroke-width="1.8"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="snap-title">Designed to move fast</div>
+        <p class="snap-desc">From first session to live system in days.</p>
+      </div>
+      <div class="snap-card reveal reveal-d2">
+        <div class="snap-icon" style="background:rgba(123,92,255,.08);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#7B5CFF" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/></svg>
+        </div>
+        <div class="snap-title">Modular by nature</div>
+        <p class="snap-desc">Start with one process, scale to the entire organization.</p>
+      </div>
+    </div>
+    <img src="https://placehold.co/600x300" alt="Platform overview" class="shot">
+  </div>
+</section>
+
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>

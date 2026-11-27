@@ -366,6 +366,14 @@ Prisma `SectionTemplate` (no migration): `type='custom-html'`, `category='Custom
 - JS: each `<script>` block is listed; the admin assigns it to a section (default: the section whose ids/classes the block references, else the first). Warning that cross-section scripts must be put into one section.
 - Update [ai-section-prompt-template.md](./ai-section-prompt-template.md): `data-edit*` hints, content in HTML, query only inside the section, `textContent` not `innerHTML` for content, no CDN frameworks / module scripts.
 
+As implemented:
+- Files: `split-page.ts` (plan, wrappers, scripts), `split-css.ts` (viewport heights, fidelity warnings, pruning), `split-scripts.ts` (static analysis with acorn), `split-assemble.ts` (each part goes through `analyzeExtract` → `assembleCustomHtml`; the first failure aborts, nothing is inserted). UI: `SplitImportPanel.tsx`, offered for new imports only; one state update appends all sections. No server code changed.
+- The page is a list of units (nodes) with their wrapper chain, so no node is lost. Wrappers are `data-chs-body`, a `<main>` that has attributes or is targeted by CSS / JS, and elements opened with "Split further" (one section per child element; not forms, tables or SVG).
+- With two or more kept sections, viewport-height utilities, inline styles and CSS declarations are removed from repeated wrappers and html/body rules. A wrapper id stays on every copy only if CSS or JS mentions it. Each section's CSS starts with a `/* page section n */` comment so that no two share a style scope. Other repeated wrapper styling (padding, backgrounds) is only warned about.
+- Pruning also keeps rules whose classes / ids occur nowhere in the page markup (runtime or library classes, when the page has scripts), unless they also need a name only other sections have.
+- Scripts are not rewritten or copied: a block that serves several sections (typical: one `IntersectionObserver` reveal script for the whole page) works only after those sections are merged. Detection of references is heuristic. External scripts and stylesheets and the Tailwind config go to every section.
+- Fields are detected automatically per section (no mapping step, no "Save to library"). With full CSS, every section also gets the CSS-sourced fields of the whole stylesheet.
+
 ## 14. Tests (vitest + jsdom, `src/tests/custom-html/`)
 
 - escape: obfuscated schemes (`java\tscript:`, `JaVaScRiPt:`, entities), attribute breakout, CSS breakout, colours, embed hosts.

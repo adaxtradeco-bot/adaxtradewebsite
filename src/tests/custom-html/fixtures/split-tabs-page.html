@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Two tab sections</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter&display=swap">
+<style>
+  :root { --brand: #3355ff; }
+  html, body { margin: 0; min-height: 100vh; }
+  .page { min-height: 100vh; font-family: Inter, sans-serif; }
+  .plans h2 { color: var(--brand); }
+  .plan-panel { display: none; }
+  .plan-panel.active { display: block; }
+  .answers .answer { display: none; }
+  .answers .answer.is-open { display: block; }
+  .unused-widget { border: 1px solid red; }
+  @media (max-width: 600px) { .plans h2 { font-size: 20px; } .answers h2 { font-size: 18px; } }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+<main id="content" class="page">
+  <section class="plans">
+    <h2>Pick a plan</h2>
+    <button class="plan-tab" onclick="showPlan('basic')">Basic</button>
+    <button class="plan-tab" onclick="showPlan('team')">Team</button>
+    <div class="plan-panel active" id="plan-basic">Everything one person needs to get started with the product.</div>
+    <div class="plan-panel" id="plan-team">Shared workspaces, roles and approvals for growing teams.</div>
+  </section>
+  <section class="answers">
+    <h2>Common questions</h2>
+    <button class="question" onclick="toggleAnswer(0)">Can I cancel?</button>
+    <p class="answer">Yes, at any time.</p>
+    <button class="question" onclick="toggleAnswer(1)">Is there a trial?</button>
+    <p class="answer">Fourteen days, no card required.</p>
+  </section>
+</main>
+<script>
+  function showPlan(name) {
+    document.querySelectorAll('.plan-panel').forEach(function (panel) {
+      panel.classList.toggle('active', panel.id === 'plan-' + name);
+    });
+  }
+</script>
+<script>
+  const answers = document.querySelectorAll('.answer');
+  function toggleAnswer(index) {
+    answers[index].classList.toggle('is-open');
+  }
+</script>
+</body>
+</html>

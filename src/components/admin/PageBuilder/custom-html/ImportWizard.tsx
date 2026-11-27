@@ -2,6 +2,7 @@
 
 /**
  * Custom HTML import wizard (spec §11.2): Source -> Fields -> Details -> Insert/Save.
+ * A new import can instead split a full page into several sections (spec §13, SplitImportPanel).
  * Edit mode re-imports the stored source (§6.6): ids are reused so values survive.
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -32,11 +33,15 @@ import { MappingPreview } from './MappingPreview';
 import { RepeaterFieldRows } from './RepeaterFieldRows';
 import { canEditCodeClient } from '@/lib/custom-html/client-role';
 import { createLibraryItem } from '@/lib/custom-html/library-client';
+import { SplitImportPanel } from './SplitImportPanel';
+import { Messages, btnGhost, btnPrimary, inputCls } from './wizard-ui';
 
 export interface ImportWizardProps {
   isOpen: boolean;
   onClose: () => void;
   onInsert: (section: SectionConfig) => void;
+  /** inserts several sections at once; without it "Split into sections" is not offered */
+  onInsertMany?: (sections: SectionConfig[]) => void;
   editSection?: SectionConfig;
   onReplace?: (sectionId: string, data: CustomHtmlData) => void;
   /** test seam; defaults to the admin compile API */
@@ -63,13 +68,6 @@ const MAX_UPLOAD = CUSTOM_HTML_LIMITS.uploadBytes;
 
 type Tab = 'html' | 'css' | 'js';
 type Step = 1 | 2 | 3;
-
-const inputCls =
-  'w-full rounded-md border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500/40 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100';
-const btnCls =
-  'rounded-md px-3 py-1.5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50';
-const btnPrimary = `${btnCls} bg-blue-600 text-white hover:bg-blue-700`;
-const btnGhost = `${btnCls} border border-gray-300 text-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700`;
 
 function readFileText(file: File): Promise<string> {
   if (typeof file.text === 'function') return file.text();
@@ -106,27 +104,9 @@ function guessTypes(el: Element): FieldType[] {
   }
 }
 
-function Messages({ items, tone }: { items: string[]; tone: 'warn' | 'error' }) {
-  if (items.length === 0) return null;
-  const cls =
-    tone === 'error'
-      ? 'border-red-300 bg-red-50 text-red-800 dark:border-red-700 dark:bg-red-900/20 dark:text-red-200'
-      : 'border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-700 dark:bg-amber-900/20 dark:text-amber-200';
-  return (
-    <ul
-      role={tone === 'error' ? 'alert' : undefined}
-      data-testid={tone === 'error' ? 'wizard-errors' : 'wizard-warnings'}
-      className={`space-y-1 rounded-md border px-3 py-2 text-sm ${cls}`}
-    >
-      {items.map((m, i) => (
-        <li key={i} className="whitespace-pre-wrap">{m}</li>
-      ))}
-    </ul>
-  );
-}
-
-export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace, compile = defaultCompile, saveToLibrary = createLibraryItem }: ImportWizardProps) {
+export function ImportWizard({ isOpen, onClose, onInsert, onInsertMany, editSection, onReplace, compile = defaultCompile, saveToLibrary = createLibraryItem }: ImportWizardProps) {
   const [addToLibrary, setAddToLibrary] = useState(false);
+  const [mode, setMode] = useState<'single' | 'split'>('single');
   const [step, setStep] = useState<Step>(1);
   const [tab, setTab] = useState<Tab>('html');
   const [html, setHtml] = useState('');
@@ -150,6 +130,8 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
   const rowRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const isEdit = !!editSection;
+  const canChooseSplit = !isEdit && !!onInsertMany;
+  const splitting = canChooseSplit && mode === 'split';
 
   const runAnalysis = useCallback(
     (source: { html: string; css: string; js: string; handlerJs: string }, hints: boolean) => {
@@ -185,6 +167,7 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
     setNotice(null);
     setCompileWarnings([]);
     setAddToLibrary(false);
+    setMode('single');
     previous.current = null;
 
     if (editSection) {
@@ -425,7 +408,7 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
               {isEdit ? 'Edit custom HTML' : 'Import HTML'}
             </h2>
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Step {step} of 3 — {step === 1 ? 'Source' : step === 2 ? 'Fields' : 'Details'}
+              Step {step} of {splitting ? 2 : 3} — {step === 1 ? 'Source' : splitting ? 'Sections' : step === 2 ? 'Fields' : 'Details'}
             </p>
           </div>
           <button onClick={onClose} aria-label="Close" className="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -433,10 +416,36 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
           </button>
         </div>
 
+        {splitting && step === 2 && analysis && onInsertMany ? (
+          <SplitImportPanel
+            extract={analysis.extract}
+            compile={compile}
+            onInsert={onInsertMany}
+            onBack={() => setStep(1)}
+            onClose={onClose}
+          />
+        ) : (
+        <>
         <div className="flex-1 overflow-y-auto p-4">
           {/* ---------------- Step 1 ---------------- */}
           {step === 1 && (
             <div className="space-y-3">
+              {canChooseSplit && (
+                <fieldset className="flex flex-wrap items-center gap-4 text-sm text-gray-900 dark:text-white">
+                  <legend className="sr-only">Import as</legend>
+                  {([['single', 'One section'], ['split', 'Split into sections']] as const).map(([value, label]) => (
+                    <label key={value} className="flex items-center gap-1.5">
+                      <input
+                        type="radio"
+                        name="chs-import-mode"
+                        checked={mode === value}
+                        onChange={() => setMode(value)}
+                      />
+                      {label}
+                    </label>
+                  ))}
+                </fieldset>
+              )}
               <div className="flex items-center gap-2">
                 <div role="tablist" className="flex gap-1 rounded-lg bg-gray-100 p-1 dark:bg-gray-700">
                   {(['html', 'css', 'js'] as const).map((t) => (
@@ -681,7 +690,7 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
             )}
             {step === 1 && (
               <button className={btnPrimary} disabled={!canNext1} onClick={() => { setError(null); setStep(2); }}>
-                Next: map fields
+                {splitting ? 'Next: split sections' : 'Next: map fields'}
               </button>
             )}
             {step === 2 && (
@@ -696,6 +705,8 @@ export function ImportWizard({ isOpen, onClose, onInsert, editSection, onReplace
             )}
           </div>
         </div>
+        </>
+        )}
       </div>
     </div>
   );

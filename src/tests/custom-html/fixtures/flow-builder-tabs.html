@@ -1,0 +1,59 @@
+<style>
+.sec1 { padding: 80px 0; }
+.tab-btn { cursor: pointer; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+</style>
+<section class="sec1">
+  <div class="container">
+    <div class="eyebrow">Visual Process Designer</div>
+    <h2>Design workflows exactly<br><em>as they execute.</em></h2>
+    <p class="sec1-lead">Drag stages onto the canvas, connect them with transitions, define rules on each edge.</p>
+  </div>
+  <div class="container">
+    <div class="tab-rail" id="rail1" role="tablist">
+      <button class="tab-btn active" role="tab" aria-selected="true" data-tab="0" onclick="switchTab(1,0)">
+        <span class="tab-num">01</span>Stage Types
+        <div class="prog-bar" id="s1-prog-0"></div>
+      </button>
+      <button class="tab-btn" role="tab" data-tab="1" onclick="switchTab(1,1)">
+        <span class="tab-num">02</span>Conditions
+        <div class="prog-bar" id="s1-prog-1"></div>
+      </button>
+      <button class="tab-btn" role="tab" data-tab="2" onclick="return switchTab(1,2) || false">
+        <span class="tab-num">03</span>Parallel Execution
+        <div class="prog-bar" id="s1-prog-2"></div>
+      </button>
+    </div>
+    <div class="tab-panels" id="panels1">
+      <div class="tab-panel active" id="s1-panel-0">
+        <div class="panel-left">
+          <span class="tag">Stage Library</span>
+          <h3>Every process needs the right stage type</h3>
+          <p class="panel-lead">Initial stages capture requests. Standard stages route work through teams.</p>
+          <div class="example-box"><strong>Example:</strong> An HR onboarding flow uses 1 initial stage and 6 standard stages.</div>
+        </div>
+      </div>
+      <div class="tab-panel" id="s1-panel-1">
+        <h3>Conditions</h3>
+        <p class="panel-lead">Decision stages evaluate conditions.</p>
+        <a href="javascript:void(0)" class="more" id="more-link">Read more</a>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+const state = { 1: { timer: null, animFrame: 0 } };
+function getEls(sec) {
+  const rail = document.getElementById('rail' + sec);
+  return { btns: rail.querySelectorAll('.tab-btn') };
+}
+function switchTab(sec, idx) {
+  const st = state[sec];
+  cancelAnimationFrame(st.animFrame);
+  clearTimeout(st.timer);
+  const { btns } = getEls(sec);
+  btns.forEach((b, i) => b.classList.toggle('active', i === idx));
+  document.querySelectorAll('#panels' + sec + ' .tab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+}
+</script>

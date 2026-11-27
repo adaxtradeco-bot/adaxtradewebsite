@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FleetBPMS</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { brand: { 500: '#1a73e8', 600: "#1557b0" }, ink: `#0b1220` },
+                    spacing: { '-4': -1, 18: '4.5rem' },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    flags: [true, false, null]
+                }
+            }
+        }
+    </script>
+    <script type="application/json" id="seo-data">{"page":"fleet"}</script>
+    <script type="module">import x from './x.js'; x();</script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .nav-link.active { font-weight: bold; color: #1a73e8; }
+    </style>
+</head>
+<body class="antialiased">
+    <header class="bg-white shadow">
+        <nav class="flex gap-4">
+            <a href="#features" class="nav-link text-brand-500">Features</a>
+            <a href="#pricing" class="nav-link">Pricing</a>
+            <button class="px-4 py-2 bg-brand-600 text-white rounded">Book a demo</button>
+        </nav>
+    </header>
+    <section id="features" class="py-16" style="background-image: url('https://placehold.co/1600x600/eee/333'); background-size: cover">
+        <h2 class="text-3xl font-bold">Features that move fleets</h2>
+        <div class="grid grid-cols-2 gap-6">
+            <div class="card p-6">
+                <img src="https://placehold.co/150x150/CCE3FF/2D73CC?text=Workflow" alt="Dynamic digital workflow dashboard" class="w-36 h-36 rounded-full">
+                <h3 class="text-xl">Workflow visualisation</h3>
+                <p class="text-slate-600">See every vehicle, driver and delivery on one screen.</p>
+            </div>
+            <div class="card p-6">
+                <img data-src="https://placehold.co/150x150/FFF0CC/CC8800?text=Cost" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="Cost savings graph">
+                <h3 class="text-xl">Cost savings</h3>
+                <p class="text-slate-600">Cut fuel and maintenance spend.</p>
+            </div>
+        </div>
+        <video src="https://cdn.example.com/promo.mp4" poster="https://cdn.example.com/promo.jpg" controls></video>
+        <iframe src="https://www.youtube.com/embed/abc123" title="Demo" allowfullscreen></iframe>
+        <iframe src="https://evil.example.com/frame" title="Other"></iframe>
+        <form>
+            <input type="email" placeholder="Work email" class="border">
+            <textarea placeholder="Tell us about your fleet"></textarea>
+        </form>
+    </section>
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const el = document.querySelector(this.getAttribute('href'));
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

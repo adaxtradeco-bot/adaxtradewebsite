@@ -132,6 +132,13 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
     setSelectedSectionId(section.id);
   }, []);
 
+  // Sections of a split page import: appended in order in a single state update.
+  const handleInsertSections = useCallback((added: SectionConfig[]) => {
+    if (!added.length) return;
+    setSections(prev => [...prev, ...added.map((s, i) => ({ ...s, order: prev.length + i }) as SectionConfig)]);
+    setSelectedSectionId(added[0].id);
+  }, []);
+
   // Property panel "Edit code" -> open the import wizard in edit mode (admins only)
   useEffect(() => {
     const onEditCode = (event: Event) => {
@@ -411,6 +418,7 @@ export function PageBuilder({ pageId, initialSections = [], onSave, adminMode = 
         isOpen={importWizard.open}
         onClose={() => setImportWizard({ open: false, editSectionId: null })}
         onInsert={handleInsertSection}
+        onInsertMany={handleInsertSections}
         editSection={importWizard.editSectionId ? sections.find(s => s.id === importWizard.editSectionId) : undefined}
         onReplace={(sectionId, data: CustomHtmlData) =>
           handleUpdateSection(sectionId, { data } as unknown as Partial<SectionConfig>)

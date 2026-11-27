@@ -2,6 +2,7 @@
  * Custom HTML section — import/assembly pipeline (spec §3, §6.6, §7.1, §11.2).
  *
  * analyzeSource  : extract -> rewrite inline handlers -> detect fields (browser/jsdom, no network).
+ * analyzeExtract : the same from an ExtractResult.
  * buildCustomHtmlData : tokenize -> compile CSS (injected) -> assemble + validate CustomHtmlData.
  * reconstructSource   : stored data -> editable source for "Edit code" (re-import, §6.6).
  */
@@ -50,7 +51,15 @@ export interface Analysis {
 }
 
 export function analyzeSource(input: string, extra: SourceExtras = {}, opts: AnalyzeOptions = {}): Analysis {
-  const extract = extractSource(input, { css: extra.css, js: extra.js });
+  return analyzeExtract(extractSource(input, { css: extra.css, js: extra.js }), extra, opts);
+}
+
+/** analyzeSource for an already extracted source (each part of a page split uses it). */
+export function analyzeExtract(
+  extract: ExtractResult,
+  extra: Pick<SourceExtras, 'handlerJs'> = {},
+  opts: AnalyzeOptions = {}
+): Analysis {
   const blocked = extract.errors.length > 0;
 
   let handlerHtml = '';
