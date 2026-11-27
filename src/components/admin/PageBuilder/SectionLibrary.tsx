@@ -16,6 +16,7 @@ import { SectionPreviewModal } from '@/components/section-preview/SectionPreview
 import { getSectionPreviewData } from '@/lib/section-preview-data';
 import { canEditCodeClient } from '@/lib/custom-html/client-role';
 import { LibraryPicker } from './custom-html/LibraryPicker';
+import { AiPromptButton } from './custom-html/AiPromptButton';
 
 interface SectionLibraryProps {
   onAddSection: (templateType: string) => void;
@@ -146,6 +147,7 @@ export function SectionLibrary({ onAddSection, sections, selectedSectionId, onSe
             >
               Import HTML…
             </button>
+            <AiPromptButton className="mt-2 w-full rounded-md border border-blue-300 px-3 py-1.5 text-sm font-medium text-blue-700 hover:bg-blue-100 dark:border-blue-700 dark:text-blue-300 dark:hover:bg-blue-900/30" />
           </div>
         )}
         {Object.entries(groupedTemplates).map(([category, templates]) => {

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { SECTION_TEMPLATES } from '@/lib/page-builder/section-registry';
 import Toast from '@/components/ui/Toast';
 import CreateSectionWizard from '@/components/admin/CreateSectionWizard';
+import { AiPromptButton } from '@/components/admin/PageBuilder/custom-html/AiPromptButton';
 
 const ALL_CATEGORIES = ['All', ...Array.from(new Set(SECTION_TEMPLATES.map(t => t.category)))];
 
@@ -34,12 +35,18 @@ export default function AdminSections() {
           </p>
         </div>
 
-        <button
-          onClick={() => setShowWizard(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-        >
-          + Create New Section
-        </button>
+        <div className="flex items-center gap-3">
+          <AiPromptButton
+            label="AI prompt (Custom HTML)"
+            className="border border-gray-300 text-gray-700 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium transition-colors dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700"
+          />
+          <button
+            onClick={() => setShowWizard(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+          >
+            + Create New Section
+          </button>
+        </div>
       </div>
 
       {/* Search and Filters */}
